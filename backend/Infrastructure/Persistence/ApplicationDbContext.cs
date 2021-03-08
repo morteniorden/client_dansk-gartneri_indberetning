@@ -22,6 +22,9 @@ namespace Infrastructure.Persistence
       _dateTimeOffsetService = dateTimeOffset;
     }
 
+    public DbSet<Account> Accounts { get; set;}
+    public DbSet<User> Users { get; set; }
+    public DbSet<Address> Addresses { get; set; }
     public DbSet<ExampleChild> ExampleChildren { get; set; }
 
     public DbSet<ExampleParent> ExampleParents { get; set; }
