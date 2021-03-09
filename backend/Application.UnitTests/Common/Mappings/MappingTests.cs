@@ -1,9 +1,10 @@
 using Application.ExampleChildren;
-using Application.ExampleChildren.Queries.GetExampleChildren;
 using Application.ExampleParents;
 using AutoMapper;
 using Domain.Entities;
 using System;
+using Application.Accounts;
+using Application.Users;
 using Xunit;
 
 namespace Application.UnitTests.Common.Mappings
@@ -28,6 +29,9 @@ namespace Application.UnitTests.Common.Mappings
     [Theory]
     [InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
     [InlineData(typeof(ExampleParent), typeof(ExampleParentDto))]
+    [InlineData(typeof(Account), typeof(AccountDto))]
+    [InlineData(typeof(User), typeof(UserDto))]
+    [InlineData(typeof(Address), typeof(AddressDto))]
     //[InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
     public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
     {

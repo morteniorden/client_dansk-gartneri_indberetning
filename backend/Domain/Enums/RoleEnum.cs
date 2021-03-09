@@ -4,6 +4,6 @@ namespace Domain.Enums
   {
     Admin = 0,
     Accountant = 1,
-    User = 2
+    Client = 2
   }
 }

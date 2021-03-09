@@ -34,7 +34,7 @@ class User {
 enum Role {
   Admin
   Accountant
-  User
+  Client
 }
 
 class Address {
