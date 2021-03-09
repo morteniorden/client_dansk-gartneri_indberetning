@@ -1,4 +1,5 @@
 using System;
+using Domain.Enums;
 
 namespace Application.Common.Security
 {
@@ -14,9 +15,9 @@ namespace Application.Common.Security
     public AuthorizeAttribute() { }
 
     /// <summary>
-    /// Gets or sets a comma delimited list of roles that are allowed to access the resource.
+    /// Gets or sets a role that are allowed to access the resource.
     /// </summary>
-    public string Roles { get; set; }
+    public RoleEnum Role { get; set; }
 
     /// <summary>
     /// Gets or sets the policy name that determines access to the resource.
