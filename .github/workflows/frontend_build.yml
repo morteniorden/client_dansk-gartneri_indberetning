@@ -26,6 +26,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -39,34 +44,16 @@ jobs:
           npm ci
           npm run validate
 
-  codecov:
-    name: CodeCov
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v2.1.4
-        with:
-          node-version: ${{ env.node-version }}
-
-      - name: Test Frontend
-        run: |
-          npm ci
-          npm t
-
-      - name: Run CodeCov
-        uses: codecov/codecov-action@v1.2.1
-        with:
-          working-directory: frontend
-
   codeql:
     name: CodeQL
     runs-on: ubuntu-latest
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
