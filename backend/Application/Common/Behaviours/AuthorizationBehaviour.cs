@@ -1,6 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
+using Domain.Enums;
 using MediatR;
 using System;
 using System.Linq;
@@ -36,21 +37,17 @@ namespace Application.Common.Behaviours
         }
 
         // Role-based authorization
-        var authorizeAttributesWithRoles = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
+        var authorizeAttributesWithRoles = authorizeAttributes.Where(a => Enum.IsDefined(typeof(RoleEnum), a));
 
         if (authorizeAttributesWithRoles.Any())
         {
-          foreach (var roles in authorizeAttributesWithRoles.Select(a => a.Roles.Split(',')))
+          foreach (var role in authorizeAttributesWithRoles.Select(a => a.Role))
           {
-            var authorized = false;
-            foreach (var role in roles)
+            var authorized = _identityService.IsInRole(role);
+
+            if (!authorized)
             {
-              var isInRole = _identityService.IsInRole(role.Trim());
-              if (isInRole)
-              {
-                authorized = true;
-                break;
-              }
+              throw new ForbiddenAccessException();
             }
 
             // Must be a member of at least one role in roles
