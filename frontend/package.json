@@ -37,6 +37,7 @@
     "next-rosetta": "^1.2.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.2.0",
     "react-list-reducer": "^1.1.0",
     "ts-array-ext": "^2.0.0",
     "uuid": "^8.3.2"

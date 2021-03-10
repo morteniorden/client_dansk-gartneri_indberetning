@@ -126,7 +126,8 @@ export class ClientBase {
 }
 
 export interface IAccountClient {
-    getAllClients(): Promise<AccountDto[]>;
+    createAccount(command: CreateAccountCommand): Promise<number>;
+    getAllAccounts(): Promise<AccountDto[]>;
 }
 
 export class AccountClient extends ClientBase implements IAccountClient {
@@ -140,7 +141,47 @@ export class AccountClient extends ClientBase implements IAccountClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getAllClients(): Promise<AccountDto[]> {
+    createAccount(command: CreateAccountCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/Account";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateAccount(_response));
+        });
+    }
+
+    protected processCreateAccount(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+
+    getAllAccounts(): Promise<AccountDto[]> {
         let url_ = this.baseUrl + "/api/Account";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -154,11 +195,11 @@ export class AccountClient extends ClientBase implements IAccountClient {
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllClients(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllAccounts(_response));
         });
     }
 
-    protected processGetAllClients(response: Response): Promise<AccountDto[]> {
+    protected processGetAllAccounts(response: Response): Promise<AccountDto[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -555,13 +596,152 @@ export class HealthClient extends ClientBase implements IHealthClient {
     }
 }
 
+export class CreateAccountCommand implements ICreateAccountCommand {
+    account?: CreateAccountDto | null;
+
+    constructor(data?: ICreateAccountCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.account = data.account && !(<any>data.account).toJSON ? new CreateAccountDto(data.account) : <CreateAccountDto>this.account; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.account = _data["account"] ? CreateAccountDto.fromJS(_data["account"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateAccountCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateAccountCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["account"] = this.account ? this.account.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateAccountCommand {
+    account?: ICreateAccountDto | null;
+}
+
+export class CreateAccountDto implements ICreateAccountDto {
+    email?: string | null;
+    name?: string | null;
+    tel?: string | null;
+    address?: AddressDto | null;
+    cvrNumber?: string | null;
+
+    constructor(data?: ICreateAccountDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.address = data.address && !(<any>data.address).toJSON ? new AddressDto(data.address) : <AddressDto>this.address; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.tel = _data["tel"] !== undefined ? _data["tel"] : <any>null;
+            this.address = _data["address"] ? AddressDto.fromJS(_data["address"]) : <any>null;
+            this.cvrNumber = _data["cvrNumber"] !== undefined ? _data["cvrNumber"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateAccountDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateAccountDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["tel"] = this.tel !== undefined ? this.tel : <any>null;
+        data["address"] = this.address ? this.address.toJSON() : <any>null;
+        data["cvrNumber"] = this.cvrNumber !== undefined ? this.cvrNumber : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateAccountDto {
+    email?: string | null;
+    name?: string | null;
+    tel?: string | null;
+    address?: IAddressDto | null;
+    cvrNumber?: string | null;
+}
+
+export class AddressDto implements IAddressDto {
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
+
+    constructor(data?: IAddressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
+            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
+            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
+            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AddressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
+        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
+        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
+        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
+        return data; 
+    }
+}
+
+export interface IAddressDto {
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
+}
+
 export class AccountDto implements IAccountDto {
+    id?: number;
     name?: string | null;
     email?: string | null;
     tel?: string | null;
     addressId?: number;
     cvrNumber?: string | null;
-    deactivationTime?: Date;
+    deactivationTime?: Date | null;
 
     constructor(data?: IAccountDto) {
         if (data) {
@@ -574,6 +754,7 @@ export class AccountDto implements IAccountDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
             this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
             this.tel = _data["tel"] !== undefined ? _data["tel"] : <any>null;
@@ -592,6 +773,7 @@ export class AccountDto implements IAccountDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["tel"] = this.tel !== undefined ? this.tel : <any>null;
@@ -603,12 +785,13 @@ export class AccountDto implements IAccountDto {
 }
 
 export interface IAccountDto {
+    id?: number;
     name?: string | null;
     email?: string | null;
     tel?: string | null;
     addressId?: number;
     cvrNumber?: string | null;
-    deactivationTime?: Date;
+    deactivationTime?: Date | null;
 }
 
 export class CreateExampleChildCommand implements ICreateExampleChildCommand {
