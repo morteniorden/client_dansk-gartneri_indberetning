@@ -14,7 +14,8 @@ export const table: Locale = {
   },
 
   common: {
-    search: "Search"
+    search: "Search",
+    add: "Add"
   },
 
   accounts: {
@@ -23,9 +24,22 @@ export const table: Locale = {
     name: "Name",
     email: "Email",
     tel: "Tel",
+    address: "Address",
     address1: "Address 1",
     address2: "Address 2",
     cvrNumber: "CVR",
-    addAccount: "Add account"
+    addAccount: "Add account",
+    street: "Street",
+    streetNum: "Number",
+    postCode: "Zip",
+    city: "City",
+    country: "Country",
+    addressLine1: "Line 1",
+    addressLine2: "Line 2",
+    addressLine3: "Line 3",
+    addressLine4: "Line 4",
+    CVR_getFromRegistry: "Get info from CVR-registry",
+    CVR_apiErrorTitle: "CVR not found",
+    CVR_apiErrorDescription: "Could not find CVR number in the registry"
   }
 };

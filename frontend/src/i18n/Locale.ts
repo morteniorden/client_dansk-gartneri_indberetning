@@ -13,6 +13,7 @@ export interface Locale {
 
   common: {
     search: string;
+    add: string;
   };
 
   accounts: {
@@ -21,9 +22,22 @@ export interface Locale {
     name: string;
     email: string;
     tel: string;
+    address: string;
     address1: string;
     address2: string;
     cvrNumber: string;
     addAccount: string;
+    street: string;
+    streetNum: string;
+    postCode: string;
+    city: string;
+    country: string;
+    addressLine1: string;
+    addressLine2: string;
+    addressLine3: string;
+    addressLine4: string;
+    CVR_getFromRegistry: string;
+    CVR_apiErrorTitle: string;
+    CVR_apiErrorDescription: string;
   };
 }

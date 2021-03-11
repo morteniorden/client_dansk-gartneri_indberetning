@@ -1,6 +1,5 @@
-import { Button, Flex, Heading, Stack } from "@chakra-ui/react";
+import { Flex, Heading, Stack } from "@chakra-ui/react";
 import BasicLayout from "components/Layouts/BasicLayout";
-import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
@@ -9,11 +8,11 @@ import { IAccountDto } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import AccountsTable from "./AccountsTable";
+import NewAccountModal from "./NewAccountModal";
 import SearchFilterInput from "./SearchFilterInput";
 
 const Accounts: FC = () => {
   const { t } = useLocales();
-  const { buttonFont } = useColors();
 
   const [accounts, dispatchAccounts] = useReducer(ListReducer<IAccountDto>("id"), []);
   const [searchString, setSearchString] = useState<string>("");
@@ -45,9 +44,7 @@ const Accounts: FC = () => {
       <Stack spacing={4}>
         <Flex justifyContent="space-between" alignItems="center">
           <Heading>{t("accounts.accounts")}</Heading>
-          <Button rounded="full" colorScheme="blue" textColor={buttonFont}>
-            {t("accounts.addAccount")}
-          </Button>
+          <NewAccountModal onSubmit={fetchData} />
         </Flex>
         <SearchFilterInput onChange={setSearchString} value={searchString} />
         <AccountsTable data={accounts} searchString={searchString} />

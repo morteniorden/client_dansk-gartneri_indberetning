@@ -36,10 +36,10 @@ namespace Application.Accounts.Commands.CreateAccountCommand
 
         var address1Entity = new Address
         {
-          AddressLine1 = request.account.Address.AddressLine1,
-          AddressLine2 = request.account.Address.AddressLine2,
-          AddressLine3 = request.account.Address.AddressLine3,
-          AddressLine4 = request.account.Address.AddressLine4,
+          AddressLine1 = request.account.AddressLine1,
+          AddressLine2 = request.account.AddressLine2,
+          AddressLine3 = request.account.AddressLine3,
+          AddressLine4 = request.account.AddressLine4,
         };
         _context.Addresses.Add(address1Entity);
 
@@ -63,7 +63,7 @@ namespace Application.Accounts.Commands.CreateAccountCommand
           AccountId = accountEntity.Id,
           Account = accountEntity,
           Email = accountEntity.Email,
-          Password = "password123", //Temporary, should perhaps be auto-generated or something
+          Password = "Password123", //Temporary, should perhaps be auto-generated or something..
           Role = RoleEnum.Client,
           Name = request.account.Name
         };

@@ -18,9 +18,7 @@ namespace Application.Accounts.Commands.CreateAccountCommand
       RuleFor(e => e.account.Tel)
         .MinimumLength(8)
         .NotNull();
-      RuleFor(e => e.account.Address)
-        .NotNull();
-      RuleFor(e => e.account.Address.AddressLine1)
+      RuleFor(e => e.account.AddressLine1)
         .NotEmpty();
     }
   }
