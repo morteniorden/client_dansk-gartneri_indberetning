@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Accounts;
 using Application.Accounts.Commands.CreateAccountCommand;
+using Application.Common.Interfaces;
+using Moq;
 using Xunit;
 
 namespace Application.UnitTests.Accounts.Commands.CreateAccount
@@ -22,13 +24,13 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
+          CVRNumber = "13243546",
           AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city",
-          CVRNumber = "13243546"
+          AddressLine2 = "1234 test city"
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context);
+      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, passwordHasherMock.Object);
 
       var result = await handler.Handle(command, CancellationToken.None);
 
@@ -64,9 +66,9 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
+          CVRNumber = "13243546",
           AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city",
-          CVRNumber = "13243546"
+          AddressLine2 = "1234 test city"
         }
       };
 
@@ -78,13 +80,13 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
+          CVRNumber = "43546578",
           AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city",
-          CVRNumber = "43546578"
+          AddressLine2 = "1234 test city"
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context);
+      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, passwordHasherMock.Object);
       await handler.Handle(command1, CancellationToken.None);
 
       Func<Task> action = async () => await handler.Handle(command2, CancellationToken.None);
@@ -102,9 +104,9 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
+          CVRNumber = "13243546",
           AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city",
-          CVRNumber = "13243546"
+          AddressLine2 = "1234 test city"
         }
       };
 
@@ -116,13 +118,13 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
           Email = "test2@test.dk",
           Name = "test name",
           Tel = "12345678",
+          CVRNumber = "13243546",
           AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city",
-          CVRNumber = "13243546"
+          AddressLine2 = "1234 test city"
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context);
+      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, passwordHasherMock.Object);
       await handler.Handle(command1, CancellationToken.None);
 
       Func<Task> action = async () => await handler.Handle(command2, CancellationToken.None);

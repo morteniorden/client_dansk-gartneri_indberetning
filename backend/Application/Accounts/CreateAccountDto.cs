@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Application.Common.Mappings;
-using AutoMapper;
-using Domain.Entities;
-
 namespace Application.Accounts
 {
   public class CreateAccountDto

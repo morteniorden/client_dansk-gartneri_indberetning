@@ -1,31 +1,24 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Application.Users;
+using Application.Users.Commands.Login;
 
 namespace Web.Controllers
 {
 
   public class AuthController : ApiControllerBase
   {
-    private static string TEMP_TOKEN = "abs";
-
     [HttpPost]
-    public ActionResult<string> Login()
+    public async Task<ActionResult<UserTokenDto>> Login([FromBody] LoginCommand command)
     {
-      return TEMP_TOKEN;
+      return await Mediator.Send(command);
     }
 
     [HttpPut]
-    public ActionResult<bool> CheckAuth()
+    public async Task<ActionResult<UserDto>> CheckAuth()
     {
-      if (!Request.Headers.TryGetValue("Authorization", out var auth)) {
-        return false;
-      }
-
-      Regex r = new Regex(@"^Bearer (\S+)$", RegexOptions.IgnoreCase);
-      Match m = r.Match(auth);
-      var g = m.Groups[1].Captures[0].Value;
-
-      return g == TEMP_TOKEN;
+      throw new NotImplementedException();
     }
   }
 }

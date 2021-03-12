@@ -16,10 +16,12 @@ namespace Application.Accounts.Commands.CreateAccountCommand
     public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, int>
     {
       private readonly IApplicationDbContext _context;
+      private readonly IPasswordHasher _passwordHasher;
 
-      public CreateAccountCommandHandler(IApplicationDbContext context)
+      public CreateAccountCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher)
       {
         _context = context;
+        _passwordHasher = passwordHasher;
       }
 
       public async Task<int> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
@@ -63,7 +65,7 @@ namespace Application.Accounts.Commands.CreateAccountCommand
           AccountId = accountEntity.Id,
           Account = accountEntity,
           Email = accountEntity.Email,
-          Password = "Password123", //Temporary, should perhaps be auto-generated or something..
+          Password = _passwordHasher.Hash("password123"), //temporary
           Role = RoleEnum.Client,
           Name = request.account.Name
         };

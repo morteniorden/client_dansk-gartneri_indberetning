@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { genAuthenticationClient } from "services/backend/apiClients";
+import { ILoginRequestDto, IUserTokenDto, LoginCommand } from "services/backend/nswagts";
 
 import { useEffectAsync } from "./useEffectAsync";
 
@@ -14,7 +15,7 @@ export enum AuthStage {
 
 type AuthHook<T> = {
   authStage: AuthStage;
-  login: () => Promise<boolean>;
+  login: (loginRequest: ILoginRequestDto) => Promise<boolean>;
   logout: () => void;
   activeUser: T | null;
 };
@@ -34,22 +35,26 @@ export const useAuth = (): AuthHook<boolean> => {
     setAuthStage(user ? AuthStage.AUTHENTICATED : AuthStage.UNAUTHENTICATED);
   }, [authCounter]);
 
-  const login = useCallback(async () =>
-    // TODO input login DTO
-    {
-      const client = await genAuthenticationClient();
+  const login = useCallback(async (loginRequest: ILoginRequestDto) => {
+    const client = await genAuthenticationClient();
 
-      const user: string = await client.login().catch(() => null);
+    const user: IUserTokenDto = await client
+      .login(
+        new LoginCommand({
+          loginDetails: loginRequest
+        })
+      )
+      .catch(() => null);
 
-      if (!user) {
-        return false;
-      }
-      setAuthStage(AuthStage.CHECKING);
-      setCookie(user);
-      setAuthToken(user);
-      setAuthCounter(c => c + 1);
-      return true;
-    }, []);
+    if (!user) {
+      return false;
+    }
+    setAuthStage(AuthStage.CHECKING);
+    setCookie(user.token);
+    setAuthToken(user.token);
+    setAuthCounter(c => c + 1);
+    return true;
+  }, []);
 
   const logout = useCallback(() => {
     setAuthStage(AuthStage.CHECKING);

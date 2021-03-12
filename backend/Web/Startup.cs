@@ -14,6 +14,8 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
 using System.Linq;
+using Application.Common.Options;
+using Application.Security;
 using Web.DocumentProcessors;
 using Web.Filters;
 using Web.Hubs;
@@ -36,6 +38,8 @@ namespace Web
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
+      services.Configure<HashingOptions>(Configuration.GetSection(HashingOptions.Hashing));
+      services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.Tokens));
 
       services.AddCors(options =>
       {
@@ -85,6 +89,8 @@ namespace Web
       services.AddScoped<ICurrentUserService, CurrentUserService>();
       services.AddScoped<IAuthorizationService, AuthorizationService>();
       services.AddScoped<IExampleHubService, ExampleHubService>();
+      services.AddScoped<ITokenService, TokenService>();
+      services.AddScoped<IPasswordHasher, PasswordHasher>();
       services.AddSignalR();
     }
 
@@ -117,9 +123,8 @@ namespace Web
 
       app.UseRouting();
 
-      //TODO add auth.
-      //app.UseAuthentication();
-      //app.UseAuthorization();
+      app.UseAuthentication();
+      app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
       {
