@@ -41,5 +41,13 @@ export const table: Locale = {
     CVR_getFromRegistry: "Hent info fra CVR-registret",
     CVR_apiErrorTitle: "CVR ikke fundet",
     CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret"
+  },
+
+  password: {
+    dontMatch: "De to passwords er ikke ens.",
+    tooShort: "Skal være på minds 8 karakterer.",
+    missingUppercase: "Skal have mindst ét stort bogstav.",
+    missingLowercase: "Skal have mindst ét lille bogstav.",
+    missingNumber: "Skal have mindst ét tal."
   }
 };

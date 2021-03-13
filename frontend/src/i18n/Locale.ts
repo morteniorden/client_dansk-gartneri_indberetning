@@ -40,4 +40,12 @@ export interface Locale {
     CVR_apiErrorTitle: string;
     CVR_apiErrorDescription: string;
   };
+
+  password: {
+    dontMatch: string;
+    tooShort: string;
+    missingUppercase: string;
+    missingLowercase: string;
+    missingNumber: string;
+  };
 }
