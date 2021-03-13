@@ -1,45 +1,58 @@
-import { Button, Flex, FormControl, FormLabel, Input, ModalHeader, Spacer } from "@chakra-ui/react";
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
+import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
-import { genAccountClient } from "services/backend/apiClients";
-import {
-  CreateAccountCommand,
-  CreateAccountDto,
-  ICreateAccountDto,
-  UpdatePasswordDto
-} from "services/backend/nswagts";
-import { CVRDataDto } from "services/cvr/api";
+import { genUserClient } from "services/backend/apiClients";
+import { UpdatePasswordCommand, UpdatePasswordDto } from "services/backend/nswagts";
 
 interface Props {
   onSubmit: (e: React.FormEvent) => void;
 }
 
 const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
+  const { activeUser } = useAuth();
   const { t } = useLocales();
 
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      formUpdateReform(e.target.value, e.target.id as keyof typeof localForm);
-    },
-    [formUpdateReform]
-  );
+  const [password, setPassword] = useState<string>("");
+  const [repeatPassword, setRepeatPassword] = useState<string>("");
+  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      const accountClient = await genAccountClient();
-      await accountClient.createAccount(
-        new CreateAccountCommand({
-          account: localForm
+      const match = repeatPassword == password;
+      setPasswordsMatch(match);
+      if (!match) return;
+
+      const userClient = await genUserClient();
+      await userClient.updatePassword(
+        1, //TODO: Change to id of active user.
+        new UpdatePasswordCommand({
+          passwordDto: new UpdatePasswordDto({
+            password: password
+          })
         })
       );
+
       onSubmit(e);
     },
-    [localForm]
+    [password, repeatPassword]
   );
 
   return (
     <form onSubmit={handleSubmit}>
+      <FormControl id="password" isRequired>
+        <FormLabel htmlFor="password">{t("users.password")}</FormLabel>
+        <Input type="password" value={password} onChange={e => setPassword(e.target.value)}></Input>
+      </FormControl>
+      <FormControl id="passwordRepeat" isRequired isInvalid={!passwordsMatch}>
+        <FormLabel htmlFor="password">{t("users.repeatPassword")}</FormLabel>
+        <Input
+          type="password"
+          value={repeatPassword}
+          onChange={e => setRepeatPassword(e.target.value)}></Input>
+        <FormErrorMessage>{t("users.passwordsDontMatch")}</FormErrorMessage>
+      </FormControl>
       <Flex justifyContent="flex-end" w="100%" mt={5}>
         <Button colorScheme="green" type="submit">
           {t("common.add")}
@@ -48,4 +61,4 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
     </form>
   );
 };
-export default NewAccountForm;
+export default ChangePasswordForm;

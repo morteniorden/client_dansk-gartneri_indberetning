@@ -596,11 +596,11 @@ export class HealthClient extends ClientBase implements IHealthClient {
     }
 }
 
-export interface IUseClient {
+export interface IUserClient {
     updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse>;
 }
 
-export class UseClient extends ClientBase implements IUseClient {
+export class UserClient extends ClientBase implements IUserClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -612,7 +612,7 @@ export class UseClient extends ClientBase implements IUseClient {
     }
 
     updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/Use/{id}";
+        let url_ = this.baseUrl + "/api/User/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
