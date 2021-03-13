@@ -596,6 +596,63 @@ export class HealthClient extends ClientBase implements IHealthClient {
     }
 }
 
+export interface IUseClient {
+    updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse>;
+}
+
+export class UseClient extends ClientBase implements IUseClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(configuration: AuthBase, baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super(configuration);
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Use/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdatePassword(_response));
+        });
+    }
+
+    protected processUpdatePassword(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
+    }
+}
+
 export class CreateAccountCommand implements ICreateAccountCommand {
     account?: CreateAccountDto | null;
 
@@ -985,6 +1042,79 @@ export class ExampleParentDto implements IExampleParentDto {
 
 export interface IExampleParentDto {
     name?: string | null;
+}
+
+export class UpdatePasswordCommand implements IUpdatePasswordCommand {
+    passwordDto?: UpdatePasswordDto | null;
+
+    constructor(data?: IUpdatePasswordCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.passwordDto = data.passwordDto && !(<any>data.passwordDto).toJSON ? new UpdatePasswordDto(data.passwordDto) : <UpdatePasswordDto>this.passwordDto; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.passwordDto = _data["passwordDto"] ? UpdatePasswordDto.fromJS(_data["passwordDto"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UpdatePasswordCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePasswordCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["passwordDto"] = this.passwordDto ? this.passwordDto.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IUpdatePasswordCommand {
+    passwordDto?: IUpdatePasswordDto | null;
+}
+
+export class UpdatePasswordDto implements IUpdatePasswordDto {
+    password?: string | null;
+
+    constructor(data?: IUpdatePasswordDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.password = _data["password"] !== undefined ? _data["password"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UpdatePasswordDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePasswordDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["password"] = this.password !== undefined ? this.password : <any>null;
+        return data; 
+    }
+}
+
+export interface IUpdatePasswordDto {
+    password?: string | null;
 }
 
 export enum CommandErrorCode {
