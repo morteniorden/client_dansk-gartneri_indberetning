@@ -1,3 +1,4 @@
+using System;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -5,12 +6,15 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Security;
+using Newtonsoft.Json;
 
 namespace Application.Users.Commands.UpdatePassword
 {
   [Authorize]
   public class UpdatePasswordCommand : IRequest
   {
+    [JsonIgnore]
+    public int Id { get; set; }
     public UpdatePasswordDto PasswordDto { get; set; }
 
 
@@ -27,11 +31,16 @@ namespace Application.Users.Commands.UpdatePassword
 
       public async Task<Unit> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
       {
-        var userEntity = await _context.Users.FindAsync(_currentUserService.UserId);
+        if (request.Id != int.Parse(_currentUserService.UserId))
+        {
+          throw new UnauthorizedAccessException("The request id did not match the currently authorized user.");
+        }
+
+        var userEntity = await _context.Users.FindAsync(request.Id);
 
         if (userEntity == null)
         {
-          throw new NotFoundException(nameof(User), _currentUserService.UserId);
+          throw new NotFoundException(nameof(User), request.Id);
         }
 
         userEntity.Password = request.PasswordDto.Password;
