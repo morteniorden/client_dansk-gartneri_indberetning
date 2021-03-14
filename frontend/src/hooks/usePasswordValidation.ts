@@ -50,9 +50,16 @@ export const usePasswordValidation = () => {
       return errors;
     }, []);
 
-    const newState = { ...pwState, ...{ errors: newErrors } };
-    newState.pw1Valid = newState.errors.length == 0;
-    newState.pw2Valid = newState.pw1 == newState.pw2;
+    const newState = {
+      ...pwState,
+      ...{
+        errors: newErrors,
+        pw1Valid: newErrors.length == 0,
+        pw2Valid: pwState.pw1 == pwState.pw2
+      }
+    };
+    //newState.pw1Valid = newState.errors.length == 0;
+    //newState.pw2Valid = newState.pw1 == newState.pw2;
     setPwState(newState);
 
     return newState.pw1Valid && newState.pw2Valid;
