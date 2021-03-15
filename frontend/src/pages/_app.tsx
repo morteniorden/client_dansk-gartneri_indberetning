@@ -82,4 +82,3 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType & Props): ReactEl
 };
 
 export default MyApp;
-/*<Component {...pageProps} />*/

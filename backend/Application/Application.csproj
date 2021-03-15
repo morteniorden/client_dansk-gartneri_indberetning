@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="Users\Commands\LoginCommand\" />
     <Folder Include="Common\Services\" />
+    <Folder Include="Users\Commands\CreateAdminCommand\" />
   </ItemGroup>
 
 </Project>
