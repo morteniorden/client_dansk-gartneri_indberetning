@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Accounts;
 using Application.Accounts.Commands.CreateAccountCommand;
 using Application.Accounts.Queries.GetAccountsQuery;
+using Application.Accounts.Queries.GetCurrentAccountQuery;
 
 namespace Web.Controllers
 {
@@ -22,5 +23,10 @@ namespace Web.Controllers
       return await Mediator.Send(new GetAccountsQuery());
     }
 
+    [HttpGet("myAccount")]
+    public async Task<ActionResult<AccountDto>> GetAccount()
+    {
+      return await Mediator.Send(new GetCurrentAccountQuery());
+    }
   }
 }

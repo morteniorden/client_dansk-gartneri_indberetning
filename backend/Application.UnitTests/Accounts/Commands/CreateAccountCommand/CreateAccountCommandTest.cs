@@ -44,8 +44,6 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
       entity.Address.Should().NotBeNull();
       entity.Address.Account.Should().Be(entity);
       entity.Address.AccountId.Should().Be(entity.Id);
-      entity.Address.AddressLine1.Should().Be(command.account.AddressLine1);
-      entity.Address.AddressLine2.Should().Be(command.account.AddressLine2);
       entity.Users.Should().HaveCount(1);
 
       var user = entity.Users.First();
