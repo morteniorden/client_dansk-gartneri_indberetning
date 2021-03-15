@@ -14,7 +14,7 @@ namespace Application.UnitTests
       Context = ApplicationDbContextFactory.Create();
       passwordHasherMock = new Mock<IPasswordHasher>();
       passwordHasherMock.Setup(m => m.Hash("password"))
-        .Returns("Password123");
+        .Returns("password");
       passwordHasherMock.Setup(m => m.Check("password", "password")).Returns((true, false));
     }
 

@@ -72,6 +72,12 @@ namespace Application.UnitTests
         new User { Id = 3, AccountId = 2, Account = account2, Email = "test2@test2.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test2 client" }
       );
 
+      context.Admins.AddRange(
+        new AdminUser { Id = 1, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name="Admin"},
+        new AdminUser { Id = 2, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
+        new AdminUser { Id = 3, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
+      );
+
       context.SaveChanges();
     }
 

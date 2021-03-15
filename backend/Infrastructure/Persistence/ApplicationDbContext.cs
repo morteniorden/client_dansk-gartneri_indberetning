@@ -24,6 +24,7 @@ namespace Infrastructure.Persistence
 
     public DbSet<Account> Accounts { get; set;}
     public DbSet<User> Users { get; set; }
+    public DbSet<AdminUser> Admins { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<ExampleChild> ExampleChildren { get; set; }
 
