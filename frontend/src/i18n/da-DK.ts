@@ -44,10 +44,13 @@ export const table: Locale = {
   },
 
   password: {
+    password: "Password:",
+    repeatPassword: "Gentag password:",
     dontMatch: "De to passwords er ikke ens.",
     tooShort: "Skal være på minds 8 karakterer.",
     missingUppercase: "Skal have mindst ét stort bogstav.",
     missingLowercase: "Skal have mindst ét lille bogstav.",
-    missingNumber: "Skal have mindst ét tal."
+    missingNumber: "Skal have mindst ét tal.",
+    change: "Skift password"
   }
 };

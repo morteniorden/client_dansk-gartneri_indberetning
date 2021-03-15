@@ -36,26 +36,28 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <FormControl id="password" isRequired isInvalid={!pwState.pw1Valid}>
-        <FormLabel htmlFor="password">{t("users.password")}</FormLabel>
+        <FormLabel htmlFor="password">{t("password.password")}</FormLabel>
         <Input
           type="password"
           value={pwState.pw1}
           onChange={e => setPwState({ ...pwState, ...{ pw1: e.target.value } })}></Input>
-        {pwState.errors.map((err, i) => (
-          <FormErrorMessage key={i}>{err.errorMsg}</FormErrorMessage>
-        ))}
       </FormControl>
       <FormControl id="passwordRepeat" isRequired isInvalid={!pwState.pw2Valid}>
-        <FormLabel htmlFor="password">{t("users.repeatPassword")}</FormLabel>
+        <FormLabel htmlFor="password">{t("password.repeatPassword")}</FormLabel>
         <Input
           type="password"
           value={pwState.pw2}
           onChange={e => setPwState({ ...pwState, ...{ pw2: e.target.value } })}></Input>
+      </FormControl>
+      <FormControl isInvalid={!pwState.pw1Valid || !pwState.pw2Valid}>
+        {pwState.errors.map((err, i) => (
+          <FormErrorMessage key={i}>{err.errorMsg}</FormErrorMessage>
+        ))}
         <FormErrorMessage>{t("password.dontMatch")}</FormErrorMessage>
       </FormControl>
       <Flex justifyContent="flex-end" w="100%" mt={5}>
         <Button colorScheme="green" type="submit">
-          {t("common.add")}
+          {t("password.change")}
         </Button>
       </Flex>
     </form>
