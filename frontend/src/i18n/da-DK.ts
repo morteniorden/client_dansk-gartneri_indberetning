@@ -2,6 +2,7 @@ import { Locale } from "./Locale";
 
 export const table: Locale = {
   locale: "Dansk",
+  flagUrl: "images/icons/DK.svg",
 
   example: {
     title: "Hej Verden",
@@ -41,5 +42,13 @@ export const table: Locale = {
     CVR_getFromRegistry: "Hent info fra CVR-registret",
     CVR_apiErrorTitle: "CVR ikke fundet",
     CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret"
+  },
+
+  login: {
+    email: "Email:",
+    password: "Password:",
+    login: "Log ind",
+    forgotPassword: "Glemt password?",
+    invalidMsg: "Fejl i email eller password. Prøv igen."
   }
 };

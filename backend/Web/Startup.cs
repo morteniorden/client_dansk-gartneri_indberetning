@@ -14,8 +14,11 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
 using System.Linq;
+using System.Text;
 using Application.Common.Options;
 using Application.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Web.DocumentProcessors;
 using Web.Filters;
 using Web.Hubs;
@@ -84,6 +87,7 @@ namespace Web
 
         configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         configure.DocumentProcessors.Add(new CustomDocumentProcessor());
+
       });
 
       services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -92,6 +96,25 @@ namespace Web
       services.AddScoped<ITokenService, TokenService>();
       services.AddScoped<IPasswordHasher, PasswordHasher>();
       services.AddSignalR();
+
+      var key = Encoding.ASCII.GetBytes("VERY_SECRET_SECRET");
+      services.AddAuthentication(x =>
+        {
+          x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+          x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+          x.RequireHttpsMetadata = false;
+          x.SaveToken = true;
+          x.TokenValidationParameters = new TokenValidationParameters
+          {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+          };
+        });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

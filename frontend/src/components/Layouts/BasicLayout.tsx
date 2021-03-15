@@ -8,7 +8,7 @@ interface Props {
 
 const BasicLayout: FC<Props> = ({ children }) => {
   return (
-    <Grid gridTemplateColumns="1fr minmax(400px, 1000px) 1fr" gridTemplateRows="auto 1fr">
+    <Grid gridTemplateColumns="1fr minmax(400px, 80vw) 1fr" gridTemplateRows="auto 1fr">
       <GridItem rowSpan={1} colSpan={3}>
         <Header />
       </GridItem>

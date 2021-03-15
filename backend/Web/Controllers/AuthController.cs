@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Application.Users.Commands.CheckAuthCommand;
 using Application.Users;
 using Application.Users.Commands.Login;
 
@@ -18,7 +19,8 @@ namespace Web.Controllers
     [HttpPut]
     public async Task<ActionResult<UserDto>> CheckAuth()
     {
-      throw new NotImplementedException();
+      var result = await Mediator.Send(new CheckAuthCommand());
+      return result;
     }
   }
 }

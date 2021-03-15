@@ -25,7 +25,8 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
     { name: t("accounts.name"), id: "name" },
     { name: t("accounts.email"), id: "email" },
     { name: t("accounts.tel"), id: "tel" },
-    { name: t("accounts.cvrNumber"), id: "cvrNumber" }
+    { name: t("accounts.cvrNumber"), id: "cvrNumber" },
+    { name: t("accounts.address"), id: "address" }
   ];
   const [tableKeys, setTableKeys] = useState<SelectType[]>(allKeyOptions);
 
@@ -39,9 +40,21 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
     }
   }, []);
 
+  const genValueFromKey = useCallback((account: IAccountDto, key: string) => {
+    if (key == "address") {
+      const a = account.address;
+      return `${a.addressLine1 ?? ""} ${a.addressLine2 ?? ""} ${a.addressLine3 ?? ""} ${
+        a.addressLine4 ?? ""
+      }`;
+    }
+    return account[key as keyof IAccountDto];
+  }, []);
+
   const sortComparer = useCallback(
     (a: IAccountDto, b: IAccountDto) => {
-      const [c, d] = sortDirection == "ASC" ? [a[sortKey], b[sortKey]] : [b[sortKey], a[sortKey]];
+      const aValue = genValueFromKey(a, sortKey);
+      const bValue = genValueFromKey(b, sortKey);
+      const [c, d] = sortDirection == "ASC" ? [aValue, bValue] : [bValue, aValue];
       if (typeof c == "number" && typeof d == "number") {
         return c - d;
       }
@@ -75,8 +88,10 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
             <Tr>
               {tableKeys.map(key => (
                 <Th key={key.id}>
-                  <QuerySortBtn queryKey={key.id.toString()} sortCb={handleSortChange} mr={3} />
-                  {key.name}
+                  <Flex>
+                    <QuerySortBtn queryKey={key.id.toString()} sortCb={handleSortChange} mr={3} />
+                    {t(`accounts.${key.id}`)}
+                  </Flex>
                 </Th>
               ))}
             </Tr>
@@ -89,7 +104,7 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
                 return (
                   <Tr key={account.id}>
                     {tableKeys.map(key => (
-                      <Td key={key.id}>{account[key.id.toString() as keyof IAccountDto]}</Td>
+                      <Td key={key.id}>{genValueFromKey(account, key.id.toString())}</Td>
                     ))}
                   </Tr>
                 );

@@ -1,4 +1,4 @@
-import { Flex, Heading, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, HStack, Stack } from "@chakra-ui/react";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useReducer, useState } from "react";
@@ -44,9 +44,13 @@ const Accounts: FC = () => {
       <Stack spacing={4}>
         <Flex justifyContent="space-between" alignItems="center">
           <Heading>{t("accounts.accounts")}</Heading>
-          <NewAccountModal onSubmit={fetchData} />
+          <HStack spacing={5}>
+            <Box>
+              <SearchFilterInput onChange={setSearchString} value={searchString} />
+            </Box>
+            <NewAccountModal onSubmit={fetchData} />
+          </HStack>
         </Flex>
-        <SearchFilterInput onChange={setSearchString} value={searchString} />
         <AccountsTable data={accounts} searchString={searchString} />
       </Stack>
     </BasicLayout>

@@ -10,6 +10,7 @@ import { useEffectAsync } from "./useEffectAsync";
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useLocales = () => {
   const [localeNameMap, setLocaleNameMap] = useState<Record<string, string>>();
+  const [localeFlagMap, setLocaleFlagMap] = useState<Record<string, string>>();
   const { locale, locales } = useRouter();
 
   const { t } = useI18n<Locale>();
@@ -23,8 +24,17 @@ export const useLocales = () => {
       return acc;
     }, {});
 
+    const localeFlagMap = await locales.reduceAsync<Record<string, string>>(async (acc, cur) => {
+      const localeFile = await require("../i18n/" + cur);
+
+      acc[cur] = (localeFile.table as Locale).flagUrl;
+
+      return acc;
+    }, {});
+
     setLocaleNameMap(localeNameMap);
+    setLocaleFlagMap(localeFlagMap);
   }, []);
 
-  return { t, locale, locales, localeNameMap };
+  return { t, locale, locales, localeNameMap, localeFlagMap };
 };

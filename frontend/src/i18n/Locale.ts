@@ -1,5 +1,6 @@
 export interface Locale {
   locale: string; // !Must not be deleted. Used for providing the locale in the native language
+  flagUrl: string;
 
   example: {
     title: string;
@@ -39,5 +40,13 @@ export interface Locale {
     CVR_getFromRegistry: string;
     CVR_apiErrorTitle: string;
     CVR_apiErrorDescription: string;
+  };
+
+  login: {
+    email: string;
+    password: string;
+    login: string;
+    forgotPassword: string;
+    invalidMsg: string;
   };
 }

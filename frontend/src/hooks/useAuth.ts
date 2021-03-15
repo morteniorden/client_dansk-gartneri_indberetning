@@ -3,7 +3,13 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { genAuthenticationClient } from "services/backend/apiClients";
-import { ILoginRequestDto, IUserTokenDto, LoginCommand } from "services/backend/nswagts";
+import {
+  ILoginRequestDto,
+  IUserDto,
+  IUserTokenDto,
+  LoginCommand,
+  LoginRequestDto
+} from "services/backend/nswagts";
 
 import { useEffectAsync } from "./useEffectAsync";
 
@@ -13,22 +19,22 @@ export enum AuthStage {
   UNAUTHENTICATED
 }
 
-type AuthHook<T> = {
+type AuthHook<IUserDto> = {
   authStage: AuthStage;
   login: (loginRequest: ILoginRequestDto) => Promise<boolean>;
   logout: () => void;
-  activeUser: T | null;
+  activeUser: IUserDto | null;
 };
 
-export const useAuth = (): AuthHook<boolean> => {
+export const useAuth = (): AuthHook<IUserDto> => {
   const [authStage, setAuthStage] = useState(AuthStage.CHECKING);
   const [authCounter, setAuthCounter] = useState(0);
-  const [activeUser, setActiveUser] = useState<boolean>(null);
+  const [activeUser, setActiveUser] = useState<IUserDto>(null);
   const router = useRouter();
 
   useEffectAsync(async () => {
     const client = await genAuthenticationClient();
-    const user: boolean = await client.checkAuth().catch(() => null);
+    const user: IUserDto = await client.checkAuth().catch(() => null);
 
     setActiveUser(user);
 
@@ -59,7 +65,7 @@ export const useAuth = (): AuthHook<boolean> => {
   const logout = useCallback(() => {
     setAuthStage(AuthStage.CHECKING);
     deleteCookie();
-    setAuthToken("");
+    setAuthToken("invalid_token");
     setAuthCounter(c => c + 1);
     router.push("/");
   }, []);
