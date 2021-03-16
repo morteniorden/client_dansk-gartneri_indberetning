@@ -49,4 +49,12 @@ export interface Locale {
     forgotPassword: string;
     invalidMsg: string;
   };
+
+  admins: {
+    admins: string;
+  };
+
+  actions: {
+    delete: string;
+  };
 }

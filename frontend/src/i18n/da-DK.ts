@@ -50,5 +50,13 @@ export const table: Locale = {
     login: "Log ind",
     forgotPassword: "Glemt password?",
     invalidMsg: "Fejl i email eller password. Prøv igen."
+  },
+
+  admins: {
+    admins: "Administratorer"
+  },
+
+  actions: {
+    delete: "Slet"
   }
 };
