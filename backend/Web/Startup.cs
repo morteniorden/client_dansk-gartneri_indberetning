@@ -1,3 +1,4 @@
+using System;
 using Application;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Hubs;
@@ -17,6 +18,8 @@ using System.Linq;
 using System.Text;
 using Application.Common.Options;
 using Application.Security;
+using Hangfire;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Web.DocumentProcessors;
@@ -55,7 +58,7 @@ namespace Web
                   });
       });
 
-      services.AddApplication();
+      services.AddApplication(Configuration);
       services.AddInfrastructure(Configuration, Environment);
 
       services.AddHttpContextAccessor();
@@ -148,6 +151,8 @@ namespace Web
 
       app.UseAuthentication();
       app.UseAuthorization();
+
+      app.UseHangfireDashboard();
 
       app.UseEndpoints(endpoints =>
       {
