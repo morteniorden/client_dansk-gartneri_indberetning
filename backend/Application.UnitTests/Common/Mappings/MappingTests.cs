@@ -30,7 +30,7 @@ namespace Application.UnitTests.Common.Mappings
     [InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
     [InlineData(typeof(ExampleParent), typeof(ExampleParentDto))]
     [InlineData(typeof(Account), typeof(AccountDto))]
-    [InlineData(typeof(User), typeof(UserDto))]
+    [InlineData(typeof(User), typeof(UserAccountIdDto))]
     [InlineData(typeof(AdminUser), typeof(UserDto))]
     [InlineData(typeof(Address), typeof(AddressDto))]
     //[InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
