@@ -46,6 +46,7 @@ namespace Web
     {
       services.Configure<HashingOptions>(Configuration.GetSection(HashingOptions.Hashing));
       services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.Tokens));
+      services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
 
       services.AddCors(options =>
       {

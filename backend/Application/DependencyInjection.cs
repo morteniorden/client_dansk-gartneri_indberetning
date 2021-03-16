@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Application.Common.Interfaces;
+using Application.Common.Services;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +24,7 @@ namespace Application
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+      services.AddTransient<IMailService, MailService>();
 
       services.AddHangfire(configuration => configuration
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
