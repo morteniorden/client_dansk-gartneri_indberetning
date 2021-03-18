@@ -20,7 +20,6 @@ namespace Application.Users.Commands.Login
       private readonly IPasswordHasher _passwordHasher;
       private readonly ITokenService _tokenService;
 
-
       public LoginCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, ITokenService tokenService, IMapper mapper)
       {
         _context = context;

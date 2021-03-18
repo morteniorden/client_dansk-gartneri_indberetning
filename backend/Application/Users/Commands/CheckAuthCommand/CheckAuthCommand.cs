@@ -5,6 +5,7 @@ using Application.Accounts;
 using Application.Common.Interfaces;
 using Application.Common.Security;
 using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,8 +30,15 @@ namespace Application.Users.Commands.CheckAuthCommand
 
       public async Task<UserDto> Handle(CheckAuthCommand request, CancellationToken cancellationToken)
       {
-        var user = await _context.Users
-          .FirstOrDefaultAsync(u => u.Id.ToString().Equals(_userAuthService.UserId));
+
+        IUser user = await _context.Users
+          .FirstOrDefaultAsync(x => x.Id.ToString().Equals(_userAuthService.UserId));
+
+        if (user == null)
+        {
+          user = await _context.Admins
+          .FirstOrDefaultAsync(x => x.Id.ToString().Equals(_userAuthService.UserId));
+        }
 
         if (user == null)
         {

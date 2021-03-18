@@ -24,6 +24,7 @@ namespace Web.Services
       var claims = new List<Claim>();
       claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
       claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
+
       var key = Encoding.ASCII.GetBytes(_options.Secret);
       var tokenHandler = new JwtSecurityTokenHandler();
       var descriptor = new SecurityTokenDescriptor
