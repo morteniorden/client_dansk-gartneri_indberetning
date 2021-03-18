@@ -49,6 +49,7 @@ namespace Web
       services.Configure<HashingOptions>(Configuration.GetSection(HashingOptions.Hashing));
       services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.Tokens));
       services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
+      services.Configure<SuperUserOptions>(Configuration.GetSection(SuperUserOptions.SuperUser));
 
       var corsOptions = Configuration.GetSection(CorsOptions.Cors).Get<CorsOptions>();
       services.AddCors(options =>
@@ -103,6 +104,7 @@ namespace Web
       services.AddScoped<IExampleHubService, ExampleHubService>();
       services.AddScoped<ITokenService, TokenService>();
       services.AddScoped<IPasswordHasher, PasswordHasher>();
+      services.AddScoped<SuperAdminService>();
       services.AddSignalR();
 
       var key = Encoding.ASCII.GetBytes("VERY_SECRET_SECRET");
@@ -126,7 +128,7 @@ namespace Web
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, SuperAdminService superAdminService)
     {
       if (env.IsDevelopment())
       {
@@ -141,7 +143,7 @@ namespace Web
 
       using (context)
       {
-        context.Database.AutoTransactionsEnabled = false;
+        context.Database.AutoTransactionsEnabled = true;
         context.Database.Migrate();
 
         // if (env.IsDevelopment() && !env.IsEnvironment("Test") && seedOptions.Value.SeedSampleData)
@@ -149,7 +151,7 @@ namespace Web
         //   SampleData.SeedSampleData(context);
         // }
 
-        // superAdminService.SetupSuperUser();
+        superAdminService.SetupSuperUser();
       }
 
       app.UseCors("AllowSecure");

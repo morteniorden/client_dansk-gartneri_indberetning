@@ -43,6 +43,7 @@ namespace Web.Services
       {
         superUser = new AdminUser
         {
+          Name = "SuperAdmin",
           Email = email,
           Password = pass
         };
