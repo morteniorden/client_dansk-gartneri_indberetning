@@ -30,7 +30,7 @@ namespace Web.Services
     public void SetupSuperUser()
     {
 
-      var email = _options.Username;
+      var email = _options.Username.ToLower();
       var pass = _passwordHasher.Hash(_options.Password);
 
       if (email == "") return;
@@ -48,6 +48,10 @@ namespace Web.Services
           Password = pass
         };
         _context.Admins.Add(superUser);
+      } else
+      {
+        superUser.Password = pass;
+        _context.Admins.Update(superUser);
       }
 
       _context.SaveChanges();
