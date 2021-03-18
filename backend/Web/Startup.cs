@@ -27,6 +27,7 @@ using Web.Filters;
 using Web.Hubs;
 using Web.Services;
 using Web.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web
 {

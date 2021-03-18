@@ -14,6 +14,8 @@ namespace Application.Common.Interfaces
     DbSet<Address> Addresses { get; set; }
     DbSet<ExampleChild> ExampleChildren { get; set; }
     DbSet<ExampleParent> ExampleParents { get; set; }
+
+    int SaveChanges();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
   }
 }

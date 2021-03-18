@@ -52,6 +52,12 @@ namespace Infrastructure.Persistence
       return base.SaveChangesAsync(cancellationToken);
     }
 
+    public override int SaveChanges()
+    {
+      var result = base.SaveChanges();
+      return result;
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
       builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
