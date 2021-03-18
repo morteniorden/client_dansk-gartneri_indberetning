@@ -19,7 +19,7 @@ namespace Web.Services
     {
       _options = options.Value;
     }
-    public string CreateToken(User user)
+    public string CreateToken(IUser user)
     {
       var claims = new List<Claim>();
       claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));

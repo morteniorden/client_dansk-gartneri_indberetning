@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,8 +31,14 @@ namespace Application.Users.Commands.Login
 
       public async Task<UserTokenDto> Handle(LoginCommand request, CancellationToken cancellationToken)
       {
-        var user = await _context.Users
+        IUser user = await _context.Users
           .FirstOrDefaultAsync(x => x.Email.Equals(request.LoginDetails.Email.ToLower()));
+
+        if (user == null)
+        {
+          user = await _context.Admins
+          .FirstOrDefaultAsync(x => x.Email.Equals(request.LoginDetails.Email.ToLower()));
+        }
 
         if (user == null)
         {
