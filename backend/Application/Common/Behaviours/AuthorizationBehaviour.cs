@@ -37,7 +37,7 @@ namespace Application.Common.Behaviours
         }
 
         // Role-based authorization
-        var authorizeAttributesWithRoles = authorizeAttributes.Where(a => Enum.IsDefined(typeof(RoleEnum), a));
+        var authorizeAttributesWithRoles = authorizeAttributes.Where(a => Enum.IsDefined(typeof(RoleEnum), a.Role));
 
         if (authorizeAttributesWithRoles.Any())
         {

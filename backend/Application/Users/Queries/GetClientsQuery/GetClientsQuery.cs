@@ -8,10 +8,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Accounts;
+using Application.Common.Security;
 using Domain.Enums;
 
 namespace Application.Users.Queries.GetClientsQuery
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class GetClientsQuery : IRequest<List<UserDto>>
   {
     public class GetClientsQueryHandler : IRequestHandler<GetClientsQuery, List<UserDto>>

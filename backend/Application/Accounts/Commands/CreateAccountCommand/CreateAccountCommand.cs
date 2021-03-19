@@ -6,9 +6,11 @@ using Domain.Enums;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Security;
 
 namespace Application.Accounts.Commands.CreateAccountCommand
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class CreateAccountCommand : IRequest<int>
   {
     public CreateAccountDto account;

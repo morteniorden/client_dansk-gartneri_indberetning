@@ -4,10 +4,12 @@ using Domain.Enums;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Security;
 using Application.Users;
 
 namespace Application.Accounts.Commands.CreateAdmin
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class CreateAdminCommand : IRequest<int>
   {
     public CreateUserDto user;
