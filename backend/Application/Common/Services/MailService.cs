@@ -6,15 +6,20 @@ using Application.Common.Interfaces;
 using Application.Common.Options;
 using Application.Mails;
 using Microsoft.Extensions.Options;
+using RazorEmail.Services;
+using RazorEmails.Interfaces;
+using RazorEmails.Views.Emails.ActivateUserEmail;
 
 namespace Application.Common.Services
 {
   public class MailService : IMailService
   {
     private readonly MailOptions _mailOptions;
-    public MailService(IOptions<MailOptions> mailOptions)
+    private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
+    public MailService(IOptions<MailOptions> mailOptions, IRazorViewToStringRenderer razorViewToStringRenderer)
     {
       _mailOptions = mailOptions.Value;
+      _razorViewToStringRenderer = razorViewToStringRenderer;
     }
     public async Task SendEmailAsync(MailRequestDto mailRequest)
     {
@@ -55,11 +60,17 @@ namespace Application.Common.Services
 
     public async Task TestSendEmail()
     {
+      var activateUserModel = new ActivateUserEmailViewModel()
+      {
+        Header = "Header 1 here",
+        Paragraph = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.",
+        Url = "http://danskgartneri.dk"
+      };
       var mail = new MailRequestDto
       {
         ToEmail = "4aa05eab54-030844@inbox.mailtrap.io", //Mailtrap inbox
         Subject = "Test mail from Dansk Gartneri",
-        Body = "<img src=cid:logo><p>Hello world from mailService</p><img src=cid:altLogo>"
+        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ActivateUserEmail/ActivateUserEmail.cshtml", activateUserModel)
       };
 
       await SendEmailAsync(mail);
