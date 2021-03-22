@@ -55,15 +55,19 @@ export interface Locale {
   };
 
   actions: {
+    update: string;
     delete: string;
   };
 
   password: {
+    password: string;
+    repeatPassword: string;
     dontMatch: string;
     tooShort: string;
     missingUppercase: string;
     missingLowercase: string;
     missingNumber: string;
+    changePassword: string;
     changeSuccessTitle: string;
     changeSuccessText: string;
     changeFailTitle: string;

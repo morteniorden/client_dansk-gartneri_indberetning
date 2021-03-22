@@ -57,15 +57,19 @@ export const table: Locale = {
   },
 
   actions: {
+    update: "Update",
     delete: "Delete"
   },
 
   password: {
+    password: "Password:",
+    repeatPassword: "Repeat password:",
     dontMatch: "De to passwords er ikke ens.",
     tooShort: "Skal være på minds 8 karakterer.",
     missingUppercase: "Skal have mindst ét stort bogstav.",
     missingLowercase: "Skal have mindst ét lille bogstav.",
     missingNumber: "Skal have mindst ét tal.",
+    changePassword: "Update password",
     changeSuccessTitle: "Password updatet",
     changeSuccessText: "Your password has been updated.",
     changeFailTitle: "Error",
