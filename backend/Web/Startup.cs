@@ -46,6 +46,7 @@ namespace Web
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
+      services.Configure<CorsOptions>(Configuration.GetSection(CorsOptions.Cors));
       services.Configure<HashingOptions>(Configuration.GetSection(HashingOptions.Hashing));
       services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.Tokens));
       services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
