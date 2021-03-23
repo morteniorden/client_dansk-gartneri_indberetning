@@ -1164,6 +1164,7 @@ export class User extends AuditableEntity implements IUser {
     deactivationTime?: Date | null;
     accountId?: number;
     account?: Account | null;
+    ssoTokenId?: string | null;
 
     constructor(data?: IUser) {
         super(data);
@@ -1183,6 +1184,7 @@ export class User extends AuditableEntity implements IUser {
             this.deactivationTime = _data["deactivationTime"] ? new Date(_data["deactivationTime"].toString()) : <any>null;
             this.accountId = _data["accountId"] !== undefined ? _data["accountId"] : <any>null;
             this.account = _data["account"] ? Account.fromJS(_data["account"]) : <any>null;
+            this.ssoTokenId = _data["ssoTokenId"] !== undefined ? _data["ssoTokenId"] : <any>null;
         }
     }
 
@@ -1203,6 +1205,7 @@ export class User extends AuditableEntity implements IUser {
         data["deactivationTime"] = this.deactivationTime ? this.deactivationTime.toISOString() : <any>null;
         data["accountId"] = this.accountId !== undefined ? this.accountId : <any>null;
         data["account"] = this.account ? this.account.toJSON() : <any>null;
+        data["ssoTokenId"] = this.ssoTokenId !== undefined ? this.ssoTokenId : <any>null;
         super.toJSON(data);
         return data; 
     }
@@ -1217,6 +1220,7 @@ export interface IUser extends IAuditableEntity {
     deactivationTime?: Date | null;
     accountId?: number;
     account?: IAccount | null;
+    ssoTokenId?: string | null;
 }
 
 export enum RoleEnum {

@@ -1,4 +1,3 @@
-using Application.ExampleChildren;
 using AutoMapper;
 using Domain.Entities;
 
