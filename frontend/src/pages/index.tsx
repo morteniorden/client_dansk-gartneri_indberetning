@@ -1,11 +1,10 @@
-import Demo from "components/Demo/Demo";
 import { AuthContext } from "contexts/AuthContext";
 import { Locale } from "i18n/Locale";
 // import { runTimeTable } from "i18n/runtimeTable";
 import { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { I18nProps } from "next-rosetta";
-import { useCallback, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { RoleEnum } from "services/backend/nswagts";
 
 const IndexPage: NextPage = () => {
