@@ -62,6 +62,8 @@ export interface Locale {
   password: {
     password: string;
     repeatPassword: string;
+    newPassword: string;
+    repeatNewPassword: string;
     dontMatch: string;
     tooShort: string;
     missingUppercase: string;

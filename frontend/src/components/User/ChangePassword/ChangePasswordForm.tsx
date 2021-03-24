@@ -73,7 +73,7 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
     <form onSubmit={handleSubmit}>
       <Stack spacing={5}>
         <FormControl id="password" isRequired isInvalid={!validationResult.isValid}>
-          <FormLabel htmlFor="password">{t("password.password")}</FormLabel>
+          <FormLabel htmlFor="password">{t("password.newPassword")}</FormLabel>
           <Input
             type="password"
             value={password}
@@ -81,7 +81,7 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
             maxW="500px"></Input>
         </FormControl>
         <FormControl id="passwordRepeat" isRequired isInvalid={!validationResult.repetitionValid}>
-          <FormLabel htmlFor="passwordRepeat">{t("password.repeatPassword")}</FormLabel>
+          <FormLabel htmlFor="passwordRepeat">{t("password.repeatNewPassword")}</FormLabel>
           <Input
             type="password"
             value={passwordRep}
