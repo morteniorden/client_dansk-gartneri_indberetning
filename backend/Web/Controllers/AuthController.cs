@@ -38,7 +38,7 @@ namespace Web.Controllers
     {
       var url = _corsOptions.Origins[0] + "/changepassword?token=";
 
-      if (Regex.IsMatch(token, "/^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$/"))
+      if (Regex.IsMatch(token, @"^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$"))
       {
         url += token;
       } else

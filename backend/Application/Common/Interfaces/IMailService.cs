@@ -7,5 +7,6 @@ namespace Application.Common.Interfaces
   {
     Task SendEmailAsync(MailRequestDto mailRequest);
     Task TestSendEmail();
+    Task SendUserActivationEmail(string email, string token, string baseUrl);
   }
 }

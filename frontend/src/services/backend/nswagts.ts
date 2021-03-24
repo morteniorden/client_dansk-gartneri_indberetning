@@ -729,7 +729,9 @@ export class MailClient extends ClientBase implements IMailClient {
 }
 
 export interface IUserClient {
-    getAllAdmins(): Promise<UserDto>;
+    getAllAdmins(): Promise<UserDto[]>;
+    updateUser(id: number, command: UpdateUserCommand): Promise<FileResponse>;
+    deactivateUser(id: number): Promise<FileResponse>;
     updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse>;
 }
 
@@ -744,8 +746,8 @@ export class UserClient extends ClientBase implements IUserClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getAllAdmins(): Promise<UserDto> {
-        let url_ = this.baseUrl + "/api/User";
+    getAllAdmins(): Promise<UserDto[]> {
+        let url_ = this.baseUrl + "/api/User/admins";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -762,14 +764,18 @@ export class UserClient extends ClientBase implements IUserClient {
         });
     }
 
-    protected processGetAllAdmins(response: Response): Promise<UserDto> {
+    protected processGetAllAdmins(response: Response): Promise<UserDto[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserDto.fromJS(resultData200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserDto.fromJS(item));
+            }
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -777,11 +783,89 @@ export class UserClient extends ClientBase implements IUserClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserDto>(<any>null);
+        return Promise.resolve<UserDto[]>(<any>null);
+    }
+
+    updateUser(id: number, command: UpdateUserCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/User/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdateUser(_response));
+        });
+    }
+
+    protected processUpdateUser(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    deactivateUser(id: number): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/User/{id}/deactivate";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "PUT",
+            headers: {
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processDeactivateUser(_response));
+        });
+    }
+
+    protected processDeactivateUser(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 
     updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/User/{id}";
+        let url_ = this.baseUrl + "/api/User/{id}/changePassword";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1694,6 +1778,43 @@ export class SendTestMailCommand implements ISendTestMailCommand {
 }
 
 export interface ISendTestMailCommand {
+}
+
+export class UpdateUserCommand implements IUpdateUserCommand {
+    user?: UserDto | null;
+
+    constructor(data?: IUpdateUserCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.user = data.user && !(<any>data.user).toJSON ? new UserDto(data.user) : <UserDto>this.user; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.user = _data["user"] ? UserDto.fromJS(_data["user"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UpdateUserCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateUserCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["user"] = this.user ? this.user.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IUpdateUserCommand {
+    user?: IUserDto | null;
 }
 
 export class UpdatePasswordCommand implements IUpdatePasswordCommand {

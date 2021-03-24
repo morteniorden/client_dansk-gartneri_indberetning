@@ -22,11 +22,13 @@ namespace Application.Users.Commands.UpdatePassword
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUserService;
+      private readonly IPasswordHasher _passwordHasher;
 
-      public UpdatePasswordCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+      public UpdatePasswordCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IPasswordHasher passwordHasher)
       {
         _context = context;
         _currentUserService = currentUserService;
+        _passwordHasher = passwordHasher;
       }
 
       public async Task<Unit> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
@@ -43,7 +45,7 @@ namespace Application.Users.Commands.UpdatePassword
           throw new NotFoundException(nameof(User), request.Id);
         }
 
-        userEntity.Password = request.NewPassword;
+        userEntity.Password = _passwordHasher.Hash(request.NewPassword);
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync(cancellationToken);

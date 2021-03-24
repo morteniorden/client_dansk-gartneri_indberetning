@@ -1,10 +1,12 @@
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Options;
 using Application.Mails;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using RazorEmail.Services;
 using RazorEmails.Interfaces;
@@ -16,10 +18,12 @@ namespace Application.Common.Services
   {
     private readonly MailOptions _mailOptions;
     private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
-    public MailService(IOptions<MailOptions> mailOptions, IRazorViewToStringRenderer razorViewToStringRenderer)
+    private readonly IHttpContextAccessor _context;
+    public MailService(IOptions<MailOptions> mailOptions, IRazorViewToStringRenderer razorViewToStringRenderer, IHttpContextAccessor context)
     {
       _mailOptions = mailOptions.Value;
       _razorViewToStringRenderer = razorViewToStringRenderer;
+      _context = context;
     }
     public async Task SendEmailAsync(MailRequestDto mailRequest)
     {
@@ -68,11 +72,29 @@ namespace Application.Common.Services
       };
       var mail = new MailRequestDto
       {
-        ToEmail = "4aa05eab54-030844@inbox.mailtrap.io", //Mailtrap inbox
+        ToEmail = _mailOptions.DevelopmentRecipient,
         Subject = "Test mail from Dansk Gartneri",
         Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ActivateUserEmail/ActivateUserEmail.cshtml", activateUserModel)
       };
 
+      await SendEmailAsync(mail);
+    }
+
+    public async Task SendUserActivationEmail(string email, string token, string baseUrl)
+    {
+      var activateUserModel = new ActivateUserEmailViewModel()
+      {
+        Header = "Velkommen til Dansk Gartneri indeberetningssystem",
+        Paragraph =
+          "Du er blevet inviteret til systemet. Klik herunder for at aktivere din bruger og vælge dit password.",
+        Url = baseUrl + "/api/auth/resetPassword?token=" + token
+      };
+      var mail = new MailRequestDto
+      {
+        ToEmail = _mailOptions.DevelopmentRecipient ?? email,
+        Subject = "Velkommen til Dansk Gartneri indberetningssystem",
+        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ActivateUserEmail/ActivateUserEmail.cshtml", activateUserModel)
+      };
       await SendEmailAsync(mail);
     }
   }
