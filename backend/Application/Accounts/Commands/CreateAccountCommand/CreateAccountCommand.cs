@@ -24,14 +24,16 @@ namespace Application.Accounts.Commands.CreateAccountCommand
       private readonly ITokenService _tokenService;
       private readonly IMailService _mailService;
       private readonly IHttpContextAccessor _accessor;
+      private readonly IBackgroundJobClient _jobClient;
 
-      public CreateAccountCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, ITokenService tokenService, IMailService mailService, IHttpContextAccessor accessor)
+      public CreateAccountCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, ITokenService tokenService, IMailService mailService, IHttpContextAccessor accessor, IBackgroundJobClient jobClient)
       {
         _context = context;
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
         _mailService = mailService;
         _accessor = accessor;
+        _jobClient = jobClient;
       }
 
       public async Task<int> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
@@ -91,9 +93,9 @@ namespace Application.Accounts.Commands.CreateAccountCommand
         userEntity.SSOTokenId = tokenId;
         await _context.SaveChangesAsync(cancellationToken);
 
-        var httpRequest = _accessor.HttpContext.Request;
-        var baseUrl = "https://" + httpRequest.Host;
-        BackgroundJob.Enqueue(() => _mailService.SendUserActivationEmail(userEntity.Email, token, baseUrl));
+        var host = _accessor.HttpContext.Request.Host;
+        var baseUrl = "https://" + host;
+        _jobClient.Enqueue(() => _mailService.SendUserActivationEmail(userEntity.Email, token, baseUrl));
 
         return accountEntity.Id;
       }

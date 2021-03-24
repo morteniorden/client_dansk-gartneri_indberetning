@@ -732,7 +732,7 @@ export interface IUserClient {
     getAllAdmins(): Promise<UserDto[]>;
     updateUser(id: number, command: UpdateUserCommand): Promise<FileResponse>;
     deactivateUser(id: number): Promise<FileResponse>;
-    updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse>;
+    updatePassword(command: UpdatePasswordCommand): Promise<FileResponse>;
 }
 
 export class UserClient extends ClientBase implements IUserClient {
@@ -864,11 +864,8 @@ export class UserClient extends ClientBase implements IUserClient {
         return Promise.resolve<FileResponse>(<any>null);
     }
 
-    updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/User/{id}/changePassword";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    updatePassword(command: UpdatePasswordCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/User/changePassword";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);

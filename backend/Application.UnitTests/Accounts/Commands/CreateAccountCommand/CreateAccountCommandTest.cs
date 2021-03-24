@@ -30,7 +30,7 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, passwordHasherMock.Object);
+      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
 
       var result = await handler.Handle(command, CancellationToken.None);
 
@@ -84,7 +84,7 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, passwordHasherMock.Object);
+      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
       await handler.Handle(command1, CancellationToken.None);
 
       Func<Task> action = async () => await handler.Handle(command2, CancellationToken.None);
@@ -122,7 +122,7 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, passwordHasherMock.Object);
+      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
       await handler.Handle(command1, CancellationToken.None);
 
       Func<Task> action = async () => await handler.Handle(command2, CancellationToken.None);
