@@ -1,17 +1,11 @@
-import ChangePasswordForm from "components/User/ChangePassword/ChangePasswordForm";
+import ChangePassword from "components/User/ChangePassword/ChangePassword";
 import { Locale } from "i18n/Locale";
 // import { runTimeTable } from "i18n/runtimeTable";
 import { GetStaticProps, NextPage } from "next";
 import { I18nProps } from "next-rosetta";
 
 const ChangePasswordPage: NextPage = () => {
-  return (
-    <ChangePasswordForm
-      onSubmit={() => {
-        return;
-      }}
-    />
-  );
+  return <ChangePassword />;
 };
 
 export const getStaticProps: GetStaticProps<I18nProps<Locale>> = async context => {
