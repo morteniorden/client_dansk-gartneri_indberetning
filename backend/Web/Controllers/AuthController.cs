@@ -48,5 +48,12 @@ namespace Web.Controllers
 
       return Redirect(url);
     }
+
+    [HttpPut("resetPassword")]
+    public async Task<ActionResult<UserDto>> SendMailToResetPassword([FromBody] string email)
+    {
+      var result = await Mediator.Send(new CheckAuthCommand());
+      return result;
+    }
   }
 }

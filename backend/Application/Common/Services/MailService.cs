@@ -97,5 +97,23 @@ namespace Application.Common.Services
       };
       await SendEmailAsync(mail);
     }
+
+    public async Task SendForgotPasswordEmail(string email, string token, string baseUrl)
+    {
+      var activateUserModel = new ActivateUserEmailViewModel()
+      {
+        Header = "Reset dit password",
+        Paragraph =
+          "Du har modtaget denne mail, fordi du har anmodet om at resette dit password til Dansk Gartneri indeberetningssystem. Klik herunder for at gå til siden, hvor du kan vælge et nyt password.",
+        Url = baseUrl + "/api/auth/resetPassword?token=" + token
+      };
+      var mail = new MailRequestDto
+      {
+        ToEmail = _mailOptions.DevelopmentRecipient ?? email,
+        Subject = "Reset dit password til Dansk Gartneri Indberetningssystem",
+        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ActivateUserEmail/ActivateUserEmail.cshtml", activateUserModel)
+      };
+      await SendEmailAsync(mail);
+    }
   }
 }
