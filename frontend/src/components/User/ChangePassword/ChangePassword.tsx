@@ -23,7 +23,7 @@ const ChangePassword: FC = () => {
       <Stack spacing={4}>
         <Heading>{t("password.changePassword")}</Heading>
         <Container maxW="400px" pt="50px">
-          <ChangePasswordForm />
+          <ChangePasswordForm onSubmit={() => router.push("./")} />
         </Container>
       </Stack>
     </BasicLayout>

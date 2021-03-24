@@ -16,7 +16,7 @@ import { genUserClient } from "services/backend/apiClients";
 import { UpdatePasswordCommand } from "services/backend/nswagts";
 
 interface Props {
-  onSubmit?: (success: boolean) => void;
+  onSubmit: (success: boolean) => void;
 }
 
 const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
@@ -39,8 +39,8 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
       const res = validatePassword(password, passwordRep);
       setValidationResult(res);
       if (!res.isValid || !res.repetitionValid) return;
-      const userClient = await genUserClient();
       try {
+        const userClient = await genUserClient();
         await userClient.updatePassword(
           new UpdatePasswordCommand({
             newPassword: password
