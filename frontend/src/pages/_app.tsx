@@ -7,6 +7,7 @@ import { AuthStage, useAuth } from "hooks/useAuth";
 import { usePWA } from "hooks/usePWA";
 import { AppPropsType } from "next/dist/next-server/lib/utils";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { I18nProvider } from "next-rosetta";
 import { ReactElement, useEffect } from "react";
 import EnvSettings from "types/EnvSettings";
@@ -25,6 +26,7 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType & Props): ReactEl
   // usePWA(); //! OPT IN
 
   const auth = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!__N_SSG) {
@@ -68,7 +70,7 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType & Props): ReactEl
         <ChakraProvider theme={theme}>
           <AuthContext.Provider value={auth}>
             {/* <SignalRContext.Provider value={{ connection }}> */}
-            {auth.authStage == AuthStage.AUTHENTICATED ? (
+            {auth.authStage == AuthStage.AUTHENTICATED || router.pathname == "/changepassword" ? (
               <Component {...pageProps} />
             ) : (
               <LoginPage />

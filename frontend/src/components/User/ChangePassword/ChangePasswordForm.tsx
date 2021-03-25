@@ -5,12 +5,13 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  Stack,
   useToast
 } from "@chakra-ui/react";
-import { useAuth } from "hooks/useAuth";
+import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
 import { pwValidationResult, usePasswordValidation } from "hooks/usePasswordValidation";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useContext, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
 import { UpdatePasswordCommand } from "services/backend/nswagts";
 
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
-  const { activeUser } = useAuth();
+  const { activeUser } = useContext(AuthContext);
   const { t } = useLocales();
   const { validatePassword } = usePasswordValidation();
   const toast = useToast();
@@ -51,7 +52,8 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
           description: t("password.changeSuccessText"),
           status: "success",
           duration: 5000,
-          isClosable: true
+          isClosable: true,
+          position: "bottom-left"
         });
         onSubmit(true);
       } catch {
@@ -60,7 +62,8 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
           description: t("password.changeFailText"),
           status: "error",
           duration: 5000,
-          isClosable: true
+          isClosable: true,
+          position: "bottom-left"
         });
       }
     },
@@ -69,28 +72,35 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormControl id="password" isRequired isInvalid={!validationResult.isValid}>
-        <FormLabel htmlFor="password">{t("users.password")}</FormLabel>
-        <Input type="password" value={password} onChange={e => setPassword(e.target.value)}></Input>
-      </FormControl>
-      <FormControl id="passwordRepeat" isRequired isInvalid={!validationResult.repetitionValid}>
-        <FormLabel htmlFor="passwordRepeat">{t("users.repeatPassword")}</FormLabel>
-        <Input
-          type="password"
-          value={passwordRep}
-          onChange={e => setPasswordRep(e.target.value)}></Input>
-      </FormControl>
-      <FormControl isInvalid={!validationResult.isValid || !validationResult.repetitionValid}>
-        {validationResult.errors.map((err, i) => (
-          <FormErrorMessage key={i}>{err.errorMsg}</FormErrorMessage>
-        ))}
-        {!validationResult.repetitionValid && (
-          <FormErrorMessage>{t("password.dontMatch")}</FormErrorMessage>
-        )}
-      </FormControl>
+      <Stack spacing={5}>
+        <FormControl id="password" isRequired isInvalid={!validationResult.isValid}>
+          <FormLabel htmlFor="password">{t("password.password")}</FormLabel>
+          <Input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            maxW="500px"></Input>
+        </FormControl>
+        <FormControl id="passwordRepeat" isRequired isInvalid={!validationResult.repetitionValid}>
+          <FormLabel htmlFor="passwordRepeat">{t("password.repeatPassword")}</FormLabel>
+          <Input
+            type="password"
+            value={passwordRep}
+            onChange={e => setPasswordRep(e.target.value)}
+            maxW="500px"></Input>
+        </FormControl>
+        <FormControl isInvalid={!validationResult.isValid || !validationResult.repetitionValid}>
+          {validationResult.errors.map((err, i) => (
+            <FormErrorMessage key={i}>{err.errorMsg}</FormErrorMessage>
+          ))}
+          {!validationResult.repetitionValid && (
+            <FormErrorMessage>{t("password.dontMatch")}</FormErrorMessage>
+          )}
+        </FormControl>
+      </Stack>
       <Flex justifyContent="flex-end" w="100%" mt={5}>
         <Button colorScheme="green" type="submit">
-          {t("common.add")}
+          {t("actions.update")}
         </Button>
       </Flex>
     </form>
