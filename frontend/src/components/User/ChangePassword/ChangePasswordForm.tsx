@@ -8,10 +8,10 @@ import {
   Stack,
   useToast
 } from "@chakra-ui/react";
-import { useAuth } from "hooks/useAuth";
+import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
 import { pwValidationResult, usePasswordValidation } from "hooks/usePasswordValidation";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useContext, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
 import { UpdatePasswordCommand } from "services/backend/nswagts";
 
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
-  const { activeUser } = useAuth();
+  const { activeUser } = useContext(AuthContext);
   const { t } = useLocales();
   const { validatePassword } = usePasswordValidation();
   const toast = useToast();
