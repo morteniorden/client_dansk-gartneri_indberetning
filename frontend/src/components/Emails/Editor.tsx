@@ -1,18 +1,39 @@
+import { Button } from "@chakra-ui/button";
 import CSSReset from "@chakra-ui/css-reset";
-import { Box } from "@chakra-ui/layout";
+import { Box, Flex } from "@chakra-ui/layout";
+import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
-import { FC, useContext } from "react";
-
-import CustomCSSReset from "./CustomCSSReset";
+import { FC, useCallback, useContext, useRef, useState } from "react";
+import { genMailClient } from "services/backend/apiClients";
+import { GeneratePreviewMailCommand } from "services/backend/nswagts";
 
 const Editor: FC = () => {
   const { t } = useLocales();
   const router = useRouter();
   const { activeUser } = useContext(AuthContext);
+  const [editorData, setEditorData] = useState("");
+  const [result, setResult] = useState("");
+
+  const handleSubmit = useCallback(
+    async (e: React.MouseEvent) => {
+      try {
+        const mailClient = await genMailClient();
+        const res = await mailClient.generatePreview(
+          new GeneratePreviewMailCommand({
+            bodyContent: editorData
+          })
+        );
+        setResult(res);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [editorData]
+  );
 
   return (
     <Box
@@ -21,7 +42,6 @@ const Editor: FC = () => {
         "ul, ol": { paddingLeft: "40px" }
       }}>
       <div>
-        <h2>Using CKEditor 5 build in React</h2>
         <CKEditor
           editor={ClassicEditor}
           data="<p>Hello from CKEditor 5!</p>"
@@ -29,11 +49,16 @@ const Editor: FC = () => {
             toolbar: [
               "heading",
               "|",
+              "alignment",
+              "|",
               "bold",
               "italic",
+              "|",
               "link",
+              "|",
               "bulletedList",
               "numberedList",
+              "|",
               "undo",
               "redo"
             ],
@@ -50,7 +75,8 @@ const Editor: FC = () => {
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
-            console.log({ event, editor, data });
+            setEditorData(data);
+            //console.log({ event, editor, data });
           }}
           onBlur={(event, editor) => {
             console.log("Blur.", editor);
@@ -60,6 +86,9 @@ const Editor: FC = () => {
           }}
         />
       </div>
+      <Button onClick={handleSubmit}>test</Button>
+      <CSSReset />
+      <div dangerouslySetInnerHTML={{ __html: result }}></div>
     </Box>
   );
 };

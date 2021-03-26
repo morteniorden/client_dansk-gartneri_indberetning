@@ -115,5 +115,25 @@ namespace Application.Common.Services
       };
       await SendEmailAsync(mail);
     }
+
+    public async Task<string> GeneratePreview(string content)
+    {
+      var activateUserModel = new ActivateUserEmailViewModel()
+      {
+        Paragraph = content
+      };
+
+      var htmlString = await _razorViewToStringRenderer.RenderViewToStringAsync(
+        "/Views/Emails/ActivateUserEmail/ActivateUserEmail.cshtml", activateUserModel);
+
+      var hostedLogo = _mailOptions.baseUrl + "/images/logo.png";
+      var hostedAltLogo = _mailOptions.baseUrl + "/images/altlogo.png";
+
+      var imgReplacedHtml = htmlString
+        .Replace("cid:Logo", hostedLogo)
+        .Replace("cid:altLogo", hostedAltLogo);
+
+      return imgReplacedHtml;
+    }
   }
 }
