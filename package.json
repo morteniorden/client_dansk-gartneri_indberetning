@@ -5,5 +5,8 @@
   },
   "devDependencies": {
     "husky": "^5.0.6"
+  },
+  "dependencies": {
+    "@tinymce/tinymce-react": "^3.12.0"
   }
 }
