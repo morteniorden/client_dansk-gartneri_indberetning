@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Html
 @using RazorEmails.Views.Emails.ActivateUserEmail
 @using RazorEmails.Views.Shared
 @model ActivateUserEmailViewModel
@@ -8,8 +9,7 @@
 
   <tr>
     <td class="mailSection">
-      <h1>@Model.Header</h1>
-      <p>@Model.Paragraph</p>
+      @(new HtmlString(@Model.Paragraph))
       @await Html.PartialAsync("EmailButton", new EmailButtonViewModel("Aktiver din konto", Model.Url))
     </td>
   </tr>

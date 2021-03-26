@@ -27,6 +27,7 @@
   "dependencies": {
     "@chakra-ui/react": "^1.3.3",
     "@ckeditor/ckeditor5-build-classic": "^27.0.0",
+    "@ckeditor/ckeditor5-build-inline": "^27.0.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
@@ -45,6 +46,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@ckeditor/ckeditor5-alignment": "^27.0.0",
     "@testing-library/dom": "^7.29.6",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
