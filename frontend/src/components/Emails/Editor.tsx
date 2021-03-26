@@ -1,18 +1,19 @@
+import "@ckeditor/ckeditor5-build-classic/build/translations/da";
+
 import { Button } from "@chakra-ui/button";
 import CSSReset from "@chakra-ui/css-reset";
-import { Box, Flex } from "@chakra-ui/layout";
-import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
+import { Box } from "@chakra-ui/layout";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
-import { FC, useCallback, useContext, useRef, useState } from "react";
+import { FC, useCallback, useContext, useState } from "react";
 import { genMailClient } from "services/backend/apiClients";
 import { GeneratePreviewMailCommand } from "services/backend/nswagts";
 
 const Editor: FC = () => {
-  const { t } = useLocales();
+  const { t, locale } = useLocales();
   const router = useRouter();
   const { activeUser } = useContext(AuthContext);
   const [editorData, setEditorData] = useState("");
@@ -44,12 +45,11 @@ const Editor: FC = () => {
       <div>
         <CKEditor
           editor={ClassicEditor}
-          data="<p>Hello from CKEditor 5!</p>"
+          data={editorData}
           config={{
+            language: locale.substr(0, 2),
             toolbar: [
               "heading",
-              "|",
-              "alignment",
               "|",
               "bold",
               "italic",
@@ -64,8 +64,17 @@ const Editor: FC = () => {
             ],
             heading: {
               options: [
-                { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
-                { model: "heading2", view: "h2", title: "Heading", class: "ck-heading_heading2" }
+                {
+                  model: "paragraph",
+                  title: t("textEditor.paragraph"),
+                  class: "ck-heading_paragraph"
+                },
+                {
+                  model: "heading2",
+                  view: "h2",
+                  title: t("textEditor.heading"),
+                  class: "ck-heading_heading2"
+                }
               ]
             }
           }}

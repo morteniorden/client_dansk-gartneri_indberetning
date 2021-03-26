@@ -93,4 +93,9 @@ export interface Locale {
     alreadyAssignedTitle: string;
     alreadyAssignedText: string;
   };
+
+  textEditor: {
+    paragraph: string;
+    heading: string;
+  };
 }

@@ -94,5 +94,10 @@ export const table: Locale = {
     deleteErrorText: "Der skete en fejl. Prøv eventuelt igen.",
     alreadyAssignedTitle: "Fejl",
     alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto."
+  },
+
+  textEditor: {
+    paragraph: "Brødtekst",
+    heading: "Overskrift"
   }
 };

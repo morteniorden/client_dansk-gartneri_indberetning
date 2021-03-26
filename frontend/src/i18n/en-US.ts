@@ -95,5 +95,10 @@ export const table: Locale = {
     alreadyAssignedTitle: "Error",
     alreadyAssignedText:
       "This email is used by an accountant, that is already assigned to a client."
+  },
+
+  textEditor: {
+    paragraph: "Paragraph",
+    heading: "Heading"
   }
 };
