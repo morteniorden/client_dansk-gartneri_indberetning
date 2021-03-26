@@ -76,5 +76,10 @@ export const table: Locale = {
     changeSuccessText: "Dit password er nu blevet opdateret.",
     changeFailTitle: "Fejl",
     changeFailText: "Noget gik galt, prøv igen senere."
+  },
+
+  textEditor: {
+    paragraph: "Brødtekst",
+    heading: "Overskrift"
   }
 };

@@ -75,4 +75,9 @@ export interface Locale {
     changeFailTitle: string;
     changeFailText: string;
   };
+
+  textEditor: {
+    paragraph: string;
+    heading: string;
+  };
 }
