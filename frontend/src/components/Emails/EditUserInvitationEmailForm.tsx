@@ -17,6 +17,7 @@ import { setAuthToken } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
+import { Editor } from '@tinymce/tinymce-react';
 
 interface Props {}
 
@@ -28,7 +29,28 @@ const EditUserInvitatinoEmailForm: FC<Props> = ({}) => {
   const handleSubmit = useCallback((e: React.FormEvent) => {}, []);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Editor
+         initialValue="<p>This is the initial content of the editor</p>"
+         init={{
+           height: 500,
+           menubar: false,
+           plugins: [
+             'advlist autolink lists link image charmap print preview anchor',
+             'searchreplace visualblocks code fullscreen',
+             'insertdatetime media table paste code help wordcount'
+           ],
+           toolbar:
+             'undo redo | formatselect | bold italic backcolor | \
+             alignleft aligncenter alignright alignjustify | \
+             bullist numlist outdent indent | removeformat | help'
+         }}
+         onEditorChange={this.handleEditorChange}
+       />
+  );
+};
+export default EditUserInvitatinoEmailForm;
+/*
+<form onSubmit={handleSubmit}>
       <Heading>Afsnit 1</Heading>
       <FormControl id="h1">
         <FormLabel>Overskrift</FormLabel>
@@ -55,6 +77,4 @@ const EditUserInvitatinoEmailForm: FC<Props> = ({}) => {
       </FormControl>
       <Button type="submit">Gem</Button>
     </form>
-  );
-};
-export default EditUserInvitatinoEmailForm;
+*/
