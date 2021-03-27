@@ -10,7 +10,7 @@ const EditUserInvitationEmail: FC = () => {
   const router = useRouter();
   const { activeUser } = useContext(AuthContext);
 
-  const Editor = dynamic(() => import("./Editor"), { ssr: false });
+  const Editor = dynamic(() => import("./Editor/Editor"), { ssr: false });
 
   return (
     <Stack>
@@ -20,4 +20,3 @@ const EditUserInvitationEmail: FC = () => {
   );
 };
 export default EditUserInvitationEmail;
-//<EditUserInvitatinoEmailForm />
