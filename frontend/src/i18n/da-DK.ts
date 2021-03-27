@@ -81,7 +81,7 @@ export const table: Locale = {
   mailEditor: {
     paragraph: "Brødtekst",
     heading: "Overskrift",
-    ctaButtonInputLabel: "Tekst på knap:",
+    ctaButtonInputLabel: "Knap:",
     preview: "Se forhåndsvisning"
   }
 };

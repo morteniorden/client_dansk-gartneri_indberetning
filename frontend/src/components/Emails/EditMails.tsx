@@ -1,5 +1,6 @@
 import { Button } from "@chakra-ui/button";
-import { Flex, Heading, HStack, Stack } from "@chakra-ui/layout";
+import { InputGroup } from "@chakra-ui/input";
+import { Divider, Flex, Heading, HStack, Stack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Spinner } from "@chakra-ui/spinner";
 import BasicLayout from "components/Layouts/BasicLayout";
@@ -82,7 +83,7 @@ const EditEmails: FC = () => {
       <Stack>
         <Heading>Edit email</Heading>
         <Flex justifyContent="space-between">
-          <Select maxW="max-content" placeholder="Select option" onChange={handleSelectChange}>
+          <Select maxW="max-content" placeholder="Vælg email" onChange={handleSelectChange}>
             {emails.map(mail => (
               <option key={mail.id} value={mail.id}>
                 {mail.name}
@@ -98,6 +99,7 @@ const EditEmails: FC = () => {
             </Button>
           </HStack>
         </Flex>
+        <Divider mb={5} />
         <Stack>
           <ExtendedMailEditor
             variant="endCTAButton"
