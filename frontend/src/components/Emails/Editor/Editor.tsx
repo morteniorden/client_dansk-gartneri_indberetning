@@ -1,7 +1,6 @@
 import "@ckeditor/ckeditor5-build-classic/build/translations/da";
 
 import { Button } from "@chakra-ui/button";
-import CSSReset from "@chakra-ui/css-reset";
 import { Box } from "@chakra-ui/layout";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -37,6 +36,8 @@ const Editor: FC = () => {
   );
 
   return (
+    //The "sx" styling is a necessary hack to make headings and lists display properly in the editor.
+    //This is due to Chakra UI that somehow overwrites the styling in a wrong way, and it cannot be fixed with a <CSSReset />
     <Box
       sx={{
         h2: { fontSize: "1.5em", marginTop: "0.83em", marginBottom: "0.83em", fontWeight: "bold" },
@@ -96,12 +97,7 @@ const Editor: FC = () => {
         />
       </div>
       <Button onClick={handleSubmit}>test</Button>
-      <CSSReset />
-      <div dangerouslySetInnerHTML={{ __html: result }}></div>
     </Box>
   );
 };
 export default Editor;
-/*
- 
-*/
