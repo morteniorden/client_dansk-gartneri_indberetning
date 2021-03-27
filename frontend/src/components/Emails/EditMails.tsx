@@ -3,18 +3,25 @@ import { InputGroup } from "@chakra-ui/input";
 import { Divider, Flex, Heading, HStack, Stack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Spinner } from "@chakra-ui/spinner";
+import { useToast } from "@chakra-ui/toast";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
 import { genMailClient } from "services/backend/apiClients";
-import { EmailDto, GeneratePreviewMailCommand, IEmailDto } from "services/backend/nswagts";
+import {
+  EmailDto,
+  GeneratePreviewMailCommand,
+  IEmailDto,
+  UpdateEmailCommand
+} from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import ExtendedMailEditor from "./Editor/ExtendedMailEditor";
 import PreviewContainer from "./Editor/PreviewContainer";
 
 const EditEmails: FC = () => {
+  const toast = useToast();
   const { t } = useLocales();
   const [emails, dispatchEmails] = useReducer(ListReducer<IEmailDto>("id"), []);
   const [currentMail, setCurrentMail] = useState<IEmailDto>(
@@ -48,10 +55,14 @@ const EditEmails: FC = () => {
   }, []);
 
   useEffect(() => {
-    fetchData();
+    async function asyncInnerEffect() {
+      await fetchData();
+      if (emails && emails.length > 0) setCurrentMail(emails[0]);
+    }
+    asyncInnerEffect();
   }, [fetchData]);
 
-  const handleSubmit = useCallback(
+  const handlePreview = useCallback(
     async (e: React.MouseEvent) => {
       setIsLoading(true);
       try {
@@ -66,6 +77,41 @@ const EditEmails: FC = () => {
         console.error(e);
       }
       setIsLoading(false);
+    },
+    [currentMail]
+  );
+
+  const handleSave = useCallback(
+    async (e: React.MouseEvent) => {
+      setIsSaving(true);
+      try {
+        const mailClient = await genMailClient();
+        await mailClient.updateEmail(
+          currentMail.id,
+          new UpdateEmailCommand({
+            newEmail: currentMail
+          })
+        );
+        toast({
+          title: t("password.changeSuccessTitle"),
+          description: t("password.changeSuccessText"),
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      } catch (e) {
+        toast({
+          title: t("password.changeSuccessTitle"),
+          description: t("password.changeSuccessText"),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      }
+      await fetchData();
+      setIsSaving(false);
     },
     [currentMail]
   );
@@ -85,7 +131,7 @@ const EditEmails: FC = () => {
       <Stack>
         <Heading>Edit email</Heading>
         <Flex justifyContent="space-between">
-          <Select maxW="max-content" placeholder="Vælg email" onChange={handleSelectChange}>
+          <Select maxW="max-content" onChange={handleSelectChange}>
             {emails.map(mail => (
               <option key={mail.id} value={mail.id}>
                 {mail.name}
@@ -93,10 +139,10 @@ const EditEmails: FC = () => {
             ))}
           </Select>
           <HStack>
-            <Button w="max-content" minW="100px" onClick={handleSubmit}>
+            <Button w="max-content" minW="100px" onClick={handlePreview}>
               {isLoading ? <Spinner /> : t("mailEditor.preview")}
             </Button>
-            <Button colorScheme="green" w="max-content" minW="100px">
+            <Button colorScheme="green" w="max-content" minW="100px" onClick={handleSave}>
               {isSaving ? <Spinner /> : "Gem"}
             </Button>
           </HStack>

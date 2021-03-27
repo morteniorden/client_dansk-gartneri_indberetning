@@ -38,8 +38,6 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
           <InputGroup>
             <InputLeftAddon w="70px">Navn</InputLeftAddon>
             <Input
-              maxW="max-content"
-              minW="300px"
               value={state.name}
               onChange={e => setState({ ...state, ...{ name: e.target.value } })}></Input>{" "}
           </InputGroup>
@@ -53,8 +51,6 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
           <InputGroup>
             <InputLeftAddon w="70px">Titel</InputLeftAddon>
             <Input
-              maxW="max-content"
-              minW="300px"
               value={state.title}
               onChange={e => setState({ ...state, ...{ title: e.target.value } })}></Input>
           </InputGroup>
@@ -69,16 +65,17 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
             <InputGroup>
               <InputLeftAddon w="70px">{t("mailEditor.ctaButtonInputLabel")}</InputLeftAddon>
               <Input
-                maxW="300px"
                 value={state.ctaButtonText}
-                onChange={e => setState({ ...state, ...{ ctaButton: e.target.value } })}></Input>
+                onChange={e =>
+                  setState({ ...state, ...{ ctaButtonText: e.target.value } })
+                }></Input>
             </InputGroup>
           </FormControl>
         </Tooltip>
       )}
       <Editor
         content={state.htmlContent}
-        setContent={content => setState({ ...state, ...{ editorContent: content } })}
+        setContent={content => setState({ ...state, ...{ htmlContent: content } })}
       />
     </Stack>
   );
