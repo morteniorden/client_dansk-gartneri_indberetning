@@ -12,7 +12,7 @@ namespace Infrastructure.Persistence.Configurations
         .HasMaxLength(200);
       builder.Property(e => e.Title)
         .HasMaxLength(200);
-      builder.Property(e => e.ctaButtonText)
+      builder.Property(e => e.CtaButtonText)
         .HasMaxLength(200);
     }
   }
