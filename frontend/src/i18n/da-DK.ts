@@ -78,8 +78,10 @@ export const table: Locale = {
     changeFailText: "Noget gik galt, prøv igen senere."
   },
 
-  textEditor: {
+  mailEditor: {
     paragraph: "Brødtekst",
-    heading: "Overskrift"
+    heading: "Overskrift",
+    ctaButtonInputLabel: "Tekst på knap:",
+    preview: "Se forhåndsvisning"
   }
 };
