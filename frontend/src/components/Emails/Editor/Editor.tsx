@@ -49,13 +49,13 @@ const Editor: FC<Props> = ({ content, setContent }) => {
             options: [
               {
                 model: "paragraph",
-                title: t("textEditor.paragraph"),
+                title: t("mailEditor.paragraph"),
                 class: "ck-heading_paragraph"
               },
               {
                 model: "heading2",
                 view: "h2",
-                title: t("textEditor.heading"),
+                title: t("mailEditor.heading"),
                 class: "ck-heading_heading2"
               }
             ]

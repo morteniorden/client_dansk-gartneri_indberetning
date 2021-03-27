@@ -71,7 +71,6 @@ namespace Web
       services.AddInfrastructure(Configuration, Environment);
 
       services.AddHttpContextAccessor();
-      //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
       services.AddHealthChecks()
           .AddDbContextCheck<ApplicationDbContext>();
@@ -110,6 +109,7 @@ namespace Web
       services.AddScoped<IPasswordHasher, PasswordHasher>();
       services.AddScoped<IMailService, MailService>();
       services.AddScoped<SuperAdminService>();
+      services.AddScoped<DefaultEmailsService>();
       services.AddSignalR();
 
       var key = Encoding.ASCII.GetBytes("VERY_SECRET_SECRET");
@@ -133,7 +133,7 @@ namespace Web
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, SuperAdminService superAdminService)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, SuperAdminService superAdminService, DefaultEmailsService defaultEmailsService)
     {
       if (env.IsDevelopment())
       {
@@ -157,6 +157,7 @@ namespace Web
         // }
 
         superAdminService.SetupSuperUser();
+        defaultEmailsService.SetupDefaultEmails();
       }
 
       app.UseCors("AllowSecure");
