@@ -1,14 +1,17 @@
-import { Heading, Stack } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { Flex, Heading, HStack, Stack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
+import { Spinner } from "@chakra-ui/spinner";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
 import { genMailClient } from "services/backend/apiClients";
-import { EmailDto, IEmailDto } from "services/backend/nswagts";
+import { EmailDto, GeneratePreviewMailCommand, IEmailDto } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
-import EditorPage from "./Editor/EditorPage";
+import ExtendedMailEditor from "./Editor/ExtendedMailEditor";
+import PreviewContainer from "./Editor/PreviewContainer";
 
 const EditEmails: FC = () => {
   const { t } = useLocales();
@@ -22,6 +25,9 @@ const EditEmails: FC = () => {
       ctaButtonText: ""
     })
   );
+  const [htmlResponse, setHtmlResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -42,8 +48,26 @@ const EditEmails: FC = () => {
 
   useEffect(() => {
     fetchData();
-    if (emails && emails.length > 0) setCurrentMail(emails[0]);
   }, [fetchData]);
+
+  const handleSubmit = useCallback(
+    async (e: React.MouseEvent) => {
+      setIsLoading(true);
+      try {
+        const mailClient = await genMailClient();
+        const res = await mailClient.generatePreview(
+          new GeneratePreviewMailCommand({
+            bodyContent: currentMail.htmlContent
+          })
+        );
+        setHtmlResponse(res);
+      } catch (e) {
+        console.error(e);
+      }
+      setIsLoading(false);
+    },
+    [currentMail]
+  );
 
   const handleSelectChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -53,22 +77,35 @@ const EditEmails: FC = () => {
     [emails]
   );
 
-  useEffect(() => {
-    //console.log(currentMail);
-  }, [currentMail]);
-
   return (
     <BasicLayout>
       <Stack>
         <Heading>Edit email</Heading>
-        <Select maxW="max-content" placeholder="Select option" onChange={handleSelectChange}>
-          {emails.map(mail => (
-            <option key={mail.id} value={mail.id}>
-              {mail.name}
-            </option>
-          ))}
-        </Select>
-        <EditorPage emailDto={currentMail} />
+        <Flex justifyContent="space-between">
+          <Select maxW="max-content" placeholder="Select option" onChange={handleSelectChange}>
+            {emails.map(mail => (
+              <option key={mail.id} value={mail.id}>
+                {mail.name}
+              </option>
+            ))}
+          </Select>
+          <HStack>
+            <Button w="max-content" minW="100px" onClick={handleSubmit}>
+              {isLoading ? <Spinner /> : t("mailEditor.preview")}
+            </Button>
+            <Button colorScheme="green" w="max-content" minW="100px">
+              {isSaving ? <Spinner /> : "Gem"}
+            </Button>
+          </HStack>
+        </Flex>
+        <Stack>
+          <ExtendedMailEditor
+            variant="endCTAButton"
+            state={currentMail}
+            setState={state => setCurrentMail(state)}
+          />
+          <PreviewContainer html={htmlResponse} />
+        </Stack>
       </Stack>
     </BasicLayout>
   );
