@@ -73,13 +73,15 @@ const EditEmails: FC = () => {
   const handleSelectChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       const mail = emails.find(m => m.id == Number(e.target.value));
-      if (mail) setCurrentMail(mail);
+      if (!mail) return;
+      if (mail.id != currentMail.id) setHtmlResponse("");
+      setCurrentMail(mail);
     },
     [emails]
   );
 
   return (
-    <BasicLayout>
+    <BasicLayout maxW="1000px">
       <Stack>
         <Heading>Edit email</Heading>
         <Flex justifyContent="space-between">
