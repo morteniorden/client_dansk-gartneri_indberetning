@@ -3,7 +3,7 @@ import "@ckeditor/ckeditor5-build-classic/build/translations/da";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useLocales } from "hooks/useLocales";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import CustomCSSReset from "./CustomCSSReset";
 
@@ -14,6 +14,7 @@ interface Props {
 
 interface ICKEditor {
   getData: () => string;
+  setData: (data: string) => void;
 }
 
 interface ICKEditorEvent {
@@ -23,6 +24,11 @@ interface ICKEditorEvent {
 
 const Editor: FC<Props> = ({ content, setContent }) => {
   const { t, locale } = useLocales();
+  const [editor, setEditor] = useState<ICKEditor>(null);
+
+  useEffect(() => {
+    editor?.setData(content);
+  }, [content]);
 
   return (
     <CustomCSSReset>
@@ -63,6 +69,7 @@ const Editor: FC<Props> = ({ content, setContent }) => {
         }}
         onReady={(editor: ICKEditor) => {
           //Do something
+          setEditor(editor);
         }}
         onChange={(event: ICKEditorEvent, editor: ICKEditor) => {
           const data = editor.getData();
