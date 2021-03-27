@@ -1,4 +1,4 @@
-import { Button, Stack } from "@chakra-ui/react";
+import { Button, Spinner, Stack } from "@chakra-ui/react";
 import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
@@ -20,9 +20,11 @@ const EditorPage: FC<Props> = ({}) => {
     ctaButton: ""
   });
   const [htmlResponse, setHtmlResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = useCallback(
     async (e: React.MouseEvent) => {
+      setIsLoading(true);
       try {
         const mailClient = await genMailClient();
         const res = await mailClient.generatePreview(
@@ -34,6 +36,7 @@ const EditorPage: FC<Props> = ({}) => {
       } catch (e) {
         console.error(e);
       }
+      setIsLoading(false);
     },
     [editorState]
   );
@@ -45,7 +48,9 @@ const EditorPage: FC<Props> = ({}) => {
         state={editorState}
         setState={state => setEditorState(state)}
       />
-      <Button onClick={handleSubmit}>test</Button>
+      <Button w="max-content" minW="100px" onClick={handleSubmit}>
+        {isLoading ? <Spinner /> : t("mailEditor.preview")}
+      </Button>
       <PreviewContainer html={htmlResponse} />
     </Stack>
   );

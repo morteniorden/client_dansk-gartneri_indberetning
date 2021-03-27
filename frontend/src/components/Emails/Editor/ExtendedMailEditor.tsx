@@ -27,8 +27,9 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
       />
       {variant == "endCTAButton" && (
         <FormControl id="ctaButton">
-          <FormLabel htmlFor="ctaButton">{t("editor.ctaButton")}</FormLabel>
+          <FormLabel htmlFor="ctaButton">{t("mailEditor.ctaButtonInputLabel")}</FormLabel>
           <Input
+            maxW="300px"
             value={state.ctaButton}
             onChange={e => setState({ ...state, ...{ ctaButton: e.target.value } })}></Input>
         </FormControl>

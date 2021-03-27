@@ -97,5 +97,7 @@ export interface Locale {
   textEditor: {
     paragraph: string;
     heading: string;
+    ctaButtonInputLabel: string;
+    preview: string;
   };
 }

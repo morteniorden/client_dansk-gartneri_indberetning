@@ -97,8 +97,10 @@ export const table: Locale = {
       "This email is used by an accountant, that is already assigned to a client."
   },
 
-  textEditor: {
+  mailEditor: {
     paragraph: "Paragraph",
-    heading: "Heading"
+    heading: "Heading",
+    ctaButtonInputLabel: "Button text:",
+    preview: "Preview"
   }
 };

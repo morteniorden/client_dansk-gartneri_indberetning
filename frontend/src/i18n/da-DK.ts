@@ -96,8 +96,10 @@ export const table: Locale = {
     alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto."
   },
 
-  textEditor: {
+  mailEditor: {
     paragraph: "Brødtekst",
-    heading: "Overskrift"
+    heading: "Overskrift",
+    ctaButtonInputLabel: "Tekst på knap:",
+    preview: "Se forhåndsvisning"
   }
 };
