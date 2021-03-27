@@ -72,11 +72,12 @@ const Editor: FC<Props> = ({ content, setContent }) => {
           setEditor(editor);
         }}
         onChange={(event: ICKEditorEvent, editor: ICKEditor) => {
-          const data = editor.getData();
-          setContent(data);
+          //Do something
         }}
         onBlur={(event: ICKEditorEvent, editor: ICKEditor) => {
           //Do something
+          const data = editor.getData();
+          setContent(data);
         }}
         onFocus={(event: ICKEditorEvent, editor: ICKEditor) => {
           //Do something
