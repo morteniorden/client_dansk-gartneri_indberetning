@@ -10,7 +10,7 @@ namespace Application.Mails.Commands.GeneratePreviewMailCommand
 {
   public class GeneratePreviewMailCommand : IRequest<string>
   {
-    public string BodyContent { get; set; }
+    public EmailDto EmailDto { get; set; }
     public class GeneratePreviewMailCommandHandler : IRequestHandler<GeneratePreviewMailCommand, string>
     {
       private readonly IMailService _mailService;
@@ -22,7 +22,7 @@ namespace Application.Mails.Commands.GeneratePreviewMailCommand
 
       public async Task<string> Handle(GeneratePreviewMailCommand request, CancellationToken cancellationToken)
       {
-        return await _mailService.GeneratePreview(request.BodyContent);
+        return await _mailService.GeneratePreview(request.EmailDto);
       }
     }
   }

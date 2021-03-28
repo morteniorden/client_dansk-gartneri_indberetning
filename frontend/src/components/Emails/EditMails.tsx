@@ -28,7 +28,7 @@ const EditEmails: FC = () => {
     new EmailDto({
       id: 0,
       name: "",
-      title: "",
+      subject: "",
       htmlContent: "",
       ctaButtonText: ""
     })
@@ -65,11 +65,12 @@ const EditEmails: FC = () => {
   const handlePreview = useCallback(
     async (e: React.MouseEvent) => {
       setIsLoading(true);
+      console.log(currentMail);
       try {
         const mailClient = await genMailClient();
         const res = await mailClient.generatePreview(
           new GeneratePreviewMailCommand({
-            bodyContent: currentMail.htmlContent
+            emailDto: currentMail
           })
         );
         setHtmlResponse(res);
