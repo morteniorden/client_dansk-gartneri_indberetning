@@ -40,7 +40,7 @@ const EditEmails: FC = () => {
   const fetchData = useCallback(async () => {
     try {
       const mailClient = await genMailClient();
-      const data = await mailClient.getAllChildren();
+      const data = await mailClient.getAllMails();
       console.log(data);
 
       if (data && data.length > 0)

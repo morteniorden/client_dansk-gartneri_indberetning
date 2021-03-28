@@ -716,7 +716,7 @@ export class HealthClient extends ClientBase implements IHealthClient {
 }
 
 export interface IMailClient {
-    getAllChildren(): Promise<EmailDto[]>;
+    getAllMails(): Promise<EmailDto[]>;
     sendTestMail(command: SendTestMailCommand): Promise<FileResponse>;
     updateEmail(id: number, command: UpdateEmailCommand): Promise<FileResponse>;
     generatePreview(command: GeneratePreviewMailCommand): Promise<string>;
@@ -733,7 +733,7 @@ export class MailClient extends ClientBase implements IMailClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getAllChildren(): Promise<EmailDto[]> {
+    getAllMails(): Promise<EmailDto[]> {
         let url_ = this.baseUrl + "/api/Mail";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -747,11 +747,11 @@ export class MailClient extends ClientBase implements IMailClient {
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllChildren(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllMails(_response));
         });
     }
 
-    protected processGetAllChildren(response: Response): Promise<EmailDto[]> {
+    protected processGetAllMails(response: Response): Promise<EmailDto[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
