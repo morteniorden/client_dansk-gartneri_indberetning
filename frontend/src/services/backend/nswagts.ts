@@ -1750,7 +1750,7 @@ export interface IExampleParentDto {
 export class EmailDto implements IEmailDto {
     id?: number;
     name?: string | null;
-    title?: string | null;
+    subject?: string | null;
     htmlContent?: string | null;
     ctaButtonText?: string | null;
 
@@ -1767,7 +1767,7 @@ export class EmailDto implements IEmailDto {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
+            this.subject = _data["subject"] !== undefined ? _data["subject"] : <any>null;
             this.htmlContent = _data["htmlContent"] !== undefined ? _data["htmlContent"] : <any>null;
             this.ctaButtonText = _data["ctaButtonText"] !== undefined ? _data["ctaButtonText"] : <any>null;
         }
@@ -1784,7 +1784,7 @@ export class EmailDto implements IEmailDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["title"] = this.title !== undefined ? this.title : <any>null;
+        data["subject"] = this.subject !== undefined ? this.subject : <any>null;
         data["htmlContent"] = this.htmlContent !== undefined ? this.htmlContent : <any>null;
         data["ctaButtonText"] = this.ctaButtonText !== undefined ? this.ctaButtonText : <any>null;
         return data; 
@@ -1794,7 +1794,7 @@ export class EmailDto implements IEmailDto {
 export interface IEmailDto {
     id?: number;
     name?: string | null;
-    title?: string | null;
+    subject?: string | null;
     htmlContent?: string | null;
     ctaButtonText?: string | null;
 }
@@ -1866,8 +1866,8 @@ export class SendTestMailCommand implements ISendTestMailCommand {
 export interface ISendTestMailCommand {
 }
 
-export class CreateAccountantCommand implements ICreateAccountantCommand {
-    accountantDto?: UserAccountIdDto | null;
+export class GeneratePreviewMailCommand implements IGeneratePreviewMailCommand {
+    emailDto?: EmailDto | null;
 
     constructor(data?: ICreateAccountantCommand) {
         if (data) {
@@ -1875,13 +1875,13 @@ export class CreateAccountantCommand implements ICreateAccountantCommand {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
-            this.accountantDto = data.accountantDto && !(<any>data.accountantDto).toJSON ? new UserAccountIdDto(data.accountantDto) : <UserAccountIdDto>this.accountantDto; 
+            this.emailDto = data.emailDto && !(<any>data.emailDto).toJSON ? new EmailDto(data.emailDto) : <EmailDto>this.emailDto; 
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.accountantDto = _data["accountantDto"] ? UserAccountIdDto.fromJS(_data["accountantDto"]) : <any>null;
+            this.emailDto = _data["emailDto"] ? EmailDto.fromJS(_data["emailDto"]) : <any>null;
         }
     }
 
@@ -1894,13 +1894,13 @@ export class CreateAccountantCommand implements ICreateAccountantCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["accountantDto"] = this.accountantDto ? this.accountantDto.toJSON() : <any>null;
+        data["emailDto"] = this.emailDto ? this.emailDto.toJSON() : <any>null;
         return data; 
     }
 }
 
-export interface ICreateAccountantCommand {
-    accountantDto?: IUserAccountIdDto | null;
+export interface IGeneratePreviewMailCommand {
+    emailDto?: IEmailDto | null;
 }
 
 export class UpdateUserCommand implements IUpdateUserCommand {

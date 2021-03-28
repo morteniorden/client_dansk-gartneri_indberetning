@@ -1,0 +1,11 @@
+@using Microsoft.AspNetCore.Html
+@using RazorEmails.Views.Emails.CtaButtonEmail
+@using RazorEmails.Views.Shared
+@model CtaButtonEmailViewModel
+
+  <tr>
+    <td class="mailSection">
+      @(new HtmlString(@Model.HtmlContent))
+      @await Html.PartialAsync("EmailButton", new EmailButtonViewModel(@Model.CtaButtonText, Model.CtaButtonUrl))
+    </td>
+  </tr>

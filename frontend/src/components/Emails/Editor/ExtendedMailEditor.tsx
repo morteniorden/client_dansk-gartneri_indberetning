@@ -1,4 +1,5 @@
 import {
+  Box,
   FormControl,
   FormLabel,
   Input,
@@ -51,7 +52,7 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
           <InputGroup>
             <InputLeftAddon w="70px">Titel</InputLeftAddon>
             <Input
-              value={state.title}
+              value={state.subject}
               onChange={e => setState({ ...state, ...{ title: e.target.value } })}></Input>
           </InputGroup>
         </FormControl>

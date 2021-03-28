@@ -28,7 +28,7 @@ namespace Web.Services
           emailEntity = new Email
           {
             Name = email.Name,
-            Title = email.Title,
+            Subject = email.Subject,
             HtmlContent = email.HtmlContent,
             CtaButtonText = email.CtaButtonText
           };

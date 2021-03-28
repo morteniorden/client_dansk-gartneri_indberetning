@@ -15,7 +15,7 @@ const EditorPage: FC<Props> = ({ emailDto }) => {
   const { t } = useLocales();
   const [editorState, setEditorState] = useState<IEmailDto>({
     name: emailDto.name,
-    title: emailDto.title,
+    subject: emailDto.subject,
     htmlContent: emailDto.htmlContent,
     ctaButtonText: emailDto.ctaButtonText
   });
@@ -30,7 +30,7 @@ const EditorPage: FC<Props> = ({ emailDto }) => {
         const mailClient = await genMailClient();
         const res = await mailClient.generatePreview(
           new GeneratePreviewMailCommand({
-            bodyContent: editorState.htmlContent
+            emailDto: editorState
           })
         );
         setHtmlResponse(res);

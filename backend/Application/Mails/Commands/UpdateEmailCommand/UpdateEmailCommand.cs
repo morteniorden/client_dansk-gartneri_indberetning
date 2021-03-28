@@ -34,7 +34,7 @@ namespace Application.Mails.Commands.UpdateEmailCommand
         }
 
         emailEntity.Name = request.NewEmail.Name;
-        emailEntity.Title = request.NewEmail.Title;
+        emailEntity.Subject = request.NewEmail.Subject;
         emailEntity.HtmlContent = request.NewEmail.HtmlContent;
         emailEntity.CtaButtonText = request.NewEmail.CtaButtonText;
 

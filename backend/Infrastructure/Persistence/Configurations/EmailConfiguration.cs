@@ -10,7 +10,7 @@ namespace Infrastructure.Persistence.Configurations
     {
       builder.Property(e => e.Name)
         .HasMaxLength(200);
-      builder.Property(e => e.Title)
+      builder.Property(e => e.Subject)
         .HasMaxLength(200);
       builder.Property(e => e.CtaButtonText)
         .HasMaxLength(200);
