@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Domain.Entities;
+
 namespace Application.Common.Options
 {
   public class MailOptions
@@ -10,5 +13,8 @@ namespace Application.Common.Options
     public string Host { get; set; }
     public int Port { get; set; }
     public string baseUrl { get; set; }
+
+    //Options for generating default emails on startup
+    public List<Email> DefaultEmails { get; set; }
   }
 }

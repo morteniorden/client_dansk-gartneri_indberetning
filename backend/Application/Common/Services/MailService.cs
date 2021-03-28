@@ -16,8 +16,8 @@ namespace Application.Common.Services
   {
     private readonly MailOptions _mailOptions;
     private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
-    private readonly IHttpContextAccessor _context;
-    public MailService(IOptions<MailOptions> mailOptions, IRazorViewToStringRenderer razorViewToStringRenderer, IHttpContextAccessor context)
+    private readonly IApplicationDbContext _context;
+    public MailService(IOptions<MailOptions> mailOptions, IRazorViewToStringRenderer razorViewToStringRenderer, IApplicationDbContext context)
     {
       _mailOptions = mailOptions.Value;
       _razorViewToStringRenderer = razorViewToStringRenderer;
@@ -80,6 +80,7 @@ namespace Application.Common.Services
 
     public async Task SendUserActivationEmail(string email, string token)
     {
+
       var activateUserModel = new ActivateUserEmailViewModel()
       {
         Header = "Velkommen til Dansk Gartneri indeberetningssystem",
