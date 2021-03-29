@@ -14,9 +14,9 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Subject = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     HtmlContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ctaButtonText = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    CtaButtonText = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
