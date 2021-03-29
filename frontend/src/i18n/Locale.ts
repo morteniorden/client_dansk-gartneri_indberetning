@@ -59,6 +59,10 @@ export interface Locale {
   actions: {
     update: string;
     delete: string;
+    saveSuccessTitle: string;
+    saveSuccessText: string;
+    saveErrorTitle: string;
+    saveErrorText: string;
   };
 
   password: {
@@ -94,7 +98,9 @@ export interface Locale {
     alreadyAssignedText: string;
   };
 
-  textEditor: {
+  mailEditor: {
+    name: string;
+    subject: string;
     paragraph: string;
     heading: string;
     ctaButtonInputLabel: string;

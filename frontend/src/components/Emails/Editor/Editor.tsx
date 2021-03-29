@@ -1,11 +1,12 @@
-import "@ckeditor/ckeditor5-build-classic/build/translations/da";
+import "./CKEditorBuild/ckeditor5/build/translations/en";
 
 import { Box } from "@chakra-ui/layout";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useEffect, useState } from "react";
 
+//import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import ClassicEditor from "./CKEditorBuild/ckeditor5/build/ckeditor";
 import CustomCSSReset from "./CustomCSSReset";
 
 interface Props {
@@ -48,6 +49,8 @@ const Editor: FC<Props> = ({ content, setContent }) => {
               "italic",
               "|",
               "link",
+              "|",
+              "alignment",
               "|",
               "bulletedList",
               "numberedList",
