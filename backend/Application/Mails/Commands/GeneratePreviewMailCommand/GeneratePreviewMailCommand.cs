@@ -1,13 +1,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
-using Application.ExampleChildren;
-using Domain.Entities;
-using Hangfire;
+using Application.Common.Security;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Mails.Commands.GeneratePreviewMailCommand
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class GeneratePreviewMailCommand : IRequest<string>
   {
     public EmailDto EmailDto { get; set; }

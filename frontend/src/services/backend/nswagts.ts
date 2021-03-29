@@ -262,7 +262,7 @@ export class AccountClient extends ClientBase implements IAccountClient {
 export interface IAuthClient {
     login(command: LoginCommand): Promise<UserTokenDto>;
     checkAuth(): Promise<UserDto>;
-    sendMailToResetPassword(email: string): Promise<UserDto>;
+    sendMailToResetPassword(email: string): Promise<FileResponse>;
 }
 
 export class AuthClient extends ClientBase implements IAuthClient {
@@ -352,7 +352,7 @@ export class AuthClient extends ClientBase implements IAuthClient {
         return Promise.resolve<UserDto>(<any>null);
     }
 
-    sendMailToResetPassword(email: string): Promise<UserDto> {
+    sendMailToResetPassword(email: string): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/Auth/resetPassword";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -360,10 +360,10 @@ export class AuthClient extends ClientBase implements IAuthClient {
 
         let options_ = <RequestInit>{
             body: content_,
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/octet-stream"
             }
         };
 
@@ -374,22 +374,20 @@ export class AuthClient extends ClientBase implements IAuthClient {
         });
     }
 
-    protected processSendMailToResetPassword(response: Response): Promise<UserDto> {
+    protected processSendMailToResetPassword(response: Response): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserDto.fromJS(resultData200);
-            return result200;
-            });
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserDto>(<any>null);
+        return Promise.resolve<FileResponse>(<any>null);
     }
 }
 

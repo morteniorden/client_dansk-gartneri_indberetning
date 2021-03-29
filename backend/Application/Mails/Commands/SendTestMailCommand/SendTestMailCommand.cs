@@ -1,13 +1,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
-using Application.ExampleChildren;
-using Domain.Entities;
+using Application.Common.Security;
+using Domain.Enums;
 using Hangfire;
 using MediatR;
 
 namespace Application.Mails.Commands.SendTestMailCommand
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class SendTestMailCommand : IRequest
   {
     public class SendTestMailCommandHandler : IRequestHandler<SendTestMailCommand>

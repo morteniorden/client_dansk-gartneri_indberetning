@@ -5,9 +5,12 @@ using MediatR;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Security;
+using Domain.Enums;
 
 namespace Application.Mails.Commands.UpdateEmailCommand
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class UpdateEmailCommand : IRequest
   {
     [JsonIgnore]
