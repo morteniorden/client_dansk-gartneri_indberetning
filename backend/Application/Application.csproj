@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Services\" />
+    <Folder Include="Mails\Commands\SendResetPasswordMailCommand\" />
   </ItemGroup>
 
 </Project>
