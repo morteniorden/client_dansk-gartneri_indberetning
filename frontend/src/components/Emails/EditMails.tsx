@@ -94,8 +94,8 @@ const EditEmails: FC = () => {
           })
         );
         toast({
-          title: t("password.changeSuccessTitle"),
-          description: t("password.changeSuccessText"),
+          title: t("actions.saveSuccessTitle"),
+          description: t("actions.saveSuccessText"),
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -103,8 +103,8 @@ const EditEmails: FC = () => {
         });
       } catch (e) {
         toast({
-          title: t("password.changeSuccessTitle"),
-          description: t("password.changeSuccessText"),
+          title: t("actions.saveErrorTitle"),
+          description: t("actions.saveErrorText"),
           status: "error",
           duration: 5000,
           isClosable: true,

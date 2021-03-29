@@ -58,7 +58,11 @@ export const table: Locale = {
 
   actions: {
     update: "Opdatér",
-    delete: "Slet"
+    delete: "Slet",
+    saveSuccessTitle: "Ændringer gemt",
+    saveSuccessText: "Dine ændringer er blevet gemt",
+    saveErrorTitle: "Fejl",
+    saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer."
   },
 
   password: {
@@ -79,6 +83,8 @@ export const table: Locale = {
   },
 
   mailEditor: {
+    name: "Email navn:",
+    subject: "Emne:",
     paragraph: "Brødtekst",
     heading: "Overskrift",
     ctaButtonInputLabel: "Knap:",

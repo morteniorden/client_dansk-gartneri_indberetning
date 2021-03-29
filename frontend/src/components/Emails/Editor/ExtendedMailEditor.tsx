@@ -1,13 +1,4 @@
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Stack,
-  Tooltip
-} from "@chakra-ui/react";
+import { FormControl, Input, InputGroup, InputLeftAddon, Stack, Tooltip } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import dynamic from "next/dynamic";
 import { FC } from "react";
@@ -37,7 +28,7 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
         placement="auto-end">
         <FormControl id="name">
           <InputGroup>
-            <InputLeftAddon w="70px">Navn</InputLeftAddon>
+            <InputLeftAddon w="110px">{t("mailEditor.name")}</InputLeftAddon>
             <Input
               value={state.name}
               onChange={e => setState({ ...state, ...{ name: e.target.value } })}></Input>{" "}
@@ -48,9 +39,9 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
         label="Titel på email, som den vises for modtageren."
         aria-label="A tooltip"
         placement="auto-end">
-        <FormControl id="title">
+        <FormControl id="subject">
           <InputGroup>
-            <InputLeftAddon w="70px">Titel</InputLeftAddon>
+            <InputLeftAddon w="110px">{t("mailEditor.subject")}</InputLeftAddon>
             <Input
               value={state.subject}
               onChange={e => setState({ ...state, ...{ title: e.target.value } })}></Input>
@@ -64,7 +55,7 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
           placement="auto-end">
           <FormControl id="ctaButton">
             <InputGroup>
-              <InputLeftAddon w="70px">{t("mailEditor.ctaButtonInputLabel")}</InputLeftAddon>
+              <InputLeftAddon w="110px">{t("mailEditor.ctaButtonInputLabel")}</InputLeftAddon>
               <Input
                 value={state.ctaButtonText}
                 onChange={e =>

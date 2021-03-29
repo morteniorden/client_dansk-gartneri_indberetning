@@ -58,7 +58,11 @@ export const table: Locale = {
 
   actions: {
     update: "Update",
-    delete: "Delete"
+    delete: "Delete",
+    saveSuccessTitle: "Changes saved",
+    saveSuccessText: "Your changes has been saved.",
+    saveErrorTitle: "Error",
+    saveErrorText: "An error happened when trying to save your changes."
   },
 
   password: {
@@ -79,6 +83,8 @@ export const table: Locale = {
   },
 
   mailEditor: {
+    name: "Email name:",
+    subject: "Subject:",
     paragraph: "Paragraph",
     heading: "Heading",
     ctaButtonInputLabel: "Button:",
