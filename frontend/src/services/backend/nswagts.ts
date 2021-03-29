@@ -1869,7 +1869,7 @@ export interface ISendTestMailCommand {
 export class GeneratePreviewMailCommand implements IGeneratePreviewMailCommand {
     emailDto?: EmailDto | null;
 
-    constructor(data?: ICreateAccountantCommand) {
+    constructor(data?: IGeneratePreviewMailCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1885,9 +1885,9 @@ export class GeneratePreviewMailCommand implements IGeneratePreviewMailCommand {
         }
     }
 
-    static fromJS(data: any): CreateAccountantCommand {
+    static fromJS(data: any): GeneratePreviewMailCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new CreateAccountantCommand();
+        let result = new GeneratePreviewMailCommand();
         result.init(data);
         return result;
     }
@@ -1901,6 +1901,43 @@ export class GeneratePreviewMailCommand implements IGeneratePreviewMailCommand {
 
 export interface IGeneratePreviewMailCommand {
     emailDto?: IEmailDto | null;
+}
+
+export class CreateAccountantCommand implements ICreateAccountantCommand {
+    accountantDto?: UserAccountIdDto | null;
+
+    constructor(data?: ICreateAccountantCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.accountantDto = data.accountantDto && !(<any>data.accountantDto).toJSON ? new UserAccountIdDto(data.accountantDto) : <UserAccountIdDto>this.accountantDto; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.accountantDto = _data["accountantDto"] ? UserAccountIdDto.fromJS(_data["accountantDto"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateAccountantCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateAccountantCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accountantDto"] = this.accountantDto ? this.accountantDto.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateAccountantCommand {
+    accountantDto?: IUserAccountIdDto | null;
 }
 
 export class UpdateUserCommand implements IUpdateUserCommand {

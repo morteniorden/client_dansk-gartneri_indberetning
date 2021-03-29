@@ -86,18 +86,18 @@ namespace Application.Common.Services
       {
         HtmlContent = emailEntity.HtmlContent,
         CtaButtonText = emailEntity.CtaButtonText,
-        CtaButtonUrl = baseUrl + "/api/auth/resetPassword?token=" + token
+        CtaButtonUrl = _mailOptions.baseUrl + "/changepassword?token=" + token
       };
       var mail = new MailRequestDto
       {
-        ToEmail = _mailOptions.DevelopmentRecipient ?? email,
+        ToEmail = email,
         Subject = emailEntity.Subject,
         Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
       };
       await SendEmailAsync(mail);
     }
 
-    public async Task SendForgotPasswordEmail(string email, string token, string baseUrl)
+    public async Task SendForgotPasswordEmail(string email, string token)
     {
       var emailEntity = _context.Emails.Find(2);
 
@@ -105,11 +105,11 @@ namespace Application.Common.Services
       {
         HtmlContent = emailEntity.HtmlContent,
         CtaButtonText = emailEntity.CtaButtonText,
-        CtaButtonUrl = baseUrl + "/api/auth/resetPassword?token=" + token
+        CtaButtonUrl = _mailOptions.baseUrl + "/changepassword?token=" + token
       };
       var mail = new MailRequestDto
       {
-        ToEmail = _mailOptions.DevelopmentRecipient ?? email,
+        ToEmail = email,
         Subject = emailEntity.Subject,
         Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
       };
