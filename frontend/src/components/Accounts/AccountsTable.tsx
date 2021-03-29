@@ -4,14 +4,24 @@ import QueryMultiSelectBtn from "components/Common/QueryMultiSelectBtn";
 import QuerySortBtn, { Direction } from "components/Common/QuerySortBtn";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
-import { IAccountDto } from "services/backend/nswagts";
+import { BiCheck } from "react-icons/bi";
+import { IAccountDto, RoleEnum } from "services/backend/nswagts";
 import { AccountFilter } from "types/AccountFilter";
 import SelectType from "types/SelectType";
+
+import AccountOptionsMenu from "./AccountOptionsMenu";
 
 interface Props {
   data: IAccountDto[];
   searchString: string;
+  fetchData?: () => Promise<void>;
 }
+
+type AccountsTableKey = {
+  name: string;
+  id: string;
+  sortable: boolean;
+};
 
 const AccountsTable: FC<Props> = ({ data, searchString }) => {
   const { t, locale, localeNameMap } = useLocales();
@@ -20,15 +30,16 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
   const [sortDirection, setSortDirection] = useState("ASC");
   const [filters, setFilters] = useState<AccountFilter[]>([SearchFilter]);
 
-  const allKeyOptions: SelectType[] = [
-    { name: t("accounts.id"), id: "id" },
-    { name: t("accounts.name"), id: "name" },
-    { name: t("accounts.email"), id: "email" },
-    { name: t("accounts.tel"), id: "tel" },
-    { name: t("accounts.cvrNumber"), id: "cvrNumber" },
-    { name: t("accounts.address"), id: "address" }
+  const allTableKeys: AccountsTableKey[] = [
+    { name: t("accounts.id"), id: "id", sortable: true },
+    { name: t("accounts.name"), id: "name", sortable: true },
+    { name: t("accounts.email"), id: "email", sortable: true },
+    { name: t("accounts.tel"), id: "tel", sortable: true },
+    { name: t("accounts.cvrNumber"), id: "cvrNumber", sortable: true },
+    { name: t("accounts.address"), id: "address", sortable: false },
+    { name: t("accounts.accountant"), id: "accountant", sortable: false }
   ];
-  const [tableKeys, setTableKeys] = useState<SelectType[]>(allKeyOptions);
+  const [tableKeys, setTableKeys] = useState<AccountsTableKey[]>(allTableKeys);
 
   const handleSortChange = useCallback((key: string, direction: Direction) => {
     if (direction != null) {
@@ -46,6 +57,13 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
       return `${a.addressLine1 ?? ""} ${a.addressLine2 ?? ""} ${a.addressLine3 ?? ""} ${
         a.addressLine4 ?? ""
       }`;
+    }
+    if (key == "accountant") {
+      if (account.accountant) {
+        return <BiCheck />;
+      } else {
+        return t("accountant.noAccountant");
+      }
     }
     return account[key as keyof IAccountDto];
   }, []);
@@ -74,26 +92,35 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
   );
 
   const filterCb = useCallback((qkey: string, chosenOptions: SelectType["id"][]) => {
-    setTableKeys(allKeyOptions.filter(e => chosenOptions.includes(e.id)));
+    setTableKeys(allTableKeys.filter(e => chosenOptions.includes(e.id)));
   }, []);
 
   return (
     <>
       <Flex>
         <Flex h="48px" alignItems="center">
-          <QueryMultiSelectBtn queryKey="test" options={allKeyOptions} filterCb={filterCb} />
+          <QueryMultiSelectBtn
+            queryKey="test"
+            options={allTableKeys.map(e => {
+              return { id: e.id, name: e.name };
+            })}
+            filterCb={filterCb}
+          />
         </Flex>
         <Table>
           <Thead>
             <Tr>
               {tableKeys.map(key => (
                 <Th key={key.id}>
-                  <Flex>
-                    <QuerySortBtn queryKey={key.id.toString()} sortCb={handleSortChange} mr={3} />
+                  <Flex alignItems="center">
+                    {key.sortable && (
+                      <QuerySortBtn queryKey={key.id.toString()} sortCb={handleSortChange} mr={3} />
+                    )}
                     {t(`accounts.${key.id}`)}
                   </Flex>
                 </Th>
               ))}
+              <Th></Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -106,6 +133,9 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
                     {tableKeys.map(key => (
                       <Td key={key.id}>{genValueFromKey(account, key.id.toString())}</Td>
                     ))}
+                    <Td>
+                      <AccountOptionsMenu account={account} />
+                    </Td>
                   </Tr>
                 );
               })}

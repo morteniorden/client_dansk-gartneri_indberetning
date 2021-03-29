@@ -41,7 +41,9 @@ export const table: Locale = {
     addressLine4: "Line 4",
     CVR_getFromRegistry: "Get info from CVR-registry",
     CVR_apiErrorTitle: "CVR not found",
-    CVR_apiErrorDescription: "Could not find CVR number in the registry"
+    CVR_apiErrorDescription: "Could not find CVR number in the registry",
+    accountant: "Accountant",
+    fetching: "Fetching clients..."
   },
 
   login: {
@@ -74,5 +76,22 @@ export const table: Locale = {
     changeSuccessText: "Your password has been updated.",
     changeFailTitle: "Error",
     changeFailText: "Something went wrong, please try again."
+  },
+
+  accountant: {
+    editAccountant: "Edit accountant",
+    addAccountant: "Add new accountant",
+    noAccountant: "No accountant",
+    addSuccessTitle: "Accountant added",
+    addSuccessText: "An email has been sent to the accountant with an invite to the system.",
+    addErrorTitle: "An error occured",
+    addErrorText: "Addition unsuccesfull. Please try again later.",
+    deleteSuccessTitle: "Accountant unassigned",
+    deleteSuccessText: "The accountant has been unassigned and deactivated.",
+    deleteErrorTitle: "Unassignment failed",
+    deleteErrorText: "Something went wrong. Please try again later.",
+    alreadyAssignedTitle: "Error",
+    alreadyAssignedText:
+      "This email is used by an accountant, that is already assigned to a client."
   }
 };

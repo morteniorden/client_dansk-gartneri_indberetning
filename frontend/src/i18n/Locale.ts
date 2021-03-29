@@ -40,6 +40,8 @@ export interface Locale {
     CVR_getFromRegistry: string;
     CVR_apiErrorTitle: string;
     CVR_apiErrorDescription: string;
+    accountant: string;
+    fetching: string;
   };
 
   login: {
@@ -72,5 +74,21 @@ export interface Locale {
     changeSuccessText: string;
     changeFailTitle: string;
     changeFailText: string;
+  };
+
+  accountant: {
+    editAccountant: string;
+    addAccountant: string;
+    noAccountant: string;
+    addSuccessTitle: string;
+    addSuccessText: string;
+    addErrorTitle: string;
+    addErrorText: string;
+    deleteSuccessTitle: string;
+    deleteSuccessText: string;
+    deleteErrorTitle: string;
+    deleteErrorText: string;
+    alreadyAssignedTitle: string;
+    alreadyAssignedText: string;
   };
 }

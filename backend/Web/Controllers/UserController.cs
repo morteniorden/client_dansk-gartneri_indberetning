@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Application.Users;
+using Application.Users.Commands.CreateAccountantCommand;
 using Application.Users.Commands.DeactivateUserCommand;
 using Application.Users.Commands.UpdatePassword;
 using Application.Users.Commands.UpdateUserCommand;
@@ -16,6 +17,12 @@ namespace Web.Controllers
     public async Task<ActionResult<List<UserDto>>> GetAllAdmins()
     {
       return await Mediator.Send(new GetAdminsQuery());
+    }
+
+    [HttpPost("accountant")]
+    public async Task<ActionResult<int>> CreateAndAddAccountant([FromBody] CreateAccountantCommand command)
+    {
+      return await Mediator.Send(command);
     }
 
     [HttpPut("{id}")]

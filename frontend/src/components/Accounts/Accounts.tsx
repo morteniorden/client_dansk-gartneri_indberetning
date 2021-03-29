@@ -1,5 +1,6 @@
-import { Box, Flex, Heading, HStack, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, HStack, Spinner, Stack, Text } from "@chakra-ui/react";
 import BasicLayout from "components/Layouts/BasicLayout";
+import { AccountsContext } from "contexts/AccountsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
@@ -15,9 +16,11 @@ const Accounts: FC = () => {
   const { t } = useLocales();
 
   const [accounts, dispatchAccounts] = useReducer(ListReducer<IAccountDto>("id"), []);
+  const [isFetching, setIsFetching] = useState(false);
   const [searchString, setSearchString] = useState<string>("");
 
   const fetchData = useCallback(async () => {
+    setIsFetching(true);
     try {
       const accountClient = await genAccountClient();
       const data = await accountClient.getAllAccounts();
@@ -33,6 +36,7 @@ const Accounts: FC = () => {
     } catch (err) {
       logger.warn("exampleClient.get Error", err);
     }
+    setIsFetching(false);
   }, []);
 
   useEffect(() => {
@@ -40,20 +44,36 @@ const Accounts: FC = () => {
   }, [fetchData]);
 
   return (
-    <BasicLayout>
-      <Stack spacing={4}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Heading>{t("accounts.accounts")}</Heading>
-          <HStack spacing={5}>
-            <Box>
-              <SearchFilterInput onChange={setSearchString} value={searchString} />
-            </Box>
-            <NewAccountModal onSubmit={fetchData} />
+    <AccountsContext.Provider
+      value={{
+        accounts: accounts,
+        dispatchAccounts: dispatchAccounts,
+        fetchData: fetchData,
+        isFetching: isFetching
+      }}>
+      <BasicLayout>
+        <Stack spacing={4}>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Heading>{t("accounts.accounts")}</Heading>
+            <HStack spacing={5}>
+              <Box>
+                <SearchFilterInput onChange={setSearchString} value={searchString} />
+              </Box>
+              <NewAccountModal onSubmit={fetchData} />
+            </HStack>
+          </Flex>
+          <HStack h="20px" alignItems="center">
+            {isFetching && (
+              <>
+                <Spinner size="sm" />
+                <Text>{t("accounts.fetching")}</Text>
+              </>
+            )}
           </HStack>
-        </Flex>
-        <AccountsTable data={accounts} searchString={searchString} />
-      </Stack>
-    </BasicLayout>
+          <AccountsTable data={accounts} searchString={searchString} fetchData={fetchData} />
+        </Stack>
+      </BasicLayout>
+    </AccountsContext.Provider>
   );
 };
 export default Accounts;

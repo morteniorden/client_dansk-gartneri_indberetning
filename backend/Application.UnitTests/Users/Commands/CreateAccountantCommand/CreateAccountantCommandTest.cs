@@ -22,7 +22,7 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
 
           Name = "test name",
           Email = "test@test.dk",
-          AccountId = 1
+          AccountId = 2
         }
       };
 
@@ -70,7 +70,7 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
 
           Name = "test name",
           Email = "test1@test1.dk", //Already used by an account and user defined in ApplicationDbContextFactory
-          AccountId = 1
+          AccountId = 2
         }
       };
 
@@ -78,6 +78,45 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
       action.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public async Task Handle_GivenAccountHasAccountantThrowException()
+    {
+      var command = new CreateAccountantCommand
+      {
+        AccountantDto = new UserAccountIdDto()
+        {
+
+          Name = "test name",
+          Email = "test@test.dk",
+          AccountId = 1
+        }
+      };
+
+      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context);
+
+      Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
+      action.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public async Task Handle_GivenAccountantHasAccountThrowException()
+    {
+      var command = new CreateAccountantCommand
+      {
+        AccountantDto = new UserAccountIdDto()
+        {
+          Name = "test name",
+          Email = "test1accountant@test.dk", //Matches an existing accountant in ApplicationDbContextFactory
+          AccountId = 2
+        }
+      };
+
+      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context);
+
+      Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
+      action.Should().Throw<InvalidOperationException>();
     }
   }
 }
