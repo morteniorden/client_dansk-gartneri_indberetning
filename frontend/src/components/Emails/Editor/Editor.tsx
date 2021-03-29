@@ -5,6 +5,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useEffect, useState } from "react";
 
+declare module "./CKEditorBuild/ckeditor5/build/ckeditor";
 import ClassicEditor from "./CKEditorBuild/ckeditor5/build/ckeditor";
 import CustomCSSReset from "./CustomCSSReset";
 
