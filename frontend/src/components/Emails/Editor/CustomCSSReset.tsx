@@ -8,7 +8,9 @@ const CustomCSSReset: FC = ({ children }) => {
     <chakra.div
       sx={{
         h2: { fontSize: "1.5em", marginTop: "0.83em", marginBottom: "0.83em", fontWeight: "bold" },
-        "ul, ol": { paddingLeft: "40px" }
+        "ul, ol": { paddingLeft: "40px" },
+        a: { textColor: "blue" },
+        "a:hover": { textDecoration: "underline" }
       }}>
       {children}
     </chakra.div>
