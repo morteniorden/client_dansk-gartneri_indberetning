@@ -45,12 +45,17 @@ namespace Web.Controllers
       return NoContent();
     }
 
-    [HttpPut("{id}/changePassword")]
-    public async Task<ActionResult> UpdatePassword([FromRoute] int id, [FromBody] UpdatePasswordCommand command)
+    [HttpPut("changePassword")]
+    public async Task<ActionResult> UpdatePassword(UpdatePasswordCommand command)
     {
-      command.Id = id;
       await Mediator.Send(command);
       return NoContent();
+    }
+
+    [HttpPut("resetPassword")]
+    public async Task<ActionResult<UserTokenDto>> ResetPassword(ResetPasswordCommand command)
+    {
+      return await Mediator.Send(command);
     }
   }
 }

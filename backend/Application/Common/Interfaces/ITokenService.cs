@@ -6,6 +6,6 @@ namespace Application.Common.Interfaces
   {
     string CreateToken(IUser user);
     Task<(string, string)> CreateSSOToken(IUser user);
-    Task<int> ValidateSSOToken(string token);
+    Task<(int, string)> ValidateSSOToken(string token);
   }
 }

@@ -3,9 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Users;
 using Application.Users.Commands.UpdatePassword;
-using Domain.Enums;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -32,18 +30,17 @@ namespace Application.UnitTests.Users.Commands.UpdatePasswordCommandTest
     {
       var command = new UpdatePasswordCommand()
       {
-        Id = 1,
         NewPassword = "NewPassword123"
       };
 
-      var handler = new UpdatePasswordCommand.UpdatePasswordCommandHandler(Context, CurrentUserServiceMock.Object);
+      var handler = new UpdatePasswordCommand.UpdatePasswordCommandHandler(Context, CurrentUserServiceMock.Object, PasswordHasherMock.Object);
 
       await handler.Handle(command, CancellationToken.None);
 
-      var entity = Context.Users.Find(command.Id);
+      var entity = Context.Users.Find(int.Parse(CurrentUserServiceMock.Object.UserId));
 
       entity.Should().NotBeNull();
-      entity.Password.Should().Be(command.NewPassword);
+      entity.Password.Should().Be(PasswordHasherMock.Object.Hash(command.NewPassword));
     }
 
     [Fact]
@@ -51,27 +48,10 @@ namespace Application.UnitTests.Users.Commands.UpdatePasswordCommandTest
     {
       var command = new UpdatePasswordCommand()
       {
-        Id = 1,
         NewPassword = "NewPassword123"
       };
 
-      var handler = new UpdatePasswordCommand.UpdatePasswordCommandHandler(Context, CurrentUserServiceMock2.Object);
-
-      Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
-
-      action.Should().Throw<UnauthorizedAccessException>();
-    }
-
-    [Fact]
-    public async Task Handle_GivenInvalidId_ShouldThrowException()
-    {
-      var command = new UpdatePasswordCommand()
-      {
-        Id = 99,
-        NewPassword = "NewPassword123"
-      };
-
-      var handler = new UpdatePasswordCommand.UpdatePasswordCommandHandler(Context, CurrentUserServiceMock2.Object);
+      var handler = new UpdatePasswordCommand.UpdatePasswordCommandHandler(Context, CurrentUserServiceMock2.Object, PasswordHasherMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 

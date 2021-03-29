@@ -8,5 +8,6 @@ export const AuthContext = createContext<ContextType>({
   activeUser: null,
   authStage: 0,
   login: (loginRequest: ILoginRequestDto) => null,
-  logout: () => null
+  logout: () => null,
+  loginWithToken: (token: string) => null
 });

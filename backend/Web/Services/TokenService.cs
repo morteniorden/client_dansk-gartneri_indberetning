@@ -63,7 +63,7 @@ namespace Web.Services
       return (token.Id, writtenToken);
     }
 
-    public async Task<int> ValidateSSOToken(string token)
+    public async Task<(int, string)> ValidateSSOToken(string token)
     {
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_options.Secret);
@@ -76,9 +76,11 @@ namespace Web.Services
         ValidateAudience = false
       }, out SecurityToken validatedToken);
 
-      var userId = int.Parse(((JwtSecurityToken) validatedToken).Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
+      var jwtToken = (JwtSecurityToken) validatedToken;
+      var userId = int.Parse((jwtToken.Claims.FirstOrDefault(claim => claim.Type == "nameid").Value));
 
-      return userId;
+      return (userId, validatedToken.Id);
     }
   }
 }
+//First(claim => claim.Type == ClaimTypes.NameIdentifier).Value

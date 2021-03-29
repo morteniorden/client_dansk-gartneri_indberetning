@@ -11,16 +11,18 @@ import {
 import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
 import { pwValidationResult, usePasswordValidation } from "hooks/usePasswordValidation";
+import { useRouter } from "next/router";
 import { FC, useCallback, useContext, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
-import { UpdatePasswordCommand } from "services/backend/nswagts";
+import { ResetPasswordCommand, UpdatePasswordCommand } from "services/backend/nswagts";
 
 interface Props {
-  onSubmit?: (success: boolean) => void;
+  onSubmit: (success: boolean) => void;
 }
 
 const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
-  const { activeUser } = useContext(AuthContext);
+  const router = useRouter();
+  const { activeUser, loginWithToken } = useContext(AuthContext);
   const { t } = useLocales();
   const { validatePassword } = usePasswordValidation();
   const toast = useToast();
@@ -36,17 +38,30 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+
       const res = validatePassword(password, passwordRep);
       setValidationResult(res);
       if (!res.isValid || !res.repetitionValid) return;
-      const userClient = await genUserClient();
+
       try {
-        await userClient.updatePassword(
-          activeUser.id,
-          new UpdatePasswordCommand({
-            newPassword: password
-          })
-        );
+        const userClient = await genUserClient();
+        const token = router.query.token as string;
+        if (token && !activeUser) {
+          const userTokenDto = await userClient.resetPassword(
+            new ResetPasswordCommand({
+              ssoToken: token,
+              newPassword: password
+            })
+          );
+          loginWithToken(userTokenDto.token);
+        } else if (activeUser) {
+          await userClient.updatePassword(
+            new UpdatePasswordCommand({
+              newPassword: password
+            })
+          );
+        }
+
         toast({
           title: t("password.changeSuccessTitle"),
           description: t("password.changeSuccessText"),
@@ -67,14 +82,14 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
         });
       }
     },
-    [password, passwordRep, activeUser]
+    [password, passwordRep, activeUser, router]
   );
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={5}>
         <FormControl id="password" isRequired isInvalid={!validationResult.isValid}>
-          <FormLabel htmlFor="password">{t("password.password")}</FormLabel>
+          <FormLabel htmlFor="password">{t("password.newPassword")}</FormLabel>
           <Input
             type="password"
             value={password}
@@ -82,7 +97,7 @@ const ChangePasswordForm: FC<Props> = ({ onSubmit }) => {
             maxW="500px"></Input>
         </FormControl>
         <FormControl id="passwordRepeat" isRequired isInvalid={!validationResult.repetitionValid}>
-          <FormLabel htmlFor="passwordRepeat">{t("password.repeatPassword")}</FormLabel>
+          <FormLabel htmlFor="passwordRepeat">{t("password.repeatNewPassword")}</FormLabel>
           <Input
             type="password"
             value={passwordRep}

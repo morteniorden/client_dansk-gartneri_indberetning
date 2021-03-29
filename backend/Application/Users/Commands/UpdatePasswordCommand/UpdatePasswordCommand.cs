@@ -6,44 +6,41 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Security;
+using Domain.Enums;
 using Newtonsoft.Json;
 
 namespace Application.Users.Commands.UpdatePassword
 {
-  [Authorize]
+  [Authenticated]
   public class UpdatePasswordCommand : IRequest
   {
-    [JsonIgnore]
-    public int Id { get; set; }
     public string NewPassword { get; set; }
-
 
     public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordCommand>
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUserService;
+      private readonly IPasswordHasher _passwordHasher;
 
-      public UpdatePasswordCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+      public UpdatePasswordCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IPasswordHasher passwordHasher)
       {
         _context = context;
         _currentUserService = currentUserService;
+        _passwordHasher = passwordHasher;
       }
 
       public async Task<Unit> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
       {
-        if (request.Id != int.Parse(_currentUserService.UserId))
-        {
-          throw new UnauthorizedAccessException("The request id did not match the currently authorized user.");
-        }
+        var id = int.Parse(_currentUserService.UserId);
 
-        var userEntity = await _context.Users.FindAsync(request.Id);
+        var userEntity = await _context.Users.FindAsync(id);
 
         if (userEntity == null)
         {
-          throw new NotFoundException(nameof(User), request.Id);
+          throw new NotFoundException(nameof(User), id);
         }
 
-        userEntity.Password = request.NewPassword;
+        userEntity.Password = _passwordHasher.Hash(request.NewPassword);
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync(cancellationToken);

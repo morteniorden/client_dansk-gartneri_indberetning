@@ -696,7 +696,8 @@ export interface IUserClient {
     createAndAddAccountant(command: CreateAccountantCommand): Promise<number>;
     updateUser(id: number, command: UpdateUserCommand): Promise<FileResponse>;
     deactivateUser(id: number): Promise<FileResponse>;
-    updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse>;
+    updatePassword(command: UpdatePasswordCommand): Promise<FileResponse>;
+    resetPassword(command: ResetPasswordCommand): Promise<UserTokenDto>;
 }
 
 export class UserClient extends ClientBase implements IUserClient {
@@ -868,11 +869,8 @@ export class UserClient extends ClientBase implements IUserClient {
         return Promise.resolve<FileResponse>(<any>null);
     }
 
-    updatePassword(id: number, command: UpdatePasswordCommand): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/User/{id}/changePassword";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    updatePassword(command: UpdatePasswordCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/User/changePassword";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -907,6 +905,46 @@ export class UserClient extends ClientBase implements IUserClient {
             });
         }
         return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    resetPassword(command: ResetPasswordCommand): Promise<UserTokenDto> {
+        let url_ = this.baseUrl + "/api/User/resetPassword";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processResetPassword(_response));
+        });
+    }
+
+    protected processResetPassword(response: Response): Promise<UserTokenDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserTokenDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserTokenDto>(<any>null);
     }
 }
 
@@ -1722,6 +1760,46 @@ export class UpdatePasswordCommand implements IUpdatePasswordCommand {
 }
 
 export interface IUpdatePasswordCommand {
+    newPassword?: string | null;
+}
+
+export class ResetPasswordCommand implements IResetPasswordCommand {
+    ssoToken?: string | null;
+    newPassword?: string | null;
+
+    constructor(data?: IResetPasswordCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.ssoToken = _data["ssoToken"] !== undefined ? _data["ssoToken"] : <any>null;
+            this.newPassword = _data["newPassword"] !== undefined ? _data["newPassword"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ResetPasswordCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResetPasswordCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["ssoToken"] = this.ssoToken !== undefined ? this.ssoToken : <any>null;
+        data["newPassword"] = this.newPassword !== undefined ? this.newPassword : <any>null;
+        return data; 
+    }
+}
+
+export interface IResetPasswordCommand {
+    ssoToken?: string | null;
     newPassword?: string | null;
 }
 

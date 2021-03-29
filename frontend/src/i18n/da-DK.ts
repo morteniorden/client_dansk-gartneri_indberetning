@@ -66,6 +66,8 @@ export const table: Locale = {
   password: {
     password: "Password:",
     repeatPassword: "Gentag password:",
+    newPassword: "Nyt password:",
+    repeatNewPassword: "Gentag nyt password",
     dontMatch: "De to passwords er ikke ens.",
     tooShort: "Skal være på minds 8 karakterer.",
     missingUppercase: "Skal have mindst ét stort bogstav.",

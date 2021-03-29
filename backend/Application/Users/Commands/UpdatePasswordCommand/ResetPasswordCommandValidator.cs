@@ -2,10 +2,12 @@ using FluentValidation;
 
 namespace Application.Users.Commands.UpdatePassword
 {
-  public class UpdatePasswordValidator : AbstractValidator<UpdatePasswordCommand>
+  public class ResetPasswordValidator : AbstractValidator<ResetPasswordCommand>
   {
-    public UpdatePasswordValidator()
+    public ResetPasswordValidator()
     {
+      RuleFor(e => e.SSOToken)
+        .NotEmpty();
       RuleFor(e => e.NewPassword)
         .NotEmpty().WithMessage("Your password cannot be empty")
         .MinimumLength(8).WithMessage("Your password length must be at least 8.")
