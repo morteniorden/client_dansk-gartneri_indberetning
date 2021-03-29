@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210328195609_TestMigration")]
-    partial class TestMigration
+    [Migration("20210329105147_AddEmails")]
+    partial class AddEmails
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
