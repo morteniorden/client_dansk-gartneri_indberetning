@@ -106,6 +106,9 @@ export const table: Locale = {
     paragraph: "Brødtekst",
     heading: "Overskrift",
     ctaButtonInputLabel: "Knap:",
-    preview: "Se forhåndsvisning"
+    preview: "Se forhåndsvisning",
+    nameTooltip: "Navn på email. Vises ikke for modtageren.",
+    subjectTooltip: "Emnefelt på email, som den vises for modtageren.",
+    ctaTooltip: "Tekst på knappen, der vises nederst i mailen."
   }
 };

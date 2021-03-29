@@ -105,5 +105,8 @@ export interface Locale {
     heading: string;
     ctaButtonInputLabel: string;
     preview: string;
+    nameTooltip: string;
+    subjectTooltip: string;
+    ctaTooltip: string;
   };
 }

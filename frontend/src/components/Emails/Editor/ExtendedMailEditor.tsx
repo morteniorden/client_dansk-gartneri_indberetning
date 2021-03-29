@@ -22,10 +22,7 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
 
   return (
     <Stack>
-      <Tooltip
-        label="Navn på email. Vises ikke for modtageren."
-        aria-label="A tooltip"
-        placement="auto-end">
+      <Tooltip label={t("mailEditor.nameTooltip")} aria-label="A tooltip" placement="auto-end">
         <FormControl id="name">
           <InputGroup>
             <InputLeftAddon w="110px">{t("mailEditor.name")}</InputLeftAddon>
@@ -35,10 +32,7 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
           </InputGroup>
         </FormControl>
       </Tooltip>
-      <Tooltip
-        label="Titel på email, som den vises for modtageren."
-        aria-label="A tooltip"
-        placement="auto-end">
+      <Tooltip label={t("mailEditor.subjectTooltip")} aria-label="A tooltip" placement="auto-end">
         <FormControl id="subject">
           <InputGroup>
             <InputLeftAddon w="110px">{t("mailEditor.subject")}</InputLeftAddon>
@@ -49,10 +43,7 @@ const ExtendedMailEditor: FC<Props> = ({ state, setState, variant }) => {
         </FormControl>
       </Tooltip>
       {variant == "endCTAButton" && (
-        <Tooltip
-          label="Tekst på knappen, der vises nederst i mailen."
-          aria-label="A tooltip"
-          placement="auto-end">
+        <Tooltip label={t("mailEditor.ctaTooltip")} aria-label="A tooltip" placement="auto-end">
           <FormControl id="ctaButton">
             <InputGroup>
               <InputLeftAddon w="110px">{t("mailEditor.ctaButtonInputLabel")}</InputLeftAddon>
