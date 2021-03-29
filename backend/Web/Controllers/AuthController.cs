@@ -2,6 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Application.Mails.Commands.SendResetPasswordMailCommand;
 using Application.Users.Commands.CheckAuthCommand;
 using Application.Users;
 using Application.Users.Commands.Login;
@@ -33,11 +34,11 @@ namespace Web.Controllers
       return result;
     }
 
-    [HttpPut("resetPassword")]
-    public async Task<ActionResult<UserDto>> SendMailToResetPassword([FromBody] string email)
+    [HttpPost("resetPassword")]
+    public async Task<ActionResult> SendMailToResetPassword([FromBody] string email)
     {
-      var result = await Mediator.Send(new CheckAuthCommand());
-      return result;
+      var result = await Mediator.Send(new SendResetPasswordCommand());
+      return NoContent();
     }
   }
 }
