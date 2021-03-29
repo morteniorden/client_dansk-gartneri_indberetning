@@ -14,7 +14,6 @@ namespace Application.UnitTests.Users.Commands.UpdatePasswordCommandTest
   {
     public Mock<ICurrentUserService> CurrentUserServiceMock { get; set; }
     public Mock<ICurrentUserService> CurrentUserServiceMock2 { get; set; }
-    //public Mock<IPasswordHasher> PasswordHasherMock { get; set; }
     public UpdatePasswordCommandTest()
     {
       CurrentUserServiceMock = new Mock<ICurrentUserService>();
@@ -24,11 +23,6 @@ namespace Application.UnitTests.Users.Commands.UpdatePasswordCommandTest
       CurrentUserServiceMock2 = new Mock<ICurrentUserService>();
       CurrentUserServiceMock2.Setup(m => m.UserId)
         .Returns("99");
-      /*
-      PasswordHasherMock = new Mock<IPasswordHasher>();
-      PasswordHasherMock.Setup(m => m.Check("password", "password")).Returns((true, false));
-      PasswordHasherMock.Setup(m => m.Hash("password")).Returns("password");
-      */
     }
 
     [Fact]
