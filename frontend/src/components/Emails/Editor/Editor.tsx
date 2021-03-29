@@ -5,7 +5,6 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useEffect, useState } from "react";
 
-//import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ClassicEditor from "./CKEditorBuild/ckeditor5/build/ckeditor";
 import CustomCSSReset from "./CustomCSSReset";
 
@@ -72,6 +71,9 @@ const Editor: FC<Props> = ({ content, setContent }) => {
                   class: "ck-heading_heading2"
                 }
               ]
+            },
+            link: {
+              defaultProtocol: "http://"
             }
           }}
           onReady={(editor: ICKEditor) => {

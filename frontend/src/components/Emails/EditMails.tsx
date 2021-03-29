@@ -1,5 +1,4 @@
 import { Button } from "@chakra-ui/button";
-import { InputGroup } from "@chakra-ui/input";
 import { Divider, Flex, Heading, HStack, Stack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Spinner } from "@chakra-ui/spinner";
