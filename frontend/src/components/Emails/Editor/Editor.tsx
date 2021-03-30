@@ -48,6 +48,7 @@ const Editor: FC<Props> = ({ content, setContent }) => {
               "italic",
               "|",
               "link",
+              "|",
               "bulletedList",
               "numberedList",
               "|",
