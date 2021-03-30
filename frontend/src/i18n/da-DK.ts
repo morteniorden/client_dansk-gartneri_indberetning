@@ -101,6 +101,7 @@ export const table: Locale = {
   },
 
   mailEditor: {
+    editEmails: "Rediger emails",
     name: "Email navn:",
     subject: "Emne:",
     paragraph: "Brødtekst",

@@ -129,7 +129,7 @@ const EditEmails: FC = () => {
   return (
     <BasicLayout maxW="1000px">
       <Stack>
-        <Heading>Edit email</Heading>
+        <Heading>{t("mailEditor.editEmails")}</Heading>
         <Flex justifyContent="space-between">
           <Select maxW="max-content" onChange={handleSelectChange}>
             {emails.map(mail => (

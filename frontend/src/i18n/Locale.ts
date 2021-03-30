@@ -99,6 +99,7 @@ export interface Locale {
   };
 
   mailEditor: {
+    editEmails: string;
     name: string;
     subject: string;
     paragraph: string;
