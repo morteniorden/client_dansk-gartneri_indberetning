@@ -1,3 +1,4 @@
+import { Spinner } from "@chakra-ui/spinner";
 import { AuthContext } from "contexts/AuthContext";
 import { Locale } from "i18n/Locale";
 // import { runTimeTable } from "i18n/runtimeTable";
@@ -13,23 +14,23 @@ const IndexPage: NextPage = () => {
 
   useEffect(() => {
     //Todo: Choose what to do with the index page and how to determine what content to display for the user
-    switch (activeUser.role) {
+    switch (activeUser?.role) {
       case RoleEnum.Admin:
-        router.push("./accounts");
+        router.replace("/accounts");
         break;
       case RoleEnum.Client:
-        router.push("./accounts");
+        router.replace("/accounts");
         break;
       case RoleEnum.Accountant:
-        router.push("./accounts");
+        router.replace("/accounts");
         break;
       default:
-        router.push("./accounts");
+        router.replace("/accounts");
         break;
     }
   }, [activeUser, router]);
 
-  return <></>;
+  return <Spinner />;
 };
 
 export const getStaticProps: GetStaticProps<I18nProps<Locale>> = async context => {

@@ -1,51 +1,38 @@
-import "../styles.global.css";
+import "../theme/styles.global.css";
 import "isomorphic-unfetch";
 
 import { ChakraProvider } from "@chakra-ui/react";
+import BasicLayout from "components/Layouts/BasicLayout";
 import { AuthContext } from "contexts/AuthContext";
 import { AuthStage, useAuth } from "hooks/useAuth";
-import { usePWA } from "hooks/usePWA";
+import { useEffectAsync } from "hooks/useEffectAsync";
 import { AppPropsType } from "next/dist/next-server/lib/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { I18nProvider } from "next-rosetta";
-import { ReactElement, useEffect } from "react";
-import EnvSettings from "types/EnvSettings";
+import { ReactElement } from "react";
 import isomorphicEnvSettings, { setEnvSettings } from "utils/envSettings";
 import { logger } from "utils/logger";
 
 import theme from "../theme/theme";
-import AccountsPage from "./accounts";
 import LoginPage from "./login";
 
-type Props = {
-  envSettings: EnvSettings;
-};
-
-const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType & Props): ReactElement => {
+const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType): ReactElement => {
   // usePWA(); //! OPT IN
 
   const auth = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
+  useEffectAsync(async () => {
     if (!__N_SSG) {
       logger.info("Environment should be readable");
 
       const envSettings = isomorphicEnvSettings();
       if (envSettings) setEnvSettings(envSettings);
       if (process.browser) {
-        fetch("/api/getEnv")
-          .then(res => {
-            if (res.ok) return res.json();
-            throw res.statusText;
-          })
-          .then(
-            envSettings => setEnvSettings(envSettings),
-            e => {
-              logger.debug("env error", e);
-            }
-          );
+        const response = await fetch("/api/getEnv");
+        const envSettings = await response.json();
+        setEnvSettings(envSettings);
       }
     }
   }, []);
@@ -53,11 +40,11 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType & Props): ReactEl
   return (
     <main>
       <Head>
-        <title>APPNAMEHERE</title>
+        <title>Dansk Gartneri - Indeberetning</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta charSet="utf-8" />
         <meta name="theme-color" content="#2196f3" />
-        <meta name="description" content="APPNAMEHERE" />
+        <meta name="description" content="Dansk Gartneri - Indeberetning" />
         <meta name="robots" content="noindex" />
 
         <link rel="manifest" href="/manifest.json" />
@@ -70,8 +57,12 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType & Props): ReactEl
         <ChakraProvider theme={theme}>
           <AuthContext.Provider value={auth}>
             {/* <SignalRContext.Provider value={{ connection }}> */}
-            {auth.authStage == AuthStage.AUTHENTICATED || router.pathname == "/changepassword" ? (
+            {router.pathname == "/changepassword" ? (
               <Component {...pageProps} />
+            ) : auth.authStage == AuthStage.AUTHENTICATED ? (
+              <BasicLayout>
+                <Component {...pageProps} />
+              </BasicLayout>
             ) : (
               <LoginPage />
             )}

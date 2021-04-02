@@ -1,5 +1,4 @@
 import { Box, Flex, Heading, HStack, Spinner, Stack, Text } from "@chakra-ui/react";
-import BasicLayout from "components/Layouts/BasicLayout";
 import { AccountsContext } from "contexts/AccountsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useReducer, useState } from "react";
@@ -51,28 +50,26 @@ const Accounts: FC = () => {
         fetchData: fetchData,
         isFetching: isFetching
       }}>
-      <BasicLayout>
-        <Stack spacing={4}>
-          <Flex justifyContent="space-between" alignItems="center">
-            <Heading>{t("accounts.accounts")}</Heading>
-            <HStack spacing={5}>
-              <Box>
-                <SearchFilterInput onChange={setSearchString} value={searchString} />
-              </Box>
-              <NewAccountModal onSubmit={fetchData} />
-            </HStack>
-          </Flex>
-          <HStack h="20px" alignItems="center">
-            {isFetching && (
-              <>
-                <Spinner size="sm" />
-                <Text>{t("accounts.fetching")}</Text>
-              </>
-            )}
+      <Stack spacing={4}>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Heading>{t("accounts.accounts")}</Heading>
+          <HStack spacing={5}>
+            <Box>
+              <SearchFilterInput onChange={setSearchString} value={searchString} />
+            </Box>
+            <NewAccountModal onSubmit={fetchData} />
           </HStack>
-          <AccountsTable data={accounts} searchString={searchString} fetchData={fetchData} />
-        </Stack>
-      </BasicLayout>
+        </Flex>
+        <HStack h="20px" alignItems="center">
+          {isFetching && (
+            <>
+              <Spinner size="sm" />
+              <Text>{t("accounts.fetching")}</Text>
+            </>
+          )}
+        </HStack>
+        <AccountsTable data={accounts} searchString={searchString} fetchData={fetchData} />
+      </Stack>
     </AccountsContext.Provider>
   );
 };

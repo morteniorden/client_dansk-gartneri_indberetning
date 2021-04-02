@@ -1,4 +1,3 @@
-import Accounts from "components/Accounts/Accounts";
 import Login from "components/Login/Login";
 import { Locale } from "i18n/Locale";
 // import { runTimeTable } from "i18n/runtimeTable";
