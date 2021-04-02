@@ -1,6 +1,5 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Users;
 using Application.Users.Commands.UpdatePassword;

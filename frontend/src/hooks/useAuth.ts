@@ -7,8 +7,7 @@ import {
   ILoginRequestDto,
   IUserDto,
   IUserTokenDto,
-  LoginCommand,
-  LoginRequestDto
+  LoginCommand
 } from "services/backend/nswagts";
 
 import { useEffectAsync } from "./useEffectAsync";
@@ -26,6 +25,9 @@ type AuthHook<IUserDto> = {
   activeUser: IUserDto | null;
 };
 
+// This hook requires two functionalities.
+// 1 an endpoint to login a user meant to be called in the background returning a token
+// 2 an endpoint to retrieve the user from the token in the header
 export const useAuth = (): AuthHook<IUserDto> => {
   const [authStage, setAuthStage] = useState(AuthStage.CHECKING);
   const [authCounter, setAuthCounter] = useState(0);
@@ -56,7 +58,7 @@ export const useAuth = (): AuthHook<IUserDto> => {
       return false;
     }
     setAuthStage(AuthStage.CHECKING);
-    setCookie(user.token);
+    // setCookie(user.token); // Enable ONLY if you are using servicesideprops that require auth
     setAuthToken(user.token);
     setAuthCounter(c => c + 1);
     return true;
