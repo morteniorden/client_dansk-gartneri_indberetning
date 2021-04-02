@@ -3,12 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { genAuthenticationClient } from "services/backend/apiClients";
-import {
-  ILoginRequestDto,
-  IUserDto,
-  IUserTokenDto,
-  LoginCommand
-} from "services/backend/nswagts";
+import { ILoginRequestDto, IUserDto, IUserTokenDto, LoginCommand } from "services/backend/nswagts";
 
 import { useEffectAsync } from "./useEffectAsync";
 
@@ -23,6 +18,7 @@ type AuthHook<IUserDto> = {
   login: (loginRequest: ILoginRequestDto) => Promise<boolean>;
   logout: () => void;
   activeUser: IUserDto | null;
+  loginWithToken: (token: string) => void;
 };
 
 // This hook requires two functionalities.
@@ -72,7 +68,15 @@ export const useAuth = (): AuthHook<IUserDto> => {
     router.push("/");
   }, []);
 
-  return { authStage, login, logout, activeUser };
+  const loginWithToken = useCallback((token: string) => {
+    setAuthStage(AuthStage.CHECKING);
+    setCookie(token);
+    setAuthToken(token);
+    setAuthCounter(c => c + 1);
+    return true;
+  }, []);
+
+  return { authStage, login, logout, activeUser, loginWithToken };
 };
 
 export const getAuthToken = (context?: GetServerSidePropsContext): string => {

@@ -7,10 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Security;
 using Domain.Enums;
 
 namespace Application.Accounts.Queries.GetAccountsQuery
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class GetAccountsQuery : IRequest<List<AccountDto>>
   {
     public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, List<AccountDto>>

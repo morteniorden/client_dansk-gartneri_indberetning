@@ -1,15 +1,25 @@
 using System;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Application.Users.Commands.CheckAuthCommand;
 using Application.Users;
 using Application.Users.Commands.Login;
+using Microsoft.Extensions.Options;
+using Web.Options;
 
 namespace Web.Controllers
 {
 
   public class AuthController : ApiControllerBase
   {
+    private readonly CorsOptions _corsOptions;
+
+    public AuthController(IOptions<CorsOptions> corsOptions)
+    {
+      _corsOptions = corsOptions.Value;
+    }
+
     [HttpPost]
     public async Task<ActionResult<UserTokenDto>> Login([FromBody] LoginCommand command)
     {

@@ -8,10 +8,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
+using Application.Common.Security;
 using Domain.Enums;
 
 namespace Application.Accounts.Queries.GetCurrentAccountQuery
 {
+  [Authorize]
   public class GetCurrentAccountQuery : IRequest<AccountDto>
   {
     public class GetCurrentAccountQueryHandler : IRequestHandler<GetCurrentAccountQuery, AccountDto>

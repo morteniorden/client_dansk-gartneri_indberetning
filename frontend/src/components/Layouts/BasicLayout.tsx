@@ -4,11 +4,14 @@ import { FC, ReactNode } from "react";
 
 interface Props {
   children?: ReactNode;
+  maxW?: string;
 }
 
-const BasicLayout: FC<Props> = ({ children }) => {
+const BasicLayout: FC<Props> = ({ children, maxW }) => {
   return (
-    <Grid gridTemplateColumns="1fr minmax(400px, 80vw) 1fr" gridTemplateRows="auto 1fr">
+    <Grid
+      gridTemplateColumns={`1fr minmax(400px, ${maxW ?? "80vw"}) 1fr`}
+      gridTemplateRows="auto 1fr">
       <GridItem rowSpan={1} colSpan={3}>
         <Header />
       </GridItem>

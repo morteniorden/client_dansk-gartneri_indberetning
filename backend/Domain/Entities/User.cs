@@ -14,5 +14,6 @@ namespace Domain.Entities
     public DateTimeOffset? DeactivationTime { get; set; }
     public int AccountId { get; set; }
     public virtual Account Account { get; set; }
+    public string SSOTokenId { get; set; }
   }
 }

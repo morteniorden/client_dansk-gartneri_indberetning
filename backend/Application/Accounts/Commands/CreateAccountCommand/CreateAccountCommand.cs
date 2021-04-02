@@ -6,9 +6,13 @@ using Domain.Enums;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Security;
+using Hangfire;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Accounts.Commands.CreateAccountCommand
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class CreateAccountCommand : IRequest<int>
   {
     public CreateAccountDto account;
@@ -17,11 +21,19 @@ namespace Application.Accounts.Commands.CreateAccountCommand
     {
       private readonly IApplicationDbContext _context;
       private readonly IPasswordHasher _passwordHasher;
+      private readonly ITokenService _tokenService;
+      private readonly IMailService _mailService;
+      private readonly IHttpContextAccessor _accessor;
+      private readonly IBackgroundJobClient _jobClient;
 
-      public CreateAccountCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher)
+      public CreateAccountCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, ITokenService tokenService, IMailService mailService, IHttpContextAccessor accessor, IBackgroundJobClient jobClient)
       {
         _context = context;
         _passwordHasher = passwordHasher;
+        _tokenService = tokenService;
+        _mailService = mailService;
+        _accessor = accessor;
+        _jobClient = jobClient;
       }
 
       public async Task<int> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
@@ -72,6 +84,16 @@ namespace Application.Accounts.Commands.CreateAccountCommand
 
         _context.Users.Add(userEntity);
         await _context.SaveChangesAsync(cancellationToken);
+
+        var (tokenId, token) = await _tokenService.CreateSSOToken(userEntity);
+        userEntity.SSOTokenId = tokenId;
+
+        //Is it possible to avoid saving changes twice?
+        //I'm doing it here because I think the user needs to have been assigned an ID before writing the token.
+        userEntity.SSOTokenId = tokenId;
+        await _context.SaveChangesAsync(cancellationToken);
+
+        _jobClient.Enqueue(() => _mailService.SendUserActivationEmail(userEntity.Email, token));
 
         return accountEntity.Id;
       }

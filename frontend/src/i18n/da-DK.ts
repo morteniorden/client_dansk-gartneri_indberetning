@@ -41,7 +41,9 @@ export const table: Locale = {
     addressLine4: "Linje 4",
     CVR_getFromRegistry: "Hent info fra CVR-registret",
     CVR_apiErrorTitle: "CVR ikke fundet",
-    CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret"
+    CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret",
+    accountant: "Revisor",
+    fetching: "Henter kunder..."
   },
 
   login: {
@@ -57,6 +59,40 @@ export const table: Locale = {
   },
 
   actions: {
+    update: "Opdatér",
     delete: "Slet"
+  },
+
+  password: {
+    password: "Password:",
+    repeatPassword: "Gentag password:",
+    newPassword: "Nyt password:",
+    repeatNewPassword: "Gentag nyt password",
+    dontMatch: "De to passwords er ikke ens.",
+    tooShort: "Skal være på minds 8 karakterer.",
+    missingUppercase: "Skal have mindst ét stort bogstav.",
+    missingLowercase: "Skal have mindst ét lille bogstav.",
+    missingNumber: "Skal have mindst ét tal.",
+    changePassword: "Opdater password",
+    changeSuccessTitle: "Password opdateret",
+    changeSuccessText: "Dit password er nu blevet opdateret.",
+    changeFailTitle: "Fejl",
+    changeFailText: "Noget gik galt, prøv igen senere."
+  },
+
+  accountant: {
+    editAccountant: "Rediger revisor",
+    addAccountant: "Tilføj ny revisor",
+    noAccountant: "Ingen revisor",
+    addSuccessTitle: "Revisor tilføjet",
+    addSuccessText: "En mail med invitation til systemet er sendt til revisor.",
+    addErrorTitle: "Tilføjelse mislykket",
+    addErrorText: "Der skete en fejl. Prøv eventuelt igen.",
+    deleteSuccessTitle: "Revisor fjernet",
+    deleteSuccessText: "Revisoren er nu fjernet og deaktiveret.",
+    deleteErrorTitle: "Deaktivering mislykket",
+    deleteErrorText: "Der skete en fejl. Prøv eventuelt igen.",
+    alreadyAssignedTitle: "Fejl",
+    alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto."
   }
 };

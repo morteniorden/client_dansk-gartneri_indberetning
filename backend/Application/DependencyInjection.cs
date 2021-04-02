@@ -10,6 +10,9 @@ using Application.Common.Services;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.Extensions.Configuration;
+using RazorEmail.Services;
+using RazorEmails.Interfaces;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Application
 {
@@ -25,6 +28,8 @@ namespace Application
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
       services.AddTransient<IMailService, MailService>();
+      services.AddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+      services.AddRazorPages();
 
       services.AddHangfire(configuration => configuration
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)

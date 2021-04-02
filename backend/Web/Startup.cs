@@ -17,10 +17,12 @@ using Serilog;
 using System.Linq;
 using System.Text;
 using Application.Common.Options;
+using Application.Common.Services;
 using Application.Security;
 using Hangfire;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Web.DocumentProcessors;
 using Web.Filters;
@@ -46,6 +48,7 @@ namespace Web
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
+      services.Configure<CorsOptions>(Configuration.GetSection(CorsOptions.Cors));
       services.Configure<HashingOptions>(Configuration.GetSection(HashingOptions.Hashing));
       services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.Tokens));
       services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
@@ -68,6 +71,7 @@ namespace Web
       services.AddInfrastructure(Configuration, Environment);
 
       services.AddHttpContextAccessor();
+      //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
       services.AddHealthChecks()
           .AddDbContextCheck<ApplicationDbContext>();
@@ -104,6 +108,7 @@ namespace Web
       services.AddScoped<IExampleHubService, ExampleHubService>();
       services.AddScoped<ITokenService, TokenService>();
       services.AddScoped<IPasswordHasher, PasswordHasher>();
+      services.AddScoped<IMailService, MailService>();
       services.AddScoped<SuperAdminService>();
       services.AddSignalR();
 
