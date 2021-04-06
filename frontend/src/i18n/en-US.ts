@@ -60,7 +60,11 @@ export const table: Locale = {
 
   actions: {
     update: "Update",
-    delete: "Delete"
+    delete: "Delete",
+    saveSuccessTitle: "Changes saved",
+    saveSuccessText: "Your changes has been saved.",
+    saveErrorTitle: "Error",
+    saveErrorText: "An error happened when trying to save your changes."
   },
 
   password: {
@@ -95,5 +99,19 @@ export const table: Locale = {
     alreadyAssignedTitle: "Error",
     alreadyAssignedText:
       "This email is used by an accountant, that is already assigned to a client."
+  },
+
+  mailEditor: {
+    editEmails: "Edit emails",
+    name: "Email name:",
+    subject: "Subject:",
+    ctaButtonInputLabel: "Button:",
+    preview: "Preview",
+    nameTooltip: "Name of the mail. Is not visible to the recipient.",
+    subjectTooltip: "Subject of the mail, as it is visible to the recipient.",
+    ctaTooltip: "Text on the button at the bottom of th email.",
+    section: "Section",
+    headingPlaceholder: "Heading here",
+    paragraphPlaceholder: "Paragraph here"
   }
 };

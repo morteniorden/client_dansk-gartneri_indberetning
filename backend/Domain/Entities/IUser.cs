@@ -11,5 +11,6 @@ namespace Domain.Entities
     RoleEnum Role { get; set; }
     string Name { get; set; }
     DateTimeOffset? DeactivationTime { get; set; }
+    string SSOTokenId { get; set; }
   }
 }

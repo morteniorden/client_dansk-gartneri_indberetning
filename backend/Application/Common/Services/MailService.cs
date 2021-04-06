@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Options;
@@ -8,7 +9,7 @@ using Application.Mails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using RazorEmails.Interfaces;
-using RazorEmails.Views.Emails.ActivateUserEmail;
+using RazorEmails.Views.Emails.CtaButtonEmail;
 
 namespace Application.Common.Services
 {
@@ -16,8 +17,8 @@ namespace Application.Common.Services
   {
     private readonly MailOptions _mailOptions;
     private readonly IRazorViewToStringRenderer _razorViewToStringRenderer;
-    private readonly IHttpContextAccessor _context;
-    public MailService(IOptions<MailOptions> mailOptions, IRazorViewToStringRenderer razorViewToStringRenderer, IHttpContextAccessor context)
+    private readonly IApplicationDbContext _context;
+    public MailService(IOptions<MailOptions> mailOptions, IRazorViewToStringRenderer razorViewToStringRenderer, IApplicationDbContext context)
     {
       _mailOptions = mailOptions.Value;
       _razorViewToStringRenderer = razorViewToStringRenderer;
@@ -62,17 +63,22 @@ namespace Application.Common.Services
 
     public async Task TestSendEmail()
     {
-      var activateUserModel = new ActivateUserEmailViewModel()
+      var emailModel = new CtaButtonEmailViewModel()
       {
-        Header = "Header 1 here",
-        Paragraph = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.",
-        Url = "http://danskgartneri.dk"
+        Heading1 = "Lorem",
+        paragraph1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.",
+        Heading2 = "Lorem",
+        paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.",
+        Heading3 = "Lorem",
+        paragraph3 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.",
+        CtaButtonText = "Lorem ipsum",
+        CtaButtonUrl = "http://danskgartneri.dk"
       };
       var mail = new MailRequestDto
       {
         ToEmail = _mailOptions.Mail,
         Subject = "Test mail from Dansk Gartneri",
-        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ActivateUserEmail/ActivateUserEmail.cshtml", activateUserModel)
+        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
       };
 
       await SendEmailAsync(mail);
@@ -80,20 +86,76 @@ namespace Application.Common.Services
 
     public async Task SendUserActivationEmail(string email, string token)
     {
-      var activateUserModel = new ActivateUserEmailViewModel()
+      var emailEntity = _context.Emails.Find(1);
+
+      var emailModel = new CtaButtonEmailViewModel()
       {
-        Header = "Velkommen til Dansk Gartneri indeberetningssystem",
-        Paragraph =
-          "Du er blevet inviteret til systemet. Klik herunder for at aktivere din bruger og vælge dit password.",
-        Url = _mailOptions.baseUrl + "/changepassword?token=" + token
+        Heading1 = emailEntity.Heading1,
+        paragraph1 = emailEntity.Paragraph1,
+        Heading2 = emailEntity.Heading2,
+        paragraph2 = emailEntity.Paragraph2,
+        Heading3 = emailEntity.Heading3,
+        paragraph3 = emailEntity.Paragraph3,
+        CtaButtonText = emailEntity.CtaButtonText,
+        CtaButtonUrl = _mailOptions.baseUrl + "/changepassword?token=" + token
       };
       var mail = new MailRequestDto
       {
         ToEmail = email,
-        Subject = "Velkommen til Dansk Gartneri indberetningssystem",
-        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ActivateUserEmail/ActivateUserEmail.cshtml", activateUserModel)
+        Subject = emailEntity.Subject,
+        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
       };
       await SendEmailAsync(mail);
+    }
+
+    public async Task SendForgotPasswordEmail(string email, string token)
+    {
+      var emailEntity = _context.Emails.Find(2);
+
+      var emailModel = new CtaButtonEmailViewModel()
+      {
+        Heading1 = emailEntity.Heading1,
+        paragraph1 = emailEntity.Paragraph1,
+        Heading2 = emailEntity.Heading2,
+        paragraph2 = emailEntity.Paragraph2,
+        Heading3 = emailEntity.Heading3,
+        paragraph3 = emailEntity.Paragraph3,
+        CtaButtonText = emailEntity.CtaButtonText,
+        CtaButtonUrl = _mailOptions.baseUrl + "/changepassword?token=" + token
+      };
+      var mail = new MailRequestDto
+      {
+        ToEmail = email,
+        Subject = emailEntity.Subject,
+        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
+      };
+      await SendEmailAsync(mail);
+    }
+
+    public async Task<string> GeneratePreview(EmailDto emailDto)
+    {
+      var emailModel = new CtaButtonEmailViewModel()
+      {
+        Heading1 = emailDto.Heading1,
+        paragraph1 = emailDto.Paragraph1,
+        Heading2 = emailDto.Heading2,
+        paragraph2 = emailDto.Paragraph2,
+        Heading3 = emailDto.Heading3,
+        paragraph3 = emailDto.Paragraph3,
+        CtaButtonText = emailDto.CtaButtonText,
+      };
+
+      var htmlString = await _razorViewToStringRenderer.RenderViewToStringAsync(
+        "/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel);
+
+      var hostedLogo = _mailOptions.baseUrl + "/images/logo.png";
+      var hostedAltLogo = _mailOptions.baseUrl + "/images/altlogo.png";
+
+      var imgReplacedHtml = htmlString
+        .Replace("cid:Logo", hostedLogo)
+        .Replace("cid:altLogo", hostedAltLogo);
+
+      return imgReplacedHtml;
     }
   }
 }

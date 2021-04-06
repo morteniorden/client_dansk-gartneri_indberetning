@@ -60,7 +60,11 @@ export const table: Locale = {
 
   actions: {
     update: "Opdatér",
-    delete: "Slet"
+    delete: "Slet",
+    saveSuccessTitle: "Ændringer gemt",
+    saveSuccessText: "Dine ændringer er blevet gemt",
+    saveErrorTitle: "Fejl",
+    saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer."
   },
 
   password: {
@@ -94,5 +98,19 @@ export const table: Locale = {
     deleteErrorText: "Der skete en fejl. Prøv eventuelt igen.",
     alreadyAssignedTitle: "Fejl",
     alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto."
+  },
+
+  mailEditor: {
+    editEmails: "Rediger emails",
+    name: "Email navn:",
+    subject: "Emne:",
+    ctaButtonInputLabel: "Knaptekst:",
+    preview: "Se forhåndsvisning",
+    nameTooltip: "Navn på email. Vises ikke for modtageren.",
+    subjectTooltip: "Emnefelt på email, som den vises for modtageren.",
+    ctaTooltip: "Tekst på knappen, der vises nederst i mailen.",
+    section: "Afsnit",
+    headingPlaceholder: "Overskrift her",
+    paragraphPlaceholder: "Brødtekst her"
   }
 };

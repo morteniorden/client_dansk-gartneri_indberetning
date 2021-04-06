@@ -23,7 +23,6 @@ namespace Application.Accounts.Commands.CreateAccountCommand
       private readonly IPasswordHasher _passwordHasher;
       private readonly ITokenService _tokenService;
       private readonly IMailService _mailService;
-      private readonly IHttpContextAccessor _accessor;
       private readonly IBackgroundJobClient _jobClient;
 
       public CreateAccountCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, ITokenService tokenService, IMailService mailService, IHttpContextAccessor accessor, IBackgroundJobClient jobClient)
@@ -32,7 +31,6 @@ namespace Application.Accounts.Commands.CreateAccountCommand
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
         _mailService = mailService;
-        _accessor = accessor;
         _jobClient = jobClient;
       }
 

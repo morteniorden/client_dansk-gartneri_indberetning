@@ -262,6 +262,7 @@ export class AccountClient extends ClientBase implements IAccountClient {
 export interface IAuthClient {
     login(command: LoginCommand): Promise<UserTokenDto>;
     checkAuth(): Promise<UserDto>;
+    sendMailToResetPassword(email: string): Promise<FileResponse>;
 }
 
 export class AuthClient extends ClientBase implements IAuthClient {
@@ -349,6 +350,44 @@ export class AuthClient extends ClientBase implements IAuthClient {
             });
         }
         return Promise.resolve<UserDto>(<any>null);
+    }
+
+    sendMailToResetPassword(email: string): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Auth/resetPassword";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(email);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processSendMailToResetPassword(_response));
+        });
+    }
+
+    protected processSendMailToResetPassword(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 }
 
@@ -638,7 +677,10 @@ export class HealthClient extends ClientBase implements IHealthClient {
 }
 
 export interface IMailClient {
+    getAllMails(): Promise<EmailDto[]>;
     sendTestMail(command: SendTestMailCommand): Promise<FileResponse>;
+    updateEmail(id: number, command: UpdateEmailCommand): Promise<FileResponse>;
+    generatePreview(command: GeneratePreviewMailCommand): Promise<string>;
 }
 
 export class MailClient extends ClientBase implements IMailClient {
@@ -650,6 +692,46 @@ export class MailClient extends ClientBase implements IMailClient {
         super(configuration);
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getAllMails(): Promise<EmailDto[]> {
+        let url_ = this.baseUrl + "/api/Mail";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllMails(_response));
+        });
+    }
+
+    protected processGetAllMails(response: Response): Promise<EmailDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EmailDto.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<EmailDto[]>(<any>null);
     }
 
     sendTestMail(command: SendTestMailCommand): Promise<FileResponse> {
@@ -688,6 +770,87 @@ export class MailClient extends ClientBase implements IMailClient {
             });
         }
         return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    updateEmail(id: number, command: UpdateEmailCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Mail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdateEmail(_response));
+        });
+    }
+
+    protected processUpdateEmail(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    generatePreview(command: GeneratePreviewMailCommand): Promise<string> {
+        let url_ = this.baseUrl + "/api/Mail/preview";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGeneratePreview(_response));
+        });
+    }
+
+    protected processGeneratePreview(response: Response): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(<any>null);
     }
 }
 
@@ -1623,6 +1786,115 @@ export interface IExampleParentDto {
     name?: string | null;
 }
 
+export class EmailDto implements IEmailDto {
+    id?: number;
+    name?: string | null;
+    subject?: string | null;
+    heading1?: string | null;
+    paragraph1?: string | null;
+    heading2?: string | null;
+    paragraph2?: string | null;
+    heading3?: string | null;
+    paragraph3?: string | null;
+    ctaButtonText?: string | null;
+
+    constructor(data?: IEmailDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.subject = _data["subject"] !== undefined ? _data["subject"] : <any>null;
+            this.heading1 = _data["heading1"] !== undefined ? _data["heading1"] : <any>null;
+            this.paragraph1 = _data["paragraph1"] !== undefined ? _data["paragraph1"] : <any>null;
+            this.heading2 = _data["heading2"] !== undefined ? _data["heading2"] : <any>null;
+            this.paragraph2 = _data["paragraph2"] !== undefined ? _data["paragraph2"] : <any>null;
+            this.heading3 = _data["heading3"] !== undefined ? _data["heading3"] : <any>null;
+            this.paragraph3 = _data["paragraph3"] !== undefined ? _data["paragraph3"] : <any>null;
+            this.ctaButtonText = _data["ctaButtonText"] !== undefined ? _data["ctaButtonText"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): EmailDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmailDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["subject"] = this.subject !== undefined ? this.subject : <any>null;
+        data["heading1"] = this.heading1 !== undefined ? this.heading1 : <any>null;
+        data["paragraph1"] = this.paragraph1 !== undefined ? this.paragraph1 : <any>null;
+        data["heading2"] = this.heading2 !== undefined ? this.heading2 : <any>null;
+        data["paragraph2"] = this.paragraph2 !== undefined ? this.paragraph2 : <any>null;
+        data["heading3"] = this.heading3 !== undefined ? this.heading3 : <any>null;
+        data["paragraph3"] = this.paragraph3 !== undefined ? this.paragraph3 : <any>null;
+        data["ctaButtonText"] = this.ctaButtonText !== undefined ? this.ctaButtonText : <any>null;
+        return data; 
+    }
+}
+
+export interface IEmailDto {
+    id?: number;
+    name?: string | null;
+    subject?: string | null;
+    heading1?: string | null;
+    paragraph1?: string | null;
+    heading2?: string | null;
+    paragraph2?: string | null;
+    heading3?: string | null;
+    paragraph3?: string | null;
+    ctaButtonText?: string | null;
+}
+
+export class UpdateEmailCommand implements IUpdateEmailCommand {
+    newEmail?: EmailDto | null;
+
+    constructor(data?: IUpdateEmailCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.newEmail = data.newEmail && !(<any>data.newEmail).toJSON ? new EmailDto(data.newEmail) : <EmailDto>this.newEmail; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.newEmail = _data["newEmail"] ? EmailDto.fromJS(_data["newEmail"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UpdateEmailCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateEmailCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["newEmail"] = this.newEmail ? this.newEmail.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IUpdateEmailCommand {
+    newEmail?: IEmailDto | null;
+}
+
 export class SendTestMailCommand implements ISendTestMailCommand {
 
     constructor(data?: ISendTestMailCommand) {
@@ -1651,6 +1923,43 @@ export class SendTestMailCommand implements ISendTestMailCommand {
 }
 
 export interface ISendTestMailCommand {
+}
+
+export class GeneratePreviewMailCommand implements IGeneratePreviewMailCommand {
+    emailDto?: EmailDto | null;
+
+    constructor(data?: IGeneratePreviewMailCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.emailDto = data.emailDto && !(<any>data.emailDto).toJSON ? new EmailDto(data.emailDto) : <EmailDto>this.emailDto; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.emailDto = _data["emailDto"] ? EmailDto.fromJS(_data["emailDto"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): GeneratePreviewMailCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new GeneratePreviewMailCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["emailDto"] = this.emailDto ? this.emailDto.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IGeneratePreviewMailCommand {
+    emailDto?: IEmailDto | null;
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {
