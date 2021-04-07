@@ -32,13 +32,14 @@
     "@react-icons/all-files": "^4.1.0",
     "framer-motion": "^4.1.2",
     "isomorphic-unfetch": "^3.1.0",
-    "next": "10.1.3",
-    "next-pwa": "^5.1.4",
+    "next": "^10.1.3",
+    "next-pwa": "^5.2.1",
     "next-rosetta": "^1.2.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-list-reducer": "^1.1.0",
+    "terser-webpack-plugin": "^5.1.1",
     "ts-array-ext": "^2.1.0",
     "uuid": "^8.3.2"
   },
@@ -64,10 +65,8 @@
     "fetch-mock": "^9.11.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
-    "jest-dom": "^4.0.0",
     "jest-fetch-mock": "^3.0.3",
     "prettier": "^2.2.1",
-    "terser-webpack-plugin": "^5.1.1",
     "typescript": "^4.2.3"
   }
 }
