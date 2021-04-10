@@ -13,7 +13,7 @@ using Domain.Enums;
 
 namespace Application.Accounts.Queries.GetCurrentAccountQuery
 {
-  [Authorize]
+  [Authenticated]
   public class GetCurrentAccountQuery : IRequest<AccountDto>
   {
     public class GetCurrentAccountQueryHandler : IRequestHandler<GetCurrentAccountQuery, AccountDto>

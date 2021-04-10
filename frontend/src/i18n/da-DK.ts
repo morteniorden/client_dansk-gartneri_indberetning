@@ -16,7 +16,8 @@ export const table: Locale = {
 
   common: {
     search: "Søg",
-    add: "Tilføj"
+    add: "Tilføj",
+    fetchingData: "Henter data..."
   },
 
   accounts: {
@@ -43,7 +44,8 @@ export const table: Locale = {
     CVR_apiErrorTitle: "CVR ikke fundet",
     CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret",
     accountant: "Revisor",
-    fetching: "Henter kunder..."
+    fetching: "Henter kunder...",
+    statementStatus: "Indberetning status"
   },
 
   login: {
@@ -112,5 +114,58 @@ export const table: Locale = {
     section: "Afsnit",
     headingPlaceholder: "Overskrift her",
     paragraphPlaceholder: "Brødtekst her"
+  },
+
+  statements: {
+    myStatements: "Mine indberetninger",
+    turnoverExlMoms: "Omsætning excl. moms",
+    taxIs: "Afgiften udgør",
+    boughtPlants: "Indkøbte planter",
+    other: "Andet",
+    expences: "Udgifter",
+    accountingYear: "Revisionsår",
+
+    section1: {
+      heading: "1. Grøntsager i væksthus",
+      mushrooms: "Svampe",
+      tomatoCucumberHerbs: "Tomat, agurk, krydderurt",
+      boughtPlantsDesc: "(excl. moms, ikke for svampe)"
+    },
+    section3: {
+      heading: "3. Grøntsager på friland",
+      turnoverExlPotatoes: "(excl. kartofler) Omsætning excl. moms",
+      carrot: "Gulerod",
+      pea: "Ært",
+      onion: "Løg",
+      boughtPlantsDesc: "(excl. moms kun vedr. stikløg eller andet)"
+    },
+    section4: {
+      heading: "4. Potteplanter m.v.",
+      onions: "Løg og knolde",
+      plants: "Potteplanter",
+      flowers: "Snitblomster",
+      boughtPlantsDesc: "(excl. moms kun vedr. snitblomster)"
+    },
+    section7: {
+      heading: "7. Planteskoleplanter",
+      description: "Inklusive videre- og detailsalg",
+      plants: "Planteskoleplanter",
+      turnoverDescription:
+        "(Indkøb og salg af planter ved direkte import fra udlandet skal ikke medregnes hverken i omsætning eller plantekøb.)",
+      boughtPlantsDesc: "(excl. moms)"
+    },
+    section8: {
+      heading: "8. Frugt og bær",
+      subHeading1: "Kernefrugt",
+      subHeading2: "Stenfrugt",
+      subHeading3: "Busk- og bærfrugt",
+      packagingCost: "Udgifter til emballage og indkøbt salgsfragt",
+      packagingCostDesc: "(for producenter med eget lager, excl. moms)",
+      applesPearsOther: "Æbler, pærer m.v.",
+      cherry: "Kirsebær",
+      plum: "Blommer",
+      currant: "Ribs",
+      strawberry: "Jordbær"
+    }
   }
 };

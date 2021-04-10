@@ -15,6 +15,7 @@ export interface Locale {
   common: {
     search: string;
     add: string;
+    fetchingData: string;
   };
 
   accounts: {
@@ -42,6 +43,7 @@ export interface Locale {
     CVR_apiErrorDescription: string;
     accountant: string;
     fetching: string;
+    statementStatus: string;
   };
 
   login: {
@@ -110,5 +112,57 @@ export interface Locale {
     section: string;
     headingPlaceholder: string;
     paragraphPlaceholder: string;
+  };
+
+  statements: {
+    myStatements: string;
+    turnoverExlMoms: string;
+    taxIs: string;
+    boughtPlants: string;
+    other: string;
+    expences: string;
+    accountingYear: string;
+
+    section1: {
+      heading: string;
+      mushrooms: string;
+      tomatoCucumberHerbs: string;
+      boughtPlantsDesc: string;
+    };
+    section3: {
+      heading: string;
+      turnoverExlPotatoes: string;
+      carrot: string;
+      pea: string;
+      onion: string;
+      boughtPlantsDesc: string;
+    };
+    section4: {
+      heading: string;
+      onions: string;
+      plants: string;
+      flowers: string;
+      boughtPlantsDesc: string;
+    };
+    section7: {
+      heading: string;
+      description: string;
+      plants: string;
+      turnoverDescription: string;
+      boughtPlantsDesc: string;
+    };
+    section8: {
+      heading: string;
+      subHeading1: string;
+      subHeading2: string;
+      subHeading3: string;
+      packagingCost: string;
+      packagingCostDesc: string;
+      applesPearsOther: string;
+      cherry: string;
+      plum: string;
+      currant: string;
+      strawberry: string;
+    };
   };
 }

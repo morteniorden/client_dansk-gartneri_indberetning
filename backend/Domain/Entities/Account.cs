@@ -16,5 +16,6 @@ namespace Domain.Entities
     public string CVRNumber { get; set; }
     public virtual ICollection<User> Users { get; set; }
     public DateTimeOffset? DeactivationTime { get; set; }
+    public virtual ICollection<Statement> Statements { get; set; }
   }
 }

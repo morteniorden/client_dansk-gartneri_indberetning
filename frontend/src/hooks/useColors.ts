@@ -8,12 +8,16 @@ export const useColors = () => {
   const menuBg = useColorModeValue("gray.100", "gray.700");
   const buttonFont = useColorModeValue("white", "black");
   const headerBg = "gray.700";
+  const boxBorder = useColorModeValue("gray.200", "gray.700");
+  const subTextColor = useColorModeValue("gray.500", "gray.500");
 
   return {
     hoverBg,
     menuBg,
     activeBg,
     buttonFont,
-    headerBg
+    headerBg,
+    boxBorder,
+    subTextColor
   };
 };

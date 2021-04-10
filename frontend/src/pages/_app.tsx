@@ -60,9 +60,7 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType): ReactElement =>
             {router.pathname == "/changepassword" ? (
               <Component {...pageProps} />
             ) : auth.authStage == AuthStage.AUTHENTICATED ? (
-              <BasicLayout>
-                <Component {...pageProps} />
-              </BasicLayout>
+              <Component {...pageProps} />
             ) : (
               <LoginPage />
             )}

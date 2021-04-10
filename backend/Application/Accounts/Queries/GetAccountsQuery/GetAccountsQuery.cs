@@ -29,6 +29,7 @@ namespace Application.Accounts.Queries.GetAccountsQuery
       {
         var viewModel = await _context.Accounts
           .Include(x => x.Users)
+          .Include(e => e.Statements)
           .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
           .ToListAsync(cancellationToken);
 

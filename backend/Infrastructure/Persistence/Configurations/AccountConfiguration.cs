@@ -31,6 +31,9 @@ namespace Infrastructure.Persistence.Configurations
 
       builder.Property(e => e.CVRNumber)
         .IsRequired();
+
+      builder.HasMany<Statement>(e => e.Statements)
+        .WithOne(e => e.Account);
     }
   }
 }

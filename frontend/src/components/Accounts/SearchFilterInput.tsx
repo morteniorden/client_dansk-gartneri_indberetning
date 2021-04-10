@@ -29,13 +29,18 @@ const SearchFilterInput: FC<Props> = ({ value, onChange }) => {
       <InputLeftElement>
         <BiSearch opacity="0.4" />
       </InputLeftElement>
-      <Input value={value} onChange={handleChange} placeholder={t("common.search")}></Input>
+      <Input
+        value={value}
+        onChange={handleChange}
+        placeholder={t("common.search")}
+        rounded="full"></Input>
       <InputRightElement>
         <IconButton
           aria-label="Clear"
           icon={<MdClear opacity="0.4" />}
           onClick={handleClear}
           variant="ghost"
+          isRound={true}
         />
       </InputRightElement>
     </InputGroup>

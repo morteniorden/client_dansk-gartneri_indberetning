@@ -13,6 +13,7 @@ namespace Application.Common.Interfaces
     DbSet<AdminUser> Admins { get; set; }
     DbSet<Address> Addresses { get; set; }
     DbSet<Email> Emails { get; set; }
+    DbSet<Statement> Statements { get; set; }
     DbSet<ExampleChild> ExampleChildren { get; set; }
     DbSet<ExampleParent> ExampleParents { get; set; }
 

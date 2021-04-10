@@ -854,6 +854,184 @@ export class MailClient extends ClientBase implements IMailClient {
     }
 }
 
+export interface IStatementClient {
+    getAllStatements(): Promise<StatementDto[]>;
+    getMyStatements(): Promise<StatementDto[]>;
+    getStatement(id: number): Promise<StatementDto>;
+    createStatement(command: CreateStatementCommand): Promise<number>;
+}
+
+export class StatementClient extends ClientBase implements IStatementClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(configuration: AuthBase, baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super(configuration);
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getAllStatements(): Promise<StatementDto[]> {
+        let url_ = this.baseUrl + "/api/Statement";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllStatements(_response));
+        });
+    }
+
+    protected processGetAllStatements(response: Response): Promise<StatementDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(StatementDto.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<StatementDto[]>(<any>null);
+    }
+
+    getMyStatements(): Promise<StatementDto[]> {
+        let url_ = this.baseUrl + "/api/Statement/mystatements";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetMyStatements(_response));
+        });
+    }
+
+    protected processGetMyStatements(response: Response): Promise<StatementDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(StatementDto.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<StatementDto[]>(<any>null);
+    }
+
+    getStatement(id: number): Promise<StatementDto> {
+        let url_ = this.baseUrl + "/api/Statement/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetStatement(_response));
+        });
+    }
+
+    protected processGetStatement(response: Response): Promise<StatementDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = StatementDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<StatementDto>(<any>null);
+    }
+
+    createStatement(command: CreateStatementCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/Statement/statement";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateStatement(_response));
+        });
+    }
+
+    protected processCreateStatement(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+}
+
 export interface IUserClient {
     getAllAdmins(): Promise<UserDto[]>;
     createAndAddAccountant(command: CreateAccountantCommand): Promise<number>;
@@ -1224,6 +1402,7 @@ export class AccountDto implements IAccountDto {
     users?: UserAccountIdDto[] | null;
     client?: UserAccountIdDto | null;
     accountant?: UserAccountIdDto | null;
+    statements?: StatementDto[] | null;
 
     constructor(data?: IAccountDto) {
         if (data) {
@@ -1234,6 +1413,13 @@ export class AccountDto implements IAccountDto {
             this.address = data.address && !(<any>data.address).toJSON ? new AddressDto(data.address) : <AddressDto>this.address; 
             this.client = data.client && !(<any>data.client).toJSON ? new UserAccountIdDto(data.client) : <UserAccountIdDto>this.client; 
             this.accountant = data.accountant && !(<any>data.accountant).toJSON ? new UserAccountIdDto(data.accountant) : <UserAccountIdDto>this.accountant; 
+            if (data.statements) {
+                this.statements = [];
+                for (let i = 0; i < data.statements.length; i++) {
+                    let item = data.statements[i];
+                    this.statements[i] = item && !(<any>item).toJSON ? new StatementDto(item) : <StatementDto>item;
+                }
+            }
         }
     }
 
@@ -1254,6 +1440,11 @@ export class AccountDto implements IAccountDto {
             }
             this.client = _data["client"] ? UserAccountIdDto.fromJS(_data["client"]) : <any>null;
             this.accountant = _data["accountant"] ? UserAccountIdDto.fromJS(_data["accountant"]) : <any>null;
+            if (Array.isArray(_data["statements"])) {
+                this.statements = [] as any;
+                for (let item of _data["statements"])
+                    this.statements!.push(StatementDto.fromJS(item));
+            }
         }
     }
 
@@ -1281,6 +1472,11 @@ export class AccountDto implements IAccountDto {
         }
         data["client"] = this.client ? this.client.toJSON() : <any>null;
         data["accountant"] = this.accountant ? this.accountant.toJSON() : <any>null;
+        if (Array.isArray(this.statements)) {
+            data["statements"] = [];
+            for (let item of this.statements)
+                data["statements"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -1297,6 +1493,7 @@ export interface IAccountDto {
     users?: UserAccountIdDto[] | null;
     client?: IUserAccountIdDto | null;
     accountant?: IUserAccountIdDto | null;
+    statements?: IStatementDto[] | null;
 }
 
 export class AddressDto implements IAddressDto {
@@ -1436,6 +1633,152 @@ export enum RoleEnum {
     Admin = 0,
     Accountant = 1,
     Client = 2,
+}
+
+export class StatementDto implements IStatementDto {
+    id?: number;
+    accountId?: number;
+    account?: AccountDto | null;
+    revisionYear?: number;
+    status?: StatementStatus;
+    s1_mushrooms?: number;
+    s1_tomatoCucumberHerb?: number;
+    s1_boughtPlants?: number;
+    s3_carrots?: number;
+    s3_peas?: number;
+    s3_onions?: number;
+    s3_other?: number;
+    s3_boughtPlants?: number;
+    s4_onions?: number;
+    s4_plants?: number;
+    s4_cutFlowers?: number;
+    s4_boughtPlants?: number;
+    s7_plants?: number;
+    s7_boughtPlants?: number;
+    s8_applesPearsEtc?: number;
+    s8_packaging?: number;
+    s8_cherries?: number;
+    s8_plums?: number;
+    s8_otherStoneFruit?: number;
+    s8_currant?: number;
+    s8_strawberries?: number;
+    s8_otherBerryFruit?: number;
+
+    constructor(data?: IStatementDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.account = data.account && !(<any>data.account).toJSON ? new AccountDto(data.account) : <AccountDto>this.account; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.accountId = _data["accountId"] !== undefined ? _data["accountId"] : <any>null;
+            this.account = _data["account"] ? AccountDto.fromJS(_data["account"]) : <any>null;
+            this.revisionYear = _data["revisionYear"] !== undefined ? _data["revisionYear"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
+            this.s1_tomatoCucumberHerb = _data["s1_tomatoCucumberHerb"] !== undefined ? _data["s1_tomatoCucumberHerb"] : <any>null;
+            this.s1_boughtPlants = _data["s1_boughtPlants"] !== undefined ? _data["s1_boughtPlants"] : <any>null;
+            this.s3_carrots = _data["s3_carrots"] !== undefined ? _data["s3_carrots"] : <any>null;
+            this.s3_peas = _data["s3_peas"] !== undefined ? _data["s3_peas"] : <any>null;
+            this.s3_onions = _data["s3_onions"] !== undefined ? _data["s3_onions"] : <any>null;
+            this.s3_other = _data["s3_other"] !== undefined ? _data["s3_other"] : <any>null;
+            this.s3_boughtPlants = _data["s3_boughtPlants"] !== undefined ? _data["s3_boughtPlants"] : <any>null;
+            this.s4_onions = _data["s4_onions"] !== undefined ? _data["s4_onions"] : <any>null;
+            this.s4_plants = _data["s4_plants"] !== undefined ? _data["s4_plants"] : <any>null;
+            this.s4_cutFlowers = _data["s4_cutFlowers"] !== undefined ? _data["s4_cutFlowers"] : <any>null;
+            this.s4_boughtPlants = _data["s4_boughtPlants"] !== undefined ? _data["s4_boughtPlants"] : <any>null;
+            this.s7_plants = _data["s7_plants"] !== undefined ? _data["s7_plants"] : <any>null;
+            this.s7_boughtPlants = _data["s7_boughtPlants"] !== undefined ? _data["s7_boughtPlants"] : <any>null;
+            this.s8_applesPearsEtc = _data["s8_applesPearsEtc"] !== undefined ? _data["s8_applesPearsEtc"] : <any>null;
+            this.s8_packaging = _data["s8_packaging"] !== undefined ? _data["s8_packaging"] : <any>null;
+            this.s8_cherries = _data["s8_cherries"] !== undefined ? _data["s8_cherries"] : <any>null;
+            this.s8_plums = _data["s8_plums"] !== undefined ? _data["s8_plums"] : <any>null;
+            this.s8_otherStoneFruit = _data["s8_otherStoneFruit"] !== undefined ? _data["s8_otherStoneFruit"] : <any>null;
+            this.s8_currant = _data["s8_currant"] !== undefined ? _data["s8_currant"] : <any>null;
+            this.s8_strawberries = _data["s8_strawberries"] !== undefined ? _data["s8_strawberries"] : <any>null;
+            this.s8_otherBerryFruit = _data["s8_otherBerryFruit"] !== undefined ? _data["s8_otherBerryFruit"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): StatementDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatementDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["accountId"] = this.accountId !== undefined ? this.accountId : <any>null;
+        data["account"] = this.account ? this.account.toJSON() : <any>null;
+        data["revisionYear"] = this.revisionYear !== undefined ? this.revisionYear : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
+        data["s1_tomatoCucumberHerb"] = this.s1_tomatoCucumberHerb !== undefined ? this.s1_tomatoCucumberHerb : <any>null;
+        data["s1_boughtPlants"] = this.s1_boughtPlants !== undefined ? this.s1_boughtPlants : <any>null;
+        data["s3_carrots"] = this.s3_carrots !== undefined ? this.s3_carrots : <any>null;
+        data["s3_peas"] = this.s3_peas !== undefined ? this.s3_peas : <any>null;
+        data["s3_onions"] = this.s3_onions !== undefined ? this.s3_onions : <any>null;
+        data["s3_other"] = this.s3_other !== undefined ? this.s3_other : <any>null;
+        data["s3_boughtPlants"] = this.s3_boughtPlants !== undefined ? this.s3_boughtPlants : <any>null;
+        data["s4_onions"] = this.s4_onions !== undefined ? this.s4_onions : <any>null;
+        data["s4_plants"] = this.s4_plants !== undefined ? this.s4_plants : <any>null;
+        data["s4_cutFlowers"] = this.s4_cutFlowers !== undefined ? this.s4_cutFlowers : <any>null;
+        data["s4_boughtPlants"] = this.s4_boughtPlants !== undefined ? this.s4_boughtPlants : <any>null;
+        data["s7_plants"] = this.s7_plants !== undefined ? this.s7_plants : <any>null;
+        data["s7_boughtPlants"] = this.s7_boughtPlants !== undefined ? this.s7_boughtPlants : <any>null;
+        data["s8_applesPearsEtc"] = this.s8_applesPearsEtc !== undefined ? this.s8_applesPearsEtc : <any>null;
+        data["s8_packaging"] = this.s8_packaging !== undefined ? this.s8_packaging : <any>null;
+        data["s8_cherries"] = this.s8_cherries !== undefined ? this.s8_cherries : <any>null;
+        data["s8_plums"] = this.s8_plums !== undefined ? this.s8_plums : <any>null;
+        data["s8_otherStoneFruit"] = this.s8_otherStoneFruit !== undefined ? this.s8_otherStoneFruit : <any>null;
+        data["s8_currant"] = this.s8_currant !== undefined ? this.s8_currant : <any>null;
+        data["s8_strawberries"] = this.s8_strawberries !== undefined ? this.s8_strawberries : <any>null;
+        data["s8_otherBerryFruit"] = this.s8_otherBerryFruit !== undefined ? this.s8_otherBerryFruit : <any>null;
+        return data; 
+    }
+}
+
+export interface IStatementDto {
+    id?: number;
+    accountId?: number;
+    account?: IAccountDto | null;
+    revisionYear?: number;
+    status?: StatementStatus;
+    s1_mushrooms?: number;
+    s1_tomatoCucumberHerb?: number;
+    s1_boughtPlants?: number;
+    s3_carrots?: number;
+    s3_peas?: number;
+    s3_onions?: number;
+    s3_other?: number;
+    s3_boughtPlants?: number;
+    s4_onions?: number;
+    s4_plants?: number;
+    s4_cutFlowers?: number;
+    s4_boughtPlants?: number;
+    s7_plants?: number;
+    s7_boughtPlants?: number;
+    s8_applesPearsEtc?: number;
+    s8_packaging?: number;
+    s8_cherries?: number;
+    s8_plums?: number;
+    s8_otherStoneFruit?: number;
+    s8_currant?: number;
+    s8_strawberries?: number;
+    s8_otherBerryFruit?: number;
+}
+
+export enum StatementStatus {
+    Unsigned = 0,
+    Signed = 1,
 }
 
 export class UserTokenDto implements IUserTokenDto {
@@ -1960,6 +2303,46 @@ export class GeneratePreviewMailCommand implements IGeneratePreviewMailCommand {
 
 export interface IGeneratePreviewMailCommand {
     emailDto?: IEmailDto | null;
+}
+
+export class CreateStatementCommand implements ICreateStatementCommand {
+    accountId?: number;
+    revisionYear?: number;
+
+    constructor(data?: ICreateStatementCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.accountId = _data["accountId"] !== undefined ? _data["accountId"] : <any>null;
+            this.revisionYear = _data["revisionYear"] !== undefined ? _data["revisionYear"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateStatementCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateStatementCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accountId"] = this.accountId !== undefined ? this.accountId : <any>null;
+        data["revisionYear"] = this.revisionYear !== undefined ? this.revisionYear : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateStatementCommand {
+    accountId?: number;
+    revisionYear?: number;
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {

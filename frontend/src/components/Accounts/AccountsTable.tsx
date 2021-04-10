@@ -1,11 +1,11 @@
-import { Flex, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Button, Flex, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { SearchFilter } from "components/Accounts/Filters/AccountFilters";
 import QueryMultiSelectBtn from "components/Common/QueryMultiSelectBtn";
 import QuerySortBtn, { Direction } from "components/Common/QuerySortBtn";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
 import { BiCheck } from "react-icons/bi";
-import { IAccountDto, RoleEnum } from "services/backend/nswagts";
+import { IAccountDto } from "services/backend/nswagts";
 import { AccountFilter } from "types/AccountFilter";
 import SelectType from "types/SelectType";
 
@@ -13,8 +13,10 @@ import AccountOptionsMenu from "./AccountOptionsMenu";
 
 interface Props {
   data: IAccountDto[];
+  accountingYear: number;
   searchString: string;
   fetchData?: () => Promise<void>;
+  requestStatement: (account: IAccountDto) => void;
 }
 
 type AccountsTableKey = {
@@ -23,7 +25,7 @@ type AccountsTableKey = {
   sortable: boolean;
 };
 
-const AccountsTable: FC<Props> = ({ data, searchString }) => {
+const AccountsTable: FC<Props> = ({ data, accountingYear, searchString, requestStatement }) => {
   const { t, locale, localeNameMap } = useLocales();
 
   const [sortKey, setSortKey] = useState<keyof IAccountDto>("id");
@@ -37,7 +39,8 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
     { name: t("accounts.tel"), id: "tel", sortable: true },
     { name: t("accounts.cvrNumber"), id: "cvrNumber", sortable: true },
     { name: t("accounts.address"), id: "address", sortable: false },
-    { name: t("accounts.accountant"), id: "accountant", sortable: false }
+    { name: t("accounts.accountant"), id: "accountant", sortable: false },
+    { name: "Indeberetning status", id: "statementStatus", sortable: true }
   ];
   const [tableKeys, setTableKeys] = useState<AccountsTableKey[]>(allTableKeys);
 
@@ -63,6 +66,23 @@ const AccountsTable: FC<Props> = ({ data, searchString }) => {
         return <BiCheck />;
       } else {
         return t("accountant.noAccountant");
+      }
+    }
+    if (key == "statementStatus") {
+      const statement = account.statements.find(a => a.revisionYear == accountingYear);
+      if (statement != null) {
+        switch (statement.status) {
+          case 0:
+            return "Tildelt. Ikke signeret.";
+          case 1:
+            return "Signeret.";
+        }
+      } else {
+        return (
+          <Button rounded="full" onClick={e => requestStatement(account)}>
+            Tildel
+          </Button>
+        );
       }
     }
     return account[key as keyof IAccountDto];

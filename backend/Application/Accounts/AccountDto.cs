@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Application.Common.Mappings;
+using Application.Statements;
 using Application.Users;
 using AutoMapper;
 using Domain.Entities;
@@ -21,6 +22,7 @@ namespace Application.Accounts
     public ICollection<UserAccountIdDto> Users { get; set; }
     public UserAccountIdDto Client { get; set; }
     public UserAccountIdDto Accountant { get; set; }
+    public ICollection<StatementDto> Statements { get; set; }
     public void Mapping(Profile profile)
     {
       profile.CreateMap<Account, AccountDto>()

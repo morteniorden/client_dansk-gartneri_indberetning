@@ -19,13 +19,10 @@ const IndexPage: NextPage = () => {
         router.replace("/accounts");
         break;
       case RoleEnum.Client:
-        router.replace("/accounts");
+        router.replace("/mystatements");
         break;
       case RoleEnum.Accountant:
-        router.replace("/accounts");
-        break;
-      default:
-        router.replace("/accounts");
+        router.replace("/mystatements");
         break;
     }
   }, [activeUser, router]);

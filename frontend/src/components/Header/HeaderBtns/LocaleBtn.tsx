@@ -2,7 +2,6 @@ import {
   Flex,
   IconButton,
   Image,
-  LinkBox,
   Menu,
   MenuButton,
   MenuItem,
@@ -15,9 +14,9 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 
 const LocaleBtn: FC = props => {
-  const { route } = useRouter();
+  const router = useRouter();
   const { t, locale, localeNameMap, localeFlagMap } = useLocales();
-  const currentFlag = <Image src={t("flagUrl")} w={4} />;
+  const currentFlag = <Image src={`${router.basePath}/${t("flagUrl")}`} w={4} />;
 
   return (
     <Menu>
@@ -27,10 +26,10 @@ const LocaleBtn: FC = props => {
           localeNameMap &&
           Object.entries(localeFlagMap).map(([id, flagUrl]) => (
             <MenuItem key={id}>
-              <Link href={route} locale={id}>
+              <Link href={router.route} locale={id}>
                 <Flex>
                   <Text mr={3}>{localeNameMap[id]}</Text>
-                  <Image src={flagUrl} w={4} />
+                  <Image src={`${router.basePath}/${flagUrl}`} w={4} />
                 </Flex>
               </Link>
             </MenuItem>
@@ -40,15 +39,3 @@ const LocaleBtn: FC = props => {
   );
 };
 export default LocaleBtn;
-/*
-<LinkBox
-                href={route}
-                locale={id}
-                passHref
-                display="flex"
-                w="100%"
-                justifyContent="space-between">
-                <Text mr={3}>{localeNameMap[id]}</Text>
-                <Image src={flagUrl} w={4} />
-              </LinkBox>
-*/
