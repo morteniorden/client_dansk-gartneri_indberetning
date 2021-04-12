@@ -54,7 +54,8 @@ export const table: Locale = {
     password: "Password:",
     login: "Log ind",
     forgotPassword: "Glemt password?",
-    invalidMsg: "Fejl i email eller password. Prøv igen."
+    invalidMsg: "Fejl i email eller password. Prøv igen.",
+    logout: "Log ud"
   },
 
   admins: {

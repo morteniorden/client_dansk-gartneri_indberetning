@@ -16,7 +16,7 @@ const UserBtn: FC = () => {
         <Avatar size="sm" name={activeUser.name}></Avatar>
       </MenuButton>
       <MenuList>
-        <MenuItem onClick={logout}>Logout</MenuItem>
+        <MenuItem onClick={logout}>{t("login.logout")}</MenuItem>
       </MenuList>
     </Menu>
   );

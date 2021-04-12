@@ -53,6 +53,7 @@ export interface Locale {
     login: string;
     forgotPassword: string;
     invalidMsg: string;
+    logout: string;
   };
 
   admins: {

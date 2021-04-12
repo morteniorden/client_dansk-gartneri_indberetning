@@ -10,6 +10,7 @@ import { AccountFilter } from "types/AccountFilter";
 import SelectType from "types/SelectType";
 
 import AccountOptionsMenu from "./AccountOptionsMenu";
+import ChangeAccountantModal from "./ChangeAccountant/ChangeAccountantModal";
 
 interface Props {
   data: IAccountDto[];
@@ -154,7 +155,7 @@ const AccountsTable: FC<Props> = ({ data, accountingYear, searchString, requestS
                       <Td key={key.id}>{genValueFromKey(account, key.id.toString())}</Td>
                     ))}
                     <Td>
-                      <AccountOptionsMenu account={account} />
+                      <ChangeAccountantModal account={account} />
                     </Td>
                   </Tr>
                 );

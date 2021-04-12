@@ -16,23 +16,13 @@ const EditEmailForm: FC<Props> = ({ email, setEmail, variant }) => {
 
   return (
     <Stack>
-      <Tooltip label={t("mailEditor.nameTooltip")} aria-label="A tooltip" placement="auto-end">
-        <FormControl id="name">
-          <InputGroup>
-            <InputLeftAddon w="110px">{t("mailEditor.name")}</InputLeftAddon>
-            <Input
-              value={email.name}
-              onChange={e => setEmail({ ...email, ...{ name: e.target.value } })}></Input>{" "}
-          </InputGroup>
-        </FormControl>
-      </Tooltip>
       <Tooltip label={t("mailEditor.subjectTooltip")} aria-label="A tooltip" placement="auto-end">
         <FormControl id="subject">
           <InputGroup>
             <InputLeftAddon w="110px">{t("mailEditor.subject")}</InputLeftAddon>
             <Input
               value={email.subject}
-              onChange={e => setEmail({ ...email, ...{ title: e.target.value } })}></Input>
+              onChange={e => setEmail({ ...email, ...{ subject: e.target.value } })}></Input>
           </InputGroup>
         </FormControl>
       </Tooltip>
@@ -54,21 +44,21 @@ const EditEmailForm: FC<Props> = ({ email, setEmail, variant }) => {
         sectionHeading={`${t("mailEditor.section")} 1`}
         h={email.heading1}
         p={email.paragraph1}
-        setH={h => setEmail({ ...email, ...{ Heading1: h } })}
+        setH={h => setEmail({ ...email, ...{ heading1: h } })}
         setP={p => setEmail({ ...email, ...{ paragraph1: p } })}
       />
       <SectionInput
         sectionHeading={`${t("mailEditor.section")} 2`}
         h={email.heading2}
         p={email.paragraph2}
-        setH={h => setEmail({ ...email, ...{ Heading2: h } })}
+        setH={h => setEmail({ ...email, ...{ heading2: h } })}
         setP={p => setEmail({ ...email, ...{ paragraph2: p } })}
       />
       <SectionInput
         sectionHeading={`${t("mailEditor.section")} 3`}
         h={email.heading3}
         p={email.paragraph3}
-        setH={h => setEmail({ ...email, ...{ Heading3: h } })}
+        setH={h => setEmail({ ...email, ...{ heading3: h } })}
         setP={p => setEmail({ ...email, ...{ paragraph3: p } })}
       />
     </Stack>

@@ -54,7 +54,8 @@ export const table: Locale = {
     password: "Password:",
     login: "Log in",
     forgotPassword: "Forgot password?",
-    invalidMsg: "Invalid credentials. Please try again."
+    invalidMsg: "Invalid credentials. Please try again.",
+    logout: "Logout"
   },
 
   admins: {
