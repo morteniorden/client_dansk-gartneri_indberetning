@@ -24,10 +24,15 @@ namespace Application.Common.Behaviours
         var context = new ValidationContext<TRequest>(request);
 
         var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-        var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
 
-        if (failures.Count != 0)
-          throw new Exceptions.ValidationException(failures);
+        var ok = validationResults.All(x => x.IsValid);
+        if (!ok)
+        {
+          var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
+
+          if (failures.Count != 0)
+            throw new Exceptions.ValidationException(failures);
+        }
       }
       return await next();
     }
