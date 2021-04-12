@@ -75,7 +75,7 @@ const AccountsTable: FC<Props> = ({ data, accountingYear, searchString, requestS
         switch (statement.status) {
           case 0:
             return "Tildelt. Ikke signeret.";
-          case 1:
+          case 2:
             return "Signeret.";
         }
       } else {

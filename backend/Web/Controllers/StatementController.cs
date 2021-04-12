@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Statements;
 using Application.Statements.Commands.CreateStatementCommand;
+using Application.Statements.Commands.SignOffStatement;
+using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using MediatR;
@@ -36,6 +38,26 @@ namespace Web.Controllers
     public async Task<ActionResult<int>> CreateStatement([FromBody] CreateStatementCommand command)
     {
       return await Mediator.Send(command);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateStatement([FromRoute] int id, UpdateStatementCommand command)
+    {
+      command.Id = id;
+      await Mediator.Send(command);
+
+      return NoContent();
+    }
+
+    [HttpPut("{id}/signoff")]
+    public async Task<ActionResult> SignOffStatement([FromRoute] int id) { 
+    
+      await Mediator.Send(new SignOffStatementCommand
+      {
+        Id = id
+      });
+
+      return NoContent();
     }
   }
 }

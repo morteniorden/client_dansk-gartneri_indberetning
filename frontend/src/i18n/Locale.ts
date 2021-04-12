@@ -17,6 +17,10 @@ export interface Locale {
     search: string;
     add: string;
     fetchingData: string;
+    saveSuccessTitle: string;
+    saveSuccessText: string;
+    saveErrorTitle: string;
+    saveErrorText: string;
   };
 
   accounts: {
@@ -67,6 +71,8 @@ export interface Locale {
     saveSuccessText: string;
     saveErrorTitle: string;
     saveErrorText: string;
+    saveChanges: string;
+    back: string;
   };
 
   password: {
@@ -124,6 +130,15 @@ export interface Locale {
     other: string;
     expences: string;
     accountingYear: string;
+    editStatementHeading: string;
+    signOff: string;
+    confirmSignOffButton: string;
+    confirmSignOffText: string;
+
+    signOffSuccessTitle: string;
+    signOffSuccessText: string;
+    signOffErrorTitle: string;
+    signOffErrorText: string;
 
     section1: {
       heading: string;

@@ -1,10 +1,4 @@
-import {
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
-  NumberInput,
-  NumberInputField
-} from "@chakra-ui/react";
+import { Input, InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/react";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useContext, useMemo } from "react";
@@ -44,21 +38,20 @@ const InputDKK: FC<Props> = ({ name }) => {
   return (
     <InputGroup>
       {leftOrRight === "left" && <InputLeftAddon>Kr.</InputLeftAddon>}
-      <NumberInput min={0} precision={0} w="100%">
-        <NumberInputField
-          name={name}
-          ref={ref}
-          roundedLeft={leftOrRight === "left" ? "none" : "base"}
-          roundedRight={leftOrRight === "right" ? "none" : "base"}
-          value={value}
-          bgColor={bgColor}
-          onBlur={onBlur}
-          onChange={e => {
-            onChange(e.target.valueAsNumber);
-            updatedFormAttribute(name, e.target.valueAsNumber);
-          }}
-        />
-      </NumberInput>
+      <Input
+        name={name}
+        type="number"
+        ref={ref}
+        roundedLeft={leftOrRight === "left" ? "none" : "base"}
+        roundedRight={leftOrRight === "right" ? "none" : "base"}
+        value={value}
+        bgColor={bgColor}
+        onBlur={onBlur}
+        onChange={e => {
+          onChange(e.target.valueAsNumber);
+          updatedFormAttribute(name, e.target.valueAsNumber);
+        }}
+      />
       {leftOrRight === "right" && <InputRightAddon>Kr.</InputRightAddon>}
     </InputGroup>
   );

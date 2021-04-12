@@ -18,7 +18,11 @@ export const table: Locale = {
   common: {
     search: "Søg",
     add: "Tilføj",
-    fetchingData: "Henter data..."
+    fetchingData: "Henter data...",
+    saveSuccessTitle: "Ændringer gemt",
+    saveSuccessText: "Dine ændringer er blevet gemt.",
+    saveErrorTitle: "Fejl",
+    saveErrorText: "Der skete den fejl, da vi forsøgte at gemme dine ændringer."
   },
 
   accounts: {
@@ -65,10 +69,12 @@ export const table: Locale = {
   actions: {
     update: "Opdatér",
     delete: "Slet",
+    saveChanges: "Gem ændringer",
     saveSuccessTitle: "Ændringer gemt",
     saveSuccessText: "Dine ændringer er blevet gemt",
     saveErrorTitle: "Fejl",
-    saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer."
+    saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer.",
+    back: "Tilbage"
   },
 
   password: {
@@ -126,6 +132,15 @@ export const table: Locale = {
     other: "Andet",
     expences: "Udgifter",
     accountingYear: "Revisionsår",
+    editStatementHeading: "Oplysningsskema",
+    signOff: "Underskriv og send",
+    confirmSignOffButton: "Underskriv",
+    confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
+
+    signOffSuccessTitle: "Indberetning underskrevet",
+    signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
+    signOffErrorTitle: "Fejl",
+    signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
 
     section1: {
       heading: "1. Grøntsager i væksthus",

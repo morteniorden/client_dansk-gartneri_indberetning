@@ -1,11 +1,16 @@
 import { Button, Flex, HStack, Image } from "@chakra-ui/react";
+import ConfirmSignOffModal from "components/Statement/ConfirmSignOffModal/ConfirmSignoffModal";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
+import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useContext } from "react";
 
 import HeaderButtons from "./HeaderBtns/HeaderBtns";
 
 const StatementFormHeader: FC = () => {
+  const { t } = useLocales();
+  const { save } = useContext(EditStatementContext);
   const { headerBg } = useColors();
   const router = useRouter();
   const logoPath = router.basePath + "/images/icons/logo.svg";
@@ -22,12 +27,10 @@ const StatementFormHeader: FC = () => {
       zIndex={100}>
       <Image src={logoPath} position="relative" pb="15px" h="60px"></Image>
       <HStack>
-        <Button colorScheme="green" rounded="full">
-          Gem ændringer
+        <Button colorScheme="green" rounded="full" onClick={save}>
+          {t("actions.saveChanges")}
         </Button>
-        <Button colorScheme="blue" rounded="full" type="submit" form="statement_form">
-          Underskriv og send
-        </Button>
+        <ConfirmSignOffModal />
       </HStack>
       <Flex flexDirection="row" display={["none", null, "flex"]}>
         <HeaderButtons />

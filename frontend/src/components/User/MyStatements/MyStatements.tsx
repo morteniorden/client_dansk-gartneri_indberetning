@@ -76,16 +76,16 @@ const MyStatements: FC = () => {
                     .map(statement => (
                       <Tr key={statement.id}>
                         <Td>{statement.revisionYear}</Td>
-                        <Td>{genStatus(statement.status)}</Td>
+                        <Td>{statement.status == 2 ? "Besvaret" : "Ikke besvaret"}</Td>
                         <Td>
-                          {statement.status == 0 && (
+                          {statement.status != 2 && (
                             <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
                               <Button colorScheme="green" rounded="full">
                                 Besvar
                               </Button>
                             </Link>
                           )}
-                          {statement.status == 1 && <Button rounded="full">Se besvarelse</Button>}
+                          {statement.status == 2 && <Button rounded="full">Se besvarelse</Button>}
                         </Td>
                       </Tr>
                     ))}

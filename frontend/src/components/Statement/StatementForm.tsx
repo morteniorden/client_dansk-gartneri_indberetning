@@ -1,6 +1,7 @@
 import { Stack } from "@chakra-ui/react";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useContext, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementDto } from "services/backend/nswagts";
 
@@ -12,18 +13,14 @@ import StatementTableColHeadings from "./StatementTableColHeadings";
 import StatementTableRow from "./StatementTableRow";
 import StatementTableSubHeading from "./StatementTableSubHeading";
 
-interface Props {
-  statement: IStatementDto;
-}
-
-const StatementForm: FC<Props> = ({ statement }) => {
+const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementDto>();
-  const [localForm, setLocalform] = useState<IStatementDto>(statement);
+  const { statement, setStatement, submit } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementDto, value: IStatementDto[keyof IStatementDto]) => {
-      setLocalform(x => {
+      setStatement(x => {
         (x[key] as unknown) = value;
         return x;
       });
@@ -33,17 +30,17 @@ const StatementForm: FC<Props> = ({ statement }) => {
 
   const onValid = useCallback(
     (data: IStatementDto) => {
-      //TODO: Set statement as "signed off";
-      console.log(localForm, data);
+      console.log(statement, data);
+      submit(data);
     },
-    [localForm]
+    [statement]
   );
 
   const onInvalid = useCallback(
     (errors: DeepMap<IStatementDto, FieldError>) => {
-      console.log(localForm, errors);
+      console.log(statement, errors);
     },
-    [localForm]
+    [statement]
   );
 
   return (
@@ -52,7 +49,7 @@ const StatementForm: FC<Props> = ({ statement }) => {
         <FormControlContext.Provider
           value={{
             control,
-            form: localForm,
+            form: statement,
             updatedFormAttribute
           }}>
           <StatementSection heading={t("statements.section1.heading")}>
@@ -80,6 +77,12 @@ const StatementForm: FC<Props> = ({ statement }) => {
               </StatementTableRow>
               <StatementTableRow text={t("statements.section3.pea")} tax="3.00">
                 <InputDKK name="s3_peas" />
+              </StatementTableRow>
+              <StatementTableRow text={t("statements.section3.onion")} tax="3.00">
+                <InputDKK name="s3_onions" />
+              </StatementTableRow>
+              <StatementTableRow text={t("statements.other")} tax="3.00">
+                <InputDKK name="s3_other" />
               </StatementTableRow>
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
