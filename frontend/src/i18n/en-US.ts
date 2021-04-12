@@ -3,6 +3,7 @@ import { Locale } from "./Locale";
 export const table: Locale = {
   locale: "English (US)",
   flagUrl: "images/icons/US.svg",
+  currencyCode: "USD",
 
   example: {
     title: "Hello World",

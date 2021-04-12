@@ -1,7 +1,7 @@
 import { Stack } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementDto } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";
@@ -31,7 +31,7 @@ const StatementForm: FC<Props> = ({ statement }) => {
     []
   );
 
-  const onSubmit = useCallback(
+  const onValid = useCallback(
     (data: IStatementDto) => {
       //TODO: Set statement as "signed off";
       console.log(localForm, data);
@@ -39,8 +39,15 @@ const StatementForm: FC<Props> = ({ statement }) => {
     [localForm]
   );
 
+  const onInvalid = useCallback(
+    (errors: DeepMap<IStatementDto, FieldError>) => {
+      console.log(localForm, errors);
+    },
+    [localForm]
+  );
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id="statement_form">
+    <form onSubmit={handleSubmit(onValid, onInvalid)} id="statement_form">
       <Stack>
         <FormControlContext.Provider
           value={{

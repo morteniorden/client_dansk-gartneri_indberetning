@@ -3,6 +3,7 @@ import { Locale } from "./Locale";
 export const table: Locale = {
   locale: "Dansk",
   flagUrl: "images/icons/DK.svg",
+  currencyCode: "DKK",
 
   example: {
     title: "Hej Verden",
