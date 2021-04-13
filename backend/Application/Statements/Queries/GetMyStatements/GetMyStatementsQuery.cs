@@ -30,7 +30,7 @@ namespace Application.Statements.Queries.GetMyStatements
       }
       public async Task<List<StatementDto>> Handle(GetMyStatementsQuery request, CancellationToken cancellationToken)
       {
-        var currentUser = await _context.Users.FindAsync(int.Parse(_currentUser.UserId));
+        var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
 
         var statement = await _context.Statements
           .Where(e => e.AccountId == currentUser.AccountId)

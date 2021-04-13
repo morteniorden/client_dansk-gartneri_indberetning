@@ -27,7 +27,7 @@ namespace Web.Services
     public string CreateToken(IUser user)
     {
       var claims = new List<Claim>();
-      claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+      claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Email));
       claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
       var key = Encoding.ASCII.GetBytes(_options.Secret);
@@ -45,7 +45,7 @@ namespace Web.Services
     public async Task<(string, string)> CreateSSOToken(IUser user)
     {
       var claims = new List<Claim>();
-      claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+      claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Email));
       //Give the token a unique identifier
       claims.Add(new Claim("jti", Guid.NewGuid().ToString()));
 
@@ -63,7 +63,7 @@ namespace Web.Services
       return (token.Id, writtenToken);
     }
 
-    public async Task<(int, string)> ValidateSSOToken(string token)
+    public async Task<(string, string)> ValidateSSOToken(string token)
     {
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_options.Secret);
@@ -77,10 +77,9 @@ namespace Web.Services
       }, out SecurityToken validatedToken);
 
       var jwtToken = (JwtSecurityToken) validatedToken;
-      var userId = int.Parse((jwtToken.Claims.FirstOrDefault(claim => claim.Type == "nameid").Value));
+      var userEmail = (jwtToken.Claims.FirstOrDefault(claim => claim.Type == "nameid").Value);
 
-      return (userId, validatedToken.Id);
+      return (userEmail, validatedToken.Id);
     }
   }
 }
-//First(claim => claim.Type == ClaimTypes.NameIdentifier).Value

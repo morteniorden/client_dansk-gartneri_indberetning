@@ -33,7 +33,7 @@ namespace Application.Accounts.Queries.GetCurrentAccountQuery
         var viewmodel = await _context.Accounts
           .Include(a => a.Users)
           .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
-          .FirstOrDefaultAsync(a => a.Users.Any(u => u.Id == int.Parse(_currentUserService.UserId)));
+          .FirstOrDefaultAsync(a => a.Users.Any(u => u.Email == _currentUserService.UserId));
 
         return viewmodel;
       }

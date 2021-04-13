@@ -6,9 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Security;
+using Domain.Enums;
 
 namespace Application.Mails.Queries.GetMailsQuery
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class GetMailsQuery : IRequest<List<EmailDto>>
   {
     public class GetMailsQueryHandler : IRequestHandler<GetMailsQuery, List<EmailDto>>

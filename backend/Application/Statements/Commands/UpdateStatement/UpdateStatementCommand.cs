@@ -49,7 +49,7 @@ namespace Application.Statements.Commands.UpdateStatement
           throw new InvalidOperationException("Cannot update a statement that is already signed off.");
         }
 
-        var currentUser = await _context.Users.FindAsync(int.Parse(_currentUser.UserId));
+        var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
         if (statementEntity.AccountId != currentUser.AccountId)
         {
           throw new UnauthorizedAccessException("Tried to update a statement that belongs to another account");

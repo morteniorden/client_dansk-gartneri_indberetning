@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Security;
 using Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Application.Users.Commands.UpdatePassword
@@ -31,18 +32,28 @@ namespace Application.Users.Commands.UpdatePassword
 
       public async Task<Unit> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
       {
-        var id = int.Parse(_currentUserService.UserId);
-
-        var userEntity = await _context.Users.FindAsync(id);
+        IUser userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUserService.UserId);
 
         if (userEntity == null)
         {
-          throw new NotFoundException(nameof(User), id);
+          userEntity = await _context.Admins.FirstOrDefaultAsync(x => x.Email == _currentUserService.UserId);
+        }
+
+        if (userEntity == null)
+        {
+          throw new NotFoundException(nameof(User), _currentUserService.UserId);
         }
 
         userEntity.Password = _passwordHasher.Hash(request.NewPassword);
 
-        _context.Users.Update(userEntity);
+        if (userEntity.Role == RoleEnum.Admin)
+        {
+          _context.Admins.Update((AdminUser) userEntity);
+        } else
+        {
+          _context.Users.Update((User) userEntity);
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

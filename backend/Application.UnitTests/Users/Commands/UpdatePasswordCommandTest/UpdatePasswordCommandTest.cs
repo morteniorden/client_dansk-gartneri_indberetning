@@ -5,6 +5,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Users.Commands.UpdatePassword;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -18,11 +19,11 @@ namespace Application.UnitTests.Users.Commands.UpdatePasswordCommandTest
     {
       CurrentUserServiceMock = new Mock<ICurrentUserService>();
       CurrentUserServiceMock.Setup(m => m.UserId)
-        .Returns("1");
+        .Returns("test1@test1.dk");
 
       CurrentUserServiceMock2 = new Mock<ICurrentUserService>();
       CurrentUserServiceMock2.Setup(m => m.UserId)
-        .Returns("99");
+        .Returns("invalidmail@invalidmail.dk");
     }
 
     [Fact]
@@ -37,7 +38,7 @@ namespace Application.UnitTests.Users.Commands.UpdatePasswordCommandTest
 
       await handler.Handle(command, CancellationToken.None);
 
-      var entity = Context.Users.Find(int.Parse(CurrentUserServiceMock.Object.UserId));
+      var entity = await Context.Users.FirstOrDefaultAsync(x => x.Email == CurrentUserServiceMock.Object.UserId);
 
       entity.Should().NotBeNull();
       entity.Password.Should().Be(PasswordHasherMock.Object.Hash(command.NewPassword));

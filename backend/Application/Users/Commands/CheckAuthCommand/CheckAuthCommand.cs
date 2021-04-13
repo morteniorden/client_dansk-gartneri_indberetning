@@ -32,12 +32,12 @@ namespace Application.Users.Commands.CheckAuthCommand
       {
 
         IUser user = await _context.Users
-          .FirstOrDefaultAsync(x => x.Id.ToString().Equals(_userAuthService.UserId));
+          .FirstOrDefaultAsync(x => x.Email.Equals(_userAuthService.UserId));
 
         if (user == null)
         {
           user = await _context.Admins
-          .FirstOrDefaultAsync(x => x.Id.ToString().Equals(_userAuthService.UserId));
+          .FirstOrDefaultAsync(x => x.Email.Equals(_userAuthService.UserId));
         }
 
         if (user == null)

@@ -31,22 +31,22 @@ namespace Application.Users.Commands.UpdatePassword
 
       public async Task<UserTokenDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
       {
-        int userId;
+        string userEmail;
         string tokenId;
         try
         {
-          (userId, tokenId) = await _tokenService.ValidateSSOToken(request.SSOToken);
+          (userEmail, tokenId) = await _tokenService.ValidateSSOToken(request.SSOToken);
         }
         catch (Exception e)
         {
           throw new ArgumentException("The provided token was invalid");
         }
 
-        var userEntity = await _context.Users.FindAsync(userId);
+        var userEntity = await _context.Users.FindAsync(userEmail);
 
         if (userEntity == null)
         {
-          throw new NotFoundException(nameof(User), userId);
+          throw new NotFoundException(nameof(User), userEmail);
         }
 
         if (userEntity.SSOTokenId != tokenId)

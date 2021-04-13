@@ -43,7 +43,7 @@ namespace Application.Statements.Commands.SignOffStatement
           throw new InvalidOperationException("Statement is already signed off.");
         }
 
-        var currentUser = await _context.Users.FindAsync(int.Parse(_currentUser.UserId));
+        var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
         if (statementEntity.AccountId != currentUser.AccountId)
         {
           throw new UnauthorizedAccessException("Tried to sign off a statement that belongs to another account");
