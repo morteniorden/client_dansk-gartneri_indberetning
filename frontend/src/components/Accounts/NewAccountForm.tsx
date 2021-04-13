@@ -1,4 +1,13 @@
-import { Button, Flex, FormControl, FormLabel, Input, ModalHeader, Spacer } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  ModalHeader,
+  Spacer
+} from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
 import { genAccountClient } from "services/backend/apiClients";
@@ -91,7 +100,27 @@ const NewAccountForm: FC<Props> = ({ onSubmit }) => {
         <FormLabel htmlFor="addressLine1">{t("accounts.addressLine1")}</FormLabel>
         <Input value={localForm.addressLine1} onChange={handleInputChange}></Input>
       </FormControl>
-      <FormControl id="addressLine2">
+      <HStack>
+        <FormControl id="addressLine2" maxW="100px">
+          <FormLabel htmlFor="addressLine2">{t("accounts.addressLine2")}</FormLabel>
+          <Input value={localForm.addressLine2} onChange={handleInputChange}></Input>
+        </FormControl>
+        <FormControl id="addressLine3">
+          <FormLabel htmlFor="addressLine3">{t("accounts.addressLine3")}</FormLabel>
+          <Input value={localForm.addressLine3} onChange={handleInputChange}></Input>
+        </FormControl>
+      </HStack>
+      <Flex justifyContent="flex-end" w="100%" mt={5}>
+        <Button colorScheme="green" type="submit">
+          {t("common.add")}
+        </Button>
+      </Flex>
+    </form>
+  );
+};
+export default NewAccountForm;
+/*
+<FormControl id="addressLine2">
         <FormLabel htmlFor="addressLine2">{t("accounts.addressLine2")}</FormLabel>
         <Input value={localForm.addressLine2} onChange={handleInputChange}></Input>
       </FormControl>
@@ -103,12 +132,4 @@ const NewAccountForm: FC<Props> = ({ onSubmit }) => {
         <FormLabel htmlFor="addressLine4">{t("accounts.addressLine4")}</FormLabel>
         <Input value={localForm.addressLine4} onChange={handleInputChange}></Input>
       </FormControl>
-      <Flex justifyContent="flex-end" w="100%" mt={5}>
-        <Button colorScheme="green" type="submit">
-          {t("common.add")}
-        </Button>
-      </Flex>
-    </form>
-  );
-};
-export default NewAccountForm;
+*/

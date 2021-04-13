@@ -4,6 +4,7 @@ export interface CVRDataDto {
   tel: string;
   addressLine1: string;
   addressLine2: string;
+  addressLine3: string;
 }
 
 export const getDataFromCVR = async (cvr: string): Promise<CVRDataDto> => {
@@ -18,6 +19,7 @@ export const getDataFromCVR = async (cvr: string): Promise<CVRDataDto> => {
     email: data.email ?? "",
     tel: data.phone ?? "",
     addressLine1: data.address ?? "",
-    addressLine2: `${data.zipcode ?? ""} ${data.city ?? ""}`.trim()
+    addressLine2: data.zipcode ?? "",
+    addressLine3: data.city ?? ""
   };
 };
