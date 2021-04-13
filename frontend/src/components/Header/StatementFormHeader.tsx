@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, Image } from "@chakra-ui/react";
+import { Button, Flex, HStack, Image, Spacer } from "@chakra-ui/react";
 import ConfirmSignOffModal from "components/Statement/ConfirmSignOffModal/ConfirmSignoffModal";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { FC, useContext } from "react";
 
 import HeaderButtons from "./HeaderBtns/HeaderBtns";
+import Navbar from "./Navbar";
 
 const StatementFormHeader: FC = () => {
   const { t } = useLocales();
@@ -26,15 +27,17 @@ const StatementFormHeader: FC = () => {
       w="100vw"
       zIndex={100}>
       <Image src={logoPath} position="relative" pb="15px" h="60px"></Image>
-      <HStack>
+      <HStack position="absolute" left="50%" transform="translateX(-50%)">
         <Button colorScheme="green" rounded="full" onClick={save}>
           {t("actions.saveChanges")}
         </Button>
         <ConfirmSignOffModal />
       </HStack>
-      <Flex flexDirection="row" display={["none", null, "flex"]}>
+      <HStack display={["none", null, "flex"]}>
+        <Navbar />
+        <Spacer w="40px" />
         <HeaderButtons />
-      </Flex>
+      </HStack>
     </Flex>
   );
 };

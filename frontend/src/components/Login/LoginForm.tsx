@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
+import { useRouter } from "next/router";
 import { FC, useCallback, useContext, useState } from "react";
 import { BsLock, BsPerson } from "react-icons/bs";
 import { LoginRequestDto } from "services/backend/nswagts";
@@ -18,6 +19,7 @@ import { LoginRequestDto } from "services/backend/nswagts";
 const LoginForm: FC = () => {
   const { t } = useLocales();
   const { login } = useContext(AuthContext);
+  const router = useRouter();
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -33,6 +35,7 @@ const LoginForm: FC = () => {
         })
       );
       setLoginSuccess(res);
+      router.push("/");
     },
     [email, password, login]
   );
