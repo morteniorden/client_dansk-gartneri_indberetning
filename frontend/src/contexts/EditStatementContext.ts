@@ -7,6 +7,9 @@ type ContextType = {
   save: () => void;
   isSaving: boolean;
   submit: (data: IStatementDto) => Promise<void>;
+  total: number;
+  calcTotal: () => number;
+  //setTotal: Dispatch<SetStateAction<number>>;
 };
 
 export const EditStatementContext = createContext<ContextType>({
@@ -14,5 +17,9 @@ export const EditStatementContext = createContext<ContextType>({
   setStatement: () => null,
   save: () => null,
   isSaving: false,
-  submit: (data: IStatementDto) => null
+  submit: (data: IStatementDto) => null,
+  total: 0,
+  calcTotal: () => 0
 });
+// setTotal: () => null
+//  total: 0,

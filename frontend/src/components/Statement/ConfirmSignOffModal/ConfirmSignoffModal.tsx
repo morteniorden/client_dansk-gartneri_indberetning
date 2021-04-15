@@ -9,22 +9,50 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   useDisclosure
 } from "@chakra-ui/react";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import { FC } from "react";
+import { FC, useContext, useEffect, useMemo } from "react";
+import { StatementApprovalStatus } from "services/backend/nswagts";
 
 const ConfirmSignOffModal: FC = () => {
   const { buttonFont } = useColors();
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { statement, total } = useContext(EditStatementContext);
+
+  const maxTotal = 100000;
+
+  const disabledMsg = useMemo(() => {
+    if (total >= maxTotal) return "For højt, kræver revisor";
+    if (statement.approvalStatus == StatementApprovalStatus.AwaitsAccountant)
+      return "Afventer revisor";
+    if (statement.approvalStatus == StatementApprovalStatus.AwaitsConsultant)
+      return "Afventer konsulent";
+  }, [total, statement]);
+
+  const disabled = useMemo(() => {
+    return statement.approvalStatus != StatementApprovalStatus.ReadyForSignOff || total >= maxTotal;
+  }, [statement, total, maxTotal]);
 
   return (
     <>
-      <Button rounded="full" colorScheme="blue" textColor={buttonFont} onClick={onOpen}>
-        {t("statements.signOff")}
-      </Button>
+      <Tooltip label={disabledMsg}>
+        {/* wrapping div required to display tooltip when button is disabled */}
+        <div>
+          <Button
+            rounded="full"
+            colorScheme="blue"
+            textColor={buttonFont}
+            onClick={onOpen}
+            disabled={disabled}>
+            {t("statements.signOff")}
+          </Button>
+        </div>
+      </Tooltip>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
