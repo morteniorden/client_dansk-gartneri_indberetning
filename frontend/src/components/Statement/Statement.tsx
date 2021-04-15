@@ -101,10 +101,6 @@ const Statement: FC<Props> = ({ id }) => {
     );
   }, [statement]);
 
-  useEffect(() => {
-    console.log("statement!");
-  }, [statement]);
-
   const onSubmit = useCallback(
     async (data: IStatementDto) => {
       try {

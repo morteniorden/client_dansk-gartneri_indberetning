@@ -15,8 +15,7 @@ import {
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import { FC, useContext, useEffect, useMemo } from "react";
-import { StatementApprovalStatus } from "services/backend/nswagts";
+import { FC, useContext, useMemo } from "react";
 
 const ConfirmSignOffModal: FC = () => {
   const { buttonFont } = useColors();
@@ -26,17 +25,20 @@ const ConfirmSignOffModal: FC = () => {
 
   const maxTotal = 100000;
 
-  const disabledMsg = useMemo(() => {
-    if (total >= maxTotal) return "For højt, kræver revisor";
-    if (statement.approvalStatus == StatementApprovalStatus.AwaitsAccountant)
-      return "Afventer revisor";
-    if (statement.approvalStatus == StatementApprovalStatus.AwaitsConsultant)
-      return "Afventer konsulent";
-  }, [total, statement]);
-
   const disabled = useMemo(() => {
-    return statement.approvalStatus != StatementApprovalStatus.ReadyForSignOff || total >= maxTotal;
+    return (
+      (!statement.isApproved && total >= maxTotal) ||
+      (statement.account.accountant != null && !statement.isApproved)
+    );
   }, [statement, total, maxTotal]);
+
+  const disabledMsg = useMemo(() => {
+    if (disabled && statement.account.accountant == null && total >= maxTotal)
+      return t("statements.signOffExceeding");
+    if (disabled && statement.account.accountant != null && !statement.isApproved)
+      return t("statements.signOffNeedsApproval");
+    return null;
+  }, [total, statement, disabled]);
 
   return (
     <>

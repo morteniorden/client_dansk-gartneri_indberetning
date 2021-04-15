@@ -142,6 +142,10 @@ export const table: Locale = {
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
 
+    signOffExceeding:
+      "Pga. størrelsen på den totale omsætning kræver oplysningsskemaet en revisors godkendelse.",
+    signOffNeedsApproval: "Mangler godkendelse af den tilknyttede revisor.",
+
     section1: {
       heading: "1. Grøntsager i væksthus",
       mushrooms: "Svampe",

@@ -144,6 +144,10 @@ export const table: Locale = {
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
 
+    signOffExceeding:
+      "The total turnover is of an amount that requires the approval by an accounant.",
+    signOffNeedsApproval: "The statement has not yet been approved by the assigned accountant.",
+
     section1: {
       heading: "1. Grøntsager i væksthus",
       mushrooms: "Svampe",

@@ -140,6 +140,9 @@ export interface Locale {
     signOffErrorTitle: string;
     signOffErrorText: string;
 
+    signOffExceeding: string;
+    signOffNeedsApproval: string;
+
     section1: {
       heading: string;
       mushrooms: string;

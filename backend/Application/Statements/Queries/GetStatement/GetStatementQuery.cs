@@ -8,6 +8,7 @@ using Application.Common.Security;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Entities;
+using Domain.EntityExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,8 @@ namespace Application.Statements.Queries.GetMyStatements
 
         var statement = await _context.Statements
           .Where(e => e.AccountId == currentUser.AccountId && e.Id == request.Id)
+          .Include(e => e.Account)
+          .ThenInclude(e => e.Users)
           .ProjectTo<StatementDto>(_mapper.ConfigurationProvider)
           .FirstOrDefaultAsync();
 
