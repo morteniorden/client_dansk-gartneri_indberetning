@@ -79,12 +79,13 @@ namespace Application.UnitTests
       );
 
       context.Statements.AddRange(
-        new Statement { Id = 1, AccountId = 1, Account = account1, Status = StatementStatus.InvitedNotEdited, ApprovalStatus = StatementApprovalStatus.ReadyForSignOff, RevisionYear = 2021},
-        new Statement { Id = 2, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, ApprovalStatus = StatementApprovalStatus.AwaitsAccountant, RevisionYear = 2020 },
-        new Statement { Id = 3, AccountId = 1, Account = account1, Status = StatementStatus.SignedOff, ApprovalStatus = StatementApprovalStatus.ReadyForSignOff, RevisionYear = 2019 },
-        new Statement { Id = 4, AccountId = 1, Account = account1, Status = StatementStatus.SignedOff, ApprovalStatus = StatementApprovalStatus.AwaitsAccountant, RevisionYear = 2018 },
-        new Statement { Id = 5, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, ApprovalStatus = StatementApprovalStatus.ReadyForSignOff, RevisionYear = 2021 },
-        new Statement { Id = 6, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, ApprovalStatus = StatementApprovalStatus.AwaitsAccountant, RevisionYear = 2020 }
+        new Statement { Id = 1, AccountId = 1, Account = account1, Status = StatementStatus.InvitedNotEdited, IsApproved = false, RevisionYear = 2021},
+        new Statement { Id = 2, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2020 },
+        new Statement { Id = 3, AccountId = 1, Account = account1, Status = StatementStatus.SignedOff, IsApproved = false, RevisionYear = 2019 },
+        new Statement { Id = 4, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = false, RevisionYear = 2021 },
+        new Statement { Id = 5, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2020 },
+        new Statement { Id = 6, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = false, RevisionYear = 2019, s1_mushrooms = 10000000},
+        new Statement { Id = 7, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2018, s1_mushrooms = 10000000 }
       );
 
       context.SaveChanges();

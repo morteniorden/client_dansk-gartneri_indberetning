@@ -43,11 +43,9 @@ namespace Application.Statements.Commands.CreateStatementCommand
           AccountId = request.AccountId,
           Account = accountEntity,
           RevisionYear = request.RevisionYear,
-          Status = StatementStatus.InvitedNotEdited
+          Status = StatementStatus.InvitedNotEdited,
+          IsApproved = false
         };
-        statement.ApprovalStatus = accountEntity.GetActiveAccountant() == null
-          ? StatementApprovalStatus.ReadyForSignOff
-          : StatementApprovalStatus.AwaitsAccountant;
 
         _context.Statements.Add(statement);
 

@@ -11,7 +11,8 @@ namespace Domain.Entities
     public virtual Account Account { get; set; }
     public int RevisionYear { get; set; }
     public StatementStatus Status { get; set; }
-    public StatementApprovalStatus ApprovalStatus { get; set; }
+    //public StatementApprovalStatus ApprovalStatus { get; set; }
+    public bool IsApproved { get; set; }
 
     public int s1_mushrooms { get; set; }
     public int s1_tomatoCucumberHerb { get; set; }

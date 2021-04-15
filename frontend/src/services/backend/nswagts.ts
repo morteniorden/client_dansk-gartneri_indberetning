@@ -1759,7 +1759,7 @@ export class StatementDto implements IStatementDto {
     account?: AccountDto | null;
     revisionYear?: number;
     status?: StatementStatus;
-    approvalStatus?: StatementApprovalStatus;
+    isApproved?: boolean;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;
     s1_boughtPlants?: number;
@@ -1800,7 +1800,7 @@ export class StatementDto implements IStatementDto {
             this.account = _data["account"] ? AccountDto.fromJS(_data["account"]) : <any>null;
             this.revisionYear = _data["revisionYear"] !== undefined ? _data["revisionYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.approvalStatus = _data["approvalStatus"] !== undefined ? _data["approvalStatus"] : <any>null;
+            this.isApproved = _data["isApproved"] !== undefined ? _data["isApproved"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
             this.s1_tomatoCucumberHerb = _data["s1_tomatoCucumberHerb"] !== undefined ? _data["s1_tomatoCucumberHerb"] : <any>null;
             this.s1_boughtPlants = _data["s1_boughtPlants"] !== undefined ? _data["s1_boughtPlants"] : <any>null;
@@ -1840,7 +1840,7 @@ export class StatementDto implements IStatementDto {
         data["account"] = this.account ? this.account.toJSON() : <any>null;
         data["revisionYear"] = this.revisionYear !== undefined ? this.revisionYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["approvalStatus"] = this.approvalStatus !== undefined ? this.approvalStatus : <any>null;
+        data["isApproved"] = this.isApproved !== undefined ? this.isApproved : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
         data["s1_tomatoCucumberHerb"] = this.s1_tomatoCucumberHerb !== undefined ? this.s1_tomatoCucumberHerb : <any>null;
         data["s1_boughtPlants"] = this.s1_boughtPlants !== undefined ? this.s1_boughtPlants : <any>null;
@@ -1873,7 +1873,7 @@ export interface IStatementDto {
     account?: IAccountDto | null;
     revisionYear?: number;
     status?: StatementStatus;
-    approvalStatus?: StatementApprovalStatus;
+    isApproved?: boolean;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;
     s1_boughtPlants?: number;
@@ -1902,12 +1902,6 @@ export enum StatementStatus {
     InvitedNotEdited = 0,
     InvitedAndEdited = 1,
     SignedOff = 2,
-}
-
-export enum StatementApprovalStatus {
-    ReadyForSignOff = 0,
-    AwaitsAccountant = 1,
-    AwaitsConsultant = 2,
 }
 
 export class UserTokenDto implements IUserTokenDto {

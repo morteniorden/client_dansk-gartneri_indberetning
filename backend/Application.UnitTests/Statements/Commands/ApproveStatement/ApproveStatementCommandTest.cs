@@ -29,18 +29,18 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     {
       var command = new ApproveStatementCommand
       {
-        Id = 2
+        Id = 1
       };
 
       var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);
 
       var entity = Context.Statements.Find(command.Id);
       entity.Should().NotBeNull();
-      entity.ApprovalStatus.Should().Be(StatementApprovalStatus.AwaitsAccountant);
+      entity.IsApproved.Should().BeFalse();
 
       await handler.Handle(command, CancellationToken.None);
 
-      entity.ApprovalStatus.Should().Be(StatementApprovalStatus.ReadyForSignOff);
+      entity.IsApproved.Should().BeTrue();
     }
 
     [Fact]
@@ -59,11 +59,11 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     }
 
     [Fact]
-    public void Handle_GivenInvalidApprovalState_ThrowsException()
+    public void Handle_GivenAlreadyApproved_ThrowsException()
     {
       var command = new ApproveStatementCommand
       {
-        Id = 1
+        Id = 2
       };
 
       var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);
@@ -93,7 +93,7 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     {
       var command = new ApproveStatementCommand
       {
-        Id = 6
+        Id = 4
       };
 
       var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);

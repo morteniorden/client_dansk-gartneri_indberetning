@@ -2,22 +2,22 @@
 
 namespace Infrastructure.Persistence.Migrations
 {
-    public partial class StatementApprovalStatus : Migration
+    public partial class StatementApprovedStatus : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "ApprovalStatus",
+            migrationBuilder.AddColumn<bool>(
+                name: "IsApproved",
                 table: "Statements",
-                type: "int",
+                type: "bit",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ApprovalStatus",
+                name: "IsApproved",
                 table: "Statements");
         }
     }

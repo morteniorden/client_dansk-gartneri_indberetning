@@ -7,8 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Options;
 using Application.Common.Security;
+using Domain.EntityExtensions;
 using Domain.Enums;
+using Microsoft.Extensions.Options;
 
 namespace Application.Statements.Commands.SignOffStatement
 {
@@ -22,11 +25,13 @@ namespace Application.Statements.Commands.SignOffStatement
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUser;
+      private readonly StatementOptions _options;
 
-      public SignOffStatementCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+      public SignOffStatementCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IOptions<StatementOptions> options)
       {
         _context = context;
         _currentUser = currentUser;
+        _options = options.Value;
       }
 
       public async Task<Unit> Handle(SignOffStatementCommand request, CancellationToken cancellationToken)
@@ -49,14 +54,14 @@ namespace Application.Statements.Commands.SignOffStatement
           throw new UnauthorizedAccessException("Tried to sign off a statement that belongs to another account");
         }
 
-        if (statementEntity.ApprovalStatus != StatementApprovalStatus.ReadyForSignOff)
+        if (currentUser.Account.GetActiveAccountant() != null && !statementEntity.IsApproved)
         {
-          var msg = "";
-          if (statementEntity.ApprovalStatus == StatementApprovalStatus.AwaitsAccountant)
-            msg = "Cannot sign off statement, since it needs approval by an accountant.";
-          if (statementEntity.ApprovalStatus == StatementApprovalStatus.AwaitsConsultant)
-            msg = "Cannot sign off statement, since it needs approval by a consultant.";
-          throw new InvalidOperationException(msg);
+          throw new InvalidOperationException("The statement requires an approval by the assigned accountant before sign-off.");
+        }
+
+        if (statementEntity.GetTotal() >= _options.LimitForRequiredAccountant && !statementEntity.IsApproved)
+        {
+          throw new InvalidOperationException("The total turnover of the statement exceeds DKK " + _options.LimitForRequiredAccountant + ", which then requires an approval by an accountant.");
         }
 
         statementEntity.Status = StatementStatus.SignedOff;

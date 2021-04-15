@@ -38,15 +38,14 @@ namespace Application.Statements.Commands.ApproveStatement
           throw new NotFoundException(nameof(Statement), request.Id);
         }
 
-        //TODO: Modify to also consider consultants
-        if (statementEntity.ApprovalStatus != StatementApprovalStatus.AwaitsAccountant)
-        {
-          throw new InvalidOperationException("The statement does not await an approval by an accountant.");
-        }
-
         if (statementEntity.Status == StatementStatus.SignedOff)
         {
           throw new InvalidOperationException("Cannot approve a statement that is already signed off.");
+        }
+
+        if (statementEntity.IsApproved)
+        {
+          throw new InvalidOperationException("Statement is already approved");
         }
 
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
@@ -55,7 +54,7 @@ namespace Application.Statements.Commands.ApproveStatement
           throw new UnauthorizedAccessException("Tried to approve a statement that belongs to another account");
         }
 
-        statementEntity.ApprovalStatus = StatementApprovalStatus.ReadyForSignOff;
+        statementEntity.IsApproved = true;
 
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
