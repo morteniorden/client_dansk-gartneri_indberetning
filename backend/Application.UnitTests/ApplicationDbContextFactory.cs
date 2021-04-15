@@ -78,6 +78,15 @@ namespace Application.UnitTests
         new AdminUser { Id = 3, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
       );
 
+      context.Statements.AddRange(
+        new Statement { Id = 1, AccountId = 1, Account = account1, Status = StatementStatus.InvitedNotEdited, ApprovalStatus = StatementApprovalStatus.ReadyForSignOff, RevisionYear = 2021},
+        new Statement { Id = 2, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, ApprovalStatus = StatementApprovalStatus.AwaitsAccountant, RevisionYear = 2020 },
+        new Statement { Id = 3, AccountId = 1, Account = account1, Status = StatementStatus.SignedOff, ApprovalStatus = StatementApprovalStatus.ReadyForSignOff, RevisionYear = 2019 },
+        new Statement { Id = 4, AccountId = 1, Account = account1, Status = StatementStatus.SignedOff, ApprovalStatus = StatementApprovalStatus.AwaitsAccountant, RevisionYear = 2018 },
+        new Statement { Id = 5, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, ApprovalStatus = StatementApprovalStatus.ReadyForSignOff, RevisionYear = 2021 },
+        new Statement { Id = 6, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, ApprovalStatus = StatementApprovalStatus.AwaitsAccountant, RevisionYear = 2020 }
+      );
+
       context.SaveChanges();
     }
 

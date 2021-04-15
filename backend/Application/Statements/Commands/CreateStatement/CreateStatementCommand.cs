@@ -45,6 +45,10 @@ namespace Application.Statements.Commands.CreateStatementCommand
           RevisionYear = request.RevisionYear,
           Status = StatementStatus.InvitedNotEdited
         };
+        statement.ApprovalStatus = accountEntity.GetActiveAccountant() == null
+          ? StatementApprovalStatus.ReadyForSignOff
+          : StatementApprovalStatus.AwaitsAccountant;
+
         _context.Statements.Add(statement);
 
         await _context.SaveChangesAsync(cancellationToken);

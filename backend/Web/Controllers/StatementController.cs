@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Statements;
+using Application.Statements.Commands.ApproveStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
@@ -53,6 +54,18 @@ namespace Web.Controllers
     public async Task<ActionResult> SignOffStatement([FromRoute] int id) { 
     
       await Mediator.Send(new SignOffStatementCommand
+      {
+        Id = id
+      });
+
+      return NoContent();
+    }
+
+    [HttpPut("{id}/approve")]
+    public async Task<ActionResult> ApproveStatement([FromRoute] int id)
+    {
+
+      await Mediator.Send(new ApproveStatementCommand
       {
         Id = id
       });

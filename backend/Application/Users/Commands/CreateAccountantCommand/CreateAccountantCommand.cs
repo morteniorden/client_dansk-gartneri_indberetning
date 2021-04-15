@@ -85,6 +85,15 @@ namespace Application.Users.Commands.CreateAccountantCommand
         };
 
         _context.Users.Add(accountantEntity);
+
+        //Check if the account has any unsigned statements, that now should need approval by the accountant
+        var statements = account.Statements
+          .Where(e => e.Status != StatementStatus.SignedOff);
+        foreach (var statement in statements)
+        {
+          statement.ApprovalStatus = StatementApprovalStatus.AwaitsAccountant;
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
 
         //TODO: Send email to accountant

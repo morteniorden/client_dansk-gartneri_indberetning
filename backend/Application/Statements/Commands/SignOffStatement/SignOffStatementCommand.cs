@@ -49,6 +49,16 @@ namespace Application.Statements.Commands.SignOffStatement
           throw new UnauthorizedAccessException("Tried to sign off a statement that belongs to another account");
         }
 
+        if (statementEntity.ApprovalStatus != StatementApprovalStatus.ReadyForSignOff)
+        {
+          var msg = "";
+          if (statementEntity.ApprovalStatus == StatementApprovalStatus.AwaitsAccountant)
+            msg = "Cannot sign off statement, since it needs approval by an accountant.";
+          if (statementEntity.ApprovalStatus == StatementApprovalStatus.AwaitsConsultant)
+            msg = "Cannot sign off statement, since it needs approval by a consultant.";
+          throw new InvalidOperationException(msg);
+        }
+
         statementEntity.Status = StatementStatus.SignedOff;
 
         _context.Statements.Update(statementEntity);
