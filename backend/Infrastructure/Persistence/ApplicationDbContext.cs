@@ -28,6 +28,7 @@ namespace Infrastructure.Persistence
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Email> Emails { get; set; }
     public DbSet<Statement> Statements { get; set; }
+    public DbSet<StatementInfo> StatementInfo { get; set; }
     public DbSet<ExampleChild> ExampleChildren { get; set; }
 
     public DbSet<ExampleParent> ExampleParents { get; set; }

@@ -21,6 +21,7 @@ using Application.Common.Services;
 using Application.Security;
 using Hangfire;
 using Hangfire.Dashboard;
+using Hangfire.Server;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
@@ -110,6 +111,7 @@ namespace Web
       services.AddScoped<IMailService, MailService>();
       services.AddScoped<SuperAdminService>();
       services.AddScoped<DefaultEmailsService>();
+      services.AddScoped<IStatementInfoService, StatementInfoService>();
       services.AddSignalR();
 
       var key = Encoding.ASCII.GetBytes("VERY_SECRET_SECRET");
@@ -133,7 +135,7 @@ namespace Web
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, SuperAdminService superAdminService, DefaultEmailsService defaultEmailsService)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, SuperAdminService superAdminService, DefaultEmailsService defaultEmailsService, IStatementInfoService statementInfoService)
     {
       if (env.IsDevelopment())
       {
@@ -187,6 +189,9 @@ namespace Web
 
         endpoints.MapHub<ExampleHub>("/examplehub");
       });
+
+      //At 01/01 00:00 AM every year, check if a new StatementInfo should be added to the db.
+      RecurringJob.AddOrUpdate(() => statementInfoService.CheckThisYearInfo(), "0 0 1 1 *");
     }
   }
 }

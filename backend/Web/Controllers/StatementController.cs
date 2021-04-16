@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.StatementInfos;
+using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
@@ -26,7 +28,7 @@ namespace Web.Controllers
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<StatementDto>> getStatement([FromRoute] int id)
+    public async Task<ActionResult<StatementAndInfoDto>> getStatement([FromRoute] int id)
     {
       return await Mediator.Send(new GetStatementQuery
       {
@@ -58,6 +60,12 @@ namespace Web.Controllers
       });
 
       return NoContent();
+    }
+
+    [HttpGet("statementInfo")]
+    public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
+    {
+      return await Mediator.Send(new GetAllStatementInfoQuery());
     }
   }
 }

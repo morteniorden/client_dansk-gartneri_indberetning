@@ -14,6 +14,7 @@ namespace Application.Common.Interfaces
     DbSet<Address> Addresses { get; set; }
     DbSet<Email> Emails { get; set; }
     DbSet<Statement> Statements { get; set; }
+    DbSet<StatementInfo> StatementInfo { get; set; }
     DbSet<ExampleChild> ExampleChildren { get; set; }
     DbSet<ExampleParent> ExampleParents { get; set; }
 
