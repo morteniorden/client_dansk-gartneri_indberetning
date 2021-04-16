@@ -17,9 +17,9 @@ namespace Application.Common.Services
       _context = context;
     }
 
-    public async Task CheckThisYearInfo()
+    public async Task CheckThisYearInfo(int year = -1)
     {
-      var thisYear = DateTimeOffset.Now.Year;
+      var thisYear = year == -1 ? DateTimeOffset.Now.Year : year;
 
       //Check if this year has a StatementInfo entity
       var thisYearInfo = await _context.StatementInfo
@@ -40,6 +40,7 @@ namespace Application.Common.Services
           //Copy value of each prop on last years info to this years info.
           foreach (PropertyInfo prop in typeof(StatementInfo).GetProperties())
           {
+            if (prop.Name == "Id") continue;
             var previousValue = prop.GetValue(lastYearInfo, null);
             prop.SetValue(newYearInfo, previousValue);
           }

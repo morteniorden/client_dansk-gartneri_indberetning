@@ -4,6 +4,6 @@ namespace Application.Common.Interfaces
 {
   public interface IStatementInfoService
   {
-    Task CheckThisYearInfo();
+    Task CheckThisYearInfo(int year = -1);
   }
 }

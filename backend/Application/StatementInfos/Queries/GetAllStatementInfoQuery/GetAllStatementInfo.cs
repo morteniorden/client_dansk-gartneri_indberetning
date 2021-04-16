@@ -41,7 +41,6 @@ namespace Application.StatementInfos.Queries.GetStatementInfos
 
          return statementInfo;
       }
-      }
     }
   }
 }

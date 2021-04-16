@@ -78,6 +78,11 @@ namespace Application.UnitTests
         new AdminUser { Id = 3, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
       );
 
+      context.StatementInfo.AddRange(
+        new StatementInfo { Id = 1, AccountingYear = 2019, s1_boughtPlants_permille = 0.25f, s1_boughtPlants_help = "help"},
+        new StatementInfo { Id = 2, AccountingYear = 2020, s1_boughtPlants_permille = 0.30f, s1_boughtPlants_help = "help help" }
+      );
+
       context.SaveChanges();
     }
 
