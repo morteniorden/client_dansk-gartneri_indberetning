@@ -15,12 +15,10 @@ namespace Application.UnitTests.Common.Services
   public class StatementInfoServiceTest
   {
     private readonly ApplicationDbContext _context;
-    private readonly IMapper _mapper;
 
     public StatementInfoServiceTest(QueryTestFixture fixture)
     {
       _context = fixture.Context;
-      _mapper = fixture.Mapper;
     }
 
     [Fact]
