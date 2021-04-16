@@ -22,7 +22,7 @@ namespace Application.UnitTests.Common.Services
     }
 
     [Fact]
-    public async Task Handle_ReturnsCorrectVmAndExampleChildrenCount()
+    public async Task GivenNoInfoForThisYear_shouldCreateNewInfoIdenticalToLastYear()
     {
       _context.StatementInfo.Count().Should().Be(2);
 

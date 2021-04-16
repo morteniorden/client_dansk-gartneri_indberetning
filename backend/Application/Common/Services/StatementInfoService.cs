@@ -17,9 +17,9 @@ namespace Application.Common.Services
       _context = context;
     }
 
-    public async Task CheckThisYearInfo(int year = -1)
+    public async Task CheckThisYearInfo()
     {
-      var thisYear = year == -1 ? DateTimeOffset.Now.Year : year;
+      var thisYear = DateTimeOffset.Now.Year;
 
       //Check if this year has a StatementInfo entity
       var thisYearInfo = await _context.StatementInfo
