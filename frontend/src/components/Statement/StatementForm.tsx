@@ -16,7 +16,7 @@ import StatementTableSubHeading from "./StatementTableSubHeading";
 const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementDto>();
-  const { statement, setStatement, submit } = useContext(EditStatementContext);
+  const { statement, setStatement, submit, disabled } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementDto, value: IStatementDto[keyof IStatementDto]) => {
@@ -50,7 +50,8 @@ const StatementForm: FC = () => {
           value={{
             control,
             form: statement,
-            updatedFormAttribute
+            updatedFormAttribute,
+            disabled: disabled
           }}>
           <StatementSection heading={t("statements.section1.heading")}>
             <StatementSectionTable>

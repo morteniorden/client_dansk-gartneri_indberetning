@@ -20,7 +20,7 @@ interface Props {
 const InputDKK: FC<Props> = ({ name }) => {
   const { formatCurrency } = useLocales();
 
-  const { control, form, updatedFormAttribute } = useContext(FormControlContext);
+  const { control, form, updatedFormAttribute, disabled } = useContext(FormControlContext);
   const colors = useColors();
 
   const {
@@ -48,6 +48,7 @@ const InputDKK: FC<Props> = ({ name }) => {
         <NumberInputField
           name={name}
           ref={ref}
+          disabled={disabled}
           roundedLeft={leftOrRight === "left" ? "none" : "base"}
           roundedRight={leftOrRight === "right" ? "none" : "base"}
           bgColor={bgColor}

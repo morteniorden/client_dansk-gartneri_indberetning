@@ -111,7 +111,8 @@ const Statement: FC<Props> = ({ id }) => {
             setStatement: setStatement,
             save: onSaveChanges,
             isSaving: isSaving,
-            submit: onSubmit
+            submit: onSubmit,
+            disabled: false
           }}>
           <BasicLayout variant="statementHeader" maxW="1000px">
             <Stack spacing={5}>

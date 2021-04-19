@@ -8,6 +8,7 @@ import {
   Text,
   Tooltip
 } from "@chakra-ui/react";
+import StatementReadonlyModal from "components/Statement/StatementReadonlyView/StatementReadonlyModal";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useMemo } from "react";
@@ -17,7 +18,7 @@ import { IAccountDto, StatementStatus } from "services/backend/nswagts";
 import ChangeAccountantModal from "../ChangeAccountant/ChangeAccountantModal";
 import AccountItemExpandedPanel from "./AccountItemExpandedPanel";
 import InviteBtn from "./AccountListItemButtons/InviteBtn";
-import SeeStatementBtn from "./AccountListItemButtons/SeeStatementBtn";
+import ViewStatementBtn from "./AccountListItemButtons/ViewStatementBtn";
 import StatusBadge from "./StatusBadge";
 
 interface Props {
@@ -46,10 +47,10 @@ const AccountListItem: FC<Props> = ({ account, accountingYear }) => {
                 <StatusBadge account={account} accountingYear={accountingYear} />
                 {!statement && <InviteBtn account={account} accountingYear={accountingYear} />}
                 {statement && statement.status != StatementStatus.SignedOff && (
-                  <SeeStatementBtn disabled={true} />
+                  <ViewStatementBtn disabled={true} />
                 )}
                 {statement && statement.status == StatementStatus.SignedOff && (
-                  <SeeStatementBtn account={account} accountingYear={accountingYear} />
+                  <StatementReadonlyModal statement={statement} account={account} />
                 )}
                 <ChangeAccountantModal account={account} />
                 <Tooltip label={isExpanded ? "Skjul info" : "Vis info"}>
