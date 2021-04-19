@@ -1,5 +1,12 @@
-import { Flex, InputGroup, NumberInput, NumberInputField, Text } from "@chakra-ui/react";
-import { FC, useContext, useState } from "react";
+import {
+  Flex,
+  InputGroup,
+  InputRightElement,
+  NumberInput,
+  NumberInputField,
+  Text
+} from "@chakra-ui/react";
+import { FC, useContext } from "react";
 import { useController } from "react-hook-form";
 import { IStatementInfoDto } from "services/backend/nswagts";
 
@@ -11,12 +18,6 @@ interface Props {
 }
 
 const InputPerMille: FC<Props> = ({ name, editing }) => {
-  /*
-  const format = (val: string) => val + "‰";
-  const parse = (val: string) => val.replace(/^‰/, "");
-  const [value, setValue] = useState("1.53");
-  */
-
   const { control, form, updatedFormAttribute } = useContext(FormControlContext);
 
   const {
@@ -35,7 +36,7 @@ const InputPerMille: FC<Props> = ({ name, editing }) => {
         <InputGroup>
           <NumberInput
             min={0} //Not sure about the range
-            max={1000} //Not sure about the range
+            max={99} //Not sure about the range
             precision={2}
             defaultValue={value}>
             <NumberInputField
@@ -47,8 +48,11 @@ const InputPerMille: FC<Props> = ({ name, editing }) => {
                 onChange(e.target.value);
                 updatedFormAttribute(name, parseFloat(e.target.value));
               }}
+              textAlign="end"
+              maxLength={5}
             />
           </NumberInput>
+          <InputRightElement>‰</InputRightElement>
         </InputGroup>
       ) : (
         <Text>{`${parseFloat(value).toFixed(2)}‰`}</Text>

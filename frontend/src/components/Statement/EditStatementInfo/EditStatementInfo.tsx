@@ -13,8 +13,11 @@ const EditStatementInfo: FC = () => {
   const [data, setData] = useState<IStatementInfoDto[]>([]);
   const [statementInfo, setStatementInfo] = useState<IStatementInfoDto>(null);
   const { t } = useLocales();
+  const [saving, setSaving] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   const fetchData = useCallback(async () => {
+    setFetching(true);
     try {
       const statementClient = await genStatementClient();
       const data = await statementClient.getAllStatementInfo();
@@ -26,11 +29,22 @@ const EditStatementInfo: FC = () => {
     } catch (err) {
       logger.warn("statementClient.get Error", err);
     }
+    setFetching(false);
   }, []);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const saveChanges = useCallback(async (data: IStatementInfoDto) => {
+    setSaving(true);
+    try {
+      const statementClient = await genStatementClient();
+    } catch (err) {
+      logger.warn("statementClient.get Error", err);
+    }
+    setSaving(false);
+  }, []);
 
   return (
     <BasicLayout maxW="1000px">
@@ -46,7 +60,7 @@ const EditStatementInfo: FC = () => {
             Gem ændringer
           </Button>
         </Flex>
-        <StatementInfoForm form={statementInfo} setForm={setStatementInfo} />
+        <StatementInfoForm form={statementInfo} setForm={setStatementInfo} onSave={saveChanges} />
       </Stack>
     </BasicLayout>
   );

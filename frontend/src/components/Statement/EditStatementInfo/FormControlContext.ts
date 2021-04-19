@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext } from "react";
 import { Control } from "react-hook-form";
 import { IStatementInfoDto } from "services/backend/nswagts";
 
@@ -15,5 +15,3 @@ export const FormControlContext = createContext<FormControlContextContent>({
   form: {} as unknown,
   updatedFormAttribute: () => null
 });
-//  setForm: Dispatch<SetStateAction<IStatementInfoDto>>;
-//  setForm: () => null,

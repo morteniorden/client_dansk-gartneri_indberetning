@@ -9,10 +9,10 @@ const StatementInfoTable: FC = ({ children }) => {
     <Table>
       <Thead>
         <Tr>
-          <Th></Th>
-          <Th w="60%">{t("statementInfo.helpText")}</Th>
-          <Th minW="13em">{t("statementInfo.tax")}</Th>
-          <Th>{t("actions.edit")}</Th>
+          <Th w="18em"></Th>
+          <Th>{t("statementInfo.helpText")}</Th>
+          <Th w="13em">{t("statementInfo.tax")}</Th>
+          <Th w="5em">{t("actions.edit")}</Th>
         </Tr>
       </Thead>
       <Tbody>{children}</Tbody>

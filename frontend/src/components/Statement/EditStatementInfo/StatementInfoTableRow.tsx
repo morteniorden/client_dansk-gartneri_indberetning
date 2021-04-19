@@ -41,21 +41,3 @@ const StatementInfoTableRow: FC<Props> = ({ name, displayName }) => {
   );
 };
 export default StatementInfoTableRow;
-/*
-            {editOn ? (
-              <InputHelpText name={(name + "_help") as keyof IStatementInfoDto} />
-            ) : (
-              <Text>{form[(name + "_help") as keyof IStatementInfoDto] ?? ""}</Text>
-            )}
-
-  {editOn ? (
-              <InputPerMille name={(name + "_permille") as keyof IStatementInfoDto} />
-            ) : (
-              <Text>
-                {form[(name + "_permille") as keyof IStatementInfoDto] != null &&
-                  `${form[(name + "_permille") as keyof IStatementInfoDto].toFixed(2)}‰`}
-              </Text>
-            )}
-*/
-
-//<Textarea value={helpText ?? ""} name={name + "_helptext"} />
