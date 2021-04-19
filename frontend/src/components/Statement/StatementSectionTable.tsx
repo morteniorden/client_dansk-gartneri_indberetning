@@ -3,7 +3,7 @@ import { useLocales } from "hooks/useLocales";
 import { FC, ReactNode } from "react";
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
   h1?: string;
   h2?: string;
   h3?: string;

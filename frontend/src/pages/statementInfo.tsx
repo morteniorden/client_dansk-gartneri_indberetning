@@ -4,7 +4,7 @@ import { Locale } from "i18n/Locale";
 import { GetStaticProps, NextPage } from "next";
 import { I18nProps } from "next-rosetta";
 
-const ChangePasswordPage: NextPage = () => {
+const StatementInfoPage: NextPage = () => {
   return <EditStatementInfo />;
 };
 
@@ -18,4 +18,4 @@ export const getStaticProps: GetStaticProps<I18nProps<Locale>> = async context =
   };
 };
 
-export default ChangePasswordPage;
+export default StatementInfoPage;
