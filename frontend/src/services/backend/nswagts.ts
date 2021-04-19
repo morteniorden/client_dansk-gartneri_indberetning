@@ -861,6 +861,7 @@ export interface IStatementClient {
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     createStatement(command: CreateStatementCommand): Promise<number>;
     signOffStatement(id: number): Promise<FileResponse>;
+    getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -1109,6 +1110,44 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto> {
+        let url_ = this.baseUrl + "/api/Statement/csv?";
+        if (accountingYear !== undefined && accountingYear !== null)
+            url_ += "accountingYear=" + encodeURIComponent("" + accountingYear) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetStatementsCSV(_response));
+        });
+    }
+
+    protected processGetStatementsCSV(response: Response): Promise<CSVResponseDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CSVResponseDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CSVResponseDto>(<any>null);
     }
 }
 
@@ -2461,6 +2500,46 @@ export class UpdateStatementCommand implements IUpdateStatementCommand {
 
 export interface IUpdateStatementCommand {
     statementDto?: IStatementDto | null;
+}
+
+export class CSVResponseDto implements ICSVResponseDto {
+    fileName?: string | null;
+    content?: string | null;
+
+    constructor(data?: ICSVResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.fileName = _data["fileName"] !== undefined ? _data["fileName"] : <any>null;
+            this.content = _data["content"] !== undefined ? _data["content"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CSVResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CSVResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fileName"] = this.fileName !== undefined ? this.fileName : <any>null;
+        data["content"] = this.content !== undefined ? this.content : <any>null;
+        return data; 
+    }
+}
+
+export interface ICSVResponseDto {
+    fileName?: string | null;
+    content?: string | null;
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {

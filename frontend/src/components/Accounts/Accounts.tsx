@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, HStack, Select, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, HStack, Select, Spinner, Stack, Text } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
@@ -12,6 +12,7 @@ import { logger } from "utils/logger";
 
 import AccountList from "./AccountList/AccountList";
 import AccountsTable from "./AccountsTable";
+import DownloadCsvBtn from "./Filters/DownloadCsvBtn";
 import NewAccountModal from "./NewAccountModal";
 import SearchFilterInput from "./SearchFilterInput";
 
@@ -70,6 +71,7 @@ const Accounts: FC = () => {
         <Stack spacing={4}>
           <Heading>{t("accounts.accounts")}</Heading>
           <Flex justifyContent="space-between" alignItems="center">
+            <DownloadCsvBtn accountingYear={accountingYear} />
             <AccountingYearSelect
               options={accountingYears}
               value={accountingYear}
