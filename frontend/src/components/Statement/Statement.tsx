@@ -27,7 +27,7 @@ const Statement: FC<Props> = ({ id }) => {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
 
-      if (data != null) setStatement(data);
+      if (data != null) setStatement(data.statement);
       else {
         logger.info("statementClient.get no data");
         router.push("/mystatements");

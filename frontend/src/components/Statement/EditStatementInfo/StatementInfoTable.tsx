@@ -1,12 +1,8 @@
 import { Table, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
-import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
-import { useRouter } from "next/router";
-import { FC, useContext } from "react";
+import { FC } from "react";
 
-interface Props {}
-
-const StatementInfoTable: FC<Props> = ({ children }) => {
+const StatementInfoTable: FC = ({ children }) => {
   const { t } = useLocales();
 
   return (
