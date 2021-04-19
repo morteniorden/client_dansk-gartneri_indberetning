@@ -20,7 +20,7 @@ import { BsInfoCircle } from "react-icons/bs";
 interface Props {
   text: string;
   subText?: string;
-  tax: string;
+  tax?: string;
   helpInfo?: string;
 }
 
@@ -60,7 +60,7 @@ const StatementTableRow: FC<Props> = ({ text, subText, tax, helpInfo, children }
         </HStack>
       </Td>
       <Td>{children}</Td>
-      <Td>{tax}‰</Td>
+      <Td>{tax && tax + "‰"}</Td>
     </Tr>
   );
 };
