@@ -12,13 +12,13 @@ const AccountingYearSelect: FC<Props> = ({ value, options, cb }) => {
   const { t } = useLocales();
   return (
     <InputGroup>
-      <InputLeftAddon roundedStart="full">{t("statements.accountingYear")}:</InputLeftAddon>
+      <InputLeftAddon roundedStart="md">{t("statements.accountingYear")}:</InputLeftAddon>
       <Select
         w="max-content"
         value={value}
         onChange={e => cb(parseInt(e.target.value))}
         roundedStart="none"
-        roundedEnd="full">
+        roundedEnd="md">
         {options.map(year => (
           <option key={year} value={year}>
             {year}

@@ -50,7 +50,14 @@ export const table: Locale = {
     CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret",
     accountant: "Revisor",
     fetching: "Henter kunder...",
-    statementStatus: "Indberetning status"
+    statementStatus: "Indberetning status",
+
+    tooltipInvite: "Invitér til at udfylde oplysningsksema",
+    tooltipNotYetSignedOff: "Ikke besvaret endnu",
+    tooltipEditAccountant: "Rediger revisor",
+    tooltipShowInfo: "Vis info",
+    tooltipHideInfo: "Skjul info",
+    tooltipReadStatement: "Se besvarelse"
   },
 
   login: {
@@ -136,6 +143,16 @@ export const table: Locale = {
     signOff: "Underskriv og send",
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
+
+    statusNotInvited: "Ikke inviteret",
+    statusInvited: "Inviteret",
+    statusEdited: "Har redigeret",
+    statusSignedOff: "Underskrevet",
+
+    invitationSentSuccessTitle: "Invitation sendt",
+    invitationSentSuccessText: "Invitation til at udfylde oplysningsskema blev sendt.",
+    invitationSentErrorTitle: "Invitation ikke sendt",
+    invitationSentErrorText: "Der skete en fejl, da vi forsøgte at sende invitationen.",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",

@@ -1,6 +1,8 @@
 import { Flex, HStack, Image, Spacer } from "@chakra-ui/react";
+import { AuthContext } from "contexts/AuthContext";
 import { useColors } from "hooks/useColors";
-import { FC } from "react";
+import { FC, useContext } from "react";
+import { RoleEnum } from "services/backend/nswagts";
 
 import HeaderButtons from "./HeaderBtns/HeaderBtns";
 import Navbar from "./Navbar";

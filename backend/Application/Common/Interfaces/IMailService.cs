@@ -10,5 +10,6 @@ namespace Application.Common.Interfaces
     Task SendUserActivationEmail(string email, string token);
     Task SendForgotPasswordEmail(string email, string token);
     Task<string> GeneratePreview(EmailDto emailDto);
+    Task SendStatementInvitationEmail(string email);
   }
 }

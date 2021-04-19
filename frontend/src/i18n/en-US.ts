@@ -50,7 +50,14 @@ export const table: Locale = {
     CVR_apiErrorDescription: "Could not find CVR number in the registry",
     accountant: "Accountant",
     fetching: "Fetching clients...",
-    statementStatus: "Statement status"
+    statementStatus: "Statement status",
+
+    tooltipInvite: "Invite to fill out statement",
+    tooltipNotYetSignedOff: "Not yet signed off",
+    tooltipEditAccountant: "Edit accountant",
+    tooltipShowInfo: "Show info",
+    tooltipHideInfo: "Hide info",
+    tooltipReadStatement: "See statement"
   },
 
   login: {
@@ -138,6 +145,16 @@ export const table: Locale = {
     signOff: "Sign off",
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
+
+    statusNotInvited: "Not invited",
+    statusInvited: "Invited",
+    statusEdited: "Has edited",
+    statusSignedOff: "Signed off",
+
+    invitationSentSuccessTitle: "Invite sent",
+    invitationSentSuccessText: "Invite to fill out statement has been sent",
+    invitationSentErrorTitle: "Invite not sent",
+    invitationSentErrorText: "An error occured when trying to send the invite.",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",

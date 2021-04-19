@@ -97,7 +97,7 @@ const AddNewAccountantForm: FC<Props> = ({ account, onSubmit }) => {
       <Stack spacing={5}>
         <FormControl id="name" isRequired isDisabled={formDisabled}>
           <FormLabel htmlFor="name">{t("accounts.name")}</FormLabel>
-          <Input></Input>
+          <Input value={name} onChange={e => setName(e.target.value)}></Input>
         </FormControl>
         <FormControl id="email" isRequired isDisabled={formDisabled}>
           <FormLabel htmlFor="email">{t("accounts.email")}</FormLabel>
