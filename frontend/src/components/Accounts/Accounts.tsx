@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, HStack, Select, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, HStack, Select, Spinner, Stack, Text } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
@@ -10,7 +10,9 @@ import { genAccountClient, genStatementClient } from "services/backend/apiClient
 import { CreateStatementCommand, IAccountDto } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
+import AccountList from "./AccountList/AccountList";
 import AccountsTable from "./AccountsTable";
+import DownloadCsvBtn from "./Filters/DownloadCsvBtn";
 import NewAccountModal from "./NewAccountModal";
 import SearchFilterInput from "./SearchFilterInput";
 
@@ -53,24 +55,6 @@ const Accounts: FC = () => {
     setIsFetching(false);
   }, []);
 
-  const handleRequestStatement = useCallback(
-    async (account: IAccountDto) => {
-      try {
-        const statementclient = await genStatementClient();
-        await statementclient.createStatement(
-          new CreateStatementCommand({
-            accountId: account.id,
-            revisionYear: accountingYear
-          })
-        );
-        await fetchData();
-      } catch (err) {
-        console.error(err);
-      }
-    },
-    [accountingYear]
-  );
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -83,30 +67,22 @@ const Accounts: FC = () => {
         fetchData: fetchData,
         isFetching: isFetching
       }}>
-      <BasicLayout>
+      <BasicLayout maxW="1000px">
         <Stack spacing={4}>
           <Heading>{t("accounts.accounts")}</Heading>
           <Flex justifyContent="space-between" alignItems="center">
+            <DownloadCsvBtn accountingYear={accountingYear} />
             <AccountingYearSelect
               options={accountingYears}
               value={accountingYear}
               cb={setAccountingYear}
             />
             <HStack spacing={5}>
-              <Box>
-                <SearchFilterInput onChange={setSearchString} value={searchString} />
-              </Box>
               <NewAccountModal onSubmit={fetchData} />
             </HStack>
           </Flex>
           <FetchingSpinner isFetching={isFetching} text={t("accounts.fetching")} />
-          <AccountsTable
-            data={accounts}
-            accountingYear={accountingYear}
-            searchString={searchString}
-            fetchData={fetchData}
-            requestStatement={handleRequestStatement}
-          />
+          <AccountList data={accounts} accountingYear={accountingYear} />
         </Stack>
       </BasicLayout>
     </AccountsContext.Provider>

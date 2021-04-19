@@ -1,7 +1,7 @@
 import { Stack } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useContext, useState } from "react";
+import { FC, useCallback, useContext } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementDto } from "services/backend/nswagts";
 
@@ -16,7 +16,7 @@ import StatementTableSubHeading from "./StatementTableSubHeading";
 const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementDto>();
-  const { statement, setStatement, submit } = useContext(EditStatementContext);
+  const { statement, setStatement, submit, disabled } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementDto, value: IStatementDto[keyof IStatementDto]) => {
@@ -50,7 +50,8 @@ const StatementForm: FC = () => {
           value={{
             control,
             form: statement,
-            updatedFormAttribute
+            updatedFormAttribute,
+            disabled: disabled
           }}>
           <StatementSection heading={t("statements.section1.heading")}>
             <StatementSectionTable>
@@ -64,7 +65,6 @@ const StatementForm: FC = () => {
               <StatementTableRow
                 text={t("statements.boughtPlants")}
                 subText={t("statements.section1.boughtPlantsDesc")}
-                tax="2.00"
                 helpInfo="Eksempel på hjælp til dette inputfelt.">
                 <InputDKK name="s1_boughtPlants" />
               </StatementTableRow>
@@ -87,8 +87,7 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
-                subText={t("statements.section3.boughtPlantsDesc")}
-                tax="3.00">
+                subText={t("statements.section3.boughtPlantsDesc")}>
                 <InputDKK name="s3_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -107,8 +106,7 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
-                subText={t("statements.section3.boughtPlantsDesc")}
-                tax="1.60">
+                subText={t("statements.section3.boughtPlantsDesc")}>
                 <InputDKK name="s4_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -119,7 +117,7 @@ const StatementForm: FC = () => {
                 <InputDKK name="s7_plants" />
               </StatementTableRow>
               <StatementTableColHeadings h2={t("statements.expences")} />
-              <StatementTableRow text={t("statements.boughtPlants")} tax="4.50">
+              <StatementTableRow text={t("statements.boughtPlants")}>
                 <InputDKK name="s7_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -139,8 +137,7 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.section8.packagingCost")}
-                subText={t("statements.section8.packagingCostDesc")}
-                tax="5.00">
+                subText={t("statements.section8.packagingCostDesc")}>
                 <InputDKK name="s8_packaging" />
               </StatementTableRow>
               <StatementTableSubHeading>

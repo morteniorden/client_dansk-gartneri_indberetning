@@ -50,7 +50,14 @@ export const table: Locale = {
     CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret",
     accountant: "Revisor",
     fetching: "Henter kunder...",
-    statementStatus: "Indberetning status"
+    statementStatus: "Indberetning status",
+
+    tooltipInvite: "Invitér til at udfylde oplysningsksema",
+    tooltipNotYetSignedOff: "Ikke besvaret endnu",
+    tooltipEditAccountant: "Rediger revisor",
+    tooltipShowInfo: "Vis info",
+    tooltipHideInfo: "Skjul info",
+    tooltipReadStatement: "Se besvarelse"
   },
 
   login: {
@@ -74,7 +81,8 @@ export const table: Locale = {
     saveSuccessText: "Dine ændringer er blevet gemt",
     saveErrorTitle: "Fejl",
     saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer.",
-    back: "Tilbage"
+    back: "Tilbage",
+    edit: "Rediger"
   },
 
   password: {
@@ -136,6 +144,17 @@ export const table: Locale = {
     signOff: "Underskriv og send",
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
+    downloadCsv: "Download CSV",
+
+    statusNotInvited: "Ikke inviteret",
+    statusInvited: "Inviteret",
+    statusEdited: "Har redigeret",
+    statusSignedOff: "Underskrevet",
+
+    invitationSentSuccessTitle: "Invitation sendt",
+    invitationSentSuccessText: "Invitation til at udfylde oplysningsskema blev sendt.",
+    invitationSentErrorTitle: "Invitation ikke sendt",
+    invitationSentErrorText: "Der skete en fejl, da vi forsøgte at sende invitationen.",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
@@ -143,13 +162,13 @@ export const table: Locale = {
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
 
     section1: {
-      heading: "1. Grøntsager i væksthus",
+      heading: "Grøntsager i væksthus",
       mushrooms: "Svampe",
       tomatoCucumberHerbs: "Tomat, agurk, krydderurt",
       boughtPlantsDesc: "(excl. moms, ikke for svampe)"
     },
     section3: {
-      heading: "3. Grøntsager på friland",
+      heading: "Grøntsager på friland",
       turnoverExlPotatoes: "(excl. kartofler) Omsætning excl. moms",
       carrot: "Gulerod",
       pea: "Ært",
@@ -157,14 +176,14 @@ export const table: Locale = {
       boughtPlantsDesc: "(excl. moms kun vedr. stikløg eller andet)"
     },
     section4: {
-      heading: "4. Potteplanter m.v.",
+      heading: "Potteplanter m.v.",
       onions: "Løg og knolde",
       plants: "Potteplanter",
       flowers: "Snitblomster",
       boughtPlantsDesc: "(excl. moms kun vedr. snitblomster)"
     },
     section7: {
-      heading: "7. Planteskoleplanter",
+      heading: "Planteskoleplanter",
       description: "Inklusive videre- og detailsalg",
       plants: "Planteskoleplanter",
       turnoverDescription:
@@ -172,7 +191,7 @@ export const table: Locale = {
       boughtPlantsDesc: "(excl. moms)"
     },
     section8: {
-      heading: "8. Frugt og bær",
+      heading: "Frugt og bær",
       subHeading1: "Kernefrugt",
       subHeading2: "Stenfrugt",
       subHeading3: "Busk- og bærfrugt",
@@ -184,5 +203,11 @@ export const table: Locale = {
       currant: "Ribs",
       strawberry: "Jordbær"
     }
+  },
+
+  statementInfo: {
+    editStatementInfo: "Rediger oplysningsskema",
+    helpText: "Hjælpetekst",
+    tax: "Afgift"
   }
 };

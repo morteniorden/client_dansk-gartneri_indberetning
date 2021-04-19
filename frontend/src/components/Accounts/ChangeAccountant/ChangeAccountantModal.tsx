@@ -1,9 +1,7 @@
 import {
-  Button,
   Divider,
   Heading,
   IconButton,
-  MenuItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,11 +14,13 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 import { AccountsContext } from "contexts/AccountsContext";
+import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useContext } from "react";
+import { FC, useContext } from "react";
 import { MdSupervisorAccount } from "react-icons/md";
 import { IAccountDto } from "services/backend/nswagts";
 
+import EditAccountantBtn from "../AccountList/AccountListItemButtons/EditAccountantBtn";
 import AddNewAccountantForm from "./AddNewAccountantForm";
 import CurrentAccountant from "./CurrentAccountant";
 
@@ -36,14 +36,7 @@ const ChangeAccountantModal: FC<Props> = ({ account, onSubmit }) => {
 
   return (
     <>
-      <Tooltip label={t("accountant.editAccountant")}>
-        <IconButton
-          isRound={true}
-          aria-label="Edit accountant"
-          onClick={onOpen}
-          icon={<MdSupervisorAccount />}
-        />
-      </Tooltip>
+      <EditAccountantBtn account={account} cb={onOpen} />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

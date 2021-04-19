@@ -14,7 +14,9 @@ const StatementSection: FC<Props> = ({ heading, children }) => {
 
   return (
     <Box shadow="sm" p={10} border="1px" borderColor={boxBorder} rounded="md">
-      <Heading size="md">{heading}</Heading>
+      <Heading size="md" mb={3}>
+        {heading}
+      </Heading>
       {children}
     </Box>
   );

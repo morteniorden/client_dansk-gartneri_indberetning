@@ -8,10 +8,12 @@ interface FormControlContextContent {
   control: Control<Form>;
   form: Form;
   updatedFormAttribute: (key: keyof Form, value: Form[keyof Form]) => void;
+  disabled: boolean;
 }
 
 export const FormControlContext = createContext<FormControlContextContent>({
   control: null,
   form: {} as unknown,
-  updatedFormAttribute: () => null
+  updatedFormAttribute: () => null,
+  disabled: false
 });

@@ -49,6 +49,13 @@ export interface Locale {
     accountant: string;
     fetching: string;
     statementStatus: string;
+
+    tooltipInvite: string;
+    tooltipNotYetSignedOff: string;
+    tooltipEditAccountant: string;
+    tooltipShowInfo: string;
+    tooltipHideInfo: string;
+    tooltipReadStatement: string;
   };
 
   login: {
@@ -73,6 +80,7 @@ export interface Locale {
     saveErrorText: string;
     saveChanges: string;
     back: string;
+    edit: string;
   };
 
   password: {
@@ -134,6 +142,17 @@ export interface Locale {
     signOff: string;
     confirmSignOffButton: string;
     confirmSignOffText: string;
+    downloadCsv: string;
+
+    statusNotInvited: string;
+    statusInvited: string;
+    statusEdited: string;
+    statusSignedOff: string;
+
+    invitationSentSuccessTitle: string;
+    invitationSentSuccessText: string;
+    invitationSentErrorTitle: string;
+    invitationSentErrorText: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
@@ -181,5 +200,11 @@ export interface Locale {
       currant: string;
       strawberry: string;
     };
+  };
+
+  statementInfo: {
+    editStatementInfo: string;
+    helpText: string;
+    tax: string;
   };
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Application.StatementInfos;
 using Application.StatementInfos.Queries.GetStatementInfos;
@@ -8,6 +9,7 @@ using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
+using Application.Statements.Queries.GetStatementsCSVQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,6 +62,15 @@ namespace Web.Controllers
       });
 
       return NoContent();
+    }
+
+    [HttpGet("csv")]
+    public async Task<CSVResponseDto> GetStatementsCSV([FromQuery] int? accountingYear)
+    {
+      return await Mediator.Send(new GetStatementsCSVQuery
+      {
+        AccountingYear = accountingYear
+      });
     }
 
     [HttpGet("statementInfo")]

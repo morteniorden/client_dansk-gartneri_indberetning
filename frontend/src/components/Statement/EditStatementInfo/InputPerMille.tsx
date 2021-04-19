@@ -8,28 +8,33 @@ import {
 } from "@chakra-ui/react";
 import { FC, useState } from "react";
 
-interface Props {}
+interface Props {
+  disabled: boolean;
+}
 
-const InputPerMille: FC<Props> = ({}) => {
+const InputPerMille: FC<Props> = ({ disabled }) => {
   const format = (val: string) => val + "‰";
   const parse = (val: string) => val.replace(/^‰/, "");
 
   const [value, setValue] = useState("1.53");
 
   return (
-    <Flex w="100%">
+    <Flex>
       <InputGroup>
-        <InputLeftAddon>Afgift:</InputLeftAddon>
         <NumberInput
           onChange={(valueString: string) => setValue(parse(valueString))}
           value={format(value)}
           min={0} //Not sure about the range
           max={1000} //Not sure about the range
-          precision={2}>
-          <NumberInputField roundedLeft="none" />
+          precision={2}
+          disabled={disabled}>
+          <NumberInputField />
         </NumberInput>
       </InputGroup>
     </Flex>
   );
 };
 export default InputPerMille;
+/*
+        <InputLeftAddon>Afgift:</InputLeftAddon>
+*/

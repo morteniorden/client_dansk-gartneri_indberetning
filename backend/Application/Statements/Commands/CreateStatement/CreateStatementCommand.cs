@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Security;
 using Domain.EntityExtensions;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Statements.Commands.CreateStatementCommand
@@ -21,10 +22,14 @@ namespace Application.Statements.Commands.CreateStatementCommand
     public class CreateStatementCommandHandler : IRequestHandler<CreateStatementCommand, int>
     {
       private readonly IApplicationDbContext _context;
+      private readonly IMailService _mailService;
+      private readonly IBackgroundJobClient _jobClient;
 
-      public CreateStatementCommandHandler(IApplicationDbContext context)
+      public CreateStatementCommandHandler(IApplicationDbContext context, IMailService mailService, IBackgroundJobClient jobClient)
       {
         _context = context;
+        _mailService = mailService;
+        _jobClient = jobClient;
       }
 
       public async Task<int> Handle(CreateStatementCommand request, CancellationToken cancellationToken)
@@ -47,6 +52,8 @@ namespace Application.Statements.Commands.CreateStatementCommand
         };
         _context.Statements.Add(statement);
 
+        var email = accountEntity.GetClient().Email;
+        _jobClient.Enqueue(() => _mailService.SendStatementInvitationEmail(email));
         await _context.SaveChangesAsync(cancellationToken);
 
         return statement.Id;
