@@ -1,7 +1,7 @@
 import { Stack } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useContext, useState } from "react";
+import { FC, useCallback, useContext } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementDto } from "services/backend/nswagts";
 

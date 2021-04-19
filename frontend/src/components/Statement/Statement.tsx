@@ -44,11 +44,9 @@ const Statement: FC<Props> = ({ id }) => {
 
   const onSaveChanges = useCallback(async () => {
     setIsSaving(true);
-    console.log(statement);
     try {
       const statementClient = await genStatementClient();
       const command = new UpdateStatementCommand({ statementDto: statement });
-      console.log(command);
       await statementClient.updateStatement(statement.id, command);
       toast({
         title: t("common.saveSuccessTitle"),
