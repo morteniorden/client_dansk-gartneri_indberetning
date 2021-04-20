@@ -20,10 +20,15 @@ namespace Application.Common.Services
     public async Task CheckThisYearInfo()
     {
       var thisYear = DateTimeOffset.Now.Year;
+      await AddInfoForYear(thisYear);
+      await AddInfoForYear(thisYear + 1); //TODO: Should we add the info for next year or not?
+    }
 
-      //Check if this year has a StatementInfo entity
+    public async Task AddInfoForYear(int year)
+    {
+      //Check if the year has a StatementInfo entity
       var thisYearInfo = await _context.StatementInfo
-        .Where(e => e.AccountingYear == thisYear)
+        .Where(e => e.AccountingYear == year)
         .FirstOrDefaultAsync();
 
       //If not, create one
@@ -45,7 +50,7 @@ namespace Application.Common.Services
             prop.SetValue(newYearInfo, previousValue);
           }
         //Set year to this year
-        newYearInfo.AccountingYear = thisYear;
+        newYearInfo.AccountingYear = year;
 
         _context.StatementInfo.Add(newYearInfo);
         _context.SaveChanges();

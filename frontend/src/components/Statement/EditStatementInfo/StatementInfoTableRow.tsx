@@ -1,7 +1,6 @@
-import { HStack, IconButton, Switch, Td, Text, Textarea, Tr } from "@chakra-ui/react";
+import { Switch, Td, Tr } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useContext, useState } from "react";
-import { MdEdit } from "react-icons/md";
 import { IStatementInfoDto } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";

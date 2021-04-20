@@ -32,7 +32,7 @@ namespace Application.UnitTests.Common.Services
         .Where(e => e.AccountingYear == _context.StatementInfo.Max(y => y.AccountingYear))
         .FirstOrDefaultAsync();
 
-      await service.CheckThisYearInfo();
+      await service.CheckMissingYearsInfo();
 
       _context.StatementInfo.Count().Should().Be(3);
 

@@ -189,9 +189,6 @@ namespace Web
 
         endpoints.MapHub<ExampleHub>("/examplehub");
       });
-
-      //At 01/01 00:00 AM every year, check if a new StatementInfo should be added to the db.
-      RecurringJob.AddOrUpdate(() => statementInfoService.CheckThisYearInfo(), "0 0 1 1 *");
     }
   }
 }
