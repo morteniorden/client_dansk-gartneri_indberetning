@@ -1,5 +1,6 @@
 import { Button, Flex, Heading, Stack, useToast } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
+import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useState } from "react";
@@ -40,10 +41,6 @@ const EditStatementInfo: FC = () => {
   const saveChanges = useCallback(
     async (data: IStatementInfoDto) => {
       setSaving(true);
-      console.log(data);
-      console.log(statementInfo);
-      console.log("her kommer:");
-      console.log({ ...statementInfo, ...data });
       try {
         const statementClient = await genStatementClient();
         const command = new UpdateStatementInfoCommand({
@@ -84,10 +81,11 @@ const EditStatementInfo: FC = () => {
             options={data.map(dat => dat.accountingYear).sort((a, b) => a - b)}
             cb={value => setStatementInfo(data.find(dat => dat.accountingYear == value))}
           />
-          <Button colorScheme="green" type="submit" form="editStatementInfo">
+          <Button colorScheme="green" type="submit" form="editStatementInfo" isLoading={saving}>
             Gem ændringer
           </Button>
         </Flex>
+        <FetchingSpinner isFetching={fetching} text={t("common.fetchingData")} />
         {statementInfo && (
           <StatementInfoForm form={statementInfo} setForm={setStatementInfo} onSave={saveChanges} />
         )}
@@ -96,17 +94,3 @@ const EditStatementInfo: FC = () => {
   );
 };
 export default EditStatementInfo;
-
-/*
-  const accountingYears = useMemo(() => {
-    const startYear = 2021;
-    const thisYear = new Date().getFullYear();
-    const years = [];
-    for (let i = thisYear; i >= startYear; i--) {
-      years.push(i);
-    }
-    return years;
-  }, []);
-
-  const [accountingYear, setAccountingYear] = useState<number>(accountingYears[0]);
-  */

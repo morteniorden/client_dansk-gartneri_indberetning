@@ -6,7 +6,7 @@ import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, UpdateStatementCommand } from "services/backend/nswagts";
+import { IStatementDto, IStatementInfoDto, UpdateStatementCommand } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementForm from "./StatementForm";
@@ -20,6 +20,7 @@ const Statement: FC<Props> = ({ id }) => {
   const router = useRouter();
   const toast = useToast();
   const [statement, setStatement] = useState<IStatementDto>(null);
+  const [statementInfo, setStatementInfo] = useState<IStatementInfoDto>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -27,8 +28,11 @@ const Statement: FC<Props> = ({ id }) => {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
 
-      if (data != null) setStatement(data.statement);
-      else {
+      if (data != null) {
+        setStatement(data.statement);
+        setStatementInfo(data.statementInfo);
+        console.log(data.statementInfo);
+      } else {
         logger.info("statementClient.get no data");
         router.push("/mystatements");
       }
@@ -112,7 +116,8 @@ const Statement: FC<Props> = ({ id }) => {
             save: onSaveChanges,
             isSaving: isSaving,
             submit: onSubmit,
-            disabled: false
+            disabled: false,
+            statementInfo: statementInfo
           }}>
           <BasicLayout variant="statementHeader" maxW="1000px">
             <Stack spacing={5}>
