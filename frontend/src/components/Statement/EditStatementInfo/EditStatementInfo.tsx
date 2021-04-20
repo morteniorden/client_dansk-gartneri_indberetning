@@ -1,10 +1,10 @@
-import { Button, Flex, Heading, Stack } from "@chakra-ui/react";
+import { Button, Flex, Heading, Stack, useToast } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementInfoDto } from "services/backend/nswagts";
+import { IStatementInfoDto, UpdateStatementInfoCommand } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementInfoForm from "./StatementInfoForm";
@@ -15,6 +15,7 @@ const EditStatementInfo: FC = () => {
   const { t } = useLocales();
   const [saving, setSaving] = useState(false);
   const [fetching, setFetching] = useState(false);
+  const toast = useToast();
 
   const fetchData = useCallback(async () => {
     setFetching(true);
@@ -36,15 +37,42 @@ const EditStatementInfo: FC = () => {
     fetchData();
   }, [fetchData]);
 
-  const saveChanges = useCallback(async (data: IStatementInfoDto) => {
-    setSaving(true);
-    try {
-      const statementClient = await genStatementClient();
-    } catch (err) {
-      logger.warn("statementClient.get Error", err);
-    }
-    setSaving(false);
-  }, []);
+  const saveChanges = useCallback(
+    async (data: IStatementInfoDto) => {
+      setSaving(true);
+      console.log(data);
+      console.log(statementInfo);
+      console.log("her kommer:");
+      console.log({ ...statementInfo, ...data });
+      try {
+        const statementClient = await genStatementClient();
+        const command = new UpdateStatementInfoCommand({
+          newInfo: { ...statementInfo, ...data }
+        });
+        await statementClient.updateStatementInfo(statementInfo.accountingYear, command);
+        toast({
+          title: t("common.saveSuccessTitle"),
+          description: t("common.saveSuccessText"),
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      } catch (err) {
+        logger.warn("statementClient.get Error", err);
+        toast({
+          title: t("common.saveErrorTitle"),
+          description: t("common.saveErrorText"),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      }
+      setSaving(false);
+    },
+    [statementInfo]
+  );
 
   return (
     <BasicLayout maxW="1000px">
@@ -60,7 +88,9 @@ const EditStatementInfo: FC = () => {
             Gem ændringer
           </Button>
         </Flex>
-        <StatementInfoForm form={statementInfo} setForm={setStatementInfo} onSave={saveChanges} />
+        {statementInfo && (
+          <StatementInfoForm form={statementInfo} setForm={setStatementInfo} onSave={saveChanges} />
+        )}
       </Stack>
     </BasicLayout>
   );

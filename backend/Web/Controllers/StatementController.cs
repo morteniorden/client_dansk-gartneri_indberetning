@@ -80,14 +80,11 @@ namespace Web.Controllers
       return await Mediator.Send(new GetAllStatementInfoQuery());
     }
 
-    [HttpPut("{year}")]
-    public async Task<ActionResult> UpdateStatementInfo([FromRoute] int year)
+    [HttpPut("{year}/statementInfo")]
+    public async Task<ActionResult> UpdateStatementInfo([FromRoute] int year, UpdateStatementInfoCommand command)
     {
-
-      await Mediator.Send(new UpdateStatementInfoCommand()
-      {
-        accountingYear = year
-      });
+      command.AccountingYear = year;
+      await Mediator.Send(command);
 
       return NoContent();
     }

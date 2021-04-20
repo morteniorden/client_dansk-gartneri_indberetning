@@ -34,8 +34,8 @@ namespace Application.UnitTests.StatementInfos.Commands.UpdateStatementInfo
     {
       var command = new UpdateStatementInfoCommand
       {
-        accountingYear = 2019,
-        newInfo = new StatementInfoDto
+        AccountingYear = 2019,
+        NewInfo = new StatementInfoDto
         {
           Id = 1,
           AccountingYear = 2019,
@@ -50,13 +50,13 @@ namespace Application.UnitTests.StatementInfos.Commands.UpdateStatementInfo
 
       await handler.Handle(command, CancellationToken.None);
 
-      var entity = Context.StatementInfo.FirstOrDefault(e => e.AccountingYear == command.accountingYear);
+      var entity = Context.StatementInfo.FirstOrDefault(e => e.AccountingYear == command.AccountingYear);
 
       entity.Should().NotBeNull();
-      entity.s1_boughtPlants_permille.Should().Be(command.newInfo.s1_boughtPlants_permille);
-      entity.s1_boughtPlants_help.Should().Be(command.newInfo.s1_boughtPlants_help);
-      entity.s1_mushrooms_permille.Should().Be(command.newInfo.s1_mushrooms_permille);
-      entity.s1_mushrooms_help.Should().Be(command.newInfo.s1_mushrooms_help);
+      entity.s1_boughtPlants_permille.Should().Be(command.NewInfo.s1_boughtPlants_permille);
+      entity.s1_boughtPlants_help.Should().Be(command.NewInfo.s1_boughtPlants_help);
+      entity.s1_mushrooms_permille.Should().Be(command.NewInfo.s1_mushrooms_permille);
+      entity.s1_mushrooms_help.Should().Be(command.NewInfo.s1_mushrooms_help);
     }
 
     [Fact]
@@ -64,8 +64,8 @@ namespace Application.UnitTests.StatementInfos.Commands.UpdateStatementInfo
     {
       var command = new UpdateStatementInfoCommand()
       {
-        accountingYear = 9999,
-        newInfo = new StatementInfoDto
+        AccountingYear = 9999,
+        NewInfo = new StatementInfoDto
         {
           Id = 1,
           AccountingYear = 9999,
@@ -87,8 +87,8 @@ namespace Application.UnitTests.StatementInfos.Commands.UpdateStatementInfo
     {
       var command = new UpdateStatementInfoCommand()
       {
-        accountingYear = 2019,
-        newInfo = new StatementInfoDto
+        AccountingYear = 2019,
+        NewInfo = new StatementInfoDto
         {
           Id = 1,
           AccountingYear = 2021,

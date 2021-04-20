@@ -16,8 +16,8 @@ namespace Application.StatementInfos.Commands.UpdateStatementÍnfo
   public class UpdateStatementInfoCommand : IRequest
   {
     [JsonIgnore]
-    public int accountingYear { get; set; }
-    public StatementInfoDto newInfo { get; set; }
+    public int AccountingYear { get; set; }
+    public StatementInfoDto NewInfo { get; set; }
 
 
     public class UpdateStatementInfoCommandHandler : IRequestHandler<UpdateStatementInfoCommand>
@@ -34,21 +34,21 @@ namespace Application.StatementInfos.Commands.UpdateStatementÍnfo
       public async Task<Unit> Handle(UpdateStatementInfoCommand request, CancellationToken cancellationToken)
       {
         var statementInfo = await _context.StatementInfo
-          .Where(e => e.AccountingYear == request.accountingYear && e.Id == request.newInfo.Id)
+          .Where(e => e.AccountingYear == request.AccountingYear && e.Id == request.NewInfo.Id)
           .FirstOrDefaultAsync(cancellationToken);
 
         if (statementInfo == null)
         {
-          throw new NotFoundException(nameof(StatementInfo), request.accountingYear);
+          throw new NotFoundException(nameof(StatementInfo), request.AccountingYear);
         }
 
-        if (request.newInfo.AccountingYear != null && request.newInfo.AccountingYear != request.accountingYear)
+        if (request.NewInfo.AccountingYear != null && request.NewInfo.AccountingYear != request.AccountingYear)
         {
           throw new ArgumentException("The accounting year of the provided statement info doesn't match the accounting year of the query parameter.");
         }
 
         //Use automapper to update values on entity from the dto.
-        _mapper.Map(request.newInfo, statementInfo);
+        _mapper.Map(request.NewInfo, statementInfo);
 
         await _context.SaveChangesAsync(cancellationToken);
 

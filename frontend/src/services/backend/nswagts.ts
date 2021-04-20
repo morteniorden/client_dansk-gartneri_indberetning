@@ -863,6 +863,7 @@ export interface IStatementClient {
     signOffStatement(id: number): Promise<FileResponse>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     getAllStatementInfo(): Promise<StatementInfoDto[]>;
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<FileResponse>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -1189,6 +1190,47 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<StatementInfoDto[]>(<any>null);
+    }
+
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/{year}/statementInfo";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdateStatementInfo(_response));
+        });
+    }
+
+    protected processUpdateStatementInfo(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 }
 
@@ -2839,6 +2881,43 @@ export class CSVResponseDto implements ICSVResponseDto {
 export interface ICSVResponseDto {
     fileName?: string | null;
     content?: string | null;
+}
+
+export class UpdateStatementInfoCommand implements IUpdateStatementInfoCommand {
+    newInfo?: StatementInfoDto | null;
+
+    constructor(data?: IUpdateStatementInfoCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.newInfo = data.newInfo && !(<any>data.newInfo).toJSON ? new StatementInfoDto(data.newInfo) : <StatementInfoDto>this.newInfo; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.newInfo = _data["newInfo"] ? StatementInfoDto.fromJS(_data["newInfo"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UpdateStatementInfoCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateStatementInfoCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["newInfo"] = this.newInfo ? this.newInfo.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IUpdateStatementInfoCommand {
+    newInfo?: IStatementInfoDto | null;
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {
