@@ -1,4 +1,4 @@
-import { Text, Textarea } from "@chakra-ui/react";
+import { Textarea } from "@chakra-ui/react";
 import { FC, useContext } from "react";
 import { useController } from "react-hook-form";
 import { IStatementInfoDto } from "services/backend/nswagts";
@@ -7,10 +7,9 @@ import { FormControlContext } from "./FormControlContext";
 
 interface Props {
   name: keyof IStatementInfoDto;
-  editing: boolean;
 }
 
-const InputHelpText: FC<Props> = ({ name, editing }) => {
+const InputHelpText: FC<Props> = ({ name }) => {
   const { control, form, updatedFormAttribute } = useContext(FormControlContext);
 
   const {
@@ -24,22 +23,16 @@ const InputHelpText: FC<Props> = ({ name, editing }) => {
   });
 
   return (
-    <>
-      {editing ? (
-        <Textarea
-          name={name}
-          ref={ref}
-          defaultValue={value}
-          onBlur={onBlur}
-          onChange={e => {
-            onChange(e.target.value);
-            updatedFormAttribute(name, e.target.value);
-          }}
-        />
-      ) : (
-        <Text>{value}</Text>
-      )}
-    </>
+    <Textarea
+      name={name}
+      ref={ref}
+      defaultValue={value}
+      onBlur={onBlur}
+      onChange={e => {
+        onChange(e.target.value);
+        updatedFormAttribute(name, e.target.value);
+      }}
+    />
   );
 };
 export default InputHelpText;

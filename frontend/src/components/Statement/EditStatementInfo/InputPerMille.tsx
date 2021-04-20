@@ -3,8 +3,7 @@ import {
   InputGroup,
   InputRightElement,
   NumberInput,
-  NumberInputField,
-  Text
+  NumberInputField
 } from "@chakra-ui/react";
 import { FC, useContext } from "react";
 import { useController } from "react-hook-form";
@@ -14,10 +13,9 @@ import { FormControlContext } from "./FormControlContext";
 
 interface Props {
   name: keyof IStatementInfoDto;
-  editing: boolean;
 }
 
-const InputPerMille: FC<Props> = ({ name, editing }) => {
+const InputPerMille: FC<Props> = ({ name }) => {
   const { control, form, updatedFormAttribute } = useContext(FormControlContext);
 
   const {
@@ -32,31 +30,27 @@ const InputPerMille: FC<Props> = ({ name, editing }) => {
 
   return (
     <Flex>
-      {editing ? (
-        <InputGroup>
-          <NumberInput
-            min={0} //Not sure about the range
-            max={99} //Not sure about the range
-            precision={2}
-            defaultValue={value}>
-            <NumberInputField
-              name={name}
-              ref={ref}
-              value={value}
-              onBlur={onBlur}
-              onChange={e => {
-                onChange(e.target.value);
-                updatedFormAttribute(name, parseFloat(e.target.value));
-              }}
-              textAlign="end"
-              maxLength={5}
-            />
-          </NumberInput>
-          <InputRightElement>‰</InputRightElement>
-        </InputGroup>
-      ) : (
-        <Text>{`${parseFloat(value).toFixed(2)}‰`}</Text>
-      )}
+      <InputGroup>
+        <NumberInput
+          min={0} //Not sure about the range
+          max={99} //Not sure about the range
+          precision={2}
+          defaultValue={value}>
+          <NumberInputField
+            name={name}
+            ref={ref}
+            value={value}
+            onBlur={onBlur}
+            onChange={e => {
+              onChange(e.target.value);
+              updatedFormAttribute(name, parseFloat(e.target.value));
+            }}
+            textAlign="end"
+            maxLength={5}
+          />
+        </NumberInput>
+        <InputRightElement>‰</InputRightElement>
+      </InputGroup>
     </Flex>
   );
 };

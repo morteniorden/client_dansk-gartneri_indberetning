@@ -12,7 +12,6 @@ const StatementInfoTable: FC = ({ children }) => {
           <Th w="18em"></Th>
           <Th>{t("statementInfo.helpText")}</Th>
           <Th w="13em">{t("statementInfo.tax")}</Th>
-          <Th w="5em">{t("actions.edit")}</Th>
         </Tr>
       </Thead>
       <Tbody>{children}</Tbody>

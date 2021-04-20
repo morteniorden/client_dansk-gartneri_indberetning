@@ -14,25 +14,18 @@ interface Props {
 
 const StatementInfoTableRow: FC<Props> = ({ name, displayName }) => {
   const { t } = useLocales();
-  const [editOn, setEditOn] = useState(false);
   const { form } = useContext(FormControlContext);
 
   return (
     <>
       {form && (
-        <Tr>
+        <Tr sx={{ td: { "vertical-align": "top" } }}>
           <Td>{displayName}</Td>
           <Td>
-            <InputHelpText name={(name + "_help") as keyof IStatementInfoDto} editing={editOn} />
+            <InputHelpText name={(name + "_help") as keyof IStatementInfoDto} />
           </Td>
           <Td>
-            <InputPerMille
-              name={(name + "_permille") as keyof IStatementInfoDto}
-              editing={editOn}
-            />
-          </Td>
-          <Td>
-            <Switch isChecked={editOn} onChange={e => setEditOn(e.target.checked)} />
+            <InputPerMille name={(name + "_permille") as keyof IStatementInfoDto} />
           </Td>
         </Tr>
       )}
