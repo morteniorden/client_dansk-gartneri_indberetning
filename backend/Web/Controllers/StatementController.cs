@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.StatementInfos;
+using Application.StatementInfos.Commands.UpdateStatementÍnfo;
 using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
 using Application.Statements.Commands.CreateStatementCommand;
@@ -77,6 +78,18 @@ namespace Web.Controllers
     public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
     {
       return await Mediator.Send(new GetAllStatementInfoQuery());
+    }
+
+    [HttpPut("{year}")]
+    public async Task<ActionResult> UpdateStatementInfo([FromRoute] int year)
+    {
+
+      await Mediator.Send(new UpdateStatementInfoCommand()
+      {
+        accountingYear = year
+      });
+
+      return NoContent();
     }
   }
 }

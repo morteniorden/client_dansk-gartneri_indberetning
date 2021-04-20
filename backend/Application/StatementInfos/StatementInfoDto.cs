@@ -1,4 +1,6 @@
 using Application.Common.Mappings;
+using Application.Statements;
+using AutoMapper;
 using Domain.Entities;
 
 namespace Application.StatementInfos
@@ -56,5 +58,10 @@ namespace Application.StatementInfos
     public string s8_strawberries_help { get; set; }
     public float s8_otherBerryFruit_permille { get; set; }
     public string s8_otherBerryFruit_help { get; set; }
+
+    public void Mapping(Profile profile)
+    {
+      profile.CreateMap<StatementInfo, StatementInfoDto>().ReverseMap();
+    }
   }
 }
