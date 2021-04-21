@@ -36,6 +36,7 @@ namespace Application.Accounts.Commands.CreateAccountCommand
 
       public async Task<int> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
       {
+        /*
         if (_context.Accounts.Any(e => e.Email == request.account.Email))
         {
           throw new ArgumentException("The provided email address is already used by another account.");
@@ -70,7 +71,7 @@ namespace Application.Accounts.Commands.CreateAccountCommand
         address1Entity.AccountId = accountEntity.Id;
         address1Entity.Account = accountEntity;
 
-        var userEntity = new User
+        var userEntity = new Client
         {
           AccountId = accountEntity.Id,
           Account = accountEntity,
@@ -80,7 +81,7 @@ namespace Application.Accounts.Commands.CreateAccountCommand
           Name = request.account.Name
         };
 
-        _context.Users.Add(userEntity);
+        _context.Clients.Add(userEntity);
         await _context.SaveChangesAsync(cancellationToken);
 
         var (tokenId, token) = await _tokenService.CreateSSOToken(userEntity);
@@ -92,8 +93,10 @@ namespace Application.Accounts.Commands.CreateAccountCommand
         await _context.SaveChangesAsync(cancellationToken);
 
         _jobClient.Enqueue(() => _mailService.SendUserActivationEmail(userEntity.Email, token));
-
         return accountEntity.Id;
+        */
+        return 0;
+
       }
     }
   }

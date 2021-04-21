@@ -8,9 +8,9 @@ namespace Infrastructure.Persistence.Configurations
   {
     public void Configure(EntityTypeBuilder<Address> builder)
     {
-      builder.HasOne<Account>(e => e.Account)
+      builder.HasOne<Client>(e => e.Client)
         .WithOne(e => e.Address)
-        .HasForeignKey<Account>(e => e.Id)
+        .HasForeignKey<Client>(e => e.Id)
         .IsRequired();
     }
   }

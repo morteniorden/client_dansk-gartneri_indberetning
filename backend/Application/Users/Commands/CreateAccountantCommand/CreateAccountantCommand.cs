@@ -16,7 +16,7 @@ namespace Application.Users.Commands.CreateAccountantCommand
   [Authorize(Role = RoleEnum.Admin)]
   public class CreateAccountantCommand : IRequest<int>
   {
-    public UserAccountIdDto AccountantDto;
+    public ClientDto AccountantDto;
 
     public class CreateAccountantCommandHandler : IRequestHandler<CreateAccountantCommand, int>
     {
@@ -29,6 +29,7 @@ namespace Application.Users.Commands.CreateAccountantCommand
 
       public async Task<int> Handle(CreateAccountantCommand request, CancellationToken cancellationToken)
       {
+        /*
         var account = await _context.Accounts.FindAsync(request.AccountantDto.AccountId);
 
         if (account == null)
@@ -46,12 +47,12 @@ namespace Application.Users.Commands.CreateAccountantCommand
           throw new ArgumentException("The provided email address is already used by another user.");
         }
 
-        if (_context.Users.Any(e => e.Email == request.AccountantDto.Email && e.Role != RoleEnum.Accountant))
+        if (_context.Clients.Any(e => e.Email == request.AccountantDto.Email && e.Role != RoleEnum.Accountant))
         {
           throw new ArgumentException("The provided email address is already used by another user.");
         }
 
-        var existingAccountant = await _context.Users
+        var existingAccountant = await _context.Clients
           .Include(x => x.Account)
           .FirstOrDefaultAsync(e => e.Email == request.AccountantDto.Email && e.Role == RoleEnum.Accountant);
 
@@ -75,7 +76,7 @@ namespace Application.Users.Commands.CreateAccountantCommand
         }
 
         //If the accountant doesn't exists, create a new one
-        var accountantEntity = new User
+        var accountantEntity = new Client
         {
           Name = request.AccountantDto.Name,
           Email = request.AccountantDto.Email,
@@ -84,11 +85,13 @@ namespace Application.Users.Commands.CreateAccountantCommand
           AccountId = account.Id
         };
 
-        _context.Users.Add(accountantEntity);
+        _context.Clients.Add(accountantEntity);
         await _context.SaveChangesAsync(cancellationToken);
 
         //TODO: Send email to accountant
         return accountantEntity.Id;
+        */
+        return 0;
       }
     }
   }

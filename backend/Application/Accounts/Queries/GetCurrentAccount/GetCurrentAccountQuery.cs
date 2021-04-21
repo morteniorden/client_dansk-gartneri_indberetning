@@ -30,12 +30,15 @@ namespace Application.Accounts.Queries.GetCurrentAccountQuery
       }
       public async Task<AccountDto> Handle(GetCurrentAccountQuery request, CancellationToken cancellationToken)
       {
+        /*
         var viewmodel = await _context.Accounts
           .Include(a => a.Users)
           .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
           .FirstOrDefaultAsync(a => a.Users.Any(u => u.Email == _currentUserService.UserId));
 
         return viewmodel;
+        */
+        return null;
       }
     }
   }

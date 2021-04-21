@@ -6,7 +6,8 @@ namespace Domain.EntityExtensions
 {
   public static class AccountExtensions
   {
-    public static User GetClient(this Account account)
+    /*
+    public static Client GetClient(this Account account)
     {
       try
       {
@@ -17,7 +18,7 @@ namespace Domain.EntityExtensions
         return null;
       }
     }
-    public static User GetActiveAccountant(this Account account)
+    public static Client GetActiveAccountant(this Account account)
     {
       try
       {
@@ -29,5 +30,6 @@ namespace Domain.EntityExtensions
         return null;
       }
     }
+    */
   }
 }

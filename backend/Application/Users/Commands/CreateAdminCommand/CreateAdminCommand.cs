@@ -27,7 +27,7 @@ namespace Application.Accounts.Commands.CreateAdmin
 
       public async Task<int> Handle(CreateAdminCommand request, CancellationToken cancellationToken)
       {
-        var userEntity = new AdminUser
+        var userEntity = new Admin
         {
           Email = request.user.Email,
           Password = _passwordHasher.Hash(request.user.Password),
@@ -35,7 +35,7 @@ namespace Application.Accounts.Commands.CreateAdmin
           Name = request.user.Name
         };
 
-        _context.Admins.Add(userEntity);
+        _context.Users.Add(userEntity);
         await _context.SaveChangesAsync(cancellationToken);
       
         return userEntity.Id;

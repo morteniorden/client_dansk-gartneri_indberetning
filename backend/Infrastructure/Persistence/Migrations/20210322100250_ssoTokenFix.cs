@@ -8,7 +8,7 @@ namespace Infrastructure.Persistence.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "SSOTokenId",
-                table: "Users",
+                table: "Clients",
                 type: "nvarchar(max)",
                 nullable: true);
 
@@ -23,7 +23,7 @@ namespace Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "SSOTokenId",
-                table: "Users");
+                table: "Clients");
 
             migrationBuilder.DropColumn(
                 name: "SSOTokenId",

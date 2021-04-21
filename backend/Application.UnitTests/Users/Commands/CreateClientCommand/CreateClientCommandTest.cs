@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using Application.Accounts;
 using Application.Accounts.Commands.CreateAccountCommand;
 using Application.Common.Interfaces;
+using Domain.Entities;
 using Moq;
 using Xunit;
 
-namespace Application.UnitTests.Accounts.Commands.CreateAccount
+namespace Application.UnitTests.Users.Commands.CreateClient
 {
-  public class CreateAccountCommandTest : CommandTestBase
+  public class CreateClientCommandTest : CommandTestBase
   {
     [Fact]
-    public async Task Handle_ShouldPersistAccount()
+    public async Task Handle_ShouldPersistClient()
     {
       var command = new CreateAccountCommand
       {
@@ -34,7 +35,7 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
 
       var result = await handler.Handle(command, CancellationToken.None);
 
-      var entity = Context.Accounts.Find(result);
+      var entity = (Client) Context.Users.Find(result);
 
       entity.Should().NotBeNull();
       entity.Email.Should().Be(command.account.Email);
@@ -42,15 +43,7 @@ namespace Application.UnitTests.Accounts.Commands.CreateAccount
       entity.Tel.Should().Be(command.account.Tel);
       entity.CVRNumber.Should().Be(command.account.CVRNumber);
       entity.Address.Should().NotBeNull();
-      entity.Address.Account.Should().Be(entity);
-      entity.Address.AccountId.Should().Be(entity.Id);
-      entity.Users.Should().HaveCount(1);
-
-      var user = entity.Users.First();
-      user.Name.Should().Be(command.account.Name);
-      user.Email.Should().Be(command.account.Email);
-      user.AccountId.Should().Be(entity.Id);
-      user.Account.Should().Be(entity);
+      entity.Address.ClientId.Should().Be(entity.Id);
     }
 
     [Fact]

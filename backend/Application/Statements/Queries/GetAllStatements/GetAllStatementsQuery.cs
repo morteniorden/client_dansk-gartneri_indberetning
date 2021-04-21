@@ -27,6 +27,8 @@ namespace Application.Statements.Queries.GetAllStatements
       public async Task<List<StatementDto>> Handle(GetAllStatementsQuery request, CancellationToken cancellationToken)
       {
         var statements = await _context.Statements
+          .Include(e => e.Client)
+          .Include(e => e.Accountant)
           .ProjectTo<StatementDto>(_mapper.ConfigurationProvider)
           .ToListAsync(cancellationToken);
 

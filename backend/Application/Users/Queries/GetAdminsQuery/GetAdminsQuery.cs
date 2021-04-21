@@ -27,7 +27,8 @@ namespace Application.Users.Queries.GetAdminsQuery
       }
       public async Task<List<UserDto>> Handle(GetAdminsQuery request, CancellationToken cancellationToken)
       {
-        var viewModel = await _context.Admins
+        var viewModel = await _context.Users
+          .Where(e => e.Role == RoleEnum.Admin)
           .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
           .ToListAsync(cancellationToken);
 

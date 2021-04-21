@@ -57,7 +57,7 @@ namespace Infrastructure.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Statements_AccountId_RevisionYear",
                 table: "Statements",
-                columns: new[] { "AccountId", "RevisionYear" },
+                columns: new[] { "ClientId", "AccountingYear" },
                 unique: true);
         }
 

@@ -30,8 +30,8 @@ namespace Application.UnitTests.Common.Mappings
     [InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
     [InlineData(typeof(ExampleParent), typeof(ExampleParentDto))]
     [InlineData(typeof(Account), typeof(AccountDto))]
-    [InlineData(typeof(User), typeof(UserAccountIdDto))]
-    [InlineData(typeof(AdminUser), typeof(UserDto))]
+    [InlineData(typeof(Client), typeof(ClientDto))]
+    [InlineData(typeof(Admin), typeof(UserDto))]
     [InlineData(typeof(Address), typeof(AddressDto))]
     //[InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
     public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)

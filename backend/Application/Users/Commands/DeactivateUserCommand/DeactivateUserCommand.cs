@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
+using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace Application.Users.Commands.DeactivateUserCommand
 
         if (userEntity == null)
         {
-          throw new NotFoundException(nameof(Domain.Entities.User), request.Id);
+          throw new NotFoundException(nameof(User), request.Id);
         }
 
         userEntity.DeactivationTime = DateTimeOffset.Now;

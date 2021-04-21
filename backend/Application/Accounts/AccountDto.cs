@@ -9,7 +9,7 @@ using Domain.EntityExtensions;
 
 namespace Application.Accounts
 {
-  public class AccountDto : IAutoMap<Account>
+  public class AccountDto 
   {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -19,15 +19,19 @@ namespace Application.Accounts
     public AddressDto Address { get; set; }
     public string CVRNumber { get; set; }
     public DateTimeOffset? DeactivationTime { get; set; }
-    public ICollection<UserAccountIdDto> Users { get; set; }
-    public UserAccountIdDto Client { get; set; }
-    public UserAccountIdDto Accountant { get; set; }
+    public ICollection<ClientDto> Users { get; set; }
+    public ClientDto Client { get; set; }
+    public ClientDto Accountant { get; set; }
     public ICollection<StatementDto> Statements { get; set; }
-    public void Mapping(Profile profile)
+   
+  }
+}
+//: IAutoMap<Account>
+/*
+ public void Mapping(Profile profile)
     {
       profile.CreateMap<Account, AccountDto>()
         .ForMember(dest => dest.Client, map => map.MapFrom(from => from.GetClient()))
         .ForMember(dest => dest.Accountant, map => map.MapFrom(from => from.GetActiveAccountant()));
     }
-  }
-}
+ */

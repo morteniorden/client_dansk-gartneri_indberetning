@@ -27,6 +27,7 @@ namespace Application.Accounts.Queries.GetAccountsQuery
       }
       public async Task<List<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
       {
+        /*
         var viewModel = await _context.Accounts
           .Include(x => x.Users)
           .Include(e => e.Statements)
@@ -34,6 +35,8 @@ namespace Application.Accounts.Queries.GetAccountsQuery
           .ToListAsync(cancellationToken);
 
         return viewModel;
+        */
+        return null;
       }
     }
   }

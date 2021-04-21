@@ -111,7 +111,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Clients",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -157,12 +157,12 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_AccountId",
-                table: "Users",
-                column: "AccountId");
+                table: "Clients",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
-                table: "Users",
+                table: "Clients",
                 column: "Email",
                 unique: true);
         }
@@ -176,7 +176,7 @@ namespace Infrastructure.Migrations
                 name: "ExampleChildren");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "ExampleParents");

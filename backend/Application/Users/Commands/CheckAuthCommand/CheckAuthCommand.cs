@@ -31,14 +31,8 @@ namespace Application.Users.Commands.CheckAuthCommand
       public async Task<UserDto> Handle(CheckAuthCommand request, CancellationToken cancellationToken)
       {
 
-        IUser user = await _context.Users
+        User user = await _context.Users
           .FirstOrDefaultAsync(x => x.Email.Equals(_userAuthService.UserId));
-
-        if (user == null)
-        {
-          user = await _context.Admins
-          .FirstOrDefaultAsync(x => x.Email.Equals(_userAuthService.UserId));
-        }
 
         if (user == null)
         {

@@ -33,11 +33,11 @@ namespace Application.UnitTests.Users.Commands.CreateAdmin
 
       var handler = new CreateAdminCommand.CreateAdminCommandHandler(Context, passwordHasherMock.Object);
 
-      var adminCount = Context.Admins.Count();
+      var adminCount = Context.Users.Where(e => e.Role == RoleEnum.Admin).Count();
 
       var result = await handler.Handle(command, CancellationToken.None);
 
-      var user = Context.Admins.Find(result);
+      var user = Context.Users.Find(result);
       user.Id.Should().Be(adminCount + 1);
       user.Name.Should().Be(command.user.Name);
       user.Email.Should().Be(command.user.Email);

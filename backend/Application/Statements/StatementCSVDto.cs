@@ -14,11 +14,13 @@ namespace Application.Statements
     [DisplayName("Oplysningsskema-id")]
     public int Id { get; set; }
     [DisplayName("Kunde-id")]
-    public int AccountId { get; set; }
-    [DisplayName("Navn")]
-    public string AccountName { get; set; }
+    public int ClientId { get; set; }
+    [DisplayName("Kunde")]
+    public string ClientName { get; set; }
     [DisplayName("CVR")]
-    public string AccountCVR { get; set; }
+    public string ClientCVR { get; set; }
+    [DisplayName("Revisor/Konsulent")]
+    public string AccountantName { get; set; }
     [DisplayName("Revisionsår")]
     public int RevisionYear { get; set; }
 
@@ -74,8 +76,9 @@ namespace Application.Statements
     public void Mapping(Profile profile)
     {
       profile.CreateMap<Statement, StatementCSVDto>()
-        .ForMember(dest => dest.AccountName, map => map.MapFrom(from => from.Account.Name))
-        .ForMember(dest => dest.AccountCVR, map => map.MapFrom(from => from.Account.CVRNumber));
+        .ForMember(dest => dest.ClientName, map => map.MapFrom(from => from.Client.Name))
+        .ForMember(dest => dest.ClientCVR, map => map.MapFrom(from => from.Client.CVRNumber))
+        .ForMember(dest => dest.AccountantName, map => map.MapFrom(from => from.Accountant.Name));
     }
   }
 }

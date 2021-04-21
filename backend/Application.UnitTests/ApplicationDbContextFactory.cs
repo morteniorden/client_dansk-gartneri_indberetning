@@ -58,24 +58,13 @@ namespace Application.UnitTests
         address2
       );
 
-      var account1 = new Account { Id = 1, Name = "test1 account", Email = "test1@test1.dk", Tel = "59284756", AddressId = 1, Address = address1, CVRNumber = "10356245" };
-      var account2 = new Account { Id = 2, Name = "test2 account", Email = "test2@test2.dk", Tel = "64756453", AddressId = 2, Address = address2, CVRNumber = "10356457" };
-
-      context.Accounts.AddRange(
-          account1,
-          account2
-      );
-
       context.Users.AddRange(
-        new User { Id = 1, AccountId = 1, Account = account1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test1 client" },
-        new User { Id = 2, AccountId = 1, Account = account1, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Role = RoleEnum.Accountant, Name = "test1 accountant" },
-        new User { Id = 3, AccountId = 2, Account = account2, Email = "test2@test2.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test2 client" }
-      );
-
-      context.Admins.AddRange(
-        new AdminUser { Id = 1, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name="Admin"},
-        new AdminUser { Id = 2, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
-        new AdminUser { Id = 3, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
+        new Client { Id = 1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test1 client" },
+        new Accountant { Id = 2, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Role = RoleEnum.Accountant, Name = "test1 accountant" },
+        new Client { Id = 3, Email = "test2@test2.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test2 client" },
+        new Admin { Id = 1, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
+        new Admin { Id = 2, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
+        new Admin { Id = 3, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
       );
 
       context.SaveChanges();

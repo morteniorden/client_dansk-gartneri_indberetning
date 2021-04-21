@@ -2,7 +2,7 @@ using Application.Common.Mappings;
 using AutoMapper;
 using Domain.Entities;
 
-namespace Application.Accounts
+namespace Application.Users
 {
   public class AddressDto : IAutoMap<Address>
   {

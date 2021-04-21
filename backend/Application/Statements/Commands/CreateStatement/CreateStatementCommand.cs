@@ -16,7 +16,7 @@ namespace Application.Statements.Commands.CreateStatementCommand
   [Authorize(Role = RoleEnum.Admin)]
   public class CreateStatementCommand : IRequest<int>
   {
-    public int AccountId { get; set; }
+    public int ClientId { get; set; }
     public int RevisionYear { get; set; }
 
     public class CreateStatementCommandHandler : IRequestHandler<CreateStatementCommand, int>
@@ -34,26 +34,24 @@ namespace Application.Statements.Commands.CreateStatementCommand
 
       public async Task<int> Handle(CreateStatementCommand request, CancellationToken cancellationToken)
       {
-        var accountEntity = await _context.Accounts
-          .Include(e => e.Users)
-          .FirstOrDefaultAsync(e => e.Id == request.AccountId);
+        var userEntity = await _context.Users
+          .FirstOrDefaultAsync(e => e.Id == request.ClientId && e.Role == RoleEnum.Client, cancellationToken: cancellationToken);
 
-        if (accountEntity == null)
+        if (userEntity == null)
         {
-          throw new NotFoundException(nameof(Account), request.AccountId);
+          throw new NotFoundException(nameof(User), request.ClientId);
         }
 
         var statement = new Statement
         {
-          AccountId = request.AccountId,
-          Account = accountEntity,
-          RevisionYear = request.RevisionYear,
+          ClientId = request.ClientId,
+          Client = (Client) userEntity,
+          AccountingYear = request.RevisionYear,
           Status = StatementStatus.InvitedNotEdited
         };
         _context.Statements.Add(statement);
 
-        var email = accountEntity.GetClient().Email;
-        _jobClient.Enqueue(() => _mailService.SendStatementInvitationEmail(email));
+        _jobClient.Enqueue(() => _mailService.SendStatementInvitationEmail(userEntity.Email));
         await _context.SaveChangesAsync(cancellationToken);
 
         return statement.Id;

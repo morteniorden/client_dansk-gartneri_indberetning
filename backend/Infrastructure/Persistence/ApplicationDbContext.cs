@@ -21,10 +21,7 @@ namespace Infrastructure.Persistence
       _currentUserService = currentUserService;
       _dateTimeOffsetService = dateTimeOffset;
     }
-
-    public DbSet<Account> Accounts { get; set;}
     public DbSet<User> Users { get; set; }
-    public DbSet<AdminUser> Admins { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Email> Emails { get; set; }
     public DbSet<Statement> Statements { get; set; }

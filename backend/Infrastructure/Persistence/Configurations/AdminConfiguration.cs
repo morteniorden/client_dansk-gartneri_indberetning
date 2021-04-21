@@ -4,24 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-  public class AdminConfiguration : IEntityTypeConfiguration<AdminUser>
+  public class AdminConfiguration : IEntityTypeConfiguration<Admin>
   {
-    public void Configure(EntityTypeBuilder<AdminUser> builder)
+    public void Configure(EntityTypeBuilder<Admin> builder)
     {
-      builder.HasKey(e => e.Id);
-
-      builder.Property(e => e.Email)
-        .IsRequired();
-
-      builder.HasIndex(e => e.Email)
-        .IsUnique();
-
-      builder.Property(e => e.Role)
-        .IsRequired();
-
-      builder.Property(e => e.Name)
-        .HasMaxLength(200)
-        .IsRequired();
+      
     }
   }
 }

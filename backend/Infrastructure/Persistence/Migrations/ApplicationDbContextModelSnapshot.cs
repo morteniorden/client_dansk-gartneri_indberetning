@@ -74,7 +74,7 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("AccountId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("AddressLine1")
@@ -257,7 +257,7 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("AccountId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Created")
@@ -272,7 +272,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RevisionYear")
+                    b.Property<int>("AccountingYear")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -346,7 +346,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId", "RevisionYear")
+                    b.HasIndex("ClientId", "AccountingYear")
                         .IsUnique();
 
                     b.ToTable("Statements");
@@ -359,7 +359,7 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("AccountId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Created")
@@ -397,12 +397,12 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Domain.Entities.Account", b =>
@@ -431,7 +431,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.Account", "Account")
                         .WithMany("Statements")
-                        .HasForeignKey("AccountId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -441,8 +441,8 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.HasOne("Domain.Entities.Account", "Account")
-                        .WithMany("Users")
-                        .HasForeignKey("AccountId")
+                        .WithMany("Clients")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -453,7 +453,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("Statements");
 
-                    b.Navigation("Users");
+                    b.Navigation("Clients");
                 });
 
             modelBuilder.Entity("Domain.Entities.Address", b =>

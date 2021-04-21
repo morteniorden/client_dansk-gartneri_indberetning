@@ -35,23 +35,22 @@ namespace Web.Services
 
       if (email == "") return;
 
-      var superUser = _context.Admins
-        .Where(x => x.Email.Equals(email))
-        .FirstOrDefault();
+      var superUser = _context.Users
+        .FirstOrDefault(x => x.Email.Equals(email));
 
       if (superUser == null)
       {
-        superUser = new AdminUser
+        superUser = new Admin
         {
           Name = "SuperAdmin",
           Email = email,
           Password = pass
         };
-        _context.Admins.Add(superUser);
+        _context.Users.Add(superUser);
       } else
       {
         superUser.Password = pass;
-        _context.Admins.Update(superUser);
+        _context.Users.Update(superUser);
       }
 
       _context.SaveChanges();
