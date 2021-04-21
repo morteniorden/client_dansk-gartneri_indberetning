@@ -1,5 +1,6 @@
 import { Textarea } from "@chakra-ui/react";
-import { FC, useContext } from "react";
+import { useColors } from "hooks/useColors";
+import { FC, useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
 import { IStatementInfoDto } from "services/backend/nswagts";
 
@@ -10,7 +11,8 @@ interface Props {
 }
 
 const InputHelpText: FC<Props> = ({ name }) => {
-  const { control, form, updatedFormAttribute } = useContext(FormControlContext);
+  const { control, form } = useContext(FormControlContext);
+  const colors = useColors();
 
   const {
     field: { ref, onChange, value, onBlur },
@@ -22,6 +24,12 @@ const InputHelpText: FC<Props> = ({ name }) => {
     defaultValue: form[name]
   });
 
+  const bgColor = useMemo(() => {
+    if (invalid) return colors.errorColor;
+    if (isDirty) return colors.warningColor;
+    if (isTouched) return colors.infoColor;
+  }, [isDirty, isTouched, invalid, colors]);
+
   return (
     <Textarea
       name={name}
@@ -30,8 +38,8 @@ const InputHelpText: FC<Props> = ({ name }) => {
       onBlur={onBlur}
       onChange={e => {
         onChange(e.target.value);
-        updatedFormAttribute(name, e.target.value);
       }}
+      bgColor={bgColor}
     />
   );
 };

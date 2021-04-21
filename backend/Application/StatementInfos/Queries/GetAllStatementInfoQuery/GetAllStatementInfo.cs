@@ -33,7 +33,7 @@ namespace Application.StatementInfos.Queries.GetStatementInfos
       public async Task<List<StatementInfoDto>> Handle(GetAllStatementInfoQuery request, CancellationToken cancellationToken)
       {
         //Check if, for some reason, the statementInfo for this year has not been created;
-        await _statementInfoService.CheckThisYearInfo();
+        await _statementInfoService.CheckMissingYearsInfo();
 
         var statementInfo = await _context.StatementInfo
           .ProjectTo<StatementInfoDto>(_mapper.ConfigurationProvider)

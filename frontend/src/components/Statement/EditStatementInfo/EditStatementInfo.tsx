@@ -16,7 +16,6 @@ const EditStatementInfo: FC = () => {
   const { t } = useLocales();
   const [saving, setSaving] = useState(false);
   const [fetching, setFetching] = useState(false);
-  const toast = useToast();
 
   const fetchData = useCallback(async () => {
     setFetching(true);
@@ -38,39 +37,6 @@ const EditStatementInfo: FC = () => {
     fetchData();
   }, [fetchData]);
 
-  const saveChanges = useCallback(
-    async (data: IStatementInfoDto) => {
-      setSaving(true);
-      try {
-        const statementClient = await genStatementClient();
-        const command = new UpdateStatementInfoCommand({
-          newInfo: { ...statementInfo, ...data }
-        });
-        await statementClient.updateStatementInfo(statementInfo.accountingYear, command);
-        toast({
-          title: t("common.saveSuccessTitle"),
-          description: t("common.saveSuccessText"),
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left"
-        });
-      } catch (err) {
-        logger.warn("statementClient.get Error", err);
-        toast({
-          title: t("common.saveErrorTitle"),
-          description: t("common.saveErrorText"),
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left"
-        });
-      }
-      setSaving(false);
-    },
-    [statementInfo]
-  );
-
   return (
     <BasicLayout maxW="1000px">
       <Stack spacing={5}>
@@ -86,9 +52,7 @@ const EditStatementInfo: FC = () => {
           </Button>
         </Flex>
         <FetchingSpinner isFetching={fetching} text={t("common.fetchingData")} />
-        {statementInfo && (
-          <StatementInfoForm form={statementInfo} setForm={setStatementInfo} onSave={saveChanges} />
-        )}
+        {statementInfo && <StatementInfoForm form={statementInfo} setSaving={b => setSaving(b)} />}
       </Stack>
     </BasicLayout>
   );

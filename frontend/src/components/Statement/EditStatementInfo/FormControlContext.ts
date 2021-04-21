@@ -7,11 +7,9 @@ type Form = IStatementInfoDto;
 interface FormControlContextContent {
   control: Control<Form>;
   form: Form;
-  updatedFormAttribute: (key: keyof Form, value: Form[keyof Form]) => void;
 }
 
 export const FormControlContext = createContext<FormControlContextContent>({
   control: null,
-  form: {} as unknown,
-  updatedFormAttribute: () => null
+  form: {} as unknown
 });

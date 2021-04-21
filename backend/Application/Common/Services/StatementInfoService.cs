@@ -17,7 +17,7 @@ namespace Application.Common.Services
       _context = context;
     }
 
-    public async Task CheckThisYearInfo()
+    public async Task CheckMissingYearsInfo()
     {
       var thisYear = DateTimeOffset.Now.Year;
       await AddInfoForYear(thisYear);

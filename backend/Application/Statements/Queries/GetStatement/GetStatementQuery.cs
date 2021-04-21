@@ -52,7 +52,7 @@ namespace Application.Statements.Queries.GetMyStatements
         if (statementInfo == null)
         {
           //Check if, for some reason, the statementInfo for this year has not been created. 
-          await _statementInfoService.CheckThisYearInfo();
+          await _statementInfoService.CheckMissingYearsInfo();
           statementInfo = await FindInfo(statement.RevisionYear);
 
           if (statementInfo == null)

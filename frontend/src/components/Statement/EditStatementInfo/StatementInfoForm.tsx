@@ -1,37 +1,61 @@
-import { Heading, Stack } from "@chakra-ui/react";
+import { Heading, Stack, useToast } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
-import { Dispatch, FC, SetStateAction, useCallback, useEffect } from "react";
+import { FC, useCallback } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
-import { IStatementInfoDto } from "services/backend/nswagts";
+import { genStatementClient } from "services/backend/apiClients";
+import { IStatementInfoDto, UpdateStatementInfoCommand } from "services/backend/nswagts";
+import { logger } from "utils/logger";
 
 import StatementSection from "../StatementSection";
-import StatementTableSubHeading from "../StatementTableSubHeading";
 import { FormControlContext } from "./FormControlContext";
 import StatementInfoTable from "./StatementInfoTable";
 import StatementInfoTableRow from "./StatementInfoTableRow";
 
 interface Props {
   form: IStatementInfoDto;
-  setForm: Dispatch<SetStateAction<IStatementInfoDto>>;
-  onSave: (data: IStatementInfoDto) => void;
+  setSaving: (b: boolean) => void;
 }
 
-const StatementInfoForm: FC<Props> = ({ form, setForm, onSave }) => {
+const StatementInfoForm: FC<Props> = ({ form, setSaving }) => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementInfoDto>();
+  const toast = useToast();
 
-  const updatedFormAttribute = useCallback(
-    (key: keyof IStatementInfoDto, value: IStatementInfoDto[keyof IStatementInfoDto]) => {
-      setForm(x => {
-        (x[key] as unknown) = value;
-        return x;
-      });
+  const saveChanges = useCallback(
+    async (data: IStatementInfoDto) => {
+      setSaving(true);
+      try {
+        const statementClient = await genStatementClient();
+        const command = new UpdateStatementInfoCommand({
+          newInfo: { ...form, ...data }
+        });
+        await statementClient.updateStatementInfo(form.accountingYear, command);
+        toast({
+          title: t("common.saveSuccessTitle"),
+          description: t("common.saveSuccessText"),
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      } catch (err) {
+        logger.warn("statementClient.get Error", err);
+        toast({
+          title: t("common.saveErrorTitle"),
+          description: t("common.saveErrorText"),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      }
+      setSaving(false);
     },
-    [setForm]
+    [form]
   );
 
   const onValid = useCallback((data: IStatementInfoDto) => {
-    onSave(data);
+    saveChanges(data);
   }, []);
 
   const onInvalid = useCallback((errors: DeepMap<IStatementInfoDto, FieldError>) => {
@@ -42,8 +66,7 @@ const StatementInfoForm: FC<Props> = ({ form, setForm, onSave }) => {
     <FormControlContext.Provider
       value={{
         control,
-        form: form,
-        updatedFormAttribute
+        form: form
       }}>
       <form onSubmit={handleSubmit(onValid, onInvalid)} id="editStatementInfo">
         <Stack>
