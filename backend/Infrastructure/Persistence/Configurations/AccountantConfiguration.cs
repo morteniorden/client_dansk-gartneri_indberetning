@@ -12,7 +12,9 @@ namespace Infrastructure.Persistence.Configurations
         .IsRequired(true);
 
       builder.HasMany<Statement>(e => e.Statements)
-        .WithOne(e => e.Accountant);
+        .WithOne(e => e.Accountant)
+        .HasForeignKey(e => e.AccountantId);
+      //.IsRequired(false);
     }
   }
 }

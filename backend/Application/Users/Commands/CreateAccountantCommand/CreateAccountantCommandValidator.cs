@@ -14,6 +14,8 @@ namespace Application.Users.Commands.CreateAccountantCommand
       RuleFor(e => e.AccountantDto.Name)
         .NotEmpty()
         .MaximumLength(200);
+      RuleFor(e => e.AccountantDto.AccountantType)
+        .NotEmpty();
     }
   }
 }

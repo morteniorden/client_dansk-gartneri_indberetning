@@ -13,11 +13,15 @@ namespace Infrastructure.Persistence.Configurations
         .IsRequired()
         .OnDelete(DeleteBehavior.Cascade);
 
+      builder.Property(e => e.Tel)
+        .IsRequired();
+
       builder.Property(e => e.CVRNumber)
         .IsRequired();
 
       builder.HasMany<Statement>(e => e.Statements)
-        .WithOne(e => e.Client);
+        .WithOne(e => e.Client)
+        .HasForeignKey(e => e.ClientId);
     }
   }
 }

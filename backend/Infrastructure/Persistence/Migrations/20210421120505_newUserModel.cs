@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Infrastructure.Migrations
+namespace Infrastructure.Persistence.Migrations
 {
-    public partial class MergeFix : Migration
+    public partial class newUserModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
                     AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressLine3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -25,16 +25,20 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Admins",
+                name: "Emails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Role = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DeactivationTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Subject = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Heading1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Paragraph1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Heading2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Paragraph2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Heading3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Paragraph3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CtaButtonText = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -42,7 +46,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admins", x => x.Id);
+                    table.PrimaryKey("PK_Emails", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,16 +63,21 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Accounts",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Tel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: true),
-                    CVRNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     DeactivationTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    SSOTokenId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountantType = table.Column<int>(type: "int", nullable: true),
+                    Tel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressId = table.Column<int>(type: "int", nullable: true),
+                    CVRNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -76,9 +85,9 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_Addresses_Id",
+                        name: "FK_Users_Addresses_Id",
                         column: x => x.Id,
                         principalTable: "Addresses",
                         principalColumn: "Id",
@@ -111,17 +120,37 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clients",
+                name: "Statements",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Role = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DeactivationTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    AccountantId = table.Column<int>(type: "int", nullable: false),
+                    AccountingYear = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    s1_mushrooms = table.Column<int>(type: "int", nullable: false),
+                    s1_tomatoCucumberHerb = table.Column<int>(type: "int", nullable: false),
+                    s1_boughtPlants = table.Column<int>(type: "int", nullable: false),
+                    s3_carrots = table.Column<int>(type: "int", nullable: false),
+                    s3_peas = table.Column<int>(type: "int", nullable: false),
+                    s3_onions = table.Column<int>(type: "int", nullable: false),
+                    s3_other = table.Column<int>(type: "int", nullable: false),
+                    s3_boughtPlants = table.Column<int>(type: "int", nullable: false),
+                    s4_onions = table.Column<int>(type: "int", nullable: false),
+                    s4_plants = table.Column<int>(type: "int", nullable: false),
+                    s4_cutFlowers = table.Column<int>(type: "int", nullable: false),
+                    s4_boughtPlants = table.Column<int>(type: "int", nullable: false),
+                    s7_plants = table.Column<int>(type: "int", nullable: false),
+                    s7_boughtPlants = table.Column<int>(type: "int", nullable: false),
+                    s8_applesPearsEtc = table.Column<int>(type: "int", nullable: false),
+                    s8_packaging = table.Column<int>(type: "int", nullable: false),
+                    s8_cherries = table.Column<int>(type: "int", nullable: false),
+                    s8_plums = table.Column<int>(type: "int", nullable: false),
+                    s8_otherStoneFruit = table.Column<int>(type: "int", nullable: false),
+                    s8_currant = table.Column<int>(type: "int", nullable: false),
+                    s8_strawberries = table.Column<int>(type: "int", nullable: false),
+                    s8_otherBerryFruit = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -129,26 +158,20 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Statements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
+                        name: "FK_Statements_Users_AccountantId",
+                        column: x => x.AccountantId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Statements_Users_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Accounts_Email",
-                table: "Accounts",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Admins_Email",
-                table: "Admins",
-                column: "Email",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExampleChildren_ParentId",
@@ -156,13 +179,19 @@ namespace Infrastructure.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_AccountId",
-                table: "Clients",
-                column: "ClientId");
+                name: "IX_Statements_AccountantId",
+                table: "Statements",
+                column: "AccountantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Statements_ClientId_AccountingYear",
+                table: "Statements",
+                columns: new[] { "ClientId", "AccountingYear" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
-                table: "Clients",
+                table: "Users",
                 column: "Email",
                 unique: true);
         }
@@ -170,19 +199,19 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admins");
+                name: "Emails");
 
             migrationBuilder.DropTable(
                 name: "ExampleChildren");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Statements");
 
             migrationBuilder.DropTable(
                 name: "ExampleParents");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

@@ -18,7 +18,7 @@ namespace Application.UnitTests.Users.Commands.CreateAdmin
     {
       var command = new CreateAdminCommand
       {
-        user = new CreateUserDto
+        Admin = new CreateAdminDto()
         {
 
           Email = "admin@admin.dk",
@@ -29,19 +29,19 @@ namespace Application.UnitTests.Users.Commands.CreateAdmin
 
       var passwordHasherMock = new Mock<IPasswordHasher>();
       passwordHasherMock.Setup(m => m.Check("password", "password")).Returns((true, false));
-      passwordHasherMock.Setup(m => m.Hash(command.user.Password)).Returns(command.user.Password);
+      passwordHasherMock.Setup(m => m.Hash(command.Admin.Password)).Returns(command.Admin.Password);
 
       var handler = new CreateAdminCommand.CreateAdminCommandHandler(Context, passwordHasherMock.Object);
 
-      var adminCount = Context.Users.Where(e => e.Role == RoleEnum.Admin).Count();
+      var adminCount = Context.Users.Count(e => e.Role == RoleEnum.Admin);
 
       var result = await handler.Handle(command, CancellationToken.None);
 
       var user = Context.Users.Find(result);
       user.Id.Should().Be(adminCount + 1);
-      user.Name.Should().Be(command.user.Name);
-      user.Email.Should().Be(command.user.Email);
-      user.Password.Should().Be(command.user.Password);
+      user.Name.Should().Be(command.Admin.Name);
+      user.Email.Should().Be(command.Admin.Email);
+      user.Password.Should().Be(command.Admin.Password);
       user.Role.Should().Be(RoleEnum.Admin);
     }
   }

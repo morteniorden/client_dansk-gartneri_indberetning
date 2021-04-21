@@ -12,7 +12,7 @@ namespace Application.Accounts.Commands.CreateAdmin
   [Authorize(Role = RoleEnum.Admin)]
   public class CreateAdminCommand : IRequest<int>
   {
-    public CreateUserDto user;
+    public CreateAdminDto Admin;
 
     public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, int>
     {
@@ -29,10 +29,10 @@ namespace Application.Accounts.Commands.CreateAdmin
       {
         var userEntity = new Admin
         {
-          Email = request.user.Email,
-          Password = _passwordHasher.Hash(request.user.Password),
+          Email = request.Admin.Email,
+          Password = _passwordHasher.Hash(request.Admin.Password),
           Role = RoleEnum.Admin,
-          Name = request.user.Name
+          Name = request.Admin.Name
         };
 
         _context.Users.Add(userEntity);

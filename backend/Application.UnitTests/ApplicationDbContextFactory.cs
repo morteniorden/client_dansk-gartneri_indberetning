@@ -62,10 +62,15 @@ namespace Application.UnitTests
         new Client { Id = 1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test1 client" },
         new Accountant { Id = 2, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Role = RoleEnum.Accountant, Name = "test1 accountant" },
         new Client { Id = 3, Email = "test2@test2.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test2 client" },
-        new Admin { Id = 1, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
-        new Admin { Id = 2, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
-        new Admin { Id = 3, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
+        new Admin { Id = 4, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
+        new Admin { Id = 5, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
+        new Admin { Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
       );
+
+      context.Statements.AddRange(
+        new Statement { Id = 1, AccountingYear = 2021},
+        new Statement { Id = 2, AccountingYear = 2022 }
+        );
 
       context.SaveChanges();
     }

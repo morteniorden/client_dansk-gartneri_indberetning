@@ -22,7 +22,7 @@ namespace Application.Statements
     [DisplayName("Revisor/Konsulent")]
     public string AccountantName { get; set; }
     [DisplayName("Revisionsår")]
-    public int RevisionYear { get; set; }
+    public int AccountingYear { get; set; }
 
     [DisplayName("1. Svampe")]
     public int s1_mushrooms { get; set; }

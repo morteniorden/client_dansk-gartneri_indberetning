@@ -4,8 +4,9 @@ using FluentAssertions;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Accounts;
-using Application.Accounts.Commands.CreateAccountCommand;
 using Application.Common.Interfaces;
+using Application.Users;
+using Application.Users.Commands.CreateClientCommand;
 using Domain.Entities;
 using Moq;
 using Xunit;
@@ -17,31 +18,34 @@ namespace Application.UnitTests.Users.Commands.CreateClient
     [Fact]
     public async Task Handle_ShouldPersistClient()
     {
-      var command = new CreateAccountCommand
+      var command = new CreateClientCommand
       {
-        account = new CreateAccountDto()
+        ClientDto = new ClientDto
         {
 
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city"
+          Address = new AddressDto
+          {
+            AddressLine1 = "test street 5",
+            AddressLine2 = "1234 test city"
+          }
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
+      var handler = new CreateClientCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
 
       var result = await handler.Handle(command, CancellationToken.None);
 
       var entity = (Client) Context.Users.Find(result);
 
       entity.Should().NotBeNull();
-      entity.Email.Should().Be(command.account.Email);
-      entity.Name.Should().Be(command.account.Name);
-      entity.Tel.Should().Be(command.account.Tel);
-      entity.CVRNumber.Should().Be(command.account.CVRNumber);
+      entity.Email.Should().Be(command.ClientDto.Email);
+      entity.Name.Should().Be(command.ClientDto.Name);
+      entity.Tel.Should().Be(command.ClientDto.Tel);
+      entity.CVRNumber.Should().Be(command.ClientDto.CVRNumber);
       entity.Address.Should().NotBeNull();
       entity.Address.ClientId.Should().Be(entity.Id);
     }
@@ -49,35 +53,41 @@ namespace Application.UnitTests.Users.Commands.CreateClient
     [Fact]
     public async Task Handle_ShouldFailAccountEmail()
     {
-      var command1 = new CreateAccountCommand
+      var command1 = new CreateClientCommand
       {
-        account = new CreateAccountDto()
+        ClientDto = new ClientDto
         {
 
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city"
+          Address = new AddressDto
+          {
+            AddressLine1 = "test street 5",
+            AddressLine2 = "1234 test city"
+          }
         }
       };
 
-      var command2 = new CreateAccountCommand
+      var command2 = new CreateClientCommand
       {
-        account = new CreateAccountDto()
+        ClientDto = new ClientDto
         {
 
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "43546578",
-          AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city"
+          Address =
+          {
+            AddressLine1 = "test street 5",
+            AddressLine2 = "1234 test city"
+          }
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
+      var handler = new CreateClientCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
       await handler.Handle(command1, CancellationToken.None);
 
       Func<Task> action = async () => await handler.Handle(command2, CancellationToken.None);
@@ -87,35 +97,40 @@ namespace Application.UnitTests.Users.Commands.CreateClient
     [Fact]
     public async Task Handle_ShouldFailAccountCVR()
     {
-      var command1 = new CreateAccountCommand
+      var command1 = new CreateClientCommand
       {
-        account = new CreateAccountDto()
+        ClientDto = new ClientDto
         {
 
           Email = "test@test.dk",
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city"
+          Address =
+          {
+            AddressLine1 = "test street 5",
+            AddressLine2 = "1234 test city"
+          }
         }
       };
 
-      var command2 = new CreateAccountCommand
+      var command2 = new CreateClientCommand
       {
-        account = new CreateAccountDto()
+        ClientDto = new ClientDto
         {
-
           Email = "test2@test.dk",
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          AddressLine1 = "test street 5",
-          AddressLine2 = "1234 test city"
+          Address =
+          {
+            AddressLine1 = "test street 5",
+            AddressLine2 = "1234 test city"
+          }
         }
       };
 
-      var handler = new CreateAccountCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
+      var handler = new CreateClientCommand.CreateAccountCommandHandler(Context, PasswordHasherMock.Object, TokenServiceMock.Object, MailServiceMock.Object, AccessorMock.Object, BackGroundJobClientMock.Object);
       await handler.Handle(command1, CancellationToken.None);
 
       Func<Task> action = async () => await handler.Handle(command2, CancellationToken.None);

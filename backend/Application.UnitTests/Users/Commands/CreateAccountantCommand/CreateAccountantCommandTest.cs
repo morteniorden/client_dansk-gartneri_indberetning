@@ -18,11 +18,12 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        AccountantDto = new ClientDto()
+        StatementId = 1,
+        AccountantDto = new AccountantDto()
         {
-
           Name = "test name",
           Email = "test@test.dk",
+          AccountantType = AccountantType.Accountant
         }
       };
 
@@ -30,11 +31,16 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
 
       var result = await handler.Handle(command, CancellationToken.None);
 
-      var entity = (Accountant)Context.Users.Find(result);
+      var accountant = (Accountant) Context.Users.Find(result);
 
-      entity.Should().NotBeNull();
-      entity.Name.Should().Be(command.AccountantDto.Name);
-      entity.Email.Should().Be(command.AccountantDto.Email);
+      accountant.Should().NotBeNull();
+      accountant.Name.Should().Be(command.AccountantDto.Name);
+      accountant.Email.Should().Be(command.AccountantDto.Email);
+      accountant.AccountantType.Should().Be(command.AccountantDto.AccountantType);
+
+      var statement = Context.Statements.Find(1);
+      statement.Accountant.Should().Be(accountant);
+      statement.AccountantId.Should().Be(accountant.Id);
     }
 
     [Fact]
@@ -42,11 +48,13 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        AccountantDto = new ClientDto()
+        StatementId = 1,
+        AccountantDto = new AccountantDto()
         {
 
           Name = "test name",
           Email = "test1@test1.dk", //Already used by an account and user defined in ApplicationDbContextFactory
+          AccountantType = AccountantType.Accountant
         }
       };
 

@@ -8,8 +8,6 @@ namespace Infrastructure.Persistence.Configurations
   {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-      builder.HasKey(e => e.Id);
-
       builder.Property(e => e.Name)
         .HasMaxLength(200)
         .IsRequired();
