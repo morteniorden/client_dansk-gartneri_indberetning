@@ -1,10 +1,10 @@
 import { createContext, Dispatch } from "react";
 import { AllListActions } from "react-list-reducer";
-import { IAccountDto } from "services/backend/nswagts";
+import { IClientDto } from "services/backend/nswagts";
 
 type ContextType = {
-  accounts: IAccountDto[];
-  dispatchAccounts: Dispatch<AllListActions<IAccountDto>>;
+  accounts: IClientDto[];
+  dispatchAccounts: Dispatch<AllListActions<IClientDto>>;
   fetchData: () => Promise<void>;
   isFetching: boolean;
 };

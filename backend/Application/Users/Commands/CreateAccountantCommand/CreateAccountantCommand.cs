@@ -75,7 +75,6 @@ namespace Application.Users.Commands.CreateAccountantCommand
         //If the accountant doesn't exists, create a new one
         var accountantEntity = new Accountant
         {
-          Id = request.AccountantDto.Id,
           Name = request.AccountantDto.Name,
           Email = request.AccountantDto.Email,
           Role = RoleEnum.Accountant,

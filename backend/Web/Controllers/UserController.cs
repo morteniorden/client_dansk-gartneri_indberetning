@@ -8,12 +8,20 @@ using Application.Users.Commands.CreateAccountantCommand;
 using Application.Users.Commands.DeactivateUserCommand;
 using Application.Users.Commands.UpdateUserCommand;
 using Application.Users.Queries.GetAdminsQuery;
+using Application.Users.Queries.GetClientsQuery;
 
 namespace Web.Controllers
 {
 
   public class UserController : ApiControllerBase
   {
+    [HttpGet("clients")]
+    public async Task<ActionResult<List<ClientDto>>> GetAllClients()
+    {
+      return await Mediator.Send(new GetClientsQuery());
+    }
+
+
     [HttpGet("admins")]
     public async Task<ActionResult<List<UserDto>>> GetAllAdmins()
     {

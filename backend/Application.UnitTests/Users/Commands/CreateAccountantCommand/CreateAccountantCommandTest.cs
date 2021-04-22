@@ -21,7 +21,6 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
         StatementId = 1,
         AccountantDto = new AccountantDto
         {
-          Id = 7,
           Name = "test name",
           Email = "test@test.dk",
           AccountantType = AccountantType.Accountant
@@ -52,7 +51,6 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
         StatementId = 1,
         AccountantDto = new AccountantDto()
         {
-          Id = 7,
           Name = "test name",
           Email = "test1@test1.dk", //Already used by an account and user defined in ApplicationDbContextFactory
           AccountantType = AccountantType.Accountant

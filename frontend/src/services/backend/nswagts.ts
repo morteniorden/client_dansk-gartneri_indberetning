@@ -1018,6 +1018,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
 }
 
 export interface IUserClient {
+    getAllClients(): Promise<ClientDto[]>;
     getAllAdmins(): Promise<UserDto[]>;
     createAndAddAccountant(command: CreateAccountantCommand): Promise<number>;
     updateUser(id: number, command: UpdateUserCommand): Promise<FileResponse>;
@@ -1035,6 +1036,46 @@ export class UserClient extends ClientBase implements IUserClient {
         super(configuration);
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getAllClients(): Promise<ClientDto[]> {
+        let url_ = this.baseUrl + "/api/User/clients";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllClients(_response));
+        });
+    }
+
+    protected processGetAllClients(response: Response): Promise<ClientDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ClientDto.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ClientDto[]>(<any>null);
     }
 
     getAllAdmins(): Promise<UserDto[]> {
@@ -2236,6 +2277,7 @@ export class Statement extends AuditableEntity implements IStatement {
     client?: Client | null;
     accountantId?: number | null;
     accountant?: Accountant | null;
+    accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;
@@ -2277,6 +2319,7 @@ export class Statement extends AuditableEntity implements IStatement {
             this.client = _data["client"] ? Client.fromJS(_data["client"]) : <any>null;
             this.accountantId = _data["accountantId"] !== undefined ? _data["accountantId"] : <any>null;
             this.accountant = _data["accountant"] ? Accountant.fromJS(_data["accountant"]) : <any>null;
+            this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
@@ -2318,6 +2361,7 @@ export class Statement extends AuditableEntity implements IStatement {
         data["client"] = this.client ? this.client.toJSON() : <any>null;
         data["accountantId"] = this.accountantId !== undefined ? this.accountantId : <any>null;
         data["accountant"] = this.accountant ? this.accountant.toJSON() : <any>null;
+        data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
@@ -2353,6 +2397,7 @@ export interface IStatement extends IAuditableEntity {
     client?: IClient | null;
     accountantId?: number | null;
     accountant?: IAccountant | null;
+    accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;
@@ -2550,6 +2595,117 @@ export class CSVResponseDto implements ICSVResponseDto {
 export interface ICSVResponseDto {
     fileName?: string | null;
     content?: string | null;
+}
+
+export class ClientDto extends UserDto implements IClientDto {
+    tel?: string | null;
+    address?: AddressDto | null;
+    cvrNumber?: string | null;
+    statements?: StatementDto[] | null;
+
+    constructor(data?: IClientDto) {
+        super(data);
+        if (data) {
+            this.address = data.address && !(<any>data.address).toJSON ? new AddressDto(data.address) : <AddressDto>this.address; 
+            if (data.statements) {
+                this.statements = [];
+                for (let i = 0; i < data.statements.length; i++) {
+                    let item = data.statements[i];
+                    this.statements[i] = item && !(<any>item).toJSON ? new StatementDto(item) : <StatementDto>item;
+                }
+            }
+        }
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.tel = _data["tel"] !== undefined ? _data["tel"] : <any>null;
+            this.address = _data["address"] ? AddressDto.fromJS(_data["address"]) : <any>null;
+            this.cvrNumber = _data["cvrNumber"] !== undefined ? _data["cvrNumber"] : <any>null;
+            if (Array.isArray(_data["statements"])) {
+                this.statements = [] as any;
+                for (let item of _data["statements"])
+                    this.statements!.push(StatementDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ClientDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClientDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tel"] = this.tel !== undefined ? this.tel : <any>null;
+        data["address"] = this.address ? this.address.toJSON() : <any>null;
+        data["cvrNumber"] = this.cvrNumber !== undefined ? this.cvrNumber : <any>null;
+        if (Array.isArray(this.statements)) {
+            data["statements"] = [];
+            for (let item of this.statements)
+                data["statements"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IClientDto extends IUserDto {
+    tel?: string | null;
+    address?: IAddressDto | null;
+    cvrNumber?: string | null;
+    statements?: IStatementDto[] | null;
+}
+
+export class AddressDto implements IAddressDto {
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
+
+    constructor(data?: IAddressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
+            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
+            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
+            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AddressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
+        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
+        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
+        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
+        return data; 
+    }
+}
+
+export interface IAddressDto {
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {

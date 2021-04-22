@@ -8,9 +8,6 @@ namespace Infrastructure.Persistence.Configurations
   {
     public void Configure(EntityTypeBuilder<Accountant> builder)
     {
-      builder.Property(e => e.AccountantType)
-        .IsRequired(true);
-
       builder.HasMany<Statement>(e => e.Statements)
         .WithOne(e => e.Accountant)
         .HasForeignKey(e => e.AccountantId)
