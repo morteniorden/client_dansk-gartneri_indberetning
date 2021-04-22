@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Application.Users;
 using Application.Users.Commands.UpdatePassword;
 using System.Collections.Generic;
+using Application.Accounts.Queries.GetCurrentAccountQuery;
 using Application.Users.Commands.CreateAccountantCommand;
+using Application.Users.Commands.CreateClientCommand;
 using Application.Users.Commands.DeactivateUserCommand;
 using Application.Users.Commands.UpdateUserCommand;
 using Application.Users.Queries.GetAdminsQuery;
@@ -15,10 +17,22 @@ namespace Web.Controllers
 
   public class UserController : ApiControllerBase
   {
+    [HttpGet("currentUser")]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    {
+      return await Mediator.Send(new GetCurrentUserQuery());
+    }
+
     [HttpGet("clients")]
     public async Task<ActionResult<List<ClientDto>>> GetAllClients()
     {
       return await Mediator.Send(new GetClientsQuery());
+    }
+
+    [HttpPost("clients")]
+    public async Task<ActionResult<int>> CreateClient([FromBody] CreateClientCommand command)
+    {
+      return await Mediator.Send(command);
     }
 
 

@@ -1018,7 +1018,9 @@ export class StatementClient extends ClientBase implements IStatementClient {
 }
 
 export interface IUserClient {
+    getCurrentUser(): Promise<UserDto>;
     getAllClients(): Promise<ClientDto[]>;
+    createClient(command: CreateClientCommand): Promise<number>;
     getAllAdmins(): Promise<UserDto[]>;
     createAndAddAccountant(command: CreateAccountantCommand): Promise<number>;
     updateUser(id: number, command: UpdateUserCommand): Promise<FileResponse>;
@@ -1036,6 +1038,42 @@ export class UserClient extends ClientBase implements IUserClient {
         super(configuration);
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getCurrentUser(): Promise<UserDto> {
+        let url_ = this.baseUrl + "/api/User/currentUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetCurrentUser(_response));
+        });
+    }
+
+    protected processGetCurrentUser(response: Response): Promise<UserDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserDto>(<any>null);
     }
 
     getAllClients(): Promise<ClientDto[]> {
@@ -1076,6 +1114,46 @@ export class UserClient extends ClientBase implements IUserClient {
             });
         }
         return Promise.resolve<ClientDto[]>(<any>null);
+    }
+
+    createClient(command: CreateClientCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/User/clients";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateClient(_response));
+        });
+    }
+
+    protected processCreateClient(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
     }
 
     getAllAdmins(): Promise<UserDto[]> {
@@ -2706,6 +2784,43 @@ export interface IAddressDto {
     addressLine2?: string | null;
     addressLine3?: string | null;
     addressLine4?: string | null;
+}
+
+export class CreateClientCommand implements ICreateClientCommand {
+    clientDto?: ClientDto | null;
+
+    constructor(data?: ICreateClientCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.clientDto = data.clientDto && !(<any>data.clientDto).toJSON ? new ClientDto(data.clientDto) : <ClientDto>this.clientDto; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.clientDto = _data["clientDto"] ? ClientDto.fromJS(_data["clientDto"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateClientCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateClientCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["clientDto"] = this.clientDto ? this.clientDto.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateClientCommand {
+    clientDto?: IClientDto | null;
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {

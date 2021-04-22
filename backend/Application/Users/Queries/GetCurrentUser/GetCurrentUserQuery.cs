@@ -9,36 +9,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Security;
+using Application.Users;
 using Domain.Enums;
 
 namespace Application.Accounts.Queries.GetCurrentAccountQuery
 {
   [Authenticated]
-  public class GetCurrentAccountQuery : IRequest<AccountDto>
+  public class GetCurrentUserQuery : IRequest<UserDto>
   {
-    public class GetCurrentAccountQueryHandler : IRequestHandler<GetCurrentAccountQuery, AccountDto>
+    public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserDto>
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUserService;
       private readonly IMapper _mapper;
 
-      public GetCurrentAccountQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IMapper mapper)
+      public GetCurrentUserQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IMapper mapper)
       {
         _context = context;
        _currentUserService = currentUserService;
         _mapper = mapper;
       }
-      public async Task<AccountDto> Handle(GetCurrentAccountQuery request, CancellationToken cancellationToken)
+      public async Task<UserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
       {
-        /*
-        var viewmodel = await _context.Accounts
-          .Include(a => a.Users)
-          .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
-          .FirstOrDefaultAsync(a => a.Users.Any(u => u.Email == _currentUserService.UserId));
+        var viewmodel = await _context.Users
+          .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+          .FirstOrDefaultAsync(e => e.Email == _currentUserService.UserId);
 
         return viewmodel;
-        */
-        return null;
       }
     }
   }

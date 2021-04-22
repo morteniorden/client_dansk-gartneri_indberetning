@@ -8,29 +8,29 @@ import {
   Stack,
   useToast
 } from "@chakra-ui/react";
-import { AccountsContext } from "contexts/AccountsContext";
+import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
 import {
+  AccountantDto,
   CreateAccountantCommand,
-  IAccountDto,
-  RoleEnum,
-  UserAccountIdDto
+  IClientDto,
+  RoleEnum
 } from "services/backend/nswagts";
 
 interface Props {
-  account: IAccountDto;
+  client: IClientDto;
   onSubmit?: (success: boolean) => void;
 }
 
-const AddNewAccountantForm: FC<Props> = ({ account, onSubmit }) => {
+const AddNewAccountantForm: FC<Props> = ({ client: account, onSubmit }) => {
   const { t } = useLocales();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [formDisabled, setFormDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { accounts } = useContext(AccountsContext);
+  const { clients } = useContext(ClientsContext);
   const toast = useToast();
 
   const handleSubmit = useCallback(
@@ -38,14 +38,12 @@ const AddNewAccountantForm: FC<Props> = ({ account, onSubmit }) => {
       e.preventDefault();
       setLoading(true);
 
-      const accountantDto = new UserAccountIdDto({
+      const accountantDto = new AccountantDto({
         id: 1,
-        accountId: account.id,
         name: name,
         email: email,
         role: RoleEnum.Accountant
       });
-      accountantDto.accountId = account.id;
 
       try {
         const userClient = await genUserClient();
@@ -63,34 +61,25 @@ const AddNewAccountantForm: FC<Props> = ({ account, onSubmit }) => {
         });
         onSubmit(true);
       } catch {
-        if (accounts.some(a => a.accountant?.email == email)) {
-          toast({
-            title: t("accountant.alreadyAssignedTitle"),
-            description: t("accountant.alreadyAssignedText"),
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom-left"
-          });
-        } else {
-          toast({
-            title: t("accountant.addErrorTitle"),
-            description: t("accountant.addErrorText"),
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom-left"
-          });
-        }
+        toast({
+          title: t("accountant.addErrorTitle"),
+          description: t("accountant.addErrorText"),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
       }
       setLoading(false);
     },
-    [name, email, accounts]
+    [name, email, clients]
   );
 
+  /*
   useEffect(() => {
     setFormDisabled(account.accountant != null || loading);
   }, [loading, account.accountant]);
+  */
 
   return (
     <form onSubmit={handleSubmit}>

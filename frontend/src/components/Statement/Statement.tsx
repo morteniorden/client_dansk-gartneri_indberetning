@@ -118,7 +118,7 @@ const Statement: FC<Props> = ({ id }) => {
             <Stack spacing={5}>
               <Heading>{t("statements.editStatementHeading")}</Heading>
               <Heading size="sm">{`${t("statements.accountingYear")}: ${
-                statement.revisionYear
+                statement.accountingYear
               }`}</Heading>
               <StatementForm />
             </Stack>

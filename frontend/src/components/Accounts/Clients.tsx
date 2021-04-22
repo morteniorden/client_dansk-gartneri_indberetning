@@ -2,12 +2,12 @@ import { Box, Button, Flex, Heading, HStack, Select, Spinner, Stack, Text } from
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
-import { AccountsContext } from "contexts/AccountsContext";
+import { AccountsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
-import { genAccountClient, genStatementClient } from "services/backend/apiClients";
-import { CreateStatementCommand, IAccountDto } from "services/backend/nswagts";
+import { genStatementClient, genUserClient } from "services/backend/apiClients";
+import { CreateStatementCommand, IClientDto } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import AccountList from "./AccountList/AccountList";
@@ -19,7 +19,7 @@ import SearchFilterInput from "./SearchFilterInput";
 const Accounts: FC = () => {
   const { t } = useLocales();
 
-  const [accounts, dispatchAccounts] = useReducer(ListReducer<IAccountDto>("id"), []);
+  const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
   const [isFetching, setIsFetching] = useState(false);
   const [searchString, setSearchString] = useState<string>("");
 
@@ -38,13 +38,13 @@ const Accounts: FC = () => {
   const fetchData = useCallback(async () => {
     setIsFetching(true);
     try {
-      const accountClient = await genAccountClient();
-      const data = await accountClient.getAllAccounts();
+      const userClient = await genUserClient();
+      const data = await userClient.getAllClients();
 
       console.log(data);
 
       if (data && data.length > 0)
-        dispatchAccounts({
+        dispatchClients({
           type: ListReducerActionType.AddOrUpdate,
           data
         });
@@ -62,8 +62,8 @@ const Accounts: FC = () => {
   return (
     <AccountsContext.Provider
       value={{
-        accounts: accounts,
-        dispatchAccounts: dispatchAccounts,
+        accounts: clients,
+        dispatchAccounts: dispatchClients,
         fetchData: fetchData,
         isFetching: isFetching
       }}>
@@ -82,7 +82,7 @@ const Accounts: FC = () => {
             </HStack>
           </Flex>
           <FetchingSpinner isFetching={isFetching} text={t("accounts.fetching")} />
-          <AccountList data={accounts} accountingYear={accountingYear} />
+          <AccountList data={clients} accountingYear={accountingYear} />
         </Stack>
       </BasicLayout>
     </AccountsContext.Provider>

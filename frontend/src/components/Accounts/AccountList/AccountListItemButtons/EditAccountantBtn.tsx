@@ -3,19 +3,22 @@ import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC } from "react";
 import { MdSupervisorAccount } from "react-icons/md";
-import { IAccountDto } from "services/backend/nswagts";
+import { IClientDto } from "services/backend/nswagts";
 
 interface Props {
-  account: IAccountDto;
+  client: IClientDto;
   cb: () => void;
 }
 
-const EditAccountantBtn: FC<Props> = ({ account, cb }) => {
+const EditAccountantBtn: FC<Props> = ({ client: account, cb }) => {
   const { t } = useLocales();
   const { iconGreenColor } = useColors();
 
-  return (
-    <Tooltip label={t("accounts.tooltipEditAccountant")}>
+  return <div></div>;
+};
+export default EditAccountantBtn;
+/*
+<Tooltip label={t("accounts.tooltipEditAccountant")}>
       <IconButton
         aria-label="Edit accountant"
         color={account.accountant != null ? iconGreenColor : "auto"}
@@ -23,6 +26,4 @@ const EditAccountantBtn: FC<Props> = ({ account, cb }) => {
         icon={<MdSupervisorAccount />}
       />
     </Tooltip>
-  );
-};
-export default EditAccountantBtn;
+*/

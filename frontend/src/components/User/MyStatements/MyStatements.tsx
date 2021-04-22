@@ -18,22 +18,22 @@ import { useLocales } from "hooks/useLocales";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
-import { genAccountClient } from "services/backend/apiClients";
-import { IAccountDto, StatementStatus } from "services/backend/nswagts";
+import { genUserClient } from "services/backend/apiClients";
+import { IClientDto, StatementStatus } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 const MyStatements: FC = () => {
   const { t } = useLocales();
-  const [account, setAccount] = useState<IAccountDto>();
+  const [client, setClient] = useState<IClientDto>();
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
       setIsFetching(true);
-      const accountClient = await genAccountClient();
-      const data = await accountClient.getAccount();
+      const userClient = await genUserClient();
+      const data = await userClient.getCurrentUser();
 
-      if (data != null) setAccount(data);
+      if (data != null) setClient(data);
       else logger.info("accountclient.get no data");
     } catch (err) {
       logger.warn("accountclient.get Error", err);
@@ -70,12 +70,12 @@ const MyStatements: FC = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {account &&
-                  account.statements
-                    .sort((a, b) => b.revisionYear - a.revisionYear)
+                {client &&
+                  client.statements
+                    .sort((a, b) => b.accountingYear - a.accountingYear)
                     .map(statement => (
                       <Tr key={statement.id}>
-                        <Td>{statement.revisionYear}</Td>
+                        <Td>{statement.accountingYear}</Td>
                         <Td>{statement.status == 2 ? "Besvaret" : "Ikke besvaret"}</Td>
                         <Td>
                           {statement.status != 2 && (

@@ -1,20 +1,20 @@
 import { IconButton, Menu, MenuButton, MenuList } from "@chakra-ui/react";
 import { FC } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { IAccountDto } from "services/backend/nswagts";
+import { IClientDto } from "services/backend/nswagts";
 
 import ChangeAccountantModal from "./ChangeAccountant/ChangeAccountantModal";
 
 interface Props {
-  account: IAccountDto;
+  client: IClientDto;
 }
 
-const AccountOptionsMenu: FC<Props> = ({ account }) => {
+const AccountOptionsMenu: FC<Props> = ({ client }) => {
   return (
     <Menu>
       <MenuButton as={IconButton} icon={<BiChevronDown />} isRound={true}></MenuButton>
       <MenuList>
-        <ChangeAccountantModal account={account} />
+        <ChangeAccountantModal client={client} />
       </MenuList>
     </Menu>
   );

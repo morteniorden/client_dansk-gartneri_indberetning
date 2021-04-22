@@ -1,12 +1,12 @@
 import { Accordion } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC } from "react";
-import { IAccountDto } from "services/backend/nswagts";
+import { IClientDto } from "services/backend/nswagts";
 
 import AccountListItem from "./AccountListItem";
 
 interface Props {
-  data: IAccountDto[];
+  data: IClientDto[];
   accountingYear: number;
 }
 
@@ -15,8 +15,8 @@ const AccountList: FC<Props> = ({ data, accountingYear }) => {
 
   return (
     <Accordion allowToggle>
-      {data.map(account => (
-        <AccountListItem key={account.id} account={account} accountingYear={accountingYear} />
+      {data.map(client => (
+        <AccountListItem key={client.id} client={client} accountingYear={accountingYear} />
       ))}
     </Accordion>
   );

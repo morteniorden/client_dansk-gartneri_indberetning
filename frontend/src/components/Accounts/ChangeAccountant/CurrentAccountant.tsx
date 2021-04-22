@@ -11,21 +11,21 @@ import {
   Tr,
   useToast
 } from "@chakra-ui/react";
-import { AccountsContext } from "contexts/AccountsContext";
+import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import React, { FC, useCallback, useContext } from "react";
 import { BiX } from "react-icons/bi";
 import { genUserClient } from "services/backend/apiClients";
-import { IUserAccountIdDto } from "services/backend/nswagts";
+import { IAccountantDto } from "services/backend/nswagts";
 
 interface Props {
-  accountant: IUserAccountIdDto;
+  accountant: IAccountantDto;
 }
 
 const CurrentAccountant: FC<Props> = ({ accountant }) => {
   const { t } = useLocales();
   const toast = useToast();
-  const { fetchData, isFetching } = useContext(AccountsContext);
+  const { fetchData, isFetching } = useContext(ClientsContext);
 
   const handleDelete = useCallback(
     async (e: React.MouseEvent) => {
