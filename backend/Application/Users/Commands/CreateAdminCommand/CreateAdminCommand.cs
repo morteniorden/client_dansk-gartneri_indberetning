@@ -29,14 +29,12 @@ namespace Application.Accounts.Commands.CreateAdmin
       {
         var userEntity = new Admin
         {
-          Id = 1,
           Email = request.Admin.Email,
           Password = _passwordHasher.Hash(request.Admin.Password),
-          Role = RoleEnum.Admin,
           Name = request.Admin.Name
         };
 
-        _context.Users.Add(userEntity);
+        _context.Admins.Add(userEntity);
         await _context.SaveChangesAsync(cancellationToken);
       
         return userEntity.Id;

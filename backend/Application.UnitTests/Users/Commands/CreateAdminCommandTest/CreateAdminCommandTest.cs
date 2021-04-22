@@ -14,13 +14,12 @@ namespace Application.UnitTests.Users.Commands.CreateAdmin
   public class CreateAdminCommandTest : CommandTestBase
   {
     [Fact]
-    public async Task Handle_ShouldPersistAccount()
+    public async Task Handle_ShouldPersistAdmin()
     {
       var command = new CreateAdminCommand
       {
         Admin = new CreateAdminDto()
         {
-
           Email = "admin@admin.dk",
           Password = "Password123",
           Name = "admin"

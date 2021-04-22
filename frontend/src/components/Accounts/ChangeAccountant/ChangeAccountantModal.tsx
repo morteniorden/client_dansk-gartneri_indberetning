@@ -46,7 +46,7 @@ const ChangeAccountantModal: FC<Props> = ({ client, onSubmit }) => {
           <ModalBody>
             <Stack spacing={5}>
               <Heading size="sm">{t("accounts.accountant")}:</Heading>
-              <CurrentAccountant accountant={client.accountant} />
+              {/* <CurrentAccountant accountant={client.accountant} /> */}
               <Divider />
               <Heading size="md">{t("accountant.addAccountant")}</Heading>
               <AddNewAccountantForm client={client} onSubmit={fetchData} />

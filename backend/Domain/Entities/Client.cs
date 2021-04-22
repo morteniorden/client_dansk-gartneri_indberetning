@@ -12,5 +12,6 @@ namespace Domain.Entities
     public virtual Address? Address { get; set; }
     public string CVRNumber { get; set; }
     public virtual ICollection<Statement> Statements { get; set; }
+    public override RoleEnum Role { get; set; } = RoleEnum.Client;
   }
 }

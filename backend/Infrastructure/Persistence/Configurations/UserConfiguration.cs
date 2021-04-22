@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,6 +9,15 @@ namespace Infrastructure.Persistence.Configurations
   {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+      builder.HasKey(e => e.Id);
+
+      //builder.Property(e => e.Id).UseIdentityColumn();
+
+      builder.HasDiscriminator<RoleEnum>("Role")
+        .HasValue<Admin>(RoleEnum.Admin)
+        .HasValue<Accountant>(RoleEnum.Accountant)
+        .HasValue<Client>(RoleEnum.Client);
+
       builder.Property(e => e.Name)
         .HasMaxLength(200)
         .IsRequired();
@@ -20,6 +30,17 @@ namespace Infrastructure.Persistence.Configurations
 
       builder.Property(e => e.Role)
         .IsRequired();
+
+      //builder.HasOne<Address>(e => e.Address)
+      //  .WithOne(e => e.Client)
+      //  .IsRequired()
+      //  .OnDelete(DeleteBehavior.Cascade);
+
+      //builder.Property(e => e.Tel)
+      //  .IsRequired();
+
+      //builder.Property(e => e.CVRNumber)
+      //  .IsRequired();
     }
   }
 }

@@ -2234,6 +2234,7 @@ export class Client extends User implements IClient {
     address?: Address | null;
     cvrNumber?: string | null;
     statements?: Statement[] | null;
+    role?: RoleEnum;
 
     constructor(data?: IClient) {
         super(data);
@@ -2254,6 +2255,7 @@ export class Client extends User implements IClient {
                 for (let item of _data["statements"])
                     this.statements!.push(Statement.fromJS(item));
             }
+            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
         }
     }
 
@@ -2275,6 +2277,7 @@ export class Client extends User implements IClient {
             for (let item of this.statements)
                 data["statements"].push(item.toJSON());
         }
+        data["role"] = this.role !== undefined ? this.role : <any>null;
         super.toJSON(data);
         return data; 
     }
@@ -2286,6 +2289,7 @@ export interface IClient extends IUser {
     address?: IAddress | null;
     cvrNumber?: string | null;
     statements?: Statement[] | null;
+    role?: RoleEnum;
 }
 
 export class Address implements IAddress {
@@ -2503,6 +2507,7 @@ export interface IStatement extends IAuditableEntity {
 }
 
 export class Accountant extends User implements IAccountant {
+    role?: RoleEnum;
     accountantType?: AccountantType;
     statements?: Statement[] | null;
 
@@ -2513,6 +2518,7 @@ export class Accountant extends User implements IAccountant {
     init(_data?: any) {
         super.init(_data);
         if (_data) {
+            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
             this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             if (Array.isArray(_data["statements"])) {
                 this.statements = [] as any;
@@ -2531,6 +2537,7 @@ export class Accountant extends User implements IAccountant {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["role"] = this.role !== undefined ? this.role : <any>null;
         data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         if (Array.isArray(this.statements)) {
             data["statements"] = [];
@@ -2543,6 +2550,7 @@ export class Accountant extends User implements IAccountant {
 }
 
 export interface IAccountant extends IUser {
+    role?: RoleEnum;
     accountantType?: AccountantType;
     statements?: Statement[] | null;
 }
