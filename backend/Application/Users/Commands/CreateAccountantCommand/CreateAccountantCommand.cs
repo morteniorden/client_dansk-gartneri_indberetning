@@ -75,18 +75,17 @@ namespace Application.Users.Commands.CreateAccountantCommand
         //If the accountant doesn't exists, create a new one
         var accountantEntity = new Accountant
         {
-          Id = 0,
+          Id = request.AccountantDto.Id,
           Name = request.AccountantDto.Name,
           Email = request.AccountantDto.Email,
           Role = RoleEnum.Accountant,
           AccountantType = request.AccountantDto.AccountantType
         };
-        statement.Accountant = accountantEntity;
+
         statement.AccountantId = accountantEntity.Id;
+        statement.Accountant = accountantEntity;
 
-
-        await _context.Users.AddAsync(accountantEntity, cancellationToken);
-
+        _context.Users.Add(accountantEntity);
 
         await _context.SaveChangesAsync(cancellationToken);
 

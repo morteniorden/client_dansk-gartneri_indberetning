@@ -20,7 +20,7 @@ namespace Application.Statements
     [DisplayName("CVR")]
     public string ClientCVR { get; set; }
     [DisplayName("Revisor/Konsulent")]
-    public string AccountantName { get; set; }
+    public string? AccountantName { get; set; }
     [DisplayName("Revisionsår")]
     public int AccountingYear { get; set; }
 

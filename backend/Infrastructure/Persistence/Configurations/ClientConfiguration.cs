@@ -21,7 +21,9 @@ namespace Infrastructure.Persistence.Configurations
 
       builder.HasMany<Statement>(e => e.Statements)
         .WithOne(e => e.Client)
-        .HasForeignKey(e => e.ClientId);
+        .HasForeignKey(e => e.ClientId)
+        .IsRequired(false)
+        .OnDelete(DeleteBehavior.NoAction);
     }
   }
 }

@@ -5,6 +5,7 @@ using Application.Common.Interfaces;
 using Application.Common.Options;
 using Application.Security;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
 using Web.Options;
@@ -44,7 +45,8 @@ namespace Web.Services
         {
           Name = "SuperAdmin",
           Email = email,
-          Password = pass
+          Password = pass,
+          Role = RoleEnum.Admin
         };
         _context.Users.Add(superUser);
       } else

@@ -68,8 +68,8 @@ namespace Application.UnitTests
       );
 
       context.Statements.AddRange(
-        new Statement { Id = 1, AccountingYear = 2021},
-        new Statement { Id = 2, AccountingYear = 2022 }
+        new Statement { Id = 1, AccountingYear = 2021, ClientId = 1},
+        new Statement { Id = 2, AccountingYear = 2022, ClientId = 3}
         );
 
       context.SaveChanges();

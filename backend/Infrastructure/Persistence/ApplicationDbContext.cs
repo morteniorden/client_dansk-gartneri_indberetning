@@ -22,6 +22,9 @@ namespace Infrastructure.Persistence
       _dateTimeOffsetService = dateTimeOffset;
     }
     public DbSet<User> Users { get; set; }
+    public DbSet<Client> Clients { get; set; }
+    public DbSet<Accountant> Accountants { get; set; }
+    public DbSet<Admin> Admins { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Email> Emails { get; set; }
     public DbSet<Statement> Statements { get; set; }

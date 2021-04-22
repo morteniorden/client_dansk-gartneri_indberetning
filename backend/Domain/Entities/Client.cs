@@ -9,7 +9,7 @@ namespace Domain.Entities
   {
     public string Tel { get; set; }
     public int? AddressId { get; set; }
-    public virtual Address Address { get; set; }
+    public virtual Address? Address { get; set; }
     public string CVRNumber { get; set; }
     public virtual ICollection<Statement> Statements { get; set; }
   }

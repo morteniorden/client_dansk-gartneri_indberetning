@@ -1860,7 +1860,7 @@ export class StatementDto implements IStatementDto {
     id?: number;
     clientId?: number;
     client?: Client | null;
-    accountantId?: number;
+    accountantId?: number | null;
     accountant?: Accountant | null;
     accountingYear?: number;
     status?: StatementStatus;
@@ -1978,7 +1978,7 @@ export interface IStatementDto {
     id?: number;
     clientId?: number;
     client?: IClient | null;
-    accountantId?: number;
+    accountantId?: number | null;
     accountant?: IAccountant | null;
     accountingYear?: number;
     status?: StatementStatus;
@@ -2234,7 +2234,7 @@ export class Statement extends AuditableEntity implements IStatement {
     id?: number;
     clientId?: number;
     client?: Client | null;
-    accountantId?: number;
+    accountantId?: number | null;
     accountant?: Accountant | null;
     accountingYear?: number;
     status?: StatementStatus;
@@ -2351,7 +2351,7 @@ export interface IStatement extends IAuditableEntity {
     id?: number;
     clientId?: number;
     client?: IClient | null;
-    accountantId?: number;
+    accountantId?: number | null;
     accountant?: IAccountant | null;
     accountingYear?: number;
     status?: StatementStatus;

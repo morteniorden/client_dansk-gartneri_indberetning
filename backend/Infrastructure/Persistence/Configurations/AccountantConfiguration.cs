@@ -13,8 +13,9 @@ namespace Infrastructure.Persistence.Configurations
 
       builder.HasMany<Statement>(e => e.Statements)
         .WithOne(e => e.Accountant)
-        .HasForeignKey(e => e.AccountantId);
-      //.IsRequired(false);
+        .HasForeignKey(e => e.AccountantId)
+        .IsRequired(false)
+        .OnDelete(DeleteBehavior.NoAction);
     }
   }
 }
