@@ -212,5 +212,13 @@ export interface Locale {
       currant: string;
       strawberry: string;
     };
+    accountantSection: {
+      heading: string;
+      helpText: string;
+      downloadPdf: string;
+      dragAndDrop: string;
+      dropFile: string;
+      signAndApprove: string;
+    };
   };
 }

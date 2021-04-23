@@ -218,6 +218,15 @@ export const table: Locale = {
       plum: "Blommer",
       currant: "Ribs",
       strawberry: "Jordbær"
+    },
+    accountantSection: {
+      heading: "Sektion for revisor",
+      helpText:
+        "Før oplysningsskemaet kan signeres som godkendt, skal følgende erklæring downloades, udfyldes og uploades herunder.",
+      downloadPdf: "Hent erklæring",
+      dragAndDrop: "Træk og slip PDF med udfyldt erklæring her, eller klik for at vælge fil...",
+      dropFile: "Slip din fil her...",
+      signAndApprove: "Signér og godkend"
     }
   }
 };

@@ -1,29 +1,39 @@
-import { Box, Button, Heading, HStack, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, HStack, Stack, Text } from "@chakra-ui/react";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import { FC } from "react";
+import { FC, useCallback, useState } from "react";
 import { FiDownload } from "react-icons/fi";
+
+import DropZone from "./Dropzone";
 
 const AccountantSection: FC = () => {
   const { t } = useLocales();
   const { boxBorder } = useColors();
+  const [file, setFile] = useState<File>(null);
+
+  const onSubmit = useCallback(() => {
+    console.log(file);
+  }, [file]);
 
   return (
     <Box shadow="sm" p={10} border="1px" borderColor={boxBorder} rounded="md">
-      <Stack>
-        <Heading size="md" mb={3}>
-          Sektion for revisor
-        </Heading>
-        <Text>
-          Før oplysningsskemaet kan signeres som godkendt, skal følgende erklæring downloades,
-          udfyldes og uploades herunder.
-        </Text>
-        <HStack>
-          <FiDownload />
-          <Button variant="link" w="min">
-            Hent erklæring
+      <Stack spacing={5}>
+        <Heading size="md">{t("statements.accountantSection.heading")}</Heading>
+        <Text>{t("statements.accountantSection.helpText")}</Text>
+        <Center>
+          <HStack>
+            <FiDownload />
+            <Button variant="link" w="min" colorScheme="green">
+              {t("statements.accountantSection.downloadPdf")}
+            </Button>
+          </HStack>
+        </Center>
+        <DropZone file={file} setFile={setFile} />
+        <Center>
+          <Button colorScheme="green" onClick={onSubmit} disabled={file == null}>
+            {t("statements.accountantSection.signAndApprove")}
           </Button>
-        </HStack>
+        </Center>
       </Stack>
     </Box>
   );

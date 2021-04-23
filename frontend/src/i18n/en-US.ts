@@ -220,6 +220,15 @@ export const table: Locale = {
       plum: "Blommer",
       currant: "Ribs",
       strawberry: "Jordbær"
+    },
+    accountantSection: {
+      heading: "Section for accountant or consultant",
+      helpText:
+        "Please download and fill out the following statement PDF. Upload it here to before signing off.",
+      downloadPdf: "Download statement",
+      dragAndDrop: "Drag and drop PDF with statement here, or click to choose file...",
+      dropFile: "Drop your file here...",
+      signAndApprove: "Sign-off and approve"
     }
   }
 };
