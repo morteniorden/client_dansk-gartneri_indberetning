@@ -2,7 +2,7 @@ import { Box, Button, Flex, Heading, HStack, Select, Spinner, Stack, Text } from
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
-import { AccountsContext } from "contexts/ClientsContext";
+import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
@@ -60,9 +60,9 @@ const Accounts: FC = () => {
   }, [fetchData]);
 
   return (
-    <AccountsContext.Provider
+    <ClientsContext.Provider
       value={{
-        accounts: clients,
+        clients: clients,
         dispatchAccounts: dispatchClients,
         fetchData: fetchData,
         isFetching: isFetching
@@ -85,7 +85,7 @@ const Accounts: FC = () => {
           <AccountList data={clients} accountingYear={accountingYear} />
         </Stack>
       </BasicLayout>
-    </AccountsContext.Provider>
+    </ClientsContext.Provider>
   );
 };
 export default Accounts;

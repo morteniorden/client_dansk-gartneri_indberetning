@@ -6,7 +6,7 @@ import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, UpdateStatementCommand } from "services/backend/nswagts";
+import { IStatementDto, StatementDto, UpdateStatementCommand } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementForm from "./StatementForm";
@@ -19,10 +19,13 @@ const Statement: FC<Props> = ({ id }) => {
   const { t } = useLocales();
   const router = useRouter();
   const toast = useToast();
-  const [statement, setStatement] = useState<IStatementDto>(null);
+  //const [statement, setStatement] = useState<IStatementDto>(null);
+  const [statement, setStatement] = useState<IStatementDto>(new StatementDto());
   const [isSaving, setIsSaving] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   const fetchData = useCallback(async () => {
+    setIsFetching(true);
     try {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
@@ -30,12 +33,13 @@ const Statement: FC<Props> = ({ id }) => {
       if (data != null) setStatement(data);
       else {
         logger.info("statementClient.get no data");
-        router.push("/mystatements");
+        //router.push("/mystatements");
       }
     } catch (err) {
       logger.warn("statementClient.get Error", err);
       router.push("mystatements");
     }
+    setIsFetching(false);
   }, [id]);
 
   useEffect(() => {
@@ -112,7 +116,9 @@ const Statement: FC<Props> = ({ id }) => {
             save: onSaveChanges,
             isSaving: isSaving,
             submit: onSubmit,
-            disabled: false
+            disabled: false,
+            fetchData: fetchData,
+            isFetching: isFetching
           }}>
           <BasicLayout variant="statementHeader" maxW="1000px">
             <Stack spacing={5}>

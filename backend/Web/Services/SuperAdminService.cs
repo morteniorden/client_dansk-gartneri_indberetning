@@ -48,14 +48,14 @@ namespace Web.Services
           Password = pass,
           Role = RoleEnum.Admin
         };
-        _context.Users.Add(superUser);
+        //_context.Users.Add(superUser);
       } else
       {
         superUser.Password = pass;
-        _context.Users.Update(superUser);
+        //_context.Users.Update(superUser);
       }
 
-      _context.SaveChanges();
+      //_context.SaveChanges();
     }
   }
 

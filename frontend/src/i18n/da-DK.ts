@@ -81,7 +81,8 @@ export const table: Locale = {
     saveSuccessText: "Dine ændringer er blevet gemt",
     saveErrorTitle: "Fejl",
     saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer.",
-    back: "Tilbage"
+    back: "Tilbage",
+    sendRequest: "Send anmodning"
   },
 
   password: {
@@ -103,7 +104,7 @@ export const table: Locale = {
 
   accountant: {
     editAccountant: "Rediger revisor",
-    addAccountant: "Tilføj ny revisor",
+    addAccountant: "Inviter revisor",
     noAccountant: "Ingen revisor",
     addSuccessTitle: "Revisor tilføjet",
     addSuccessText: "En mail med invitation til systemet er sendt til revisor.",
@@ -114,7 +115,10 @@ export const table: Locale = {
     deleteErrorTitle: "Deaktivering mislykket",
     deleteErrorText: "Der skete en fejl. Prøv eventuelt igen.",
     alreadyAssignedTitle: "Fejl",
-    alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto."
+    alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto.",
+    accountant: "Revisor",
+    consultant: "Uvildig konsulent",
+    accountantType: "Vælg revisor/konsulent:"
   },
 
   mailEditor: {
@@ -144,6 +148,11 @@ export const table: Locale = {
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
     downloadCsv: "Download CSV",
+    sendToAccountant: "Send til revisor el. konsulent",
+    sendToAccountantText1:
+      "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
+    sendToAccountantText2:
+      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Ikke inviteret",
     statusInvited: "Inviteret",

@@ -62,7 +62,7 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType): ReactElement =>
             ) : auth.authStage == AuthStage.AUTHENTICATED ? (
               <Component {...pageProps} />
             ) : (
-              <LoginPage />
+              <Component {...pageProps} />
             )}
             {/* </SignalRContext.Provider> */}
           </AuthContext.Provider>
@@ -71,5 +71,6 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType): ReactElement =>
     </main>
   );
 };
+//<LoginPage />
 
 export default MyApp;

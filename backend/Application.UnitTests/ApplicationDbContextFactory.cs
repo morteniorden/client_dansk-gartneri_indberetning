@@ -92,6 +92,11 @@ namespace Application.UnitTests
         );
 
       context.SaveChanges();
+
+      foreach (var entity in context.ChangeTracker.Entries())
+      {
+        entity.State = EntityState.Detached;
+      }
     }
 
     public static void Destroy(ApplicationDbContext context)

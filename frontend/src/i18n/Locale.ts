@@ -80,6 +80,7 @@ export interface Locale {
     saveErrorText: string;
     saveChanges: string;
     back: string;
+    sendRequest: string;
   };
 
   password: {
@@ -113,6 +114,9 @@ export interface Locale {
     deleteErrorText: string;
     alreadyAssignedTitle: string;
     alreadyAssignedText: string;
+    accountant: string;
+    consultant: string;
+    accountantType: string;
   };
 
   mailEditor: {
@@ -142,6 +146,9 @@ export interface Locale {
     confirmSignOffButton: string;
     confirmSignOffText: string;
     downloadCsv: string;
+    sendToAccountant: string;
+    sendToAccountantText1: string;
+    sendToAccountantText2: string;
 
     statusNotInvited: string;
     statusInvited: string;

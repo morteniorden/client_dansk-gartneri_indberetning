@@ -81,7 +81,8 @@ export const table: Locale = {
     saveSuccessText: "Your changes has been saved.",
     saveErrorTitle: "Error",
     saveErrorText: "An error happened when trying to save your changes.",
-    back: "Cancel"
+    back: "Cancel",
+    sendRequest: "Send request"
   },
 
   password: {
@@ -115,7 +116,10 @@ export const table: Locale = {
     deleteErrorText: "Something went wrong. Please try again later.",
     alreadyAssignedTitle: "Error",
     alreadyAssignedText:
-      "This email is used by an accountant, that is already assigned to a client."
+      "This email is used by an accountant, that is already assigned to a client.",
+    accountant: "Accountant",
+    consultant: "Consultant",
+    accountantType: "Choose accountant or consultant:"
   },
 
   mailEditor: {
@@ -146,6 +150,11 @@ export const table: Locale = {
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
     downloadCsv: "Download CSV",
+    sendToAccountant: "Send to accountant or consultant",
+    sendToAccountantText1:
+      "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
+    sendToAccountantText2:
+      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Not invited",
     statusInvited: "Invited",

@@ -18,12 +18,5 @@ const EditAccountantBtn: FC<Props> = ({ client: account, cb }) => {
 };
 export default EditAccountantBtn;
 /*
-<Tooltip label={t("accounts.tooltipEditAccountant")}>
-      <IconButton
-        aria-label="Edit accountant"
-        color={account.accountant != null ? iconGreenColor : "auto"}
-        onClick={cb}
-        icon={<MdSupervisorAccount />}
-      />
-    </Tooltip>
+
 */

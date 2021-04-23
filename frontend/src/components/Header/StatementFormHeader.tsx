@@ -1,17 +1,21 @@
 import { Button, Flex, HStack, Image, Spacer } from "@chakra-ui/react";
+import ChangeAccountantModal from "components/Statement/ChangeAccountant/ChangeAccountantModal";
 import ConfirmSignOffModal from "components/Statement/ConfirmSignOffModal/ConfirmSignoffModal";
 import { EditStatementContext } from "contexts/EditStatementContext";
+import { useAuth } from "hooks/useAuth";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useContext } from "react";
+import { RoleEnum } from "services/backend/nswagts";
 
 import HeaderButtons from "./HeaderBtns/HeaderBtns";
 import Navbar from "./Navbar";
 
 const StatementFormHeader: FC = () => {
   const { t } = useLocales();
-  const { save } = useContext(EditStatementContext);
+  const { save, statement } = useContext(EditStatementContext);
+  const { activeUser } = useAuth();
   const { headerBg } = useColors();
   const router = useRouter();
   const logoPath = router.basePath + "/images/icons/logo.svg";
@@ -31,6 +35,8 @@ const StatementFormHeader: FC = () => {
         <Button colorScheme="green" rounded="full" onClick={save}>
           {t("actions.saveChanges")}
         </Button>
+        {/* activeUser.role == RoleEnum.Client && <ChangeAccountantModal statement={statement} /> */}
+        <ChangeAccountantModal statement={statement} />
         <ConfirmSignOffModal />
       </HStack>
       <HStack display={["none", null, "flex"]}>

@@ -12,6 +12,7 @@ import {
   useToast
 } from "@chakra-ui/react";
 import { ClientsContext } from "contexts/ClientsContext";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
 import React, { FC, useCallback, useContext } from "react";
 import { BiX } from "react-icons/bi";
@@ -25,7 +26,7 @@ interface Props {
 const CurrentAccountant: FC<Props> = ({ accountant }) => {
   const { t } = useLocales();
   const toast = useToast();
-  const { fetchData, isFetching } = useContext(ClientsContext);
+  const { fetchData, isFetching } = useContext(EditStatementContext);
 
   const handleDelete = useCallback(
     async (e: React.MouseEvent) => {

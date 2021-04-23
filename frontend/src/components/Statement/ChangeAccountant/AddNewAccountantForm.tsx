@@ -4,33 +4,34 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Radio,
+  RadioGroup,
   Spinner,
   Stack,
   useToast
 } from "@chakra-ui/react";
-import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
 import {
   AccountantDto,
+  AccountantType,
   CreateAccountantCommand,
-  IClientDto,
+  IStatementDto,
   RoleEnum
 } from "services/backend/nswagts";
 
 interface Props {
-  client: IClientDto;
+  statement: IStatementDto;
   onSubmit?: (success: boolean) => void;
 }
 
-const AddNewAccountantForm: FC<Props> = ({ client: account, onSubmit }) => {
+const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
   const { t } = useLocales();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [formDisabled, setFormDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { clients } = useContext(ClientsContext);
   const toast = useToast();
 
   const handleSubmit = useCallback(
@@ -72,29 +73,32 @@ const AddNewAccountantForm: FC<Props> = ({ client: account, onSubmit }) => {
       }
       setLoading(false);
     },
-    [name, email, clients]
+    [name, email]
   );
 
-  /*
   useEffect(() => {
-    setFormDisabled(account.accountant != null || loading);
-  }, [loading, account.accountant]);
-  */
+    setFormDisabled(statement.accountant != null || loading);
+  }, [loading, statement.accountant]);
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack spacing={5}>
-        <FormControl id="name" isRequired isDisabled={formDisabled}>
-          <FormLabel htmlFor="name">{t("accounts.name")}</FormLabel>
-          <Input value={name} onChange={e => setName(e.target.value)}></Input>
+      <Stack spacing={5} maxW="sm">
+        <FormControl as="fieldset" isRequired isDisabled={formDisabled}>
+          <FormLabel as="legend">{t("accountant.accountantType")}</FormLabel>
+          <RadioGroup>
+            <Stack>
+              <Radio value="0">{t("accountant.accountant")}</Radio>
+              <Radio value="1">{t("accountant.consultant")}</Radio>
+            </Stack>
+          </RadioGroup>
         </FormControl>
         <FormControl id="email" isRequired isDisabled={formDisabled}>
           <FormLabel htmlFor="email">{t("accounts.email")}</FormLabel>
           <Input type="email" value={email} onChange={e => setEmail(e.target.value)}></Input>
         </FormControl>
-        <Flex justifyContent="flex-end" w="100%" mt={5}>
+        <Flex w="100%" mt={5}>
           <Button colorScheme="green" type="submit" disabled={formDisabled}>
-            {loading ? <Spinner /> : t("common.add")}
+            {loading ? <Spinner /> : t("actions.sendRequest")}
           </Button>
         </Flex>
       </Stack>
@@ -102,3 +106,15 @@ const AddNewAccountantForm: FC<Props> = ({ client: account, onSubmit }) => {
   );
 };
 export default AddNewAccountantForm;
+/*
+        <FormControl id="name" isRequired isDisabled={formDisabled}>
+          <FormLabel htmlFor="name">{t("accounts.name")}</FormLabel>
+          <Input value={name} onChange={e => setName(e.target.value)}></Input>
+        </FormControl>
+
+<Flex w="100%" mt={5}>
+          <Button colorScheme="green" type="submit" disabled={formDisabled}>
+            {loading ? <Spinner /> : t("actions.sendRequest")}
+          </Button>
+        </Flex>
+*/

@@ -11,6 +11,8 @@ namespace Infrastructure.Persistence.Configurations
     {
       builder.HasKey(e => e.Id);
 
+      
+
       //builder.Property(e => e.Id).UseIdentityColumn();
 
       builder.HasDiscriminator<RoleEnum>("Role")
