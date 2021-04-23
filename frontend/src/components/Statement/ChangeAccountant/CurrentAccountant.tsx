@@ -24,6 +24,8 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { genUserClient } from "services/backend/apiClients";
 import { AccountantType, IAccountantDto } from "services/backend/nswagts";
 
+import RemoveAccountantModal from "./RemoveAccountantModal";
+
 interface Props {
   accountant: IAccountantDto;
 }
@@ -34,33 +36,30 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
   const { fetchData, isFetching } = useContext(EditStatementContext);
   const { boxBorder } = useColors();
 
-  const handleDelete = useCallback(
-    async (e: React.MouseEvent) => {
-      try {
-        const userClient = await genUserClient();
-        await userClient.deactivateUser(accountant.id);
-        toast({
-          title: t("accountant.deleteSuccessTitle"),
-          description: t("accountant.deleteSuccessText"),
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left"
-        });
-        await fetchData();
-      } catch {
-        toast({
-          title: t("accountant.deleteErrorTitle"),
-          description: t("accountant.deleteErrorText"),
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left"
-        });
-      }
-    },
-    [accountant]
-  );
+  const handleDelete = useCallback(async () => {
+    try {
+      const userClient = await genUserClient();
+      await userClient.deactivateUser(accountant.id);
+      toast({
+        title: t("accountant.deleteSuccessTitle"),
+        description: t("accountant.deleteSuccessText"),
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left"
+      });
+      await fetchData();
+    } catch {
+      toast({
+        title: t("accountant.deleteErrorTitle"),
+        description: t("accountant.deleteErrorText"),
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left"
+      });
+    }
+  }, [accountant]);
 
   useEffect(() => console.log(accountant), [accountant]);
 
@@ -89,9 +88,7 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
             <Text fontSize="sm">Revisor har endnu ikke godkendt skemaet</Text>
           </Stack>
         </HStack>
-        <Button colorScheme="red" variant="outline">
-          Fjern revisor
-        </Button>
+        <RemoveAccountantModal accountant={accountant} cb={handleDelete} />
       </Flex>
     </Skeleton>
   );

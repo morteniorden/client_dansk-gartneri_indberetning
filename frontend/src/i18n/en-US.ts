@@ -76,6 +76,7 @@ export const table: Locale = {
   actions: {
     update: "Update",
     delete: "Delete",
+    remove: "Remove",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Changes saved",
     saveSuccessText: "Your changes has been saved.",
@@ -160,6 +161,13 @@ export const table: Locale = {
     statusInvited: "Invited",
     statusEdited: "Has edited",
     statusSignedOff: "Signed off",
+
+    removeAccountant: "Remove accountant",
+    removeConsultant: "Remove consultant",
+    confirmRemoveAccountant:
+      "You are about to unassign the accountant for this statement. Do you want to continue?",
+    confirmRemoveConsultant:
+      "You are about to unassign the consultant for this statement. Do you want to continue?",
 
     invitationSentSuccessTitle: "Invite sent",
     invitationSentSuccessText: "Invite to fill out statement has been sent",

@@ -76,6 +76,7 @@ export const table: Locale = {
   actions: {
     update: "Opdatér",
     delete: "Slet",
+    remove: "Fjern",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Ændringer gemt",
     saveSuccessText: "Dine ændringer er blevet gemt",
@@ -163,6 +164,13 @@ export const table: Locale = {
     invitationSentSuccessText: "Invitation til at udfylde oplysningsskema blev sendt.",
     invitationSentErrorTitle: "Invitation ikke sendt",
     invitationSentErrorText: "Der skete en fejl, da vi forsøgte at sende invitationen.",
+
+    removeAccountant: "Fjern revisor",
+    removeConsultant: "Fjern konsulent",
+    confirmRemoveAccountant:
+      "Du er ved at fjerne revisoren for dette oplysningsskema. Vil du fortsætte?",
+    confirmRemoveConsultant:
+      "Du er ved at fjerne den uvildige konsulent for dette oplysningsskema. Vil du fortsætte?",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",

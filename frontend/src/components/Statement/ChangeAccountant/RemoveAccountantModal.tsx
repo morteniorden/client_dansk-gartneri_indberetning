@@ -7,44 +7,51 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
   Text,
   useDisclosure
 } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC } from "react";
-import { IStatementDto } from "services/backend/nswagts";
-
-import AddNewAccountantForm from "./AddNewAccountantForm";
+import { AccountantType, IAccountantDto } from "services/backend/nswagts";
 
 interface Props {
-  statement: IStatementDto;
-  onSubmit?: () => Promise<void>;
+  accountant: IAccountantDto;
+  cb: () => void;
 }
 
-const RemoveAccountantModal: FC<Props> = ({ statement, onSubmit }) => {
+const RemoveAccountantModal: FC<Props> = ({ accountant, cb }) => {
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Button onClick={onOpen} colorScheme="gray" disabled={statement.accountant != null}>
-        {t("statements.sendToAccountant")}
+      <Button onClick={onOpen} colorScheme="red" variant="outline">
+        {accountant.accountantType == AccountantType.Accountant
+          ? t("statements.removeAccountant")
+          : t("statements.removeConsultant")}
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{t("statements.sendToAccountant")}</ModalHeader>
+          <ModalHeader>
+            {accountant.accountantType == AccountantType.Accountant
+              ? t("statements.removeAccountant")
+              : t("statements.removeConsultant")}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Stack spacing={5} justifyContent="center">
-              <Text>{t("statements.sendToAccountantText1")}</Text>
-              <Text>{t("statements.sendToAccountantText2")}</Text>
-              <AddNewAccountantForm statement={statement} />
-            </Stack>
+            <Text>
+              {accountant.accountantType == AccountantType.Accountant
+                ? t("statements.confirmRemoveAccountant")
+                : t("statements.confirmRemoveConsultant")}
+            </Text>
           </ModalBody>
-          <ModalFooter></ModalFooter>
+          <ModalFooter>
+            <Button onClick={e => cb()} colorScheme="red" variant="outline">
+              {t("actions.remove")}
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

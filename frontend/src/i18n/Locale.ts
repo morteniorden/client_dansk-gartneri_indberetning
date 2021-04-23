@@ -74,6 +74,7 @@ export interface Locale {
   actions: {
     update: string;
     delete: string;
+    remove: string;
     saveSuccessTitle: string;
     saveSuccessText: string;
     saveErrorTitle: string;
@@ -159,6 +160,11 @@ export interface Locale {
     invitationSentSuccessText: string;
     invitationSentErrorTitle: string;
     invitationSentErrorText: string;
+
+    removeAccountant: string;
+    removeConsultant: string;
+    confirmRemoveAccountant: string;
+    confirmRemoveConsultant: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
