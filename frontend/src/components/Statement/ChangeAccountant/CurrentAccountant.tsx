@@ -1,7 +1,11 @@
 import {
   Box,
   Button,
+  Flex,
+  Heading,
+  HStack,
   Skeleton,
+  Spacer,
   Stack,
   Table,
   Tbody,
@@ -11,13 +15,14 @@ import {
   Tr,
   useToast
 } from "@chakra-ui/react";
-import { ClientsContext } from "contexts/ClientsContext";
 import { EditStatementContext } from "contexts/EditStatementContext";
+import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import React, { FC, useCallback, useContext } from "react";
+import React, { FC, useCallback, useContext, useEffect } from "react";
 import { BiX } from "react-icons/bi";
+import { BsFillPeopleFill } from "react-icons/bs";
 import { genUserClient } from "services/backend/apiClients";
-import { IAccountantDto } from "services/backend/nswagts";
+import { AccountantType, IAccountantDto } from "services/backend/nswagts";
 
 interface Props {
   accountant: IAccountantDto;
@@ -27,6 +32,7 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
   const { t } = useLocales();
   const toast = useToast();
   const { fetchData, isFetching } = useContext(EditStatementContext);
+  const { boxBorder } = useColors();
 
   const handleDelete = useCallback(
     async (e: React.MouseEvent) => {
@@ -56,8 +62,45 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
     [accountant]
   );
 
+  useEffect(() => console.log(accountant), [accountant]);
+
   return (
     <Skeleton isLoaded={!isFetching}>
+      <Flex
+        shadow="sm"
+        p={5}
+        pl={10}
+        pr={10}
+        border="1px"
+        borderColor={boxBorder}
+        rounded="md"
+        background="orange.100"
+        justifyContent="space-between"
+        alignItems="center">
+        <HStack spacing="5">
+          <BsFillPeopleFill size="40px" />
+          <Stack spacing={0}>
+            <Heading size="sm" colorScheme="green">
+              {accountant.accountantType == AccountantType.Accountant
+                ? "Anmodning om godkendelse sendt til revisor"
+                : "Anmodning om godkendelse sendt til uvildig konsulent"}
+            </Heading>
+            <Text fontSize="sm">{`Anmodning sendt til: ${accountant.email}`}</Text>
+            <Text fontSize="sm">Revisor har endnu ikke godkendt skemaet</Text>
+          </Stack>
+        </HStack>
+        <Button colorScheme="red" variant="outline">
+          Fjern revisor
+        </Button>
+      </Flex>
+    </Skeleton>
+  );
+};
+export default CurrentAccountant;
+/*
+Revisor anmodet om godkendelse
+
+<Skeleton isLoaded={!isFetching}>
       <Stack>
         {accountant ? (
           <>
@@ -90,6 +133,4 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
         )}
       </Stack>
     </Skeleton>
-  );
-};
-export default CurrentAccountant;
+*/

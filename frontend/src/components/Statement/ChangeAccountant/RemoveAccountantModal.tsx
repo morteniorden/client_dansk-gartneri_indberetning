@@ -22,7 +22,7 @@ interface Props {
   onSubmit?: () => Promise<void>;
 }
 
-const ChangeAccountantModal: FC<Props> = ({ statement, onSubmit }) => {
+const RemoveAccountantModal: FC<Props> = ({ statement, onSubmit }) => {
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -50,10 +50,4 @@ const ChangeAccountantModal: FC<Props> = ({ statement, onSubmit }) => {
     </>
   );
 };
-export default ChangeAccountantModal;
-/*
-              <Heading size="sm">{t("accounts.accountant")}:</Heading>
-              <CurrentAccountant accountant={statement.accountant} />
-              <Divider />
-              <Heading size="md">{t("accountant.addAccountant")}</Heading>
-*/
+export default RemoveAccountantModal;

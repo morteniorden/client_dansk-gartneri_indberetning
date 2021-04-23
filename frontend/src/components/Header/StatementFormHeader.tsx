@@ -32,7 +32,7 @@ const StatementFormHeader: FC = () => {
       zIndex={100}>
       <Image src={logoPath} position="relative" pb="15px" h="60px"></Image>
       <HStack position="absolute" left="50%" transform="translateX(-50%)">
-        <Button colorScheme="green" rounded="full" onClick={save}>
+        <Button colorScheme="green" onClick={save}>
           {t("actions.saveChanges")}
         </Button>
         {/* activeUser.role == RoleEnum.Client && <ChangeAccountantModal statement={statement} /> */}

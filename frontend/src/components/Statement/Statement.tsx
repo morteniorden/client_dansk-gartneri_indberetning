@@ -6,9 +6,16 @@ import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, StatementDto, UpdateStatementCommand } from "services/backend/nswagts";
+import {
+  AccountantDto,
+  AccountantType,
+  IStatementDto,
+  StatementDto,
+  UpdateStatementCommand
+} from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
+import CurrentAccountant from "./ChangeAccountant/CurrentAccountant";
 import StatementForm from "./StatementForm";
 
 interface Props {
@@ -20,7 +27,9 @@ const Statement: FC<Props> = ({ id }) => {
   const router = useRouter();
   const toast = useToast();
   //const [statement, setStatement] = useState<IStatementDto>(null);
-  const [statement, setStatement] = useState<IStatementDto>(new StatementDto());
+  const [statement, setStatement] = useState<IStatementDto>({
+    accountant: { accountantType: 0, email: "revisor@revisor.dk" }
+  });
   const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -126,6 +135,7 @@ const Statement: FC<Props> = ({ id }) => {
               <Heading size="sm">{`${t("statements.accountingYear")}: ${
                 statement.accountingYear
               }`}</Heading>
+              {statement.accountant && <CurrentAccountant accountant={statement.accountant} />}
               <StatementForm />
             </Stack>
           </BasicLayout>
