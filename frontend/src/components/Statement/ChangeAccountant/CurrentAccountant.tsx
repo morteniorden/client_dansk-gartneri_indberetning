@@ -34,7 +34,7 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
   const { t } = useLocales();
   const toast = useToast();
   const { fetchData, isFetching } = useContext(EditStatementContext);
-  const { boxBorder } = useColors();
+  const { boxBorder, lightOrange } = useColors();
 
   const handleDelete = useCallback(async () => {
     try {
@@ -73,7 +73,7 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
         border="1px"
         borderColor={boxBorder}
         rounded="md"
-        background="orange.100"
+        background={lightOrange}
         justifyContent="space-between"
         alignItems="center">
         <HStack spacing="5">

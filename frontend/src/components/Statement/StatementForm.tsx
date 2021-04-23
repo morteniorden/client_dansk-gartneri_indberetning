@@ -5,6 +5,7 @@ import { FC, useCallback, useContext } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementDto } from "services/backend/nswagts";
 
+import AccountantSection from "./AccountantSection/AccountantSection";
 import { FormControlContext } from "./FormControlContext";
 import InputDKK from "./InputDKK";
 import StatementSection from "./StatementSection";
@@ -174,6 +175,7 @@ const StatementForm: FC = () => {
               </StatementTableRow>
             </StatementSectionTable>
           </StatementSection>
+          <AccountantSection />
         </FormControlContext.Provider>
       </Stack>
     </form>
