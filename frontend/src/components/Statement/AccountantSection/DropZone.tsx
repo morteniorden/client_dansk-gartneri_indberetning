@@ -1,8 +1,8 @@
 import { IconButton } from "@chakra-ui/button";
-import { Box, Center, HStack, Stack, Text } from "@chakra-ui/layout";
+import { Center, HStack, Text } from "@chakra-ui/layout";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineFilePdf } from "react-icons/ai";
 import { BiX } from "react-icons/bi";
