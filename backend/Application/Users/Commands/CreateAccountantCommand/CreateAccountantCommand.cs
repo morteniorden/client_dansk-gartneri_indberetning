@@ -43,10 +43,10 @@ namespace Application.Users.Commands.CreateAccountantCommand
           throw new InvalidOperationException("Cannot assign a new accountant to the statement, as another accountant is already assigned.");
         }
 
-        //if (_context.Users.Any(e => e.Email == request.AccountantDto.Email))
-        //{
-        //  throw new ArgumentException("The provided email address is already used by another user.");
-        //}
+        if (_context.Users.Any(e => e.Email == request.AccountantDto.Email && e.Role != RoleEnum.Accountant))
+        {
+          throw new ArgumentException("The provided email address is already used by another user.");
+        }
 
         var existingAccountant = (Accountant) await _context.Users
           .FirstOrDefaultAsync(e => e.Email == request.AccountantDto.Email && e.Role == RoleEnum.Accountant, cancellationToken: cancellationToken);
