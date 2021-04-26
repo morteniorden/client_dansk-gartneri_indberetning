@@ -2262,7 +2262,7 @@ export class ClientDto implements IClientDto {
     tel?: string | null;
     address?: AddressDto | null;
     cvrNumber?: string | null;
-    statements?: StatementDto[] | null;
+    statements?: StatementNoUsersDto[] | null;
     id?: number;
     email?: string | null;
     role?: RoleEnum;
@@ -2280,7 +2280,7 @@ export class ClientDto implements IClientDto {
                 this.statements = [];
                 for (let i = 0; i < data.statements.length; i++) {
                     let item = data.statements[i];
-                    this.statements[i] = item && !(<any>item).toJSON ? new StatementDto(item) : <StatementDto>item;
+                    this.statements[i] = item && !(<any>item).toJSON ? new StatementNoUsersDto(item) : <StatementNoUsersDto>item;
                 }
             }
         }
@@ -2294,7 +2294,7 @@ export class ClientDto implements IClientDto {
             if (Array.isArray(_data["statements"])) {
                 this.statements = [] as any;
                 for (let item of _data["statements"])
-                    this.statements!.push(StatementDto.fromJS(item));
+                    this.statements!.push(StatementNoUsersDto.fromJS(item));
             }
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
@@ -2334,7 +2334,7 @@ export interface IClientDto {
     tel?: string | null;
     address?: IAddressDto | null;
     cvrNumber?: string | null;
-    statements?: IStatementDto[] | null;
+    statements?: IStatementNoUsersDto[] | null;
     id?: number;
     email?: string | null;
     role?: RoleEnum;
@@ -2388,6 +2388,134 @@ export interface IAddressDto {
     addressLine2?: string | null;
     addressLine3?: string | null;
     addressLine4?: string | null;
+}
+
+export class StatementNoUsersDto implements IStatementNoUsersDto {
+    accountingYear?: number;
+    status?: StatementStatus;
+    s1_mushrooms?: number;
+    s1_tomatoCucumberHerb?: number;
+    s1_boughtPlants?: number;
+    s3_carrots?: number;
+    s3_peas?: number;
+    s3_onions?: number;
+    s3_other?: number;
+    s3_boughtPlants?: number;
+    s4_onions?: number;
+    s4_plants?: number;
+    s4_cutFlowers?: number;
+    s4_boughtPlants?: number;
+    s7_plants?: number;
+    s7_boughtPlants?: number;
+    s8_applesPearsEtc?: number;
+    s8_packaging?: number;
+    s8_cherries?: number;
+    s8_plums?: number;
+    s8_otherStoneFruit?: number;
+    s8_currant?: number;
+    s8_strawberries?: number;
+    s8_otherBerryFruit?: number;
+
+    constructor(data?: IStatementNoUsersDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
+            this.s1_tomatoCucumberHerb = _data["s1_tomatoCucumberHerb"] !== undefined ? _data["s1_tomatoCucumberHerb"] : <any>null;
+            this.s1_boughtPlants = _data["s1_boughtPlants"] !== undefined ? _data["s1_boughtPlants"] : <any>null;
+            this.s3_carrots = _data["s3_carrots"] !== undefined ? _data["s3_carrots"] : <any>null;
+            this.s3_peas = _data["s3_peas"] !== undefined ? _data["s3_peas"] : <any>null;
+            this.s3_onions = _data["s3_onions"] !== undefined ? _data["s3_onions"] : <any>null;
+            this.s3_other = _data["s3_other"] !== undefined ? _data["s3_other"] : <any>null;
+            this.s3_boughtPlants = _data["s3_boughtPlants"] !== undefined ? _data["s3_boughtPlants"] : <any>null;
+            this.s4_onions = _data["s4_onions"] !== undefined ? _data["s4_onions"] : <any>null;
+            this.s4_plants = _data["s4_plants"] !== undefined ? _data["s4_plants"] : <any>null;
+            this.s4_cutFlowers = _data["s4_cutFlowers"] !== undefined ? _data["s4_cutFlowers"] : <any>null;
+            this.s4_boughtPlants = _data["s4_boughtPlants"] !== undefined ? _data["s4_boughtPlants"] : <any>null;
+            this.s7_plants = _data["s7_plants"] !== undefined ? _data["s7_plants"] : <any>null;
+            this.s7_boughtPlants = _data["s7_boughtPlants"] !== undefined ? _data["s7_boughtPlants"] : <any>null;
+            this.s8_applesPearsEtc = _data["s8_applesPearsEtc"] !== undefined ? _data["s8_applesPearsEtc"] : <any>null;
+            this.s8_packaging = _data["s8_packaging"] !== undefined ? _data["s8_packaging"] : <any>null;
+            this.s8_cherries = _data["s8_cherries"] !== undefined ? _data["s8_cherries"] : <any>null;
+            this.s8_plums = _data["s8_plums"] !== undefined ? _data["s8_plums"] : <any>null;
+            this.s8_otherStoneFruit = _data["s8_otherStoneFruit"] !== undefined ? _data["s8_otherStoneFruit"] : <any>null;
+            this.s8_currant = _data["s8_currant"] !== undefined ? _data["s8_currant"] : <any>null;
+            this.s8_strawberries = _data["s8_strawberries"] !== undefined ? _data["s8_strawberries"] : <any>null;
+            this.s8_otherBerryFruit = _data["s8_otherBerryFruit"] !== undefined ? _data["s8_otherBerryFruit"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): StatementNoUsersDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatementNoUsersDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
+        data["s1_tomatoCucumberHerb"] = this.s1_tomatoCucumberHerb !== undefined ? this.s1_tomatoCucumberHerb : <any>null;
+        data["s1_boughtPlants"] = this.s1_boughtPlants !== undefined ? this.s1_boughtPlants : <any>null;
+        data["s3_carrots"] = this.s3_carrots !== undefined ? this.s3_carrots : <any>null;
+        data["s3_peas"] = this.s3_peas !== undefined ? this.s3_peas : <any>null;
+        data["s3_onions"] = this.s3_onions !== undefined ? this.s3_onions : <any>null;
+        data["s3_other"] = this.s3_other !== undefined ? this.s3_other : <any>null;
+        data["s3_boughtPlants"] = this.s3_boughtPlants !== undefined ? this.s3_boughtPlants : <any>null;
+        data["s4_onions"] = this.s4_onions !== undefined ? this.s4_onions : <any>null;
+        data["s4_plants"] = this.s4_plants !== undefined ? this.s4_plants : <any>null;
+        data["s4_cutFlowers"] = this.s4_cutFlowers !== undefined ? this.s4_cutFlowers : <any>null;
+        data["s4_boughtPlants"] = this.s4_boughtPlants !== undefined ? this.s4_boughtPlants : <any>null;
+        data["s7_plants"] = this.s7_plants !== undefined ? this.s7_plants : <any>null;
+        data["s7_boughtPlants"] = this.s7_boughtPlants !== undefined ? this.s7_boughtPlants : <any>null;
+        data["s8_applesPearsEtc"] = this.s8_applesPearsEtc !== undefined ? this.s8_applesPearsEtc : <any>null;
+        data["s8_packaging"] = this.s8_packaging !== undefined ? this.s8_packaging : <any>null;
+        data["s8_cherries"] = this.s8_cherries !== undefined ? this.s8_cherries : <any>null;
+        data["s8_plums"] = this.s8_plums !== undefined ? this.s8_plums : <any>null;
+        data["s8_otherStoneFruit"] = this.s8_otherStoneFruit !== undefined ? this.s8_otherStoneFruit : <any>null;
+        data["s8_currant"] = this.s8_currant !== undefined ? this.s8_currant : <any>null;
+        data["s8_strawberries"] = this.s8_strawberries !== undefined ? this.s8_strawberries : <any>null;
+        data["s8_otherBerryFruit"] = this.s8_otherBerryFruit !== undefined ? this.s8_otherBerryFruit : <any>null;
+        return data; 
+    }
+}
+
+export interface IStatementNoUsersDto {
+    accountingYear?: number;
+    status?: StatementStatus;
+    s1_mushrooms?: number;
+    s1_tomatoCucumberHerb?: number;
+    s1_boughtPlants?: number;
+    s3_carrots?: number;
+    s3_peas?: number;
+    s3_onions?: number;
+    s3_other?: number;
+    s3_boughtPlants?: number;
+    s4_onions?: number;
+    s4_plants?: number;
+    s4_cutFlowers?: number;
+    s4_boughtPlants?: number;
+    s7_plants?: number;
+    s7_boughtPlants?: number;
+    s8_applesPearsEtc?: number;
+    s8_packaging?: number;
+    s8_cherries?: number;
+    s8_plums?: number;
+    s8_otherStoneFruit?: number;
+    s8_currant?: number;
+    s8_strawberries?: number;
+    s8_otherBerryFruit?: number;
 }
 
 export class CreateClientCommand implements ICreateClientCommand {

@@ -5,6 +5,7 @@ import {
   NumberInput,
   NumberInputField
 } from "@chakra-ui/react";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useContext, useMemo } from "react";
@@ -20,7 +21,8 @@ interface Props {
 const InputDKK: FC<Props> = ({ name }) => {
   const { formatCurrency } = useLocales();
 
-  const { control, form, updatedFormAttribute, disabled } = useContext(FormControlContext);
+  const { control, form, updatedFormAttribute } = useContext(FormControlContext);
+  const { readonly } = useContext(EditStatementContext);
   const colors = useColors();
 
   const {
@@ -48,7 +50,7 @@ const InputDKK: FC<Props> = ({ name }) => {
         <NumberInputField
           name={name}
           ref={ref}
-          disabled={disabled}
+          disabled={readonly}
           roundedLeft={leftOrRight === "left" ? "none" : "base"}
           roundedRight={leftOrRight === "right" ? "none" : "base"}
           bgColor={bgColor}

@@ -1,8 +1,9 @@
 import { Box, Button, Center, Heading, HStack, Stack, Text } from "@chakra-ui/react";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import Link from "next/link";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useContext, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 
 import DropZone from "./DropZone";
@@ -11,6 +12,7 @@ const AccountantSection: FC = () => {
   const { t } = useLocales();
   const { boxBorder } = useColors();
   const [file, setFile] = useState<File>(null);
+  const { readonly } = useContext(EditStatementContext);
 
   const onSubmit = useCallback(() => {
     console.log(file);

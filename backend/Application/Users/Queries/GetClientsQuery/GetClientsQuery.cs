@@ -30,6 +30,7 @@ namespace Application.Users.Queries.GetClientsQuery
       {
         var results = await _context.Clients
           .Include(e => e.Address)
+          .Include(e => e.Statements)
           .ToListAsync(cancellationToken);
 
         var viewModel = results.Select(x => _mapper.Map<ClientDto>(x)).ToList();

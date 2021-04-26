@@ -1,29 +1,34 @@
-import {
-  Box,
-  Button,
-  Heading,
-  Skeleton,
-  Stack,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr
-} from "@chakra-ui/react";
+import { Heading, Stack } from "@chakra-ui/react";
+import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
+import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
-import Link from "next/link";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, StatementStatus } from "services/backend/nswagts";
+import { IStatementDto, RoleEnum } from "services/backend/nswagts";
 import { logger } from "utils/logger";
+
+import AccountantStatements from "./AccountantStatements";
+import ClientStatements from "./ClientStatements";
 
 const MyStatements: FC = () => {
   const { t } = useLocales();
-  const [statements, setStatements] = useState<IStatementDto[]>();
+  const [statements, setStatements] = useState<IStatementDto[]>([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [accountingYear, setAccountingYear] = useState<number>();
+  const { activeUser } = useAuth();
+
+  const accountingYears = useMemo(
+    () =>
+      statements
+        .reduce((acc: number[], statement: IStatementDto) => {
+          if (!acc.some(s => s == statement.accountingYear)) acc.push(statement.accountingYear);
+          return acc;
+        }, [])
+        .sort((a, b) => b - a),
+    [statements]
+  );
 
   const fetchData = useCallback(async () => {
     try {
@@ -31,8 +36,9 @@ const MyStatements: FC = () => {
       const statementClient = await genStatementClient();
       const data = await statementClient.getMyStatements();
 
-      if (data != null) setStatements(data);
-      else logger.info("accountclient.get no data");
+      if (data != null) {
+        setStatements(data);
+      } else logger.info("accountclient.get no data");
     } catch (err) {
       logger.warn("accountclient.get Error", err);
     }
@@ -43,54 +49,32 @@ const MyStatements: FC = () => {
     fetchData();
   }, [fetchData]);
 
-  const genStatus = useCallback((status: StatementStatus) => {
-    switch (status) {
-      case 0:
-        return "Ikke besvaret";
-      case 1:
-        return "Besvaret";
-    }
-  }, []);
+  useEffect(() => {
+    if (accountingYears.length > 0) setAccountingYear(accountingYears[0]);
+  }, [accountingYears]);
 
   return (
     <BasicLayout maxW="80vw">
       <Stack spacing={10}>
         <Heading>{t("statements.myStatements")}</Heading>
+        {activeUser?.role == RoleEnum.Accountant && (
+          <AccountingYearSelect
+            options={accountingYears}
+            value={accountingYear}
+            cb={setAccountingYear}
+          />
+        )}
         <FetchingSpinner isFetching={isFetching} text={t("common.fetchingData")} />
-        <Box p={10} shadow="md" rounded="md">
-          <Skeleton isLoaded={!isFetching}>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th>Revisionsår</Th>
-                  <Th>Status</Th>
-                  <Th></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {statements &&
-                  statements
-                    .sort((a, b) => b.accountingYear - a.accountingYear)
-                    .map(statement => (
-                      <Tr key={statement.id}>
-                        <Td>{statement.accountingYear}</Td>
-                        <Td>{statement.status == 2 ? "Besvaret" : "Ikke besvaret"}</Td>
-                        <Td>
-                          {statement.status != 2 && (
-                            <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
-                              <Button colorScheme="green" rounded="full">
-                                Besvar
-                              </Button>
-                            </Link>
-                          )}
-                          {statement.status == 2 && <Button rounded="full">Se besvarelse</Button>}
-                        </Td>
-                      </Tr>
-                    ))}
-              </Tbody>
-            </Table>
-          </Skeleton>
-        </Box>
+        {activeUser?.role == RoleEnum.Client && (
+          <ClientStatements statements={statements} isFetching={isFetching} />
+        )}
+        {activeUser?.role == RoleEnum.Accountant && (
+          <AccountantStatements
+            statements={statements}
+            isFetching={isFetching}
+            accountingYear={accountingYear}
+          />
+        )}
       </Stack>
     </BasicLayout>
   );

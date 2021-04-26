@@ -19,7 +19,7 @@ const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementDto>();
   const { activeUser } = useAuth();
-  const { statement, setStatement, submit, disabled } = useContext(EditStatementContext);
+  const { statement, setStatement, submit, readonly } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementDto, value: IStatementDto[keyof IStatementDto]) => {
@@ -54,7 +54,7 @@ const StatementForm: FC = () => {
             control,
             form: statement,
             updatedFormAttribute,
-            disabled: disabled
+            disabled: readonly
           }}>
           <StatementSection heading={t("statements.section1.heading")}>
             <StatementSectionTable>
@@ -177,7 +177,8 @@ const StatementForm: FC = () => {
               </StatementTableRow>
             </StatementSectionTable>
           </StatementSection>
-          {activeUser?.role == RoleEnum.Accountant && <AccountantSection />}
+          {statement.accountant != null &&
+            (activeUser?.role == RoleEnum.Accountant || readonly) && <AccountantSection />}
         </FormControlContext.Provider>
       </Stack>
     </form>

@@ -1,8 +1,10 @@
 import { IconButton } from "@chakra-ui/button";
 import { Center, HStack, Text } from "@chakra-ui/layout";
 import { Tooltip } from "@chakra-ui/tooltip";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useEffect } from "react";
+import Link from "next/link";
+import { FC, useCallback, useContext, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineFilePdf } from "react-icons/ai";
 import { BiX } from "react-icons/bi";
@@ -14,6 +16,7 @@ interface Props {
 
 const DropZone: FC<Props> = ({ file, setFile }) => {
   const { t } = useLocales();
+  const { readonly } = useContext(EditStatementContext);
 
   const onDrop = useCallback(acceptedFiles => {
     setFile(acceptedFiles[0]);
@@ -30,7 +33,7 @@ const DropZone: FC<Props> = ({ file, setFile }) => {
 
   return (
     <>
-      {file == null ? (
+      {file == null && !readonly ? (
         <div className="container">
           <Center
             {...getRootProps({ isDragActive })}
@@ -53,17 +56,21 @@ const DropZone: FC<Props> = ({ file, setFile }) => {
         <Center p={5} borderWidth="2px">
           <HStack spacing={5}>
             <AiOutlineFilePdf size="30px" />
-            <Text>{file.name}</Text>
-            <Tooltip label={t("actions.delete")}>
-              <IconButton
-                aria-label="delete"
-                icon={<BiX color="red" />}
-                variant="ghost"
-                size="sm"
-                isRound={true}
-                onClick={e => setFile(null)}
-              />
-            </Tooltip>
+            {/* TODO: Make into a link, so that file can be downloaded */}
+            {file && <Text>{file.name}</Text>}
+            {!readonly && (
+              <Tooltip label={t("actions.delete")}>
+                <IconButton
+                  aria-label="delete"
+                  icon={<BiX color="red" />}
+                  variant="ghost"
+                  size="sm"
+                  isRound={true}
+                  disabled={readonly}
+                  onClick={e => setFile(null)}
+                />
+              </Tooltip>
+            )}
           </HStack>
         </Center>
       )}

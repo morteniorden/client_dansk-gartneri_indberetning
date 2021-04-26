@@ -50,7 +50,7 @@ namespace Application.Statements.Commands.UpdateStatement
         }
 
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId, cancellationToken: cancellationToken);
-        if (statementEntity.ClientId != currentUser.Id)
+        if (statementEntity.ClientId != currentUser.Id && statementEntity.AccountantId != currentUser.Id)
         {
           throw new UnauthorizedAccessException("Tried to update a statement that belongs to another client");
         }

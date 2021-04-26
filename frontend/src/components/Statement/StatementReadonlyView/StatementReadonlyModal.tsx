@@ -51,7 +51,9 @@ const StatementReadonlyModal: FC<Props> = ({ client, statement }) => {
                 save: null,
                 isSaving: false,
                 submit: null,
-                disabled: true
+                readonly: true,
+                fetchData: null,
+                isFetching: false
               }}>
               <StatementForm />
             </EditStatementContext.Provider>

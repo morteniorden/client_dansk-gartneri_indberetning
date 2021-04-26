@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, HStack, Select, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Flex, Heading, HStack, Stack } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
@@ -6,15 +6,13 @@ import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
-import { genStatementClient, genUserClient } from "services/backend/apiClients";
-import { CreateStatementCommand, IClientDto } from "services/backend/nswagts";
+import { genUserClient } from "services/backend/apiClients";
+import { IClientDto } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import AccountList from "./AccountList/AccountList";
-import AccountsTable from "./AccountsTable";
-import DownloadCsvBtn from "./Filters/DownloadCsvBtn";
+import DownloadCsvBtn from "./DownloadCsvBtn";
 import NewAccountModal from "./NewAccountModal";
-import SearchFilterInput from "./SearchFilterInput";
 
 const Accounts: FC = () => {
   const { t } = useLocales();

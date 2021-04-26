@@ -14,7 +14,7 @@ namespace Application.Users
     public string Tel { get; set; }
     public AddressDto Address { get; set; }
     public string CVRNumber { get; set; }
-    public ICollection<StatementDto> Statements { get; set; }
+    public ICollection<StatementNoUsersDto> Statements { get; set; }
     public int Id { get; set; }
     public string Email { get; set; }
     public RoleEnum Role { get; set; }
