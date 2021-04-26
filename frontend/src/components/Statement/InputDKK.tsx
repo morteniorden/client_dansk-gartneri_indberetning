@@ -27,11 +27,13 @@ const InputDKK: FC<Props> = ({ name }) => {
 
   const {
     field: { ref, onChange, value, onBlur },
-    meta: { isDirty, isTouched, invalid }
+    fieldState: { invalid, isDirty, isTouched }
   } = useController({
     name,
     control,
-    rules: { required: false, valueAsNumber: true },
+    rules: {
+      required: false
+    },
     defaultValue: form[name]
   });
 
@@ -57,7 +59,7 @@ const InputDKK: FC<Props> = ({ name }) => {
           value={value}
           onBlur={onBlur}
           onChange={e => {
-            onChange(e.target.value);
+            onChange(parseInt(e.target.value));
             updatedFormAttribute(name, parseInt(e.target.value));
           }}
         />
