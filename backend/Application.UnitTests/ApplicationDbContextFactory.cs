@@ -67,25 +67,6 @@ namespace Application.UnitTests
         new Admin { Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
       );
 
-      //var client1 = new Client { Id = 1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test1 client" };
-      //var accountant1 = new Accountant {Id = 2, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Role = RoleEnum.Accountant, Name = "test1 accountant"};
-      //var client2 = new Client {Id = 3, Email = "test2@test2.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test2 client"};
-      //var admin1 = new Admin {Id = 4, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin"};
-      //var admin2 = new Admin {Id = 5, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin"};
-      //var admin3 = new Admin {Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin"};
-      //context.Users.Add(client1);
-      //context.Users.Add(accountant1);
-      //context.Users.Add(client2);
-      //context.Users.Add(admin1);
-      //context.Users.Add(admin2);
-      //context.Users.Add(admin3);
-      //context.Entry<User>(client1).State = EntityState.Detached;
-      //context.Entry<User>(accountant1).State = EntityState.Detached;
-      //context.Entry<User>(client2).State = EntityState.Detached;
-      //context.Entry<User>(admin1).State = EntityState.Detached;
-      //context.Entry<User>(admin2).State = EntityState.Detached;
-      //context.Entry<User>(admin3).State = EntityState.Detached;
-
       context.Statements.AddRange(
         new Statement { Id = 1, AccountingYear = 2021, ClientId = 1},
         new Statement { Id = 2, AccountingYear = 2022, ClientId = 3}
@@ -93,10 +74,10 @@ namespace Application.UnitTests
 
       context.SaveChanges();
 
-      foreach (var entity in context.ChangeTracker.Entries())
-      {
-        entity.State = EntityState.Detached;
-      }
+      //foreach (var entity in context.ChangeTracker.Entries())
+      //{
+      //  entity.State = EntityState.Detached;
+      //}
     }
 
     public static void Destroy(ApplicationDbContext context)

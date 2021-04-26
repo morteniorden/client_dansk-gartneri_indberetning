@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210422105009_statementOwnsUsers")]
-    partial class statementOwnsUsers
+    [Migration("20210424115812_NewUserModel")]
+    partial class NewUserModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -269,7 +269,9 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -336,6 +338,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasBaseType("Domain.Entities.User");
 
                     b.Property<int?>("AddressId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("CVRNumber")
@@ -343,6 +346,10 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Tel")
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("AddressId")
+                        .IsUnique()
+                        .HasFilter("[AddressId] IS NOT NULL");
 
                     b.HasDiscriminator().HasValue(2);
                 });
@@ -380,7 +387,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.Address", "Address")
                         .WithOne("Client")
-                        .HasForeignKey("Domain.Entities.Client", "Id")
+                        .HasForeignKey("Domain.Entities.Client", "AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

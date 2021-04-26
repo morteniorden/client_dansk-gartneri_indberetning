@@ -15,7 +15,7 @@ namespace Application.Users.Commands.CreateClientCommand
   [Authorize(Role = RoleEnum.Admin)]
   public class CreateClientCommand : IRequest<int>
   {
-    public ClientDto ClientDto;
+    public ClientDto ClientDto { get; set; }
 
     public class CreateAccountCommandHandler : IRequestHandler<CreateClientCommand, int>
     {
@@ -39,6 +39,11 @@ namespace Application.Users.Commands.CreateClientCommand
         if (_context.Users.Any(e => e.Email == request.ClientDto.Email))
         {
           throw new ArgumentException("The provided email address is already used by another user.");
+        }
+
+        if (_context.Clients.Any(e => e.CVRNumber == request.ClientDto.CVRNumber))
+        {
+          throw new ArgumentException("The provided CVR number is already used by another client.");
         }
 
         var address1Entity = new Address

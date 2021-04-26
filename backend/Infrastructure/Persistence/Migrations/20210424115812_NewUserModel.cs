@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Persistence.Migrations
 {
-    public partial class newUserModel : Migration
+    public partial class NewUserModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -66,14 +66,14 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false),
                     DeactivationTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     SSOTokenId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountantType = table.Column<int>(type: "int", nullable: true),
                     Tel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressId = table.Column<int>(type: "int", nullable: true),
@@ -87,8 +87,8 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Addresses_Id",
-                        column: x => x.Id,
+                        name: "FK_Users_Addresses_AddressId",
+                        column: x => x.AddressId,
                         principalTable: "Addresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -126,7 +126,8 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    AccountantId = table.Column<int>(type: "int", nullable: false),
+                    AccountantId = table.Column<int>(type: "int", nullable: true),
+                    AccountantType = table.Column<int>(type: "int", nullable: false),
                     AccountingYear = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     s1_mushrooms = table.Column<int>(type: "int", nullable: false),
@@ -163,8 +164,7 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_Statements_Users_AccountantId",
                         column: x => x.AccountantId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Statements_Users_ClientId",
                         column: x => x.ClientId,
@@ -188,6 +188,13 @@ namespace Infrastructure.Persistence.Migrations
                 table: "Statements",
                 columns: new[] { "ClientId", "AccountingYear" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_AddressId",
+                table: "Users",
+                column: "AddressId",
+                unique: true,
+                filter: "[AddressId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

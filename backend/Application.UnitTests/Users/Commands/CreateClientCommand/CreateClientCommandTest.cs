@@ -8,6 +8,7 @@ using Application.Common.Interfaces;
 using Application.Users;
 using Application.Users.Commands.CreateClientCommand;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -39,7 +40,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
 
       var result = await handler.Handle(command, CancellationToken.None);
 
-      var entity = (Client) Context.Users.Find(result);
+      var entity = await Context.Clients.Include(e => e.Address).FirstOrDefaultAsync(e => e.Id == result);
 
       entity.Should().NotBeNull();
       entity.Email.Should().Be(command.ClientDto.Email);
@@ -47,7 +48,8 @@ namespace Application.UnitTests.Users.Commands.CreateClient
       entity.Tel.Should().Be(command.ClientDto.Tel);
       entity.CVRNumber.Should().Be(command.ClientDto.CVRNumber);
       entity.Address.Should().NotBeNull();
-      entity.Address.ClientId.Should().Be(entity.Id);
+      entity.Address.AddressLine1.Should().Be(command.ClientDto.Address.AddressLine1);
+      entity.Address.AddressLine2.Should().Be(command.ClientDto.Address.AddressLine2);
     }
 
     [Fact]
@@ -79,7 +81,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "43546578",
-          Address =
+          Address = new AddressDto
           {
             AddressLine1 = "test street 5",
             AddressLine2 = "1234 test city"
@@ -106,7 +108,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          Address =
+          Address = new AddressDto
           {
             AddressLine1 = "test street 5",
             AddressLine2 = "1234 test city"
@@ -122,7 +124,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          Address =
+          Address = new AddressDto
           {
             AddressLine1 = "test street 5",
             AddressLine2 = "1234 test city"

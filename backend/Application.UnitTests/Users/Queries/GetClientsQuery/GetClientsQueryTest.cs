@@ -33,7 +33,7 @@ namespace Application.UnitTests.Users.Queries.GetClients
 
       var result = await handler.Handle(query, CancellationToken.None);
 
-      result.Should().BeOfType<List<UserDto>>();
+      result.Should().BeOfType<List<ClientDto>>();
       result.Count.Should().Be(2);
     }
 
@@ -46,7 +46,7 @@ namespace Application.UnitTests.Users.Queries.GetClients
 
       var result = await handler.Handle(query, CancellationToken.None);
 
-      result.Should().BeOfType<List<UserDto>>();
+      result.Should().BeOfType<List<ClientDto>>();
 
       result.ForEach(entity =>
       {

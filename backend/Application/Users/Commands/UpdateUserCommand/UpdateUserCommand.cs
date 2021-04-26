@@ -38,6 +38,11 @@ namespace Application.Users.Commands.UpdateUserCommand
           throw new NotFoundException(nameof(Domain.Entities.User), request.Id);
         }
 
+        if (_context.Users.Any(e => e.Email == request.User.Email && e.Id != request.User.Id))
+        {
+          throw new ArgumentException("The provided email address is already used by another user.");
+        }
+
         userEntity.Name = request.User.Name ?? userEntity.Name;
         userEntity.Email = request.User.Email ?? userEntity.Email;
 
