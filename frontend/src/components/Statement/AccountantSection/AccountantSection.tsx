@@ -1,6 +1,7 @@
 import { Box, Button, Center, Heading, HStack, Stack, Text } from "@chakra-ui/react";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
+import Link from "next/link";
 import { FC, useCallback, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 
@@ -23,9 +24,12 @@ const AccountantSection: FC = () => {
         <Center>
           <HStack>
             <FiDownload />
-            <Button variant="link" w="min" colorScheme="green">
-              {t("statements.accountantSection.downloadPdf")}
-            </Button>
+            {/* TODO: insert actual URL */}
+            <Link href="https://danskgartneri.dk/-/media/danskgartneri/publikationer/tal-om-gartneriet/tal-om-gartneriet-2020.pdf">
+              <Button variant="link" w="min" colorScheme="green">
+                {t("statements.accountantSection.downloadPdf")}
+              </Button>
+            </Link>
           </HStack>
         </Center>
         <DropZone file={file} setFile={setFile} />
