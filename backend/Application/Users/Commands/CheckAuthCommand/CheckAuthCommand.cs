@@ -40,6 +40,11 @@ namespace Application.Users.Commands.CheckAuthCommand
           throw new ArgumentException("Invalid credentials.");
         }
 
+        if (user.DeactivationTime != null)
+        {
+          throw new ArgumentException("This user is deactivated.");
+        }
+
         return _mapper.Map<UserDto>(user);
       }
     }
