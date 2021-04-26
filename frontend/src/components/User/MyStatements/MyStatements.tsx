@@ -13,27 +13,25 @@ import {
 } from "@chakra-ui/react";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
-import { AuthContext } from "contexts/AuthContext";
 import { useLocales } from "hooks/useLocales";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { FC, useCallback, useContext, useEffect, useState } from "react";
-import { genUserClient } from "services/backend/apiClients";
-import { IClientDto, StatementStatus } from "services/backend/nswagts";
+import { FC, useCallback, useEffect, useState } from "react";
+import { genStatementClient } from "services/backend/apiClients";
+import { IStatementDto, StatementStatus } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 const MyStatements: FC = () => {
   const { t } = useLocales();
-  const [client, setClient] = useState<IClientDto>();
+  const [statements, setStatements] = useState<IStatementDto[]>();
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
       setIsFetching(true);
-      const userClient = await genUserClient();
-      const data = await userClient.getCurrentUser();
+      const statementClient = await genStatementClient();
+      const data = await statementClient.getMyStatements();
 
-      if (data != null) setClient(data);
+      if (data != null) setStatements(data);
       else logger.info("accountclient.get no data");
     } catch (err) {
       logger.warn("accountclient.get Error", err);
@@ -70,8 +68,8 @@ const MyStatements: FC = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {client &&
-                  client.statements
+                {statements &&
+                  statements
                     .sort((a, b) => b.accountingYear - a.accountingYear)
                     .map(statement => (
                       <Tr key={statement.id}>

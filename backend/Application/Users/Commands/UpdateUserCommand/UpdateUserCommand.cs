@@ -8,6 +8,7 @@ using Application.Common.Security;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Application.Users.Commands.UpdateUserCommand
@@ -38,9 +39,13 @@ namespace Application.Users.Commands.UpdateUserCommand
           throw new NotFoundException(nameof(Domain.Entities.User), request.Id);
         }
 
-        if (_context.Users.Any(e => e.Email == request.User.Email && e.Id != request.User.Id))
+        if (request.User.Email != null)
         {
-          throw new ArgumentException("The provided email address is already used by another user.");
+          var checkExisting = await _context.Users.CountAsync(x => x.Email == request.User.Email);
+
+          if (checkExisting > 0) {
+            throw new ArgumentException("Email already in use");
+          }
         }
 
         userEntity.Name = request.User.Name ?? userEntity.Name;

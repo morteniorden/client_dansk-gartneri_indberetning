@@ -26,7 +26,7 @@ namespace Application.Accounts.Queries.GetCurrentAccountQuery
       public GetCurrentUserQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IMapper mapper)
       {
         _context = context;
-       _currentUserService = currentUserService;
+        _currentUserService = currentUserService;
         _mapper = mapper;
       }
       public async Task<UserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)

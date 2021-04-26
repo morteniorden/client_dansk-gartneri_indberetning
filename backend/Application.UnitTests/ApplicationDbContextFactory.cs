@@ -37,19 +37,6 @@ namespace Application.UnitTests
 
     public static void SeedSampleData(ApplicationDbContext context)
     {
-      context.ExampleParents.AddRange(
-          new ExampleParent() { Id = 1, Name = "Test 1" },
-          new ExampleParent() { Id = 2, Name = "Test 2" }
-      );
-
-      context.ExampleChildren.AddRange(
-          new ExampleChild { Id = 1, ParentId = 1, Name = "Bread", Type = ExampleEnum.Youngest },
-          new ExampleChild { Id = 2, ParentId = 1, Name = "Butter", Type = ExampleEnum.Youngest },
-          new ExampleChild { Id = 3, ParentId = 1, Name = "Milk", Type = ExampleEnum.Middle },
-          new ExampleChild { Id = 4, ParentId = 2, Name = "Sugar", Type = ExampleEnum.Middle },
-          new ExampleChild { Id = 5, ParentId = 2, Name = "Coffee", Type = ExampleEnum.Oldest }
-      );
-
       var address1 = new Address { Id = 1, AddressLine1 = "test1 street 5", AddressLine2 = "2200 test1 city" };
       var address2 = new Address { Id = 2, AddressLine1 = "test2 street 7", AddressLine2 = "2200 test2 city" };
 
@@ -59,17 +46,17 @@ namespace Application.UnitTests
       );
 
       context.Users.AddRange(
-        new Client { Id = 1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test1 client" },
-        new Accountant { Id = 2, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Role = RoleEnum.Accountant, Name = "test1 accountant" },
-        new Client { Id = 3, Email = "test2@test2.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test2 client" },
-        new Admin { Id = 4, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
-        new Admin { Id = 5, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
-        new Admin { Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
+        new Client { Id = 1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Name = "test1 client" },
+        new Accountant { Id = 2, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Name = "test1 accountant" },
+        new Client { Id = 3, Email = "test2@test2.dk", Password = "Pa$$w0rd", Name = "test2 client" },
+        new Admin { Id = 4, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
+        new Admin { Id = 5, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
+        new Admin { Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Name = "Admin" }
       );
 
       context.Statements.AddRange(
-        new Statement { Id = 1, AccountingYear = 2021, ClientId = 1},
-        new Statement { Id = 2, AccountingYear = 2022, ClientId = 3}
+        new Statement { Id = 1, AccountingYear = 2021, ClientId = 1 },
+        new Statement { Id = 2, AccountingYear = 2022, ClientId = 3 }
         );
 
       context.SaveChanges();

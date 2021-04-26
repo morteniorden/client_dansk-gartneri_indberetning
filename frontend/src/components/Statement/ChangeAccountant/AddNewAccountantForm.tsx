@@ -10,6 +10,7 @@ import {
   Stack,
   useToast
 } from "@chakra-ui/react";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
@@ -29,9 +30,11 @@ interface Props {
 const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
   const { t } = useLocales();
   const [name, setName] = useState("");
+  const [accountantType, setAccountantType] = useState<AccountantType>(AccountantType.Accountant);
   const [email, setEmail] = useState("");
   const [formDisabled, setFormDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { fetchData } = useContext(EditStatementContext);
   const toast = useToast();
 
   const handleSubmit = useCallback(
@@ -45,10 +48,12 @@ const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
         email: email,
         role: RoleEnum.Accountant
       });
-
+      //I don't know why, but I have to set accountantType here. If I do it when creating the dto, it is undefined afterwards.
+      accountantDto.accountantType = accountantType;
       try {
         const userClient = await genUserClient();
         const command = new CreateAccountantCommand({
+          statementId: statement.id,
           accountantDto: accountantDto
         });
         await userClient.createAndAddAccountant(command);
@@ -60,6 +65,7 @@ const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
           isClosable: true,
           position: "bottom-left"
         });
+        fetchData();
         onSubmit(true);
       } catch {
         toast({
@@ -73,7 +79,7 @@ const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
       }
       setLoading(false);
     },
-    [name, email]
+    [name, email, statement, accountantType]
   );
 
   useEffect(() => {
@@ -85,7 +91,12 @@ const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
       <Stack spacing={5} maxW="sm">
         <FormControl as="fieldset" isRequired isDisabled={formDisabled}>
           <FormLabel as="legend">{t("accountant.accountantType")}</FormLabel>
-          <RadioGroup>
+          <RadioGroup
+            onChange={value =>
+              setAccountantType(
+                value == "0" ? AccountantType.Accountant : AccountantType.Consultant
+              )
+            }>
             <Stack>
               <Radio value="0">{t("accountant.accountant")}</Radio>
               <Radio value="1">{t("accountant.consultant")}</Radio>
@@ -111,10 +122,4 @@ export default AddNewAccountantForm;
           <FormLabel htmlFor="name">{t("accounts.name")}</FormLabel>
           <Input value={name} onChange={e => setName(e.target.value)}></Input>
         </FormControl>
-
-<Flex w="100%" mt={5}>
-          <Button colorScheme="green" type="submit" disabled={formDisabled}>
-            {loading ? <Spinner /> : t("actions.sendRequest")}
-          </Button>
-        </Flex>
 */

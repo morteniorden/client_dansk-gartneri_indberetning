@@ -10,8 +10,8 @@ namespace Domain.Entities
     public string Email { get; set; }
     public string Password { get; set; }
     public string Name { get; set; }
-    public virtual RoleEnum Role { get; set; }
+    public RoleEnum Role { get; set; }
     public DateTimeOffset? DeactivationTime { get; set; }
-    public string? SSOTokenId { get; set; }
+    public string SSOTokenId { get; set; }
   }
 }

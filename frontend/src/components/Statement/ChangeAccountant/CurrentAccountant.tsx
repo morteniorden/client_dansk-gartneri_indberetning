@@ -1,36 +1,19 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Skeleton,
-  Spacer,
-  Stack,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Tr,
-  useToast
-} from "@chakra-ui/react";
+import { Flex, Heading, HStack, Skeleton, Stack, Text, useToast } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import React, { FC, useCallback, useContext, useEffect } from "react";
-import { BiX } from "react-icons/bi";
+import React, { FC, useCallback, useContext } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
-import { genUserClient } from "services/backend/apiClients";
-import { AccountantType, IAccountantDto } from "services/backend/nswagts";
+import { genStatementClient, genUserClient } from "services/backend/apiClients";
+import { AccountantType, IStatementDto } from "services/backend/nswagts";
 
 import RemoveAccountantModal from "./RemoveAccountantModal";
 
 interface Props {
-  accountant: IAccountantDto;
+  statement: IStatementDto;
 }
 
-const CurrentAccountant: FC<Props> = ({ accountant }) => {
+const CurrentAccountant: FC<Props> = ({ statement }) => {
   const { t } = useLocales();
   const toast = useToast();
   const { fetchData, isFetching } = useContext(EditStatementContext);
@@ -38,8 +21,8 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
 
   const handleDelete = useCallback(async () => {
     try {
-      const userClient = await genUserClient();
-      await userClient.deactivateUser(accountant.id);
+      const statementclient = await genStatementClient();
+      await statementclient.unassignAccountant(statement.id);
       toast({
         title: t("accountant.deleteSuccessTitle"),
         description: t("accountant.deleteSuccessText"),
@@ -59,9 +42,7 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
         position: "bottom-left"
       });
     }
-  }, [accountant]);
-
-  useEffect(() => console.log(accountant), [accountant]);
+  }, [statement]);
 
   return (
     <Skeleton isLoaded={!isFetching}>
@@ -80,54 +61,17 @@ const CurrentAccountant: FC<Props> = ({ accountant }) => {
           <BsFillPeopleFill size="40px" />
           <Stack spacing={0}>
             <Heading size="sm" colorScheme="green">
-              {accountant.accountantType == AccountantType.Accountant
+              {statement.accountant.accountantType == AccountantType.Accountant
                 ? "Anmodning om godkendelse sendt til revisor"
                 : "Anmodning om godkendelse sendt til uvildig konsulent"}
             </Heading>
-            <Text fontSize="sm">{`Anmodning sendt til: ${accountant.email}`}</Text>
+            <Text fontSize="sm">{`Anmodning sendt til: ${statement.accountant.email}`}</Text>
             <Text fontSize="sm">Revisor har endnu ikke godkendt skemaet</Text>
           </Stack>
         </HStack>
-        <RemoveAccountantModal accountant={accountant} cb={handleDelete} />
+        <RemoveAccountantModal accountant={statement.accountant} cb={handleDelete} />
       </Flex>
     </Skeleton>
   );
 };
 export default CurrentAccountant;
-/*
-Revisor anmodet om godkendelse
-
-<Skeleton isLoaded={!isFetching}>
-      <Stack>
-        {accountant ? (
-          <>
-            <Table>
-              <Tbody>
-                <Tr>
-                  <Th>{t("accounts.name")}:</Th>
-                  <Td>{accountant.name}</Td>
-                </Tr>
-                <Tr>
-                  <Th>{t("accounts.email")}:</Th>
-                  <Td>{accountant.email}</Td>
-                </Tr>
-              </Tbody>
-            </Table>
-            <Box>
-              <Button
-                size="sm"
-                colorScheme="red"
-                variant="outline"
-                rounded="full"
-                leftIcon={<BiX />}
-                onClick={handleDelete}>
-                {t("actions.delete")}
-              </Button>
-            </Box>
-          </>
-        ) : (
-          <Text>{t("accountant.noAccountant")}</Text>
-        )}
-      </Stack>
-    </Skeleton>
-*/

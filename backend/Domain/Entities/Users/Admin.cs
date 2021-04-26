@@ -6,6 +6,6 @@ namespace Domain.Entities
 {
   public class Admin : User
   {
-    public override RoleEnum Role { get; set; } = RoleEnum.Admin;
+    public RoleEnum Role { get; set; } = RoleEnum.Admin;
   }
 }

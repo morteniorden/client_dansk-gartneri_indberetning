@@ -28,9 +28,11 @@ namespace Application.Users.Queries.GetClientsQuery
       }
       public async Task<List<ClientDto>> Handle(GetClientsQuery request, CancellationToken cancellationToken)
       {
-        var viewModel = await _context.Clients
-          .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
+        var results = await _context.Clients
+          .Include(e => e.Address)
           .ToListAsync(cancellationToken);
+
+        var viewModel = results.Select(x => _mapper.Map<ClientDto>(x)).ToList();
 
         return viewModel;
       }

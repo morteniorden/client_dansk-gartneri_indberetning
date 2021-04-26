@@ -15,7 +15,6 @@ import { FC, useMemo } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { IClientDto, StatementStatus } from "services/backend/nswagts";
 
-import ChangeAccountantModal from "../ChangeAccountant/ChangeAccountantModal";
 import AccountItemExpandedPanel from "./AccountItemExpandedPanel";
 import InviteBtn from "./AccountListItemButtons/InviteBtn";
 import ViewStatementBtn from "./AccountListItemButtons/ViewStatementBtn";
@@ -52,7 +51,6 @@ const AccountListItem: FC<Props> = ({ client, accountingYear }) => {
                 {statement && statement.status == StatementStatus.SignedOff && (
                   <StatementReadonlyModal statement={statement} client={client} />
                 )}
-                <ChangeAccountantModal client={client} />
                 <Tooltip label={isExpanded ? "Skjul info" : "Vis info"}>
                   <AccordionButton
                     as={IconButton}

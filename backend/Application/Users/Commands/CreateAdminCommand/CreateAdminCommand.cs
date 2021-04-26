@@ -36,7 +36,7 @@ namespace Application.Accounts.Commands.CreateAdmin
 
         _context.Users.Add(userEntity);
         await _context.SaveChangesAsync(cancellationToken);
-      
+
         return userEntity.Id;
       }
     }

@@ -1,13 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +32,7 @@ namespace Application.Statements.Queries.GetMyStatements
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId, cancellationToken: cancellationToken);
 
         var statement = await _context.Statements
-          .Where(e => (e.ClientId == currentUser.Id && e.AccountantId == currentUser.Id) && e.Id == request.Id)
+          .Where(e => (e.ClientId == currentUser.Id || e.AccountantId == currentUser.Id) && e.Id == request.Id)
           .ProjectTo<StatementDto>(_mapper.ConfigurationProvider)
           .FirstOrDefaultAsync();
 

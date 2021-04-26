@@ -4,7 +4,7 @@ import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 
-import DropZone from "./Dropzone";
+import DropZone from "./DropZone";
 
 const AccountantSection: FC = () => {
   const { t } = useLocales();

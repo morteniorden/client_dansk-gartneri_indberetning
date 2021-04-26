@@ -1,9 +1,10 @@
 import { Stack } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
+import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementDto, RoleEnum } from "services/backend/nswagts";
 
 import AccountantSection from "./AccountantSection/AccountantSection";
 import { FormControlContext } from "./FormControlContext";
@@ -17,6 +18,7 @@ import StatementTableSubHeading from "./StatementTableSubHeading";
 const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementDto>();
+  const { activeUser } = useAuth();
   const { statement, setStatement, submit, disabled } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
@@ -175,7 +177,7 @@ const StatementForm: FC = () => {
               </StatementTableRow>
             </StatementSectionTable>
           </StatementSection>
-          <AccountantSection />
+          {activeUser?.role == RoleEnum.Accountant && <AccountantSection />}
         </FormControlContext.Provider>
       </Stack>
     </form>

@@ -48,8 +48,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
       entity.Tel.Should().Be(command.ClientDto.Tel);
       entity.CVRNumber.Should().Be(command.ClientDto.CVRNumber);
       entity.Address.Should().NotBeNull();
-      entity.Address.AddressLine1.Should().Be(command.ClientDto.Address.AddressLine1);
-      entity.Address.AddressLine2.Should().Be(command.ClientDto.Address.AddressLine2);
+      entity.Address.Client.Should().NotBeNull();
     }
 
     [Fact]

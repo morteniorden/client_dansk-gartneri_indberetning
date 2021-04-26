@@ -28,7 +28,7 @@ const ChangeAccountantModal: FC<Props> = ({ statement, onSubmit }) => {
 
   return (
     <>
-      <Button onClick={onOpen} colorScheme="gray" disabled={statement.accountant != null}>
+      <Button onClick={onOpen} colorScheme="green" disabled={statement.accountant != null}>
         {t("statements.sendToAccountant")}
       </Button>
 
@@ -41,7 +41,7 @@ const ChangeAccountantModal: FC<Props> = ({ statement, onSubmit }) => {
             <Stack spacing={5} justifyContent="center">
               <Text>{t("statements.sendToAccountantText1")}</Text>
               <Text>{t("statements.sendToAccountantText2")}</Text>
-              <AddNewAccountantForm statement={statement} />
+              <AddNewAccountantForm statement={statement} onSubmit={onClose} />
             </Stack>
           </ModalBody>
           <ModalFooter></ModalFooter>
@@ -51,9 +51,3 @@ const ChangeAccountantModal: FC<Props> = ({ statement, onSubmit }) => {
   );
 };
 export default ChangeAccountantModal;
-/*
-              <Heading size="sm">{t("accounts.accountant")}:</Heading>
-              <CurrentAccountant accountant={statement.accountant} />
-              <Divider />
-              <Heading size="md">{t("accountant.addAccountant")}</Heading>
-*/

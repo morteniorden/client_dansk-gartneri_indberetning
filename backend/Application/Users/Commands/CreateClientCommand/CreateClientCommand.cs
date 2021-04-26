@@ -46,34 +46,26 @@ namespace Application.Users.Commands.CreateClientCommand
           throw new ArgumentException("The provided CVR number is already used by another client.");
         }
 
-        var address1Entity = new Address
-        {
-          AddressLine1 = request.ClientDto.Address.AddressLine1,
-          AddressLine2 = request.ClientDto.Address.AddressLine2,
-          AddressLine3 = request.ClientDto.Address.AddressLine3,
-          AddressLine4 = request.ClientDto.Address.AddressLine4
-        };
-        _context.Addresses.Add(address1Entity);
-
         var client = new Client
         {
           Name = request.ClientDto.Name,
           Email = request.ClientDto.Email,
           Tel = request.ClientDto.Tel,
           CVRNumber = request.ClientDto.CVRNumber,
-          AddressId = address1Entity.Id,
-          Address = address1Entity,
+          Address = new Address
+          {
+            AddressLine1 = request.ClientDto.Address.AddressLine1,
+            AddressLine2 = request.ClientDto.Address.AddressLine2,
+            AddressLine3 = request.ClientDto.Address.AddressLine3,
+            AddressLine4 = request.ClientDto.Address.AddressLine4
+          },
           Password = _passwordHasher.Hash("password123") //TODO: REMOVE
         };
-
         _context.Users.Add(client);
 
         var (tokenId, token) = await _tokenService.CreateSSOToken(client);
         client.SSOTokenId = tokenId;
 
-        //Is it possible to avoid saving changes twice?
-        //I'm doing it here because I think the user needs to have been assigned an ID before writing the token.
-        client.SSOTokenId = tokenId;
         await _context.SaveChangesAsync(cancellationToken);
 
         _jobClient.Enqueue(() => _mailService.SendUserActivationEmail(client.Email, token));

@@ -26,10 +26,10 @@ const Statement: FC<Props> = ({ id }) => {
   const { t } = useLocales();
   const router = useRouter();
   const toast = useToast();
-  //const [statement, setStatement] = useState<IStatementDto>(null);
-  const [statement, setStatement] = useState<IStatementDto>({
-    accountant: { accountantType: 0, email: "revisor@revisor.dk" }
-  });
+  const [statement, setStatement] = useState<IStatementDto>(null);
+  // const [statement, setStatement] = useState<IStatementDto>({
+  //   accountant: { accountantType: 0, email: "revisor@revisor.dk" }
+  // });
   const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -135,7 +135,7 @@ const Statement: FC<Props> = ({ id }) => {
               <Heading size="sm">{`${t("statements.accountingYear")}: ${
                 statement.accountingYear
               }`}</Heading>
-              {statement.accountant && <CurrentAccountant accountant={statement.accountant} />}
+              {statement.accountant && <CurrentAccountant statement={statement} />}
               <StatementForm />
             </Stack>
           </BasicLayout>

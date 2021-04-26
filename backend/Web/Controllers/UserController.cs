@@ -8,6 +8,7 @@ using Application.Accounts.Queries.GetCurrentAccountQuery;
 using Application.Users.Commands.CreateAccountantCommand;
 using Application.Users.Commands.CreateClientCommand;
 using Application.Users.Commands.DeactivateUserCommand;
+using Application.Users.Commands.UnassignAccountantCommand;
 using Application.Users.Commands.UpdateUserCommand;
 using Application.Users.Queries.GetAdminsQuery;
 using Application.Users.Queries.GetClientsQuery;
