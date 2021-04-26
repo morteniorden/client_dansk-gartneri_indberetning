@@ -11,7 +11,7 @@ namespace Application.Statements
   {
     public int Id { get; set; }
     public int AccountId { get; set; }
-    public virtual AccountDto Account { get; set; }
+    // public virtual AccountDto Account { get; set; }
     public int RevisionYear { get; set; }
     public StatementStatus Status { get; set; }
 

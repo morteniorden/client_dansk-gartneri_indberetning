@@ -1757,7 +1757,6 @@ export enum RoleEnum {
 export class StatementDto implements IStatementDto {
     id?: number;
     accountId?: number;
-    account?: AccountDto | null;
     revisionYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;
@@ -1789,7 +1788,6 @@ export class StatementDto implements IStatementDto {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
-            this.account = data.account && !(<any>data.account).toJSON ? new AccountDto(data.account) : <AccountDto>this.account; 
         }
     }
 
@@ -1797,7 +1795,6 @@ export class StatementDto implements IStatementDto {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.accountId = _data["accountId"] !== undefined ? _data["accountId"] : <any>null;
-            this.account = _data["account"] ? AccountDto.fromJS(_data["account"]) : <any>null;
             this.revisionYear = _data["revisionYear"] !== undefined ? _data["revisionYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
@@ -1836,7 +1833,6 @@ export class StatementDto implements IStatementDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["accountId"] = this.accountId !== undefined ? this.accountId : <any>null;
-        data["account"] = this.account ? this.account.toJSON() : <any>null;
         data["revisionYear"] = this.revisionYear !== undefined ? this.revisionYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
@@ -1868,7 +1864,6 @@ export class StatementDto implements IStatementDto {
 export interface IStatementDto {
     id?: number;
     accountId?: number;
-    account?: IAccountDto | null;
     revisionYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;
