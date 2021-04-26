@@ -35,9 +35,8 @@ const StatementFormHeader: FC = () => {
         <Button colorScheme="green" onClick={save}>
           {t("actions.saveChanges")}
         </Button>
-        {/* activeUser.role == RoleEnum.Client && <ChangeAccountantModal statement={statement} /> */}
-        <ChangeAccountantModal statement={statement} />
-        <ConfirmSignOffModal />
+        {activeUser?.role == RoleEnum.Client && <ChangeAccountantModal statement={statement} />}
+        {activeUser?.role == RoleEnum.Client && <ConfirmSignOffModal />}
       </HStack>
       <HStack display={["none", null, "flex"]}>
         <Navbar />

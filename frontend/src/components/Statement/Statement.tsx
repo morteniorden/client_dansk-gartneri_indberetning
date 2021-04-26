@@ -2,17 +2,12 @@ import { Heading, Stack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { EditStatementContext } from "contexts/EditStatementContext";
+import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import {
-  AccountantDto,
-  AccountantType,
-  IStatementDto,
-  StatementDto,
-  UpdateStatementCommand
-} from "services/backend/nswagts";
+import { IStatementDto, RoleEnum, UpdateStatementCommand } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import CurrentAccountant from "./ChangeAccountant/CurrentAccountant";
@@ -27,11 +22,9 @@ const Statement: FC<Props> = ({ id }) => {
   const router = useRouter();
   const toast = useToast();
   const [statement, setStatement] = useState<IStatementDto>(null);
-  // const [statement, setStatement] = useState<IStatementDto>({
-  //   accountant: { accountantType: 0, email: "revisor@revisor.dk" }
-  // });
   const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const { activeUser } = useAuth();
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
@@ -42,7 +35,7 @@ const Statement: FC<Props> = ({ id }) => {
       if (data != null) setStatement(data);
       else {
         logger.info("statementClient.get no data");
-        //router.push("/mystatements");
+        router.push("mystatements");
       }
     } catch (err) {
       logger.warn("statementClient.get Error", err);
@@ -117,7 +110,7 @@ const Statement: FC<Props> = ({ id }) => {
 
   return (
     <>
-      {statement && (
+      {statement && activeUser && (
         <EditStatementContext.Provider
           value={{
             statement: statement,
@@ -135,7 +128,9 @@ const Statement: FC<Props> = ({ id }) => {
               <Heading size="sm">{`${t("statements.accountingYear")}: ${
                 statement.accountingYear
               }`}</Heading>
-              {statement.accountant && <CurrentAccountant statement={statement} />}
+              {statement.accountant && activeUser.role == RoleEnum.Client && (
+                <CurrentAccountant statement={statement} />
+              )}
               <StatementForm />
             </Stack>
           </BasicLayout>
