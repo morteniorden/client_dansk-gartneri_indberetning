@@ -34,9 +34,9 @@ namespace Application.Accounts.Commands.CreateAdmin
           Name = request.Admin.Name
         };
 
-        _context.Admins.Add(userEntity);
+        _context.Users.Add(userEntity);
         await _context.SaveChangesAsync(cancellationToken);
-      
+
         return userEntity.Id;
       }
     }

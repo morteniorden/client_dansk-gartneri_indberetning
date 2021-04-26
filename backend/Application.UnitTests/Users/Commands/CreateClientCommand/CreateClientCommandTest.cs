@@ -47,7 +47,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
       entity.Tel.Should().Be(command.ClientDto.Tel);
       entity.CVRNumber.Should().Be(command.ClientDto.CVRNumber);
       entity.Address.Should().NotBeNull();
-      entity.Address.ClientId.Should().Be(entity.Id);
+      entity.Address.Client.Should().NotBeNull();
     }
 
     [Fact]
@@ -79,7 +79,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "43546578",
-          Address =
+          Address = new AddressDto
           {
             AddressLine1 = "test street 5",
             AddressLine2 = "1234 test city"
@@ -106,7 +106,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          Address =
+          Address = new AddressDto
           {
             AddressLine1 = "test street 5",
             AddressLine2 = "1234 test city"
@@ -122,7 +122,7 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           Name = "test name",
           Tel = "12345678",
           CVRNumber = "13243546",
-          Address =
+          Address = new AddressDto
           {
             AddressLine1 = "test street 5",
             AddressLine2 = "1234 test city"

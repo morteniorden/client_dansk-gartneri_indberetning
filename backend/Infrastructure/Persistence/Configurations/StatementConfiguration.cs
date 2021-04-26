@@ -11,14 +11,14 @@ namespace Infrastructure.Persistence.Configurations
       builder.HasOne<Client>(e => e.Client)
         .WithMany(e => e.Statements)
         .HasForeignKey(e => e.ClientId)
-        .IsRequired(true)
-        .OnDelete(DeleteBehavior.Cascade);
+        .HasPrincipalKey(e => e.Id)
+        .IsRequired(true);
 
       builder.HasOne<Accountant>(e => e.Accountant)
         .WithMany(e => e.Statements)
         .HasForeignKey(e => e.AccountantId)
-        .IsRequired(false)
-        .OnDelete(DeleteBehavior.NoAction);
+        .HasPrincipalKey(e => e.Id)
+        .IsRequired(false);
 
       builder.Property(e => e.Status)
         .IsRequired(true);
@@ -29,7 +29,7 @@ namespace Infrastructure.Persistence.Configurations
       builder.Property(e => e.AccountantType)
         .IsRequired(true);
 
-      builder.HasIndex(e => new {e.ClientId, e.AccountingYear}).IsUnique();
+      builder.HasIndex(e => new { e.ClientId, e.AccountingYear }).IsUnique();
     }
   }
 }

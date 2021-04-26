@@ -9,9 +9,7 @@ namespace Infrastructure.Persistence.Configurations
   {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-      builder.HasKey(e => e.Id);
-
-      //builder.Property(e => e.Id).UseIdentityColumn();
+      builder.ToTable("Users");
 
       builder.HasDiscriminator<RoleEnum>("Role")
         .HasValue<Admin>(RoleEnum.Admin)
@@ -39,7 +37,8 @@ namespace Infrastructure.Persistence.Configurations
       //builder.Property(e => e.Tel)
       //  .IsRequired();
 
-      //builder.Property(e => e.CVRNumber)
+      // builder
+      //   .Property(e => e.CVRNumber)
       //  .IsRequired();
     }
   }

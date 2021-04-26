@@ -10,7 +10,7 @@ namespace Infrastructure.Persistence.Configurations
     {
       builder.HasOne<Client>(e => e.Client)
         .WithOne(e => e.Address)
-        .HasForeignKey<Client>(e => e.Id)
+        .HasForeignKey<Client>(e => e.AddressId)
         .IsRequired();
     }
   }

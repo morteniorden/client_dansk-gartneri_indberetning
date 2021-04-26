@@ -6,7 +6,6 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
 using Domain.Entities;
-using Domain.EntityExtensions;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

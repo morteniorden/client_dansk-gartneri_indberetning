@@ -4,8 +4,6 @@ using Application.Accounts;
 using Application.Common.Mappings;
 using AutoMapper;
 using Domain.Entities;
-using Domain.EntityExtensions;
-using Domain.Enums;
 
 namespace Application.Statements
 {

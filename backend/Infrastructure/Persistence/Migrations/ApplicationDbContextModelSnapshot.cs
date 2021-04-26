@@ -100,60 +100,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Emails");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ExampleChild", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("ExampleChildren");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ExampleParent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExampleParents");
-                });
-
             modelBuilder.Entity("Domain.Entities.Statement", b =>
                 {
                     b.Property<int>("Id")
@@ -267,7 +213,9 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -334,34 +282,29 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasBaseType("Domain.Entities.User");
 
                     b.Property<int?>("AddressId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("CVRNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tel")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasIndex("AddressId")
+                        .IsUnique()
+                        .HasFilter("[AddressId] IS NOT NULL");
+
                     b.HasDiscriminator().HasValue(2);
-                });
-
-            modelBuilder.Entity("Domain.Entities.ExampleChild", b =>
-                {
-                    b.HasOne("Domain.Entities.ExampleParent", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Domain.Entities.Statement", b =>
                 {
                     b.HasOne("Domain.Entities.Accountant", "Accountant")
                         .WithMany("Statements")
-                        .HasForeignKey("AccountantId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("AccountantId");
 
                     b.HasOne("Domain.Entities.Client", "Client")
                         .WithMany("Statements")
@@ -378,7 +321,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.Address", "Address")
                         .WithOne("Client")
-                        .HasForeignKey("Domain.Entities.Client", "Id")
+                        .HasForeignKey("Domain.Entities.Client", "AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -388,11 +331,6 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Address", b =>
                 {
                     b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ExampleParent", b =>
-                {
-                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("Domain.Entities.Accountant", b =>

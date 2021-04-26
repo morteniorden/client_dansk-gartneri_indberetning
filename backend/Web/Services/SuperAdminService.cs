@@ -36,7 +36,7 @@ namespace Web.Services
 
       if (email == "") return;
 
-      var superUser = _context.Users
+      var superUser = _context.Admins
         .FirstOrDefault(x => x.Email.Equals(email));
 
       if (superUser == null)
@@ -49,7 +49,8 @@ namespace Web.Services
           Role = RoleEnum.Admin
         };
         _context.Users.Add(superUser);
-      } else
+      }
+      else
       {
         superUser.Password = pass;
         _context.Users.Update(superUser);

@@ -28,10 +28,10 @@ namespace Application.Users.Queries.GetClientsQuery
       }
       public async Task<List<ClientDto>> Handle(GetClientsQuery request, CancellationToken cancellationToken)
       {
-        var viewModel = await _context.Users
-          .Where(user => user.Role == RoleEnum.Client)
-          .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
+        var results = await _context.Clients
           .ToListAsync(cancellationToken);
+
+        var viewModel = results.Select(x => _mapper.Map<ClientDto>(x)).ToList();
 
         return viewModel;
       }

@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Security;
-using Domain.EntityExtensions;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
