@@ -163,17 +163,31 @@ export interface Locale {
     removeAccountant: string;
     removeConsultant: string;
     confirmRemoveAccountant: string;
+    confirmRemoveApprovingAccountant: string;
     confirmRemoveConsultant: string;
+    confirmRemoveApprovingConsultant: string;
     sentToAccountant: string;
     sentToConsultant: string;
     sentTo: string;
     notYetApprovedAccountant: string;
     notYetApprovedConsultant: string;
+    approvedByAccountant: string;
+    approvedByConsultant: string;
+    approvedBy: string;
+    approvedAndReady: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
     signOffErrorTitle: string;
     signOffErrorText: string;
+
+    ApproveSuccessTitle: string;
+    ApproveSuccessText: string;
+    ApproveErrorTitle: string;
+    ApproveErrorText: string;
+
+    signOffExceeding: string;
+    signOffNeedsApproval: string;
 
     section1: {
       heading: string;
@@ -231,8 +245,8 @@ export interface Locale {
     accountantApproved: string;
     awaitsYourApproval: string;
     viewStatement: string;
-    signedOffstatus: string;
-    notSignedOffstatus: string;
+    signedOffStatus: string;
+    notSignedOffStatus: string;
     fillOutStatement: string;
   };
 }

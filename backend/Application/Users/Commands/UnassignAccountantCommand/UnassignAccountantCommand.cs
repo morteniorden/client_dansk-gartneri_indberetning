@@ -46,8 +46,18 @@ namespace Application.Users.Commands.UnassignAccountantCommand
           throw new ArgumentException("The statement has no assigned accountant");
         }
 
+        if (statement.Status == StatementStatus.SignedOff)
+        {
+          throw new ArgumentException("The statement is already signed off");
+        }
+
         statement.Accountant.DeactivationTime = DateTimeOffset.Now;
         _context.Users.Update(statement.Accountant);
+
+        if (statement.IsApproved)
+        {
+          statement.IsApproved = false;
+        }
 
         statement.Accountant = null;
         statement.AccountantId = null;

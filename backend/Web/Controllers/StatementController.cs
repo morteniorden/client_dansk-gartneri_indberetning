@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Statements;
+using Application.Statements.Commands.ApproveStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
@@ -78,6 +79,18 @@ namespace Web.Controllers
       await Mediator.Send(new UnassignAccountantCommand
       {
         StatementId = id
+      });
+
+      return NoContent();
+    }
+
+    [HttpPut("{id}/approve")]
+    public async Task<ActionResult> ApproveStatement([FromRoute] int id)
+    {
+
+      await Mediator.Send(new ApproveStatementCommand
+      {
+        Id = id
       });
 
       return NoContent();

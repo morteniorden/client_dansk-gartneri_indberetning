@@ -17,7 +17,7 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
   const { t } = useLocales();
   const toast = useToast();
   const { fetchData, isFetching } = useContext(EditStatementContext);
-  const { boxBorder, lightOrange } = useColors();
+  const { boxBorder, lightOrange, statusIsSigned } = useColors();
 
   const handleDelete = useCallback(async () => {
     try {
@@ -54,26 +54,36 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
         border="1px"
         borderColor={boxBorder}
         rounded="md"
-        background={lightOrange}
+        background={statement.isApproved ? statusIsSigned : lightOrange}
         justifyContent="space-between"
         alignItems="center">
         <HStack spacing="5">
           <BsFillPeopleFill size="40px" />
           <Stack spacing={0}>
             <Heading size="sm" colorScheme="green">
-              {statement.accountant.accountantType == AccountantType.Accountant
+              {statement.isApproved
+                ? statement.accountant.accountantType == AccountantType.Accountant
+                  ? t("statements.approvedByAccountant")
+                  : t("statements.approvedByConsultant")
+                : statement.accountant.accountantType == AccountantType.Accountant
                 ? t("statements.sentToAccountant")
                 : t("statements.sentToConsultant")}
             </Heading>
-            <Text fontSize="sm">{`${t("statements.sentTo")} ${statement.accountant.email}`}</Text>
             <Text fontSize="sm">
-              {statement.accountant.accountantType == AccountantType.Accountant
+              {statement.isApproved
+                ? `${t("statements.approvedBy")}: ${statement.accountant.email}`
+                : `${t("statements.sentTo")}: ${statement.accountant.email}`}
+            </Text>
+            <Text fontSize="sm">
+              {statement.isApproved
+                ? t("statements.approvedAndReady")
+                : statement.accountant.accountantType == AccountantType.Accountant
                 ? t("statements.notYetApprovedAccountant")
                 : t("statements.notYetApprovedConsultant")}
             </Text>
           </Stack>
         </HStack>
-        <RemoveAccountantModal accountant={statement.accountant} cb={handleDelete} />
+        <RemoveAccountantModal statement={statement} cb={handleDelete} />
       </Flex>
     </Skeleton>
   );
