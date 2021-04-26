@@ -4,7 +4,7 @@ import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import React, { FC, useCallback, useContext } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
-import { genStatementClient, genUserClient } from "services/backend/apiClients";
+import { genStatementClient } from "services/backend/apiClients";
 import { AccountantType, IStatementDto } from "services/backend/nswagts";
 
 import RemoveAccountantModal from "./RemoveAccountantModal";
@@ -62,11 +62,15 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
           <Stack spacing={0}>
             <Heading size="sm" colorScheme="green">
               {statement.accountant.accountantType == AccountantType.Accountant
-                ? "Anmodning om godkendelse sendt til revisor"
-                : "Anmodning om godkendelse sendt til uvildig konsulent"}
+                ? t("statements.sentToAccountant")
+                : t("statements.sentToConsultant")}
             </Heading>
-            <Text fontSize="sm">{`Anmodning sendt til: ${statement.accountant.email}`}</Text>
-            <Text fontSize="sm">Revisor har endnu ikke godkendt skemaet</Text>
+            <Text fontSize="sm">{`${t("statements.sentTo")} ${statement.accountant.email}`}</Text>
+            <Text fontSize="sm">
+              {statement.accountant.accountantType == AccountantType.Accountant
+                ? t("statements.notYetApprovedAccountant")
+                : t("statements.notYetApprovedConsultant")}
+            </Text>
           </Stack>
         </HStack>
         <RemoveAccountantModal accountant={statement.accountant} cb={handleDelete} />

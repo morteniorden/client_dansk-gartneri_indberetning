@@ -34,16 +34,22 @@ const ClientStatements: FC<Props> = ({ statements, isFetching }) => {
                 .map(statement => (
                   <Tr key={statement.id}>
                     <Td>{statement.accountingYear}</Td>
-                    <Td>{statement.status == 2 ? "Besvaret" : "Ikke besvaret"}</Td>
+                    <Td>
+                      {statement.status == 2
+                        ? t("myStatements.signedOffStatus")
+                        : t("myStatements.notSignedOffStatus")}
+                    </Td>
                     <Td>
                       {statement.status != 2 && (
                         <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
                           <Button colorScheme="green" rounded="full">
-                            Besvar
+                            {t("myStatements.answer")}
                           </Button>
                         </Link>
                       )}
-                      {statement.status == 2 && <Button rounded="full">Se besvarelse</Button>}
+                      {statement.status == 2 && (
+                        <Button rounded="full">{t("myStatements.viewStatement")}</Button>
+                      )}
                     </Td>
                   </Tr>
                 ))}

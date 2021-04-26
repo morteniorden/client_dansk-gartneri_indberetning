@@ -139,7 +139,6 @@ export const table: Locale = {
 
   //TODO: Translate these
   statements: {
-    myStatements: "Mine indberetninger",
     turnoverExlMoms: "Omsætning excl. moms",
     taxIs: "Afgiften udgør",
     boughtPlants: "Indkøbte planter",
@@ -168,6 +167,11 @@ export const table: Locale = {
       "You are about to unassign the accountant for this statement. Do you want to continue?",
     confirmRemoveConsultant:
       "You are about to unassign the consultant for this statement. Do you want to continue?",
+    sentToAccountant: "Request for approval sent to accountant",
+    sentToConsultant: "Request for approval sent to consultant",
+    sentTo: "Request sent to:",
+    notYetApprovedAccountant: "The accountant has not yet approved the statement",
+    notYetApprovedConsultant: "The consultant has not yet approved the statement",
 
     invitationSentSuccessTitle: "Invite sent",
     invitationSentSuccessText: "Invite to fill out statement has been sent",
@@ -230,5 +234,15 @@ export const table: Locale = {
       dropFile: "Drop your file here...",
       signAndApprove: "Sign-off and approve"
     }
+  },
+
+  myStatements: {
+    myStatements: "Mine indberetninger",
+    accountantApproved: "Approved",
+    awaitsYourApproval: "Awaits your approval",
+    viewStatement: "View statement",
+    signedOffstatus: "Finished",
+    notSignedOffstatus: "Pending",
+    fillOutStatement: "Go to statement"
   }
 };

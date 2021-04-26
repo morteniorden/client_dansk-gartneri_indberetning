@@ -32,16 +32,22 @@ const AccountantStatements: FC<Props> = ({ statements, isFetching, accountingYea
                 .map(statement => (
                   <Tr key={statement.id}>
                     <Td>{statement.client.name}</Td>
-                    <Td>{statement.status == 2 ? "Godkendt" : "Afventer din godkendelse"}</Td>
+                    <Td>
+                      {statement.status == 2
+                        ? t("myStatements.accountantApproved")
+                        : t("myStatements.awaitsYourApproval")}
+                    </Td>
                     <Td>
                       {statement.status != 2 && (
                         <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
                           <Button colorScheme="green" rounded="full">
-                            Se oplysningsksema
+                            {t("myStatements.viewStatement")}
                           </Button>
                         </Link>
                       )}
-                      {statement.status == 2 && <Button rounded="full">Se oplysningsksema</Button>}
+                      {statement.status == 2 && (
+                        <Button rounded="full">{t("myStatements.viewStatement")}</Button>
+                      )}
                     </Td>
                   </Tr>
                 ))}

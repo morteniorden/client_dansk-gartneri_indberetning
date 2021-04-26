@@ -137,7 +137,6 @@ export const table: Locale = {
   },
 
   statements: {
-    myStatements: "Mine indberetninger",
     turnoverExlMoms: "Omsætning excl. moms",
     taxIs: "Afgiften udgør",
     boughtPlants: "Indkøbte planter",
@@ -171,6 +170,11 @@ export const table: Locale = {
       "Du er ved at fjerne revisoren for dette oplysningsskema. Vil du fortsætte?",
     confirmRemoveConsultant:
       "Du er ved at fjerne den uvildige konsulent for dette oplysningsskema. Vil du fortsætte?",
+    sentToAccountant: "Anmodning om godkendelse sendt til revisor",
+    sentToConsultant: "Anmodning om godkendelse sendt til uvildig konsulent",
+    sentTo: "Anmodning sendt til:",
+    notYetApprovedAccountant: "Revisor har endnu ikke godkendt skemaet",
+    notYetApprovedConsultant: "Konsulenten har endnu ikke godkendt skemaet",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
@@ -228,5 +232,15 @@ export const table: Locale = {
       dropFile: "Slip din fil her...",
       signAndApprove: "Signér og godkend"
     }
+  },
+
+  myStatements: {
+    myStatements: "Mine indberetninger",
+    accountantApproved: "Godkendt",
+    awaitsYourApproval: "Afventer din godkendelse",
+    viewStatement: "Se oplysningsskema",
+    signedOffstatus: "Besvaret",
+    notSignedOffstatus: "Ikke besvaret",
+    fillOutStatement: "Besvar"
   }
 };

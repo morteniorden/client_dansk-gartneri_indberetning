@@ -1,6 +1,7 @@
 import { Heading, Stack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import BasicLayout from "components/Layouts/BasicLayout";
+import CurrentAccountant from "components/Statement/ChangeAccountant/CurrentAccountant";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
@@ -10,7 +11,6 @@ import { genStatementClient } from "services/backend/apiClients";
 import { IStatementDto, RoleEnum, UpdateStatementCommand } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
-import CurrentAccountant from "./ChangeAccountant/CurrentAccountant";
 import StatementForm from "./StatementForm";
 
 interface Props {
@@ -118,7 +118,7 @@ const Statement: FC<Props> = ({ id }) => {
             save: onSaveChanges,
             isSaving: isSaving,
             submit: onSubmit,
-            disabled: false,
+            readonly: false,
             fetchData: fetchData,
             isFetching: isFetching
           }}>

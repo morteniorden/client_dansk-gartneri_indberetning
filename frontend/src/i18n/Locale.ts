@@ -135,7 +135,6 @@ export interface Locale {
   };
 
   statements: {
-    myStatements: string;
     turnoverExlMoms: string;
     taxIs: string;
     boughtPlants: string;
@@ -165,6 +164,11 @@ export interface Locale {
     removeConsultant: string;
     confirmRemoveAccountant: string;
     confirmRemoveConsultant: string;
+    sentToAccountant: string;
+    sentToConsultant: string;
+    sentTo: string;
+    notYetApprovedAccountant: string;
+    notYetApprovedConsultant: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
@@ -220,5 +224,15 @@ export interface Locale {
       dropFile: string;
       signAndApprove: string;
     };
+  };
+
+  myStatements: {
+    myStatements: string;
+    accountantApproved: string;
+    awaitsYourApproval: string;
+    viewStatement: string;
+    signedOffstatus: string;
+    notSignedOffstatus: string;
+    fillOutStatement: string;
   };
 }

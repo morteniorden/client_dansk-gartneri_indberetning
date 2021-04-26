@@ -56,7 +56,7 @@ const MyStatements: FC = () => {
   return (
     <BasicLayout maxW="80vw">
       <Stack spacing={10}>
-        <Heading>{t("statements.myStatements")}</Heading>
+        <Heading>{t("myStatements.myStatements")}</Heading>
         {activeUser?.role == RoleEnum.Accountant && (
           <AccountingYearSelect
             options={accountingYears}
