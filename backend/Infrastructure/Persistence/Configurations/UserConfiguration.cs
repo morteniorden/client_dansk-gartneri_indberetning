@@ -28,18 +28,6 @@ namespace Infrastructure.Persistence.Configurations
 
       builder.Property(e => e.Role)
         .IsRequired();
-
-      //builder.HasOne<Address>(e => e.Address)
-      //  .WithOne(e => e.Client)
-      //  .IsRequired()
-      //  .OnDelete(DeleteBehavior.Cascade);
-
-      //builder.Property(e => e.Tel)
-      //  .IsRequired();
-
-      // builder
-      //   .Property(e => e.CVRNumber)
-      //  .IsRequired();
     }
   }
 }
