@@ -1,8 +1,8 @@
 import { createContext } from "react";
 import { Control } from "react-hook-form";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementNoUsersDto } from "services/backend/nswagts";
 
-type Form = IStatementDto;
+type Form = IStatementNoUsersDto;
 
 interface FormControlContextContent {
   control: Control<Form>;
