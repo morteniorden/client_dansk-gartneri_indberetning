@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Application.Accounts;
 using Application.Common.Mappings;
 using Application.Users;
 using Domain.Entities;
@@ -11,7 +9,7 @@ namespace Application.Statements
   {
     public int Id { get; set; }
     public int ClientId { get; set; }
-    public virtual Client Client { get; set; }
+    public virtual ClientNoStatementsDto Client { get; set; }
     public int? AccountantId { get; set; }
     public virtual Accountant? Accountant { get; set; }
     public int AccountingYear { get; set; }
