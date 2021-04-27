@@ -1,11 +1,11 @@
-import { Button, Flex, Heading, Stack, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, Stack } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementInfoDto, UpdateStatementInfoCommand } from "services/backend/nswagts";
+import { IStatementInfoDto } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementInfoForm from "./StatementInfoForm";

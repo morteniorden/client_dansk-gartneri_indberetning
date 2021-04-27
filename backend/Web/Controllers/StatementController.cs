@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.StatementInfos;
+using Application.StatementInfos.Commands.UpdateStatementÍnfo;
 using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
 using Application.Statements.Commands.CreateStatementCommand;
@@ -11,6 +12,7 @@ using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSVQuery;
 using Application.Users.Commands.UnassignAccountantCommand;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -80,6 +82,12 @@ namespace Web.Controllers
       return await Mediator.Send(new GetAllStatementInfoQuery());
     }
 
+    [HttpPut("statementInfo/{year}")]
+    public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
+    {
+      command.AccountingYear = year;
+      return await Mediator.Send(command);
+    }
 
     [HttpPut("statement/{id}/unassignAccountant")]
     public async Task<ActionResult> UnassignAccountant([FromRoute] int id)

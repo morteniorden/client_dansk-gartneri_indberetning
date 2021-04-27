@@ -1,16 +1,13 @@
-using Application.Common.Exceptions;
-using Application.ExampleChildren;
-using Application.ExampleChildren.Commands.UpdateExampleChild;
-using Domain.Enums;
-using FluentAssertions;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
 using Application.Common.Mappings;
 using Application.StatementInfos;
 using Application.StatementInfos.Commands.UpdateStatementÍnfo;
 using AutoMapper;
+using FluentAssertions;
 using Xunit;
 
 namespace Application.UnitTests.StatementInfos.Commands.UpdateStatementInfo

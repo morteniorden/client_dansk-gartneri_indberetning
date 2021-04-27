@@ -22,11 +22,11 @@ const InputPerMille: FC<Props> = ({ name }) => {
 
   const {
     field: { ref, onChange, value, onBlur },
-    meta: { isDirty, isTouched, invalid }
+    fieldState: { isDirty, isTouched, invalid }
   } = useController({
     name,
     control,
-    rules: { required: false, valueAsNumber: true },
+    rules: { required: false },
     defaultValue: form[name]
   });
 
@@ -41,7 +41,7 @@ const InputPerMille: FC<Props> = ({ name }) => {
       <InputGroup>
         <NumberInput
           min={0} //Not sure about the range
-          max={99} //Not sure about the range
+          max={999} //Not sure about the range
           precision={2}
           defaultValue={value}>
           <NumberInputField
@@ -50,7 +50,8 @@ const InputPerMille: FC<Props> = ({ name }) => {
             value={value}
             onBlur={onBlur}
             onChange={e => {
-              onChange(e.target.value);
+              const val = Number.parseInt(e.target.value);
+              onChange(val);
             }}
             bgColor={bgColor}
             textAlign="end"

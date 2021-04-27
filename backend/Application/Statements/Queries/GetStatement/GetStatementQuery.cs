@@ -1,11 +1,14 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
 using Application.StatementInfos;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,17 +47,17 @@ namespace Application.Statements.Queries.GetMyStatements
           throw new NotFoundException(nameof(Statement), request.Id);
         }
 
-        var statementInfo = await FindInfo(statement.RevisionYear);
+        var statementInfo = await FindInfo(statement.AccountingYear);
 
         if (statementInfo == null)
         {
-          //Check if, for some reason, the statementInfo for this year has not been created. 
+          //Check if, for some reason, the statementInfo for this year has not been created.
           await _statementInfoService.CheckMissingYearsInfo();
-          statementInfo = await FindInfo(statement.RevisionYear);
+          statementInfo = await FindInfo(statement.AccountingYear);
 
           if (statementInfo == null)
           {
-            throw new NotFoundException(nameof(StatementInfo), statement.RevisionYear);
+            throw new NotFoundException(nameof(StatementInfo), statement.AccountingYear);
           }
         }
 
@@ -63,6 +66,11 @@ namespace Application.Statements.Queries.GetMyStatements
           Statement = statement,
           StatementInfo = statementInfo
         };
+      }
+
+      private object Statement()
+      {
+        throw new NotImplementedException();
       }
 
       private async Task<StatementInfoDto> FindInfo(int year)
