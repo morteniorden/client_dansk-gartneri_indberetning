@@ -70,13 +70,21 @@ export const table: Locale = {
   },
 
   admins: {
-    admins: "Administratorer"
+    admins: "Administratorer",
+    addAdmin: "Tilføj admin",
+    addAdminSuccessTitle: "Administrator oprettet",
+    addAdminSuccessText: "En ny administrator er nu oprettet",
+    addAdminErrorTitle: "Fejl",
+    addAdminErrorText: "Der skete en fejl, da vi forsøgte at oprette ny administrator.",
+    deactivateAdmin: "Deaktivér admininistrator",
+    deactivateAdminText: "Du er ved at deaktivere denne administrator. Vil du fortsætte?"
   },
 
   actions: {
     update: "Opdatér",
     delete: "Slet",
     remove: "Fjern",
+    deactivate: "Deaktivér",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Ændringer gemt",
     saveSuccessText: "Dine ændringer er blevet gemt",

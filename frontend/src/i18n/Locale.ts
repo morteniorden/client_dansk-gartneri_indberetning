@@ -69,12 +69,20 @@ export interface Locale {
 
   admins: {
     admins: string;
+    addAdmin: string;
+    addAdminSuccessTitle: string;
+    addAdminSuccessText: string;
+    addAdminErrorTitle: string;
+    addAdminErrorText: string;
+    deactivateAdmin: string;
+    deactivateAdminText: string;
   };
 
   actions: {
     update: string;
     delete: string;
     remove: string;
+    deactivate: string;
     saveSuccessTitle: string;
     saveSuccessText: string;
     saveErrorTitle: string;

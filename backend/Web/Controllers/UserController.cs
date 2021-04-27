@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Users;
 using Application.Users.Commands.UpdatePassword;
 using System.Collections.Generic;
+using Application.Accounts.Commands.CreateAdmin;
 using Application.Accounts.Queries.GetCurrentAccountQuery;
 using Application.Users.Commands.CreateAccountantCommand;
 using Application.Users.Commands.CreateClientCommand;
@@ -32,6 +33,12 @@ namespace Web.Controllers
 
     [HttpPost("clients")]
     public async Task<ActionResult<int>> CreateClient([FromBody] CreateClientCommand command)
+    {
+      return await Mediator.Send(command);
+    }
+
+    [HttpPost("admins")]
+    public async Task<ActionResult<int>> CreateAdmin([FromBody] CreateAdminCommand command)
     {
       return await Mediator.Send(command);
     }

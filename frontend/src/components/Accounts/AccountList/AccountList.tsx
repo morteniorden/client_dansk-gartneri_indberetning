@@ -15,9 +15,15 @@ const AccountList: FC<Props> = ({ data, accountingYear }) => {
 
   return (
     <Accordion allowToggle>
-      {data.map(client => (
-        <AccountListItem key={client.id} client={client} accountingYear={accountingYear} />
-      ))}
+      {data
+        .sort((a, b) => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+          else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+          return 0;
+        })
+        .map(client => (
+          <AccountListItem key={client.id} client={client} accountingYear={accountingYear} />
+        ))}
     </Accordion>
   );
 };

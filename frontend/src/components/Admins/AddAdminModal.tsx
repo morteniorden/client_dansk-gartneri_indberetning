@@ -13,36 +13,35 @@ import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback } from "react";
 
-import NewAccountForm from "./NewAccountForm";
+import AddAdminForm from "./AddAdminForm";
 
 interface Props {
-  className?: string;
-  onSubmit: () => Promise<void>;
+  onSubmit: () => void;
 }
 
-const NewAccountModal: FC<Props> = (props: Props) => {
+const AddAdminModal: FC<Props> = ({ onSubmit }) => {
   const { buttonFont } = useColors();
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSubmit = useCallback(() => {
     onClose();
-    props.onSubmit();
+    onSubmit();
   }, []);
 
   return (
     <>
       <Button rounded="md" colorScheme="blue" textColor={buttonFont} onClick={onOpen}>
-        {t("accounts.addAccount")}
+        {t("admins.addAdmin")}
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{t("accounts.addAccount")}</ModalHeader>
+          <ModalHeader>{t("admins.addAdmin")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <NewAccountForm onSubmit={handleSubmit} />
+            <AddAdminForm onSubmit={handleSubmit} />
           </ModalBody>
           <ModalFooter></ModalFooter>
         </ModalContent>
@@ -50,4 +49,4 @@ const NewAccountModal: FC<Props> = (props: Props) => {
     </>
   );
 };
-export default NewAccountModal;
+export default AddAdminModal;
