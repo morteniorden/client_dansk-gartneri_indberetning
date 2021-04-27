@@ -10,12 +10,12 @@ import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementNoUsersDto } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";
 
 interface Props {
-  name: keyof IStatementDto;
+  name: keyof IStatementNoUsersDto;
 }
 
 const InputDKK: FC<Props> = ({ name }) => {
