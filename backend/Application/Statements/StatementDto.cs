@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Application.Accounts;
 using Application.Common.Mappings;
 using Application.Users;
 using Domain.Entities;
@@ -10,9 +8,11 @@ namespace Application.Statements
   public class StatementDto : IAutoMap<Statement>
   {
     public int Id { get; set; }
-    public int AccountId { get; set; }
-    public virtual AccountDto Account { get; set; }
-    public int RevisionYear { get; set; }
+    public int ClientId { get; set; }
+    public virtual ClientNoStatementsDto Client { get; set; }
+    public int? AccountantId { get; set; }
+    public virtual Accountant? Accountant { get; set; }
+    public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
 
     public int s1_mushrooms { get; set; }

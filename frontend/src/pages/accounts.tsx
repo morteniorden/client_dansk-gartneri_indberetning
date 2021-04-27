@@ -1,4 +1,4 @@
-import Accounts from "components/Accounts/Accounts";
+import Accounts from "components/Accounts/Clients";
 import { Locale } from "i18n/Locale";
 // import { runTimeTable } from "i18n/runtimeTable";
 import { GetStaticProps, NextPage } from "next";

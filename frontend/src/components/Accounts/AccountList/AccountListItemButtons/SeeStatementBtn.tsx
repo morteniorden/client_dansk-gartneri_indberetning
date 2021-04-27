@@ -2,15 +2,15 @@ import { IconButton, Tooltip } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC } from "react";
 import { MdAssignment } from "react-icons/md";
-import { IAccountDto } from "services/backend/nswagts";
+import { IClientDto } from "services/backend/nswagts";
 
 interface Props {
-  account?: IAccountDto;
+  client?: IClientDto;
   accountingYear?: number;
   disabled?: boolean;
 }
 
-const SeeStatementBtn: FC<Props> = ({ account, accountingYear, disabled }) => {
+const SeeStatementBtn: FC<Props> = ({ client, accountingYear, disabled }) => {
   const { t } = useLocales();
 
   //TODO: Implement functionality

@@ -5,6 +5,7 @@ using Application.Common.Interfaces;
 using Application.Common.Options;
 using Application.Security;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
 using Web.Options;
@@ -36,25 +37,26 @@ namespace Web.Services
       if (email == "") return;
 
       var superUser = _context.Admins
-        .Where(x => x.Email.Equals(email))
-        .FirstOrDefault();
+        .FirstOrDefault(x => x.Email.Equals(email));
 
       if (superUser == null)
       {
-        superUser = new AdminUser
+        superUser = new Admin
         {
           Name = "SuperAdmin",
           Email = email,
-          Password = pass
+          Password = pass,
+          Role = RoleEnum.Admin
         };
-        _context.Admins.Add(superUser);
-      } else
+        _context.Users.Add(superUser);
+      }
+      else
       {
         superUser.Password = pass;
-        _context.Admins.Update(superUser);
+        //_context.Users.Update(superUser);
       }
 
-      _context.SaveChanges();
+      //_context.SaveChanges();
     }
   }
 

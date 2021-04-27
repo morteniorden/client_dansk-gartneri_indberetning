@@ -1,9 +1,8 @@
-using Application.ExampleChildren;
-using Application.ExampleParents;
 using AutoMapper;
 using Domain.Entities;
 using System;
 using Application.Accounts;
+using Application.Statements;
 using Application.Users;
 using Xunit;
 
@@ -27,13 +26,11 @@ namespace Application.UnitTests.Common.Mappings
     }
 
     [Theory]
-    [InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
-    [InlineData(typeof(ExampleParent), typeof(ExampleParentDto))]
-    [InlineData(typeof(Account), typeof(AccountDto))]
-    [InlineData(typeof(User), typeof(UserAccountIdDto))]
-    [InlineData(typeof(AdminUser), typeof(UserDto))]
+    [InlineData(typeof(Accountant), typeof(AccountantDto))]
+    [InlineData(typeof(Client), typeof(ClientDto))]
+    [InlineData(typeof(Admin), typeof(UserDto))]
     [InlineData(typeof(Address), typeof(AddressDto))]
-    //[InlineData(typeof(ExampleChild), typeof(ExampleChildDto))]
+    [InlineData(typeof(Statement), typeof(StatementDto))]
     public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
     {
       var instance = Activator.CreateInstance(source);

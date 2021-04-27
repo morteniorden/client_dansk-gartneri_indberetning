@@ -13,26 +13,25 @@ import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useMemo } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import { IAccountDto, StatementStatus } from "services/backend/nswagts";
+import { IClientDto, StatementStatus } from "services/backend/nswagts";
 
-import ChangeAccountantModal from "../ChangeAccountant/ChangeAccountantModal";
 import AccountItemExpandedPanel from "./AccountItemExpandedPanel";
 import InviteBtn from "./AccountListItemButtons/InviteBtn";
 import ViewStatementBtn from "./AccountListItemButtons/ViewStatementBtn";
 import StatusBadge from "./StatusBadge";
 
 interface Props {
-  account: IAccountDto;
+  client: IClientDto;
   accountingYear: number;
 }
 
-const AccountListItem: FC<Props> = ({ account, accountingYear }) => {
+const AccountListItem: FC<Props> = ({ client, accountingYear }) => {
   const { t } = useLocales();
   const { boxBorder } = useColors();
 
   const statement = useMemo(() => {
-    return account.statements.find(s => s.revisionYear == accountingYear);
-  }, [account.statements, accountingYear]);
+    return client.statements.find(s => s.accountingYear == accountingYear);
+  }, [client.statements, accountingYear]);
 
   return (
     <Flex shadow="sm" p={2} border="1px" borderColor={boxBorder} rounded="md" mb={2}>
@@ -41,18 +40,17 @@ const AccountListItem: FC<Props> = ({ account, accountingYear }) => {
           <>
             <Flex justifyContent="space-between" pl={3}>
               <HStack spacing={5}>
-                <Text>{account.name}</Text>
+                <Text>{client.name}</Text>
               </HStack>
               <HStack>
-                <StatusBadge account={account} accountingYear={accountingYear} />
-                {!statement && <InviteBtn account={account} accountingYear={accountingYear} />}
+                <StatusBadge client={client} accountingYear={accountingYear} />
+                {!statement && <InviteBtn client={client} accountingYear={accountingYear} />}
                 {statement && statement.status != StatementStatus.SignedOff && (
                   <ViewStatementBtn disabled={true} />
                 )}
                 {statement && statement.status == StatementStatus.SignedOff && (
-                  <StatementReadonlyModal statement={statement} account={account} />
+                  <StatementReadonlyModal statement={statement} client={client} />
                 )}
-                <ChangeAccountantModal account={account} />
                 <Tooltip label={isExpanded ? "Skjul info" : "Vis info"}>
                   <AccordionButton
                     as={IconButton}
@@ -63,7 +61,7 @@ const AccountListItem: FC<Props> = ({ account, accountingYear }) => {
               </HStack>
             </Flex>
             <AccordionPanel p={3}>
-              <AccountItemExpandedPanel account={account} />
+              <AccountItemExpandedPanel client={client} />
             </AccordionPanel>
           </>
         )}

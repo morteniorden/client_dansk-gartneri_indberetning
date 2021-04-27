@@ -44,7 +44,7 @@ namespace Application.Statements.Commands.SignOffStatement
         }
 
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
-        if (statementEntity.AccountId != currentUser.AccountId)
+        if (statementEntity.ClientId != currentUser.Id)
         {
           throw new UnauthorizedAccessException("Tried to sign off a statement that belongs to another account");
         }

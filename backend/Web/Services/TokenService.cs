@@ -24,7 +24,7 @@ namespace Web.Services
       _options = options.Value;
       _context = context;
     }
-    public string CreateToken(IUser user)
+    public string CreateToken(User user)
     {
       var claims = new List<Claim>();
       claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Email));
@@ -42,7 +42,7 @@ namespace Web.Services
       return tokenHandler.WriteToken(token);
     }
 
-    public async Task<(string, string)> CreateSSOToken(IUser user)
+    public async Task<(string, string)> CreateSSOToken(User user)
     {
       var claims = new List<Claim>();
       claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Email));

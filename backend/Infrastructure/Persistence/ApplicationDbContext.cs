@@ -1,10 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Domain.Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence
 {
@@ -21,19 +23,39 @@ namespace Infrastructure.Persistence
       _currentUserService = currentUserService;
       _dateTimeOffsetService = dateTimeOffset;
     }
-
-    public DbSet<Account> Accounts { get; set;}
     public DbSet<User> Users { get; set; }
-    public DbSet<AdminUser> Admins { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Email> Emails { get; set; }
     public DbSet<Statement> Statements { get; set; }
     public DbSet<StatementInfo> StatementInfo { get; set; }
-    public DbSet<ExampleChild> ExampleChildren { get; set; }
-
-    public DbSet<ExampleParent> ExampleParents { get; set; }
 
 
+    [NotMapped]
+    public IQueryable<Client> Clients
+    {
+      get
+      {
+        return Users.OfType<Client>();
+      }
+    }
+
+    [NotMapped]
+    public IQueryable<Accountant> Accountants
+    {
+      get
+      {
+        return Users.OfType<Accountant>();
+      }
+    }
+
+    [NotMapped]
+    public IQueryable<Admin> Admins
+    {
+      get
+      {
+        return Users.OfType<Admin>();
+      }
+    }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

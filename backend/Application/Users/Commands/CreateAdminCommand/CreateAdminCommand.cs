@@ -12,7 +12,7 @@ namespace Application.Accounts.Commands.CreateAdmin
   [Authorize(Role = RoleEnum.Admin)]
   public class CreateAdminCommand : IRequest<int>
   {
-    public CreateUserDto user;
+    public CreateAdminDto Admin;
 
     public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, int>
     {
@@ -27,17 +27,16 @@ namespace Application.Accounts.Commands.CreateAdmin
 
       public async Task<int> Handle(CreateAdminCommand request, CancellationToken cancellationToken)
       {
-        var userEntity = new AdminUser
+        var userEntity = new Admin
         {
-          Email = request.user.Email,
-          Password = _passwordHasher.Hash(request.user.Password),
-          Role = RoleEnum.Admin,
-          Name = request.user.Name
+          Email = request.Admin.Email,
+          Password = _passwordHasher.Hash(request.Admin.Password),
+          Name = request.Admin.Name
         };
 
-        _context.Admins.Add(userEntity);
+        _context.Users.Add(userEntity);
         await _context.SaveChangesAsync(cancellationToken);
-      
+
         return userEntity.Id;
       }
     }

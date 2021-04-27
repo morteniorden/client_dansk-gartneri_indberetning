@@ -76,13 +76,15 @@ export const table: Locale = {
   actions: {
     update: "Opdatér",
     delete: "Slet",
+    remove: "Fjern",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Ændringer gemt",
     saveSuccessText: "Dine ændringer er blevet gemt",
     saveErrorTitle: "Fejl",
     saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer.",
     back: "Tilbage",
-    edit: "Rediger"
+    edit: "Rediger",
+    sendRequest: "Send anmodning"
   },
 
   password: {
@@ -104,7 +106,7 @@ export const table: Locale = {
 
   accountant: {
     editAccountant: "Rediger revisor",
-    addAccountant: "Tilføj ny revisor",
+    addAccountant: "Inviter revisor",
     noAccountant: "Ingen revisor",
     addSuccessTitle: "Revisor tilføjet",
     addSuccessText: "En mail med invitation til systemet er sendt til revisor.",
@@ -115,7 +117,10 @@ export const table: Locale = {
     deleteErrorTitle: "Deaktivering mislykket",
     deleteErrorText: "Der skete en fejl. Prøv eventuelt igen.",
     alreadyAssignedTitle: "Fejl",
-    alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto."
+    alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto.",
+    accountant: "Revisor",
+    consultant: "Uvildig konsulent",
+    accountantType: "Vælg revisor/konsulent:"
   },
 
   mailEditor: {
@@ -133,7 +138,6 @@ export const table: Locale = {
   },
 
   statements: {
-    myStatements: "Mine indberetninger",
     turnoverExlMoms: "Omsætning excl. moms",
     taxIs: "Afgiften udgør",
     boughtPlants: "Indkøbte planter",
@@ -145,6 +149,11 @@ export const table: Locale = {
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
     downloadCsv: "Download CSV",
+    sendToAccountant: "Send til revisor el. konsulent",
+    sendToAccountantText1:
+      "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
+    sendToAccountantText2:
+      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Ikke inviteret",
     statusInvited: "Inviteret",
@@ -155,6 +164,18 @@ export const table: Locale = {
     invitationSentSuccessText: "Invitation til at udfylde oplysningsskema blev sendt.",
     invitationSentErrorTitle: "Invitation ikke sendt",
     invitationSentErrorText: "Der skete en fejl, da vi forsøgte at sende invitationen.",
+
+    removeAccountant: "Fjern revisor",
+    removeConsultant: "Fjern konsulent",
+    confirmRemoveAccountant:
+      "Du er ved at fjerne revisoren for dette oplysningsskema. Vil du fortsætte?",
+    confirmRemoveConsultant:
+      "Du er ved at fjerne den uvildige konsulent for dette oplysningsskema. Vil du fortsætte?",
+    sentToAccountant: "Anmodning om godkendelse sendt til revisor",
+    sentToConsultant: "Anmodning om godkendelse sendt til uvildig konsulent",
+    sentTo: "Anmodning sendt til:",
+    notYetApprovedAccountant: "Revisor har endnu ikke godkendt skemaet",
+    notYetApprovedConsultant: "Konsulenten har endnu ikke godkendt skemaet",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
@@ -202,6 +223,15 @@ export const table: Locale = {
       plum: "Blommer",
       currant: "Ribs",
       strawberry: "Jordbær"
+    },
+    accountantSection: {
+      heading: "Sektion for revisor",
+      helpText:
+        "Før oplysningsskemaet kan signeres som godkendt, skal følgende erklæring downloades, udfyldes og uploades herunder.",
+      downloadPdf: "Hent erklæring",
+      dragAndDrop: "Træk og slip PDF med udfyldt erklæring her, eller klik for at vælge fil...",
+      dropFile: "Slip din fil her...",
+      signAndApprove: "Signér og godkend"
     }
   },
 
@@ -209,5 +239,15 @@ export const table: Locale = {
     editStatementInfo: "Rediger oplysningsskema",
     helpText: "Hjælpetekst",
     tax: "Afgift"
+  },
+
+  myStatements: {
+    myStatements: "Mine indberetninger",
+    accountantApproved: "Godkendt",
+    awaitsYourApproval: "Afventer din godkendelse",
+    viewStatement: "Se oplysningsskema",
+    signedOffstatus: "Besvaret",
+    notSignedOffstatus: "Ikke besvaret",
+    fillOutStatement: "Besvar"
   }
 };

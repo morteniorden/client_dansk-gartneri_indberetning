@@ -14,9 +14,9 @@ using Domain.Enums;
 namespace Application.Users.Queries.GetClientsQuery
 {
   [Authorize(Role = RoleEnum.Admin)]
-  public class GetClientsQuery : IRequest<List<UserDto>>
+  public class GetClientsQuery : IRequest<List<ClientDto>>
   {
-    public class GetClientsQueryHandler : IRequestHandler<GetClientsQuery, List<UserDto>>
+    public class GetClientsQueryHandler : IRequestHandler<GetClientsQuery, List<ClientDto>>
     {
       private readonly IApplicationDbContext _context;
       private readonly IMapper _mapper;
@@ -26,12 +26,14 @@ namespace Application.Users.Queries.GetClientsQuery
         _context = context;
         _mapper = mapper;
       }
-      public async Task<List<UserDto>> Handle(GetClientsQuery request, CancellationToken cancellationToken)
+      public async Task<List<ClientDto>> Handle(GetClientsQuery request, CancellationToken cancellationToken)
       {
-        var viewModel = await _context.Users
-          .Where(user => user.Role == RoleEnum.Client)
-          .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+        var results = await _context.Clients
+          .Include(e => e.Address)
+          .Include(e => e.Statements)
           .ToListAsync(cancellationToken);
+
+        var viewModel = results.Select(x => _mapper.Map<ClientDto>(x)).ToList();
 
         return viewModel;
       }
