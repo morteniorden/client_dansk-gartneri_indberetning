@@ -1553,7 +1553,7 @@ export interface IGeneratePreviewMailCommand {
 export class StatementDto implements IStatementDto {
     id?: number;
     clientId?: number;
-    client?: Client | null;
+    client?: ClientNoStatementsDto | null;
     accountantId?: number | null;
     accountant?: Accountant | null;
     accountingYear?: number;
@@ -1587,7 +1587,7 @@ export class StatementDto implements IStatementDto {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
-            this.client = data.client && !(<any>data.client).toJSON ? new Client(data.client) : <Client>this.client; 
+            this.client = data.client && !(<any>data.client).toJSON ? new ClientNoStatementsDto(data.client) : <ClientNoStatementsDto>this.client; 
             this.accountant = data.accountant && !(<any>data.accountant).toJSON ? new Accountant(data.accountant) : <Accountant>this.accountant; 
         }
     }
@@ -1596,7 +1596,7 @@ export class StatementDto implements IStatementDto {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.clientId = _data["clientId"] !== undefined ? _data["clientId"] : <any>null;
-            this.client = _data["client"] ? Client.fromJS(_data["client"]) : <any>null;
+            this.client = _data["client"] ? ClientNoStatementsDto.fromJS(_data["client"]) : <any>null;
             this.accountantId = _data["accountantId"] !== undefined ? _data["accountantId"] : <any>null;
             this.accountant = _data["accountant"] ? Accountant.fromJS(_data["accountant"]) : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
@@ -1671,7 +1671,7 @@ export class StatementDto implements IStatementDto {
 export interface IStatementDto {
     id?: number;
     clientId?: number;
-    client?: IClient | null;
+    client?: IClientNoStatementsDto | null;
     accountantId?: number | null;
     accountant?: IAccountant | null;
     accountingYear?: number;
@@ -1698,6 +1698,119 @@ export interface IStatementDto {
     s8_currant?: number;
     s8_strawberries?: number;
     s8_otherBerryFruit?: number;
+}
+
+export class ClientNoStatementsDto implements IClientNoStatementsDto {
+    tel?: string | null;
+    address?: AddressDto | null;
+    cvrNumber?: string | null;
+    id?: number;
+    email?: string | null;
+    role?: RoleEnum;
+    name?: string | null;
+    deactivationTime?: Date | null;
+
+    constructor(data?: IClientNoStatementsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.address = data.address && !(<any>data.address).toJSON ? new AddressDto(data.address) : <AddressDto>this.address; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.tel = _data["tel"] !== undefined ? _data["tel"] : <any>null;
+            this.address = _data["address"] ? AddressDto.fromJS(_data["address"]) : <any>null;
+            this.cvrNumber = _data["cvrNumber"] !== undefined ? _data["cvrNumber"] : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
+            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.deactivationTime = _data["deactivationTime"] ? new Date(_data["deactivationTime"].toString()) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ClientNoStatementsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClientNoStatementsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tel"] = this.tel !== undefined ? this.tel : <any>null;
+        data["address"] = this.address ? this.address.toJSON() : <any>null;
+        data["cvrNumber"] = this.cvrNumber !== undefined ? this.cvrNumber : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        data["role"] = this.role !== undefined ? this.role : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["deactivationTime"] = this.deactivationTime ? this.deactivationTime.toISOString() : <any>null;
+        return data; 
+    }
+}
+
+export interface IClientNoStatementsDto {
+    tel?: string | null;
+    address?: IAddressDto | null;
+    cvrNumber?: string | null;
+    id?: number;
+    email?: string | null;
+    role?: RoleEnum;
+    name?: string | null;
+    deactivationTime?: Date | null;
+}
+
+export class AddressDto implements IAddressDto {
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
+
+    constructor(data?: IAddressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
+            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
+            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
+            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AddressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
+        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
+        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
+        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
+        return data; 
+    }
+}
+
+export interface IAddressDto {
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
 }
 
 export class AuditableEntity implements IAuditableEntity {
@@ -1803,129 +1916,58 @@ export interface IUser extends IAuditableEntity {
     ssoTokenId?: string | null;
 }
 
-export class Client extends User implements IClient {
-    tel?: string | null;
-    addressId?: number | null;
-    address?: Address | null;
-    cvrNumber?: string | null;
-    statements?: Statement[] | null;
+export class Accountant extends User implements IAccountant {
     role?: RoleEnum;
+    accountantType?: AccountantType;
+    statements?: Statement[] | null;
 
-    constructor(data?: IClient) {
+    constructor(data?: IAccountant) {
         super(data);
-        if (data) {
-            this.address = data.address && !(<any>data.address).toJSON ? new Address(data.address) : <Address>this.address; 
-        }
     }
 
     init(_data?: any) {
         super.init(_data);
         if (_data) {
-            this.tel = _data["tel"] !== undefined ? _data["tel"] : <any>null;
-            this.addressId = _data["addressId"] !== undefined ? _data["addressId"] : <any>null;
-            this.address = _data["address"] ? Address.fromJS(_data["address"]) : <any>null;
-            this.cvrNumber = _data["cvrNumber"] !== undefined ? _data["cvrNumber"] : <any>null;
+            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
+            this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             if (Array.isArray(_data["statements"])) {
                 this.statements = [] as any;
                 for (let item of _data["statements"])
                     this.statements!.push(Statement.fromJS(item));
             }
-            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
         }
     }
 
-    static fromJS(data: any): Client {
+    static fromJS(data: any): Accountant {
         data = typeof data === 'object' ? data : {};
-        let result = new Client();
+        let result = new Accountant();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["tel"] = this.tel !== undefined ? this.tel : <any>null;
-        data["addressId"] = this.addressId !== undefined ? this.addressId : <any>null;
-        data["address"] = this.address ? this.address.toJSON() : <any>null;
-        data["cvrNumber"] = this.cvrNumber !== undefined ? this.cvrNumber : <any>null;
+        data["role"] = this.role !== undefined ? this.role : <any>null;
+        data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         if (Array.isArray(this.statements)) {
             data["statements"] = [];
             for (let item of this.statements)
                 data["statements"].push(item.toJSON());
         }
-        data["role"] = this.role !== undefined ? this.role : <any>null;
         super.toJSON(data);
         return data; 
     }
 }
 
-export interface IClient extends IUser {
-    tel?: string | null;
-    addressId?: number | null;
-    address?: IAddress | null;
-    cvrNumber?: string | null;
-    statements?: Statement[] | null;
+export interface IAccountant extends IUser {
     role?: RoleEnum;
+    accountantType?: AccountantType;
+    statements?: Statement[] | null;
 }
 
-export class Address implements IAddress {
-    id?: number;
-    clientId?: number;
-    client?: Client | null;
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
-
-    constructor(data?: IAddress) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-            this.client = data.client && !(<any>data.client).toJSON ? new Client(data.client) : <Client>this.client; 
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.clientId = _data["clientId"] !== undefined ? _data["clientId"] : <any>null;
-            this.client = _data["client"] ? Client.fromJS(_data["client"]) : <any>null;
-            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
-            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
-            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
-            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): Address {
-        data = typeof data === 'object' ? data : {};
-        let result = new Address();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["clientId"] = this.clientId !== undefined ? this.clientId : <any>null;
-        data["client"] = this.client ? this.client.toJSON() : <any>null;
-        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
-        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
-        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
-        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
-        return data; 
-    }
-}
-
-export interface IAddress {
-    id?: number;
-    clientId?: number;
-    client?: IClient | null;
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
+export enum AccountantType {
+    Accountant = 0,
+    Consultant = 1,
 }
 
 export class Statement extends AuditableEntity implements IStatement {
@@ -2081,58 +2123,129 @@ export interface IStatement extends IAuditableEntity {
     s8_otherBerryFruit?: number;
 }
 
-export class Accountant extends User implements IAccountant {
-    role?: RoleEnum;
-    accountantType?: AccountantType;
+export class Client extends User implements IClient {
+    tel?: string | null;
+    addressId?: number | null;
+    address?: Address | null;
+    cvrNumber?: string | null;
     statements?: Statement[] | null;
+    role?: RoleEnum;
 
-    constructor(data?: IAccountant) {
+    constructor(data?: IClient) {
         super(data);
+        if (data) {
+            this.address = data.address && !(<any>data.address).toJSON ? new Address(data.address) : <Address>this.address; 
+        }
     }
 
     init(_data?: any) {
         super.init(_data);
         if (_data) {
-            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
-            this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
+            this.tel = _data["tel"] !== undefined ? _data["tel"] : <any>null;
+            this.addressId = _data["addressId"] !== undefined ? _data["addressId"] : <any>null;
+            this.address = _data["address"] ? Address.fromJS(_data["address"]) : <any>null;
+            this.cvrNumber = _data["cvrNumber"] !== undefined ? _data["cvrNumber"] : <any>null;
             if (Array.isArray(_data["statements"])) {
                 this.statements = [] as any;
                 for (let item of _data["statements"])
                     this.statements!.push(Statement.fromJS(item));
             }
+            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
         }
     }
 
-    static fromJS(data: any): Accountant {
+    static fromJS(data: any): Client {
         data = typeof data === 'object' ? data : {};
-        let result = new Accountant();
+        let result = new Client();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["role"] = this.role !== undefined ? this.role : <any>null;
-        data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
+        data["tel"] = this.tel !== undefined ? this.tel : <any>null;
+        data["addressId"] = this.addressId !== undefined ? this.addressId : <any>null;
+        data["address"] = this.address ? this.address.toJSON() : <any>null;
+        data["cvrNumber"] = this.cvrNumber !== undefined ? this.cvrNumber : <any>null;
         if (Array.isArray(this.statements)) {
             data["statements"] = [];
             for (let item of this.statements)
                 data["statements"].push(item.toJSON());
         }
+        data["role"] = this.role !== undefined ? this.role : <any>null;
         super.toJSON(data);
         return data; 
     }
 }
 
-export interface IAccountant extends IUser {
-    role?: RoleEnum;
-    accountantType?: AccountantType;
+export interface IClient extends IUser {
+    tel?: string | null;
+    addressId?: number | null;
+    address?: IAddress | null;
+    cvrNumber?: string | null;
     statements?: Statement[] | null;
+    role?: RoleEnum;
 }
 
-export enum AccountantType {
-    Accountant = 0,
-    Consultant = 1,
+export class Address implements IAddress {
+    id?: number;
+    clientId?: number;
+    client?: Client | null;
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
+
+    constructor(data?: IAddress) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.client = data.client && !(<any>data.client).toJSON ? new Client(data.client) : <Client>this.client; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.clientId = _data["clientId"] !== undefined ? _data["clientId"] : <any>null;
+            this.client = _data["client"] ? Client.fromJS(_data["client"]) : <any>null;
+            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
+            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
+            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
+            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): Address {
+        data = typeof data === 'object' ? data : {};
+        let result = new Address();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["clientId"] = this.clientId !== undefined ? this.clientId : <any>null;
+        data["client"] = this.client ? this.client.toJSON() : <any>null;
+        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
+        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
+        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
+        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
+        return data; 
+    }
+}
+
+export interface IAddress {
+    id?: number;
+    clientId?: number;
+    client?: IClient | null;
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    addressLine3?: string | null;
+    addressLine4?: string | null;
 }
 
 export enum StatementStatus {
@@ -2340,54 +2453,6 @@ export interface IClientDto {
     role?: RoleEnum;
     name?: string | null;
     deactivationTime?: Date | null;
-}
-
-export class AddressDto implements IAddressDto {
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
-
-    constructor(data?: IAddressDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
-            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
-            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
-            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): AddressDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new AddressDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
-        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
-        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
-        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
-        return data; 
-    }
-}
-
-export interface IAddressDto {
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
 }
 
 export class StatementNoUsersDto implements IStatementNoUsersDto {
