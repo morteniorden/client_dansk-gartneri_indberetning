@@ -1,8 +1,8 @@
-import { IAccountDto } from "services/backend/nswagts";
+import { IClientDto } from "services/backend/nswagts";
 
 import SelectType from "./SelectType";
 
 export type AccountFilter = {
   id: number;
-  predicate: (account: IAccountDto, textInput?: string, keys?: SelectType[]) => boolean;
+  predicate: (account: IClientDto, textInput?: string, keys?: SelectType[]) => boolean;
 };

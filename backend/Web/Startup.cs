@@ -20,7 +20,6 @@ using Application.Common.Options;
 using Application.Common.Services;
 using Application.Security;
 using Hangfire;
-using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;

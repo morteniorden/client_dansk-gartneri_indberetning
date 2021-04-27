@@ -76,12 +76,14 @@ export const table: Locale = {
   actions: {
     update: "Update",
     delete: "Delete",
+    remove: "Remove",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Changes saved",
     saveSuccessText: "Your changes has been saved.",
     saveErrorTitle: "Error",
     saveErrorText: "An error happened when trying to save your changes.",
-    back: "Cancel"
+    back: "Cancel",
+    sendRequest: "Send request"
   },
 
   password: {
@@ -115,7 +117,10 @@ export const table: Locale = {
     deleteErrorText: "Something went wrong. Please try again later.",
     alreadyAssignedTitle: "Error",
     alreadyAssignedText:
-      "This email is used by an accountant, that is already assigned to a client."
+      "This email is used by an accountant, that is already assigned to a client.",
+    accountant: "Accountant",
+    consultant: "Consultant",
+    accountantType: "Choose accountant or consultant:"
   },
 
   mailEditor: {
@@ -134,7 +139,6 @@ export const table: Locale = {
 
   //TODO: Translate these
   statements: {
-    myStatements: "Mine indberetninger",
     turnoverExlMoms: "Omsætning excl. moms",
     taxIs: "Afgiften udgør",
     boughtPlants: "Indkøbte planter",
@@ -146,11 +150,28 @@ export const table: Locale = {
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
     downloadCsv: "Download CSV",
+    sendToAccountant: "Send to accountant or consultant",
+    sendToAccountantText1:
+      "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
+    sendToAccountantText2:
+      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Not invited",
     statusInvited: "Invited",
     statusEdited: "Has edited",
     statusSignedOff: "Signed off",
+
+    removeAccountant: "Remove accountant",
+    removeConsultant: "Remove consultant",
+    confirmRemoveAccountant:
+      "You are about to unassign the accountant for this statement. Do you want to continue?",
+    confirmRemoveConsultant:
+      "You are about to unassign the consultant for this statement. Do you want to continue?",
+    sentToAccountant: "Request for approval sent to accountant",
+    sentToConsultant: "Request for approval sent to consultant",
+    sentTo: "Request sent to:",
+    notYetApprovedAccountant: "The accountant has not yet approved the statement",
+    notYetApprovedConsultant: "The consultant has not yet approved the statement",
 
     invitationSentSuccessTitle: "Invite sent",
     invitationSentSuccessText: "Invite to fill out statement has been sent",
@@ -203,6 +224,25 @@ export const table: Locale = {
       plum: "Blommer",
       currant: "Ribs",
       strawberry: "Jordbær"
+    },
+    accountantSection: {
+      heading: "Section for accountant or consultant",
+      helpText:
+        "Please download and fill out the following statement PDF. Upload it here to before signing off.",
+      downloadPdf: "Download statement",
+      dragAndDrop: "Drag and drop PDF with statement here, or click to choose file...",
+      dropFile: "Drop your file here...",
+      signAndApprove: "Sign-off and approve"
     }
+  },
+
+  myStatements: {
+    myStatements: "Mine indberetninger",
+    accountantApproved: "Approved",
+    awaitsYourApproval: "Awaits your approval",
+    viewStatement: "View statement",
+    signedOffstatus: "Finished",
+    notSignedOffstatus: "Pending",
+    fillOutStatement: "Go to statement"
   }
 };

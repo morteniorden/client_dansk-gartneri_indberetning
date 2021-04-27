@@ -7,7 +7,9 @@ type ContextType = {
   save: () => void;
   isSaving: boolean;
   submit: (data: IStatementDto) => Promise<void>;
-  disabled: boolean;
+  readonly: boolean;
+  fetchData: () => Promise<void>;
+  isFetching: boolean;
 };
 
 export const EditStatementContext = createContext<ContextType>({
@@ -16,5 +18,7 @@ export const EditStatementContext = createContext<ContextType>({
   save: () => null,
   isSaving: false,
   submit: (data: IStatementDto) => null,
-  disabled: false
+  readonly: false,
+  fetchData: () => null,
+  isFetching: false
 });

@@ -22,7 +22,7 @@ const ConfirmSignOffModal: FC = () => {
 
   return (
     <>
-      <Button rounded="full" colorScheme="blue" textColor={buttonFont} onClick={onOpen}>
+      <Button colorScheme="blue" textColor={buttonFont} onClick={onOpen}>
         {t("statements.signOff")}
       </Button>
 

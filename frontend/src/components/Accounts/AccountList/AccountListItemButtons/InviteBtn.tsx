@@ -1,19 +1,19 @@
 import { IconButton, Spinner, Tooltip, useToast } from "@chakra-ui/react";
-import { AccountsContext } from "contexts/AccountsContext";
+import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext, useState } from "react";
 import { MdMessage } from "react-icons/md";
 import { genStatementClient } from "services/backend/apiClients";
-import { CreateStatementCommand, IAccountDto } from "services/backend/nswagts";
+import { CreateStatementCommand, IClientDto } from "services/backend/nswagts";
 
 interface Props {
-  account: IAccountDto;
+  client: IClientDto;
   accountingYear: number;
 }
 
-const InviteBtn: FC<Props> = ({ account, accountingYear }) => {
+const InviteBtn: FC<Props> = ({ client, accountingYear }) => {
   const { t } = useLocales();
-  const { fetchData } = useContext(AccountsContext);
+  const { fetchData } = useContext(ClientsContext);
   const [isProcessing, setIsProcessing] = useState(false);
   const toast = useToast();
 
@@ -23,7 +23,7 @@ const InviteBtn: FC<Props> = ({ account, accountingYear }) => {
       const statementclient = await genStatementClient();
       await statementclient.createStatement(
         new CreateStatementCommand({
-          accountId: account.id,
+          clientId: client.id,
           revisionYear: accountingYear
         })
       );
@@ -48,7 +48,7 @@ const InviteBtn: FC<Props> = ({ account, accountingYear }) => {
         position: "bottom-left"
       });
     }
-  }, [account, accountingYear]);
+  }, [client, accountingYear]);
 
   return (
     <Tooltip label={t("accounts.tooltipInvite")}>

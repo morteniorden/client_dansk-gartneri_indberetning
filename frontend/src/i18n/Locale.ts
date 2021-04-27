@@ -74,12 +74,14 @@ export interface Locale {
   actions: {
     update: string;
     delete: string;
+    remove: string;
     saveSuccessTitle: string;
     saveSuccessText: string;
     saveErrorTitle: string;
     saveErrorText: string;
     saveChanges: string;
     back: string;
+    sendRequest: string;
   };
 
   password: {
@@ -113,6 +115,9 @@ export interface Locale {
     deleteErrorText: string;
     alreadyAssignedTitle: string;
     alreadyAssignedText: string;
+    accountant: string;
+    consultant: string;
+    accountantType: string;
   };
 
   mailEditor: {
@@ -130,7 +135,6 @@ export interface Locale {
   };
 
   statements: {
-    myStatements: string;
     turnoverExlMoms: string;
     taxIs: string;
     boughtPlants: string;
@@ -142,6 +146,9 @@ export interface Locale {
     confirmSignOffButton: string;
     confirmSignOffText: string;
     downloadCsv: string;
+    sendToAccountant: string;
+    sendToAccountantText1: string;
+    sendToAccountantText2: string;
 
     statusNotInvited: string;
     statusInvited: string;
@@ -152,6 +159,16 @@ export interface Locale {
     invitationSentSuccessText: string;
     invitationSentErrorTitle: string;
     invitationSentErrorText: string;
+
+    removeAccountant: string;
+    removeConsultant: string;
+    confirmRemoveAccountant: string;
+    confirmRemoveConsultant: string;
+    sentToAccountant: string;
+    sentToConsultant: string;
+    sentTo: string;
+    notYetApprovedAccountant: string;
+    notYetApprovedConsultant: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
@@ -199,5 +216,23 @@ export interface Locale {
       currant: string;
       strawberry: string;
     };
+    accountantSection: {
+      heading: string;
+      helpText: string;
+      downloadPdf: string;
+      dragAndDrop: string;
+      dropFile: string;
+      signAndApprove: string;
+    };
+  };
+
+  myStatements: {
+    myStatements: string;
+    accountantApproved: string;
+    awaitsYourApproval: string;
+    viewStatement: string;
+    signedOffstatus: string;
+    notSignedOffstatus: string;
+    fillOutStatement: string;
   };
 }

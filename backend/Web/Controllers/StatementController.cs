@@ -8,6 +8,7 @@ using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSVQuery;
+using Application.Users.Commands.UnassignAccountantCommand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,6 +70,17 @@ namespace Web.Controllers
       {
         AccountingYear = accountingYear
       });
+    }
+
+    [HttpPut("statement/{id}/unassignAccountant")]
+    public async Task<ActionResult> UnassignAccountant([FromRoute] int id)
+    {
+      await Mediator.Send(new UnassignAccountantCommand
+      {
+        StatementId = id
+      });
+
+      return NoContent();
     }
   }
 }
