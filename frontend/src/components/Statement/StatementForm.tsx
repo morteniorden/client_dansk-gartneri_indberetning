@@ -4,7 +4,7 @@ import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
-import { IStatementDto, RoleEnum } from "services/backend/nswagts";
+import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
 
 import AccountantSection from "./AccountantSection/AccountantSection";
 import { FormControlContext } from "./FormControlContext";
@@ -17,12 +17,12 @@ import StatementTableSubHeading from "./StatementTableSubHeading";
 
 const StatementForm: FC = () => {
   const { t } = useLocales();
-  const { handleSubmit, control } = useForm<IStatementDto>();
+  const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
   const { activeUser } = useAuth();
   const { statement, setStatement, submit, readonly } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
-    (key: keyof IStatementDto, value: IStatementDto[keyof IStatementDto]) => {
+    (key: keyof IStatementNoUsersDto, value: IStatementNoUsersDto[keyof IStatementNoUsersDto]) => {
       setStatement(x => {
         (x[key] as unknown) = value;
         return x;
@@ -32,7 +32,7 @@ const StatementForm: FC = () => {
   );
 
   const onValid = useCallback(
-    (data: IStatementDto) => {
+    (data: IStatementNoUsersDto) => {
       console.log(statement, data);
       submit(data);
     },
@@ -40,7 +40,7 @@ const StatementForm: FC = () => {
   );
 
   const onInvalid = useCallback(
-    (errors: DeepMap<IStatementDto, FieldError>) => {
+    (errors: DeepMap<IStatementNoUsersDto, FieldError>) => {
       console.log(statement, errors);
     },
     [statement]
