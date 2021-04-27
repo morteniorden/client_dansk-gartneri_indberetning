@@ -31,7 +31,7 @@ export const table: Locale = {
     name: "Navn",
     email: "Email",
     tel: "Tlf.",
-    address: "Addresse",
+    address: "Adresse",
     address1: "Adresse 1",
     address2: "Adresse 2",
     cvrNumber: "CVR",
@@ -61,7 +61,7 @@ export const table: Locale = {
 
     firmName: "Firmanavn",
     ownerName: "Ejernavn",
-    addressAndPlace: "Addresse (evt. sted)"
+    addressAndPlace: "Adresse (evt. sted)"
   },
 
   login: {

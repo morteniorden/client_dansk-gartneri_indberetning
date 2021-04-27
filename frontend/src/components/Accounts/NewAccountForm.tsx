@@ -73,7 +73,18 @@ const NewAccountForm: FC<Props> = ({ onSubmit }) => {
   );
 
   const handleGetFromCvr = useCallback(
-    (result: CVRDataDto) => setLocalClientForm({ ...localForm, ...result }),
+    (result: CVRDataDto) => {
+      setLocalClientForm({ ...localForm, ...result });
+      setAddress({
+        ...address,
+        ...{
+          firmName: result.firmName,
+          addressAndPlace: result.AddressAndPlace,
+          postalCode: result.postalCode,
+          city: result.city
+        }
+      });
+    },
     [localForm]
   );
 
