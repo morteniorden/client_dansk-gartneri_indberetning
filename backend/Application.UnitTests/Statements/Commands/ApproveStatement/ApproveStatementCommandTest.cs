@@ -1,6 +1,4 @@
 using Application.Common.Exceptions;
-using Application.ExampleChildren;
-using Application.ExampleChildren.Commands.UpdateExampleChild;
 using Domain.Enums;
 using FluentAssertions;
 using System;
@@ -89,7 +87,7 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     }
 
     [Fact]
-    public void Handle_GivenInvalidAccount_ThrowsException()
+    public void Handle_GivenWrongAccountant_ThrowsException()
     {
       var command = new ApproveStatementCommand
       {

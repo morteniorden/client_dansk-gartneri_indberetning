@@ -17,7 +17,7 @@ import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useContext, useMemo } from "react";
 
-const ConfirmApprovalModal: FC = () => {
+const ConfirmSignOffModal: FC = () => {
   const { buttonFont } = useColors();
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -74,4 +74,4 @@ const ConfirmApprovalModal: FC = () => {
     </>
   );
 };
-export default ConfirmApprovalModal;
+export default ConfirmSignOffModal;

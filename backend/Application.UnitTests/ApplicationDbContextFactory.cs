@@ -51,30 +51,22 @@ namespace Application.UnitTests
         new Client { Id = 3, Email = "test2@test2.dk", Password = "Pa$$w0rd", Name = "test2 client" },
         new Admin { Id = 4, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
         new Admin { Id = 5, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
-        new Admin { Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Name = "Admin" }
+        new Admin { Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
+        new Accountant { Id = 7, Email = "test2accountant@test.dk", Password = "Pa$$w0rd", Name = "test2 accountant" }
       );
 
       context.Statements.AddRange(
-        new Statement { Id = 1, AccountingYear = 2021, ClientId = 1 },
-        new Statement { Id = 2, AccountingYear = 2022, ClientId = 3 }
-        );
-
-      context.Statements.AddRange(
-        new Statement { Id = 1, AccountId = 1, Account = account1, Status = StatementStatus.InvitedNotEdited, IsApproved = false, RevisionYear = 2021},
-        new Statement { Id = 2, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2020 },
-        new Statement { Id = 3, AccountId = 1, Account = account1, Status = StatementStatus.SignedOff, IsApproved = false, RevisionYear = 2019 },
-        new Statement { Id = 4, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = false, RevisionYear = 2021 },
-        new Statement { Id = 5, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2020 },
-        new Statement { Id = 6, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = false, RevisionYear = 2019, s1_mushrooms = 10000000},
-        new Statement { Id = 7, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2018, s1_mushrooms = 10000000 }
-      );
+        new Statement { Id = 1, AccountingYear = 2021, ClientId = 1, AccountantId = 2, IsApproved = false },
+        new Statement { Id = 2, AccountingYear = 2022, ClientId = 3, AccountantId = 2, IsApproved = true},
+        new Statement { Id = 3, AccountingYear = 2022, ClientId = 3, AccountantId = 2, Status = StatementStatus.SignedOff},
+        new Statement { Id = 4, AccountingYear = 2022, ClientId = 3, AccountantId = 7, IsApproved = false},
+        new Statement { Id = 5, AccountingYear = 2022, ClientId = 1, IsApproved = false },
+        new Statement { Id = 6, AccountingYear = 2022, ClientId = 1, AccountantId = 2, IsApproved = true },
+        new Statement { Id = 7, AccountingYear = 2022, ClientId = 1, s1_mushrooms = 1000000000},
+        new Statement { Id = 8, AccountingYear = 2022, ClientId = 1, AccountantId = 2, IsApproved = true, s1_mushrooms = 1000000000 }
+      );;
 
       context.SaveChanges();
-
-      //foreach (var entity in context.ChangeTracker.Entries())
-      //{
-      //  entity.State = EntityState.Detached;
-      //}
     }
 
     public static void Destroy(ApplicationDbContext context)
