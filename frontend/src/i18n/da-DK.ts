@@ -64,9 +64,18 @@ export const table: Locale = {
     email: "Email:",
     password: "Password:",
     login: "Log ind",
-    forgotPassword: "Glemt password?",
+    forgotPassword: "Glemt password",
+    forgotPasswordText:
+      "Indtast din mail, og vi sender dig en mail med et link til at oprette et nyt password.",
     invalidMsg: "Fejl i email eller password. Prøv igen.",
-    logout: "Log ud"
+    logout: "Log ud",
+    sendResetPW: "Send mail",
+
+    sendResetPWSuccesTitle: "Mail afsendt",
+    sendResetPWSuccesText: "En mail med link til gendannelse af password er blevet afsendt.",
+    sendResetPWErrorTitle: "Fejl",
+    sendResetPWErrorText:
+      "Der skete en fejl, da vi forsøgte at sende en mail til gendannelse af password."
   },
 
   admins: {

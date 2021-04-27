@@ -33,16 +33,3 @@ const AccountItemExpandedPanel: FC<Props> = ({ client }) => {
   );
 };
 export default AccountItemExpandedPanel;
-/*
- {client.accountant && (
-        <Stack spacing={0} w="max-content">
-          <Heading size="xs">{t("accounts.accountant")}</Heading>
-          <Text>
-            {t("accounts.name")}: {client.accountant.name}
-          </Text>
-          <Text>
-            {t("accounts.email")}: {client.accountant.email}
-          </Text>
-        </Stack>
-      )}
-*/
