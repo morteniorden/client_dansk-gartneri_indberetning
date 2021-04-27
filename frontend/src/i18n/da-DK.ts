@@ -57,7 +57,16 @@ export const table: Locale = {
     tooltipEditAccountant: "Rediger revisor",
     tooltipShowInfo: "Vis info",
     tooltipHideInfo: "Skjul info",
-    tooltipReadStatement: "Se besvarelse"
+    tooltipReadStatement: "Se besvarelse",
+
+    deactivateClient: "Deaktivér kunde",
+    confirmDeactivateUser: "Du er ved at deaktivere denne bruger. Vil du fortsætte?",
+    deactivateUserSuccessTitle: "Bruger deaktiveret",
+    deactivateUserSuccessText: "Brugeren er nu blevet deaktiveret.",
+    deactivateUserErrorTitle: "Fejl",
+    deactivateUserErrorText: "Der skete en fejl, da vi forsøgte at deaktivere brugeren.",
+    deactivated: "deaktiveret",
+    showDeactive: "Vis deaktive"
   },
 
   login: {
@@ -77,6 +86,7 @@ export const table: Locale = {
     update: "Opdatér",
     delete: "Slet",
     remove: "Fjern",
+    deactivate: "Deaktivér",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Ændringer gemt",
     saveSuccessText: "Dine ændringer er blevet gemt",

@@ -57,7 +57,16 @@ export const table: Locale = {
     tooltipEditAccountant: "Edit accountant",
     tooltipShowInfo: "Show info",
     tooltipHideInfo: "Hide info",
-    tooltipReadStatement: "See statement"
+    tooltipReadStatement: "See statement",
+
+    deactivateClient: "Deactivate client",
+    confirmDeactivateUser: "You are about to deactivate this user. Do you want to proceed?",
+    deactivateUserSuccessTitle: "User deactivated",
+    deactivateUserSuccessText: "The user has now been deactivated.",
+    deactivateUserErrorTitle: "Deactivation error",
+    deactivateUserErrorText: "An error occured when trying to deactivate the user.",
+    deactivated: "deactivated",
+    showDeactive: "Show deactive"
   },
 
   login: {
@@ -77,6 +86,7 @@ export const table: Locale = {
     update: "Update",
     delete: "Delete",
     remove: "Remove",
+    deactivate: "Deactivate",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Changes saved",
     saveSuccessText: "Your changes has been saved.",

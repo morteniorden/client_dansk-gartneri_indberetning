@@ -1,17 +1,19 @@
-import { Flex, Heading, HStack, Stack } from "@chakra-ui/react";
+import { Flex, Heading, HStack, Stack, Switch, Text } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
 import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
 import { genUserClient } from "services/backend/apiClients";
 import { IClientDto } from "services/backend/nswagts";
+import { ClientFilter } from "types/ClientFilter";
 import { logger } from "utils/logger";
 
 import AccountList from "./AccountList/AccountList";
 import DownloadCsvBtn from "./DownloadCsvBtn";
+import { ActiveFilter } from "./Filters/ClientFilters";
 import NewAccountModal from "./NewAccountModal";
 
 const Accounts: FC = () => {
@@ -19,7 +21,13 @@ const Accounts: FC = () => {
 
   const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
   const [isFetching, setIsFetching] = useState(false);
-  const [searchString, setSearchString] = useState<string>("");
+  const [showDeactive, setShowDeactive] = useState(false);
+
+  const filters = useMemo(() => {
+    const filters = [];
+    if (!showDeactive) filters.push(ActiveFilter);
+    return filters;
+  }, [showDeactive]);
 
   const accountingYears = useMemo(() => {
     const startYear = 2021;
@@ -69,18 +77,29 @@ const Accounts: FC = () => {
         <Stack spacing={4}>
           <Heading>{t("accounts.accounts")}</Heading>
           <Flex justifyContent="space-between" alignItems="center">
-            <DownloadCsvBtn accountingYear={accountingYear} />
-            <AccountingYearSelect
-              options={accountingYears}
-              value={accountingYear}
-              cb={setAccountingYear}
-            />
+            <HStack>
+              <DownloadCsvBtn accountingYear={accountingYear} />
+              <AccountingYearSelect
+                options={accountingYears}
+                value={accountingYear}
+                cb={setAccountingYear}
+              />
+            </HStack>
             <HStack spacing={5}>
               <NewAccountModal onSubmit={fetchData} />
             </HStack>
           </Flex>
-          <FetchingSpinner isFetching={isFetching} text={t("accounts.fetching")} />
-          <AccountList data={clients} accountingYear={accountingYear} />
+          <Flex justifyContent="space-between" alignItems="center">
+            <FetchingSpinner isFetching={isFetching} text={t("accounts.fetching")} />
+            <HStack>
+              <Text>{t("accounts.showDeactive")}</Text>
+              <Switch checked={showDeactive} onChange={e => setShowDeactive(e.target.checked)} />
+            </HStack>
+          </Flex>
+          <AccountList
+            data={clients.filter(client => filters.every(f => f.predicate(client)))}
+            accountingYear={accountingYear}
+          />
         </Stack>
       </BasicLayout>
     </ClientsContext.Provider>

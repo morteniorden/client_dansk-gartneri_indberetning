@@ -56,6 +56,15 @@ export interface Locale {
     tooltipShowInfo: string;
     tooltipHideInfo: string;
     tooltipReadStatement: string;
+
+    deactivateClient: string;
+    confirmDeactivateUser: string;
+    deactivateUserSuccessTitle: string;
+    deactivateUserSuccessText: string;
+    deactivateUserErrorTitle: string;
+    deactivateUserErrorText: string;
+    deactivated: string;
+    showDeactive: string;
   };
 
   login: {
@@ -75,6 +84,7 @@ export interface Locale {
     update: string;
     delete: string;
     remove: string;
+    deactivate: string;
     saveSuccessTitle: string;
     saveSuccessText: string;
     saveErrorTitle: string;
