@@ -1871,10 +1871,11 @@ export class Address implements IAddress {
     id?: number;
     clientId?: number;
     client?: Client | null;
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
+    firmName?: string | null;
+    ownerName?: string | null;
+    addressAndPlace?: string | null;
+    postalCode?: string | null;
+    city?: string | null;
 
     constructor(data?: IAddress) {
         if (data) {
@@ -1891,10 +1892,11 @@ export class Address implements IAddress {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.clientId = _data["clientId"] !== undefined ? _data["clientId"] : <any>null;
             this.client = _data["client"] ? Client.fromJS(_data["client"]) : <any>null;
-            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
-            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
-            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
-            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
+            this.firmName = _data["firmName"] !== undefined ? _data["firmName"] : <any>null;
+            this.ownerName = _data["ownerName"] !== undefined ? _data["ownerName"] : <any>null;
+            this.addressAndPlace = _data["addressAndPlace"] !== undefined ? _data["addressAndPlace"] : <any>null;
+            this.postalCode = _data["postalCode"] !== undefined ? _data["postalCode"] : <any>null;
+            this.city = _data["city"] !== undefined ? _data["city"] : <any>null;
         }
     }
 
@@ -1910,10 +1912,11 @@ export class Address implements IAddress {
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["clientId"] = this.clientId !== undefined ? this.clientId : <any>null;
         data["client"] = this.client ? this.client.toJSON() : <any>null;
-        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
-        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
-        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
-        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
+        data["firmName"] = this.firmName !== undefined ? this.firmName : <any>null;
+        data["ownerName"] = this.ownerName !== undefined ? this.ownerName : <any>null;
+        data["addressAndPlace"] = this.addressAndPlace !== undefined ? this.addressAndPlace : <any>null;
+        data["postalCode"] = this.postalCode !== undefined ? this.postalCode : <any>null;
+        data["city"] = this.city !== undefined ? this.city : <any>null;
         return data; 
     }
 }
@@ -1922,10 +1925,11 @@ export interface IAddress {
     id?: number;
     clientId?: number;
     client?: IClient | null;
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
+    firmName?: string | null;
+    ownerName?: string | null;
+    addressAndPlace?: string | null;
+    postalCode?: string | null;
+    city?: string | null;
 }
 
 export class Statement extends AuditableEntity implements IStatement {
@@ -2343,10 +2347,11 @@ export interface IClientDto {
 }
 
 export class AddressDto implements IAddressDto {
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
+    firmName?: string | null;
+    ownerName?: string | null;
+    addressAndPlace?: string | null;
+    postalCode?: string | null;
+    city?: string | null;
 
     constructor(data?: IAddressDto) {
         if (data) {
@@ -2359,10 +2364,11 @@ export class AddressDto implements IAddressDto {
 
     init(_data?: any) {
         if (_data) {
-            this.addressLine1 = _data["addressLine1"] !== undefined ? _data["addressLine1"] : <any>null;
-            this.addressLine2 = _data["addressLine2"] !== undefined ? _data["addressLine2"] : <any>null;
-            this.addressLine3 = _data["addressLine3"] !== undefined ? _data["addressLine3"] : <any>null;
-            this.addressLine4 = _data["addressLine4"] !== undefined ? _data["addressLine4"] : <any>null;
+            this.firmName = _data["firmName"] !== undefined ? _data["firmName"] : <any>null;
+            this.ownerName = _data["ownerName"] !== undefined ? _data["ownerName"] : <any>null;
+            this.addressAndPlace = _data["addressAndPlace"] !== undefined ? _data["addressAndPlace"] : <any>null;
+            this.postalCode = _data["postalCode"] !== undefined ? _data["postalCode"] : <any>null;
+            this.city = _data["city"] !== undefined ? _data["city"] : <any>null;
         }
     }
 
@@ -2375,19 +2381,21 @@ export class AddressDto implements IAddressDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["addressLine1"] = this.addressLine1 !== undefined ? this.addressLine1 : <any>null;
-        data["addressLine2"] = this.addressLine2 !== undefined ? this.addressLine2 : <any>null;
-        data["addressLine3"] = this.addressLine3 !== undefined ? this.addressLine3 : <any>null;
-        data["addressLine4"] = this.addressLine4 !== undefined ? this.addressLine4 : <any>null;
+        data["firmName"] = this.firmName !== undefined ? this.firmName : <any>null;
+        data["ownerName"] = this.ownerName !== undefined ? this.ownerName : <any>null;
+        data["addressAndPlace"] = this.addressAndPlace !== undefined ? this.addressAndPlace : <any>null;
+        data["postalCode"] = this.postalCode !== undefined ? this.postalCode : <any>null;
+        data["city"] = this.city !== undefined ? this.city : <any>null;
         return data; 
     }
 }
 
 export interface IAddressDto {
-    addressLine1?: string | null;
-    addressLine2?: string | null;
-    addressLine3?: string | null;
-    addressLine4?: string | null;
+    firmName?: string | null;
+    ownerName?: string | null;
+    addressAndPlace?: string | null;
+    postalCode?: string | null;
+    city?: string | null;
 }
 
 export class StatementNoUsersDto implements IStatementNoUsersDto {

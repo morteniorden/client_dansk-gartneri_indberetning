@@ -23,26 +23,21 @@ const AccountItemExpandedPanel: FC<Props> = ({ client }) => {
         <Text>
           {t("accounts.tel")}: {client.tel}
         </Text>
-        <Text>
-          {`${t("accounts.address")}: ${client.address.addressLine1} ${
-            client.address.addressLine2
-          } ${client.address.addressLine3} ${client.address.addressLine4}`}
-        </Text>
+        <Text>{t("accounts.address")}:</Text>
+        <Text>Firmanavn: {client.address.firmName}</Text>
+        <Text>Ejernavn: {client.address.ownerName}</Text>
+        <Text>Addresse og sted: {client.address.addressAndPlace}</Text>
+        <Text>Post nr: {client.address.postalCode}</Text>
+        <Text>By: {client.address.city}</Text>
       </Stack>
     </HStack>
   );
 };
 export default AccountItemExpandedPanel;
 /*
- {client.accountant && (
-        <Stack spacing={0} w="max-content">
-          <Heading size="xs">{t("accounts.accountant")}</Heading>
-          <Text>
-            {t("accounts.name")}: {client.accountant.name}
-          </Text>
-          <Text>
-            {t("accounts.email")}: {client.accountant.email}
-          </Text>
-        </Stack>
-      )}
+<Text>
+          {`${t("accounts.address")}: ${client.address.addressLine1} ${
+            client.address.addressLine2
+          } ${client.address.addressLine3} ${client.address.addressLine4}`}
+        </Text>
 */

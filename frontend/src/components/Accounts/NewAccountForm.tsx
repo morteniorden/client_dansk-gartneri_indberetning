@@ -1,4 +1,13 @@
-import { Button, Flex, FormControl, FormLabel, Input, ModalHeader, Spacer } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  ModalHeader,
+  Spacer
+} from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
@@ -32,7 +41,7 @@ const NewAccountForm: FC<Props> = ({ onSubmit }) => {
     })
   );
   const [address, setAddress] = useState<IAddressDto>(
-    new AddressDto({ addressLine1: "", addressLine2: "", addressLine3: "", addressLine4: "" })
+    new AddressDto({ firmName: "", ownerName: "", addressAndPlace: "", postalCode: "", city: "" })
   );
 
   const formUpdateReform = useCallback((value: unknown, key: keyof typeof localForm) => {
@@ -91,30 +100,40 @@ const NewAccountForm: FC<Props> = ({ onSubmit }) => {
       <ModalHeader p={0} mb={5}>
         {t("accounts.address")}
       </ModalHeader>
-      <FormControl id="addressLine1">
-        <FormLabel htmlFor="addressLine1">{t("accounts.addressLine1")}</FormLabel>
+      <FormControl id="firmName">
+        <FormLabel htmlFor="firmName">{t("accounts.firmName")}</FormLabel>
         <Input
-          value={address.addressLine1}
-          onChange={e => setAddress({ ...address, ...{ addressLine1: e.target.value } })}></Input>
+          value={address.firmName}
+          onChange={e => setAddress({ ...address, ...{ firmName: e.target.value } })}></Input>
       </FormControl>
-      <FormControl id="addressLine2">
-        <FormLabel htmlFor="addressLine2">{t("accounts.addressLine2")}</FormLabel>
+      <FormControl id="ownerName">
+        <FormLabel htmlFor="ownerName">{t("accounts.ownerName")}</FormLabel>
         <Input
-          value={address.addressLine2}
-          onChange={e => setAddress({ ...address, ...{ addressLine2: e.target.value } })}></Input>
+          value={address.ownerName}
+          onChange={e => setAddress({ ...address, ...{ ownerName: e.target.value } })}></Input>
       </FormControl>
-      <FormControl id="addressLine3">
-        <FormLabel htmlFor="addressLine3">{t("accounts.addressLine3")}</FormLabel>
+      <FormControl id="addressAndPlace">
+        <FormLabel htmlFor="addressAndPlace">{t("accounts.addressAndPlace")}</FormLabel>
         <Input
-          value={address.addressLine3}
-          onChange={e => setAddress({ ...address, ...{ addressLine3: e.target.value } })}></Input>
+          value={address.addressAndPlace}
+          onChange={e =>
+            setAddress({ ...address, ...{ addressAndPlace: e.target.value } })
+          }></Input>
       </FormControl>
-      <FormControl id="addressLine4">
-        <FormLabel htmlFor="addressLine4">{t("accounts.addressLine4")}</FormLabel>
-        <Input
-          value={address.addressLine4}
-          onChange={e => setAddress({ ...address, ...{ addressLine4: e.target.value } })}></Input>
-      </FormControl>
+      <HStack>
+        <FormControl id="postalCode">
+          <FormLabel htmlFor="postalCode">{t("accounts.postalCode")}</FormLabel>
+          <Input
+            value={address.postalCode}
+            onChange={e => setAddress({ ...address, ...{ postalCode: e.target.value } })}></Input>
+        </FormControl>
+        <FormControl id="city">
+          <FormLabel htmlFor="city">{t("accounts.city")}</FormLabel>
+          <Input
+            value={address.city}
+            onChange={e => setAddress({ ...address, ...{ city: e.target.value } })}></Input>
+        </FormControl>
+      </HStack>
       <Flex justifyContent="flex-end" w="100%" mt={5}>
         <Button colorScheme="green" type="submit">
           {t("common.add")}
