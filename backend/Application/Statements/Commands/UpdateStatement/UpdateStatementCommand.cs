@@ -39,9 +39,9 @@ namespace Application.Statements.Commands.UpdateStatement
           throw new NotFoundException(nameof(Statement), request.Id);
         }
 
-        if (!await _context.Accounts.AnyAsync(e => e.Id == request.statementDto.AccountId, cancellationToken))
+        if (!await _context.Users.AnyAsync(e => e.Id == request.statementDto.ClientId, cancellationToken))
         {
-          throw new NotFoundException(nameof(Account), request.statementDto.AccountId);
+          throw new NotFoundException(nameof(Client), request.statementDto.ClientId);
         }
 
         if (statementEntity.Status == StatementStatus.SignedOff)
@@ -49,10 +49,10 @@ namespace Application.Statements.Commands.UpdateStatement
           throw new InvalidOperationException("Cannot update a statement that is already signed off.");
         }
 
-        var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
-        if (statementEntity.AccountId != currentUser.AccountId)
+        var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId, cancellationToken: cancellationToken);
+        if (statementEntity.ClientId != currentUser.Id && statementEntity.AccountantId != currentUser.Id)
         {
-          throw new UnauthorizedAccessException("Tried to update a statement that belongs to another account");
+          throw new UnauthorizedAccessException("Tried to update a statement that belongs to another client");
         }
 
         statementEntity.s1_boughtPlants = request.statementDto.s1_boughtPlants;

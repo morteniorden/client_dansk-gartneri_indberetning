@@ -1,17 +1,19 @@
 import { createContext } from "react";
 import { Control } from "react-hook-form";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementNoUsersDto } from "services/backend/nswagts";
 
-type Form = IStatementDto;
+type Form = IStatementNoUsersDto;
 
 interface FormControlContextContent {
   control: Control<Form>;
   form: Form;
   updatedFormAttribute: (key: keyof Form, value: Form[keyof Form]) => void;
+  disabled: boolean;
 }
 
 export const FormControlContext = createContext<FormControlContextContent>({
   control: null,
   form: {} as unknown,
-  updatedFormAttribute: () => null
+  updatedFormAttribute: () => null,
+  disabled: false
 });

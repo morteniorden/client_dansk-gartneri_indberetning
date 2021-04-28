@@ -28,14 +28,14 @@ const ConfirmSignOffModal: FC = () => {
   const disabled = useMemo(() => {
     return (
       (!statement.isApproved && total >= maxTotal) ||
-      (statement.account.accountant != null && !statement.isApproved)
+      (statement.accountant != null && !statement.isApproved)
     );
   }, [statement, total, maxTotal]);
 
   const disabledMsg = useMemo(() => {
-    if (disabled && statement.account.accountant == null && total >= maxTotal)
+    if (disabled && statement.accountant == null && total >= maxTotal)
       return t("statements.signOffExceeding");
-    if (disabled && statement.account.accountant != null && !statement.isApproved)
+    if (disabled && statement.accountant != null && !statement.isApproved)
       return t("statements.signOffNeedsApproval");
     return null;
   }, [total, statement, disabled]);
@@ -45,12 +45,7 @@ const ConfirmSignOffModal: FC = () => {
       <Tooltip label={disabledMsg}>
         {/* wrapping div required to display tooltip when button is disabled */}
         <div>
-          <Button
-            rounded="full"
-            colorScheme="blue"
-            textColor={buttonFont}
-            onClick={onOpen}
-            disabled={disabled}>
+          <Button colorScheme="blue" textColor={buttonFont} onClick={onOpen} disabled={disabled}>
             {t("statements.signOff")}
           </Button>
         </div>

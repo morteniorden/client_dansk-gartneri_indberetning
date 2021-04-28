@@ -36,7 +36,10 @@ namespace Application.Statements.Commands.SignOffStatement
 
       public async Task<Unit> Handle(SignOffStatementCommand request, CancellationToken cancellationToken)
       {
-        var statementEntity = await _context.Statements.FindAsync(request.Id);
+        var statementEntity = await _context.Statements
+          .Include(e => e.Client)
+          .Include(e => e.Accountant)
+          .FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
 
         if (statementEntity == null)
         {
@@ -49,12 +52,12 @@ namespace Application.Statements.Commands.SignOffStatement
         }
 
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
-        if (statementEntity.AccountId != currentUser.AccountId)
+        if (statementEntity.ClientId != currentUser.Id)
         {
           throw new UnauthorizedAccessException("Tried to sign off a statement that belongs to another account");
         }
 
-        if (currentUser.Account.GetActiveAccountant() != null && !statementEntity.IsApproved)
+        if (statementEntity.Accountant != null && !statementEntity.IsApproved)
         {
           throw new InvalidOperationException("The statement requires an approval by the assigned accountant before sign-off.");
         }

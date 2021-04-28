@@ -8,18 +8,28 @@ namespace Infrastructure.Persistence.Configurations
   {
     public void Configure(EntityTypeBuilder<Statement> builder)
     {
-      builder.HasOne<Account>(e => e.Account)
+      builder.HasOne<Client>(e => e.Client)
         .WithMany(e => e.Statements)
-        .HasForeignKey(e => e.AccountId)
+        .HasForeignKey(e => e.ClientId)
+        .HasPrincipalKey(e => e.Id)
         .IsRequired(true);
+
+      builder.HasOne<Accountant>(e => e.Accountant)
+        .WithMany(e => e.Statements)
+        .HasForeignKey(e => e.AccountantId)
+        .HasPrincipalKey(e => e.Id)
+        .IsRequired(false);
 
       builder.Property(e => e.Status)
         .IsRequired(true);
 
-      builder.Property(e => e.RevisionYear)
+      builder.Property(e => e.AccountingYear)
         .IsRequired(true);
 
-      builder.HasIndex(e => new {e.AccountId, e.RevisionYear}).IsUnique();
+      builder.Property(e => e.AccountantType)
+        .IsRequired(true);
+
+      builder.HasIndex(e => new { e.ClientId, e.AccountingYear }).IsUnique();
     }
   }
 }

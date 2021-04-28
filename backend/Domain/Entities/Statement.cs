@@ -7,11 +7,13 @@ namespace Domain.Entities
   public class Statement : AuditableEntity
   {
     public int Id { get; set; }
-    public int AccountId { get; set; }
-    public virtual Account Account { get; set; }
-    public int RevisionYear { get; set; }
+    public int ClientId { get; set; }
+    public virtual Client Client { get; set; }
+    public int? AccountantId { get; set; }
+    public virtual Accountant? Accountant { get; set; }
+    public AccountantType AccountantType { get; set; }
+    public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
-    //public StatementApprovalStatus ApprovalStatus { get; set; }
     public bool IsApproved { get; set; }
 
     public int s1_mushrooms { get; set; }

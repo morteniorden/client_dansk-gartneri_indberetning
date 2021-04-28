@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
+using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Application.Users.Commands.UpdateUserCommand
@@ -30,22 +32,27 @@ namespace Application.Users.Commands.UpdateUserCommand
 
       public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
       {
-        var userEntity = await _context.Users.FindAsync(request.Id);
+        User userEntity = await _context.Users.FindAsync(request.Id);
 
         if (userEntity == null)
         {
           throw new NotFoundException(nameof(Domain.Entities.User), request.Id);
         }
 
-        if (_context.Accounts.Any(e => e.Email == request.User.Email) || _context.Users.Any(e => e.Email == request.User.Email && e.Id != request.User.Id))
+        if (request.User.Email != null)
         {
-          throw new ArgumentException("The provided email address is already used by another user.");
+          var checkExisting = await _context.Users.CountAsync(x => x.Email == request.User.Email);
+
+          if (checkExisting > 0) {
+            throw new ArgumentException("Email already in use");
+          }
         }
 
         userEntity.Name = request.User.Name ?? userEntity.Name;
         userEntity.Email = request.User.Email ?? userEntity.Email;
 
         _context.Users.Update(userEntity);
+
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

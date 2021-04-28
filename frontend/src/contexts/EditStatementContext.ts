@@ -7,9 +7,11 @@ type ContextType = {
   save: () => void;
   isSaving: boolean;
   submit: (data: IStatementDto) => Promise<void>;
+  readonly: boolean;
+  fetchData: () => Promise<void>;
+  isFetching: boolean;
   total: number;
   calcTotal: () => number;
-  //setTotal: Dispatch<SetStateAction<number>>;
 };
 
 export const EditStatementContext = createContext<ContextType>({
@@ -18,8 +20,9 @@ export const EditStatementContext = createContext<ContextType>({
   save: () => null,
   isSaving: false,
   submit: (data: IStatementDto) => null,
+  readonly: false,
+  fetchData: () => null,
+  isFetching: false,
   total: 0,
   calcTotal: () => 0
 });
-// setTotal: () => null
-//  total: 0,

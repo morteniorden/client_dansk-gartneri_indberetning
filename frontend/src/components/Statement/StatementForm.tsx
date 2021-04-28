@@ -1,9 +1,11 @@
 import { Stack } from "@chakra-ui/react";
+import AccountantSection from "components/Statement/AccountantSection/AccountantSection";
 import { EditStatementContext } from "contexts/EditStatementContext";
+import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";
 import InputDKK from "./InputDKK";
@@ -15,11 +17,12 @@ import StatementTableSubHeading from "./StatementTableSubHeading";
 
 const StatementForm: FC = () => {
   const { t } = useLocales();
-  const { handleSubmit, control } = useForm<IStatementDto>();
-  const { statement, setStatement, submit, calcTotal } = useContext(EditStatementContext);
+  const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
+  const { activeUser } = useAuth();
+  const { statement, setStatement, submit, readonly, calcTotal } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
-    (key: keyof IStatementDto, value: IStatementDto[keyof IStatementDto]) => {
+    (key: keyof IStatementNoUsersDto, value: IStatementNoUsersDto[keyof IStatementNoUsersDto]) => {
       setStatement(x => {
         (x[key] as unknown) = value;
         return x;
@@ -30,7 +33,7 @@ const StatementForm: FC = () => {
   );
 
   const onValid = useCallback(
-    (data: IStatementDto) => {
+    (data: IStatementNoUsersDto) => {
       console.log(statement, data);
       submit(data);
     },
@@ -38,7 +41,7 @@ const StatementForm: FC = () => {
   );
 
   const onInvalid = useCallback(
-    (errors: DeepMap<IStatementDto, FieldError>) => {
+    (errors: DeepMap<IStatementNoUsersDto, FieldError>) => {
       console.log(statement, errors);
     },
     [statement]
@@ -51,7 +54,8 @@ const StatementForm: FC = () => {
           value={{
             control,
             form: statement,
-            updatedFormAttribute
+            updatedFormAttribute,
+            disabled: readonly
           }}>
           <StatementSection heading={t("statements.section1.heading")}>
             <StatementSectionTable>
@@ -65,7 +69,6 @@ const StatementForm: FC = () => {
               <StatementTableRow
                 text={t("statements.boughtPlants")}
                 subText={t("statements.section1.boughtPlantsDesc")}
-                tax="2.00"
                 helpInfo="Eksempel på hjælp til dette inputfelt.">
                 <InputDKK name="s1_boughtPlants" />
               </StatementTableRow>
@@ -88,8 +91,7 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
-                subText={t("statements.section3.boughtPlantsDesc")}
-                tax="3.00">
+                subText={t("statements.section3.boughtPlantsDesc")}>
                 <InputDKK name="s3_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -108,8 +110,7 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
-                subText={t("statements.section3.boughtPlantsDesc")}
-                tax="1.60">
+                subText={t("statements.section3.boughtPlantsDesc")}>
                 <InputDKK name="s4_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -120,7 +121,7 @@ const StatementForm: FC = () => {
                 <InputDKK name="s7_plants" />
               </StatementTableRow>
               <StatementTableColHeadings h2={t("statements.expences")} />
-              <StatementTableRow text={t("statements.boughtPlants")} tax="4.50">
+              <StatementTableRow text={t("statements.boughtPlants")}>
                 <InputDKK name="s7_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -140,8 +141,7 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.section8.packagingCost")}
-                subText={t("statements.section8.packagingCostDesc")}
-                tax="5.00">
+                subText={t("statements.section8.packagingCostDesc")}>
                 <InputDKK name="s8_packaging" />
               </StatementTableRow>
               <StatementTableSubHeading>
@@ -178,6 +178,8 @@ const StatementForm: FC = () => {
               </StatementTableRow>
             </StatementSectionTable>
           </StatementSection>
+          {statement.accountant != null &&
+            (activeUser?.role == RoleEnum.Accountant || readonly) && <AccountantSection />}
         </FormControlContext.Provider>
       </Stack>
     </form>

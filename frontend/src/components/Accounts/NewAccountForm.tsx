@@ -1,11 +1,23 @@
-import { Button, Flex, FormControl, FormLabel, Input, ModalHeader, Spacer } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  ModalHeader,
+  Spacer
+} from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useState } from "react";
-import { genAccountClient } from "services/backend/apiClients";
+import { genUserClient } from "services/backend/apiClients";
 import {
-  CreateAccountCommand,
-  CreateAccountDto,
-  ICreateAccountDto
+  AddressDto,
+  ClientDto,
+  CreateClientCommand,
+  IAddressDto,
+  IClientDto,
+  RoleEnum
 } from "services/backend/nswagts";
 import { CVRDataDto } from "services/cvr/api";
 
@@ -18,21 +30,22 @@ interface Props {
 const NewAccountForm: FC<Props> = ({ onSubmit }) => {
   const { t } = useLocales();
 
-  const [localForm, setLocalAccountForm] = useState<ICreateAccountDto>(
-    new CreateAccountDto({
+  const [localForm, setLocalClientForm] = useState<IClientDto>(
+    new ClientDto({
+      id: 0,
       name: "",
       email: "",
       tel: "",
       cvrNumber: "",
-      addressLine1: "",
-      addressLine2: "",
-      addressLine3: "",
-      addressLine4: ""
+      role: RoleEnum.Client
     })
+  );
+  const [address, setAddress] = useState<IAddressDto>(
+    new AddressDto({ firmName: "", ownerName: "", addressAndPlace: "", postalCode: "", city: "" })
   );
 
   const formUpdateReform = useCallback((value: unknown, key: keyof typeof localForm) => {
-    setLocalAccountForm(form => {
+    setLocalClientForm(form => {
       (form[key] as unknown) = value;
       return { ...form };
     });
@@ -48,19 +61,30 @@ const NewAccountForm: FC<Props> = ({ onSubmit }) => {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      const accountClient = await genAccountClient();
-      await accountClient.createAccount(
-        new CreateAccountCommand({
-          account: localForm
-        })
-      );
+      const userClient = await genUserClient();
+      const command = new CreateClientCommand({
+        clientDto: { ...localForm, ...{ address: address } }
+      });
+      console.log(command);
+      await userClient.createClient(command);
       onSubmit(e);
     },
-    [localForm]
+    [localForm, address]
   );
 
   const handleGetFromCvr = useCallback(
-    (result: CVRDataDto) => setLocalAccountForm({ ...localForm, ...result }),
+    (result: CVRDataDto) => {
+      setLocalClientForm({ ...localForm, ...result });
+      setAddress({
+        ...address,
+        ...{
+          firmName: result.firmName,
+          addressAndPlace: result.AddressAndPlace,
+          postalCode: result.postalCode,
+          city: result.city
+        }
+      });
+    },
     [localForm]
   );
 
@@ -87,22 +111,40 @@ const NewAccountForm: FC<Props> = ({ onSubmit }) => {
       <ModalHeader p={0} mb={5}>
         {t("accounts.address")}
       </ModalHeader>
-      <FormControl id="addressLine1">
-        <FormLabel htmlFor="addressLine1">{t("accounts.addressLine1")}</FormLabel>
-        <Input value={localForm.addressLine1} onChange={handleInputChange}></Input>
+      <FormControl id="firmName">
+        <FormLabel htmlFor="firmName">{t("accounts.firmName")}</FormLabel>
+        <Input
+          value={address.firmName}
+          onChange={e => setAddress({ ...address, ...{ firmName: e.target.value } })}></Input>
       </FormControl>
-      <FormControl id="addressLine2">
-        <FormLabel htmlFor="addressLine2">{t("accounts.addressLine2")}</FormLabel>
-        <Input value={localForm.addressLine2} onChange={handleInputChange}></Input>
+      <FormControl id="ownerName">
+        <FormLabel htmlFor="ownerName">{t("accounts.ownerName")}</FormLabel>
+        <Input
+          value={address.ownerName}
+          onChange={e => setAddress({ ...address, ...{ ownerName: e.target.value } })}></Input>
       </FormControl>
-      <FormControl id="addressLine3">
-        <FormLabel htmlFor="addressLine3">{t("accounts.addressLine3")}</FormLabel>
-        <Input value={localForm.addressLine3} onChange={handleInputChange}></Input>
+      <FormControl id="addressAndPlace">
+        <FormLabel htmlFor="addressAndPlace">{t("accounts.addressAndPlace")}</FormLabel>
+        <Input
+          value={address.addressAndPlace}
+          onChange={e =>
+            setAddress({ ...address, ...{ addressAndPlace: e.target.value } })
+          }></Input>
       </FormControl>
-      <FormControl id="addressLine4">
-        <FormLabel htmlFor="addressLine4">{t("accounts.addressLine4")}</FormLabel>
-        <Input value={localForm.addressLine4} onChange={handleInputChange}></Input>
-      </FormControl>
+      <HStack>
+        <FormControl id="postalCode">
+          <FormLabel htmlFor="postalCode">{t("accounts.postalCode")}</FormLabel>
+          <Input
+            value={address.postalCode}
+            onChange={e => setAddress({ ...address, ...{ postalCode: e.target.value } })}></Input>
+        </FormControl>
+        <FormControl id="city">
+          <FormLabel htmlFor="city">{t("accounts.city")}</FormLabel>
+          <Input
+            value={address.city}
+            onChange={e => setAddress({ ...address, ...{ city: e.target.value } })}></Input>
+        </FormControl>
+      </HStack>
       <Flex justifyContent="flex-end" w="100%" mt={5}>
         <Button colorScheme="green" type="submit">
           {t("common.add")}

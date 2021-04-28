@@ -31,14 +31,14 @@ export const table: Locale = {
     name: "Navn",
     email: "Email",
     tel: "Tlf.",
-    address: "Addresse",
+    address: "Adresse",
     address1: "Adresse 1",
     address2: "Adresse 2",
     cvrNumber: "CVR",
     addAccount: "Tilføj kunde",
     street: "Vej",
     streetNum: "Nr.",
-    postCode: "Postnr.",
+    postalCode: "Postnr.",
     city: "By",
     country: "Land",
     addressLine1: "Linje 1",
@@ -50,7 +50,18 @@ export const table: Locale = {
     CVR_apiErrorDescription: "Kunne ikke finde CVR-nummer i registret",
     accountant: "Revisor",
     fetching: "Henter kunder...",
-    statementStatus: "Indberetning status"
+    statementStatus: "Indberetning status",
+
+    tooltipInvite: "Invitér til at udfylde oplysningsksema",
+    tooltipNotYetSignedOff: "Ikke besvaret endnu",
+    tooltipEditAccountant: "Rediger revisor",
+    tooltipShowInfo: "Vis info",
+    tooltipHideInfo: "Skjul info",
+    tooltipReadStatement: "Se besvarelse",
+
+    firmName: "Firmanavn",
+    ownerName: "Ejernavn",
+    addressAndPlace: "Adresse (evt. sted)"
   },
 
   login: {
@@ -63,18 +74,28 @@ export const table: Locale = {
   },
 
   admins: {
-    admins: "Administratorer"
+    admins: "Administratorer",
+    addAdmin: "Tilføj admin",
+    addAdminSuccessTitle: "Administrator oprettet",
+    addAdminSuccessText: "En ny administrator er nu oprettet",
+    addAdminErrorTitle: "Fejl",
+    addAdminErrorText: "Der skete en fejl, da vi forsøgte at oprette ny administrator.",
+    deactivateAdmin: "Deaktivér admininistrator",
+    deactivateAdminText: "Du er ved at deaktivere denne administrator. Vil du fortsætte?"
   },
 
   actions: {
     update: "Opdatér",
     delete: "Slet",
+    remove: "Fjern",
+    deactivate: "Deaktivér",
     saveChanges: "Gem ændringer",
     saveSuccessTitle: "Ændringer gemt",
     saveSuccessText: "Dine ændringer er blevet gemt",
     saveErrorTitle: "Fejl",
     saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer.",
-    back: "Tilbage"
+    back: "Tilbage",
+    sendRequest: "Send anmodning"
   },
 
   password: {
@@ -96,7 +117,7 @@ export const table: Locale = {
 
   accountant: {
     editAccountant: "Rediger revisor",
-    addAccountant: "Tilføj ny revisor",
+    addAccountant: "Inviter revisor",
     noAccountant: "Ingen revisor",
     addSuccessTitle: "Revisor tilføjet",
     addSuccessText: "En mail med invitation til systemet er sendt til revisor.",
@@ -107,7 +128,10 @@ export const table: Locale = {
     deleteErrorTitle: "Deaktivering mislykket",
     deleteErrorText: "Der skete en fejl. Prøv eventuelt igen.",
     alreadyAssignedTitle: "Fejl",
-    alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto."
+    alreadyAssignedText: "Denne mail bruges af en revisor, der allerede er tilknyttet en konto.",
+    accountant: "Revisor",
+    consultant: "Uvildig konsulent",
+    accountantType: "Vælg revisor/konsulent:"
   },
 
   mailEditor: {
@@ -125,7 +149,6 @@ export const table: Locale = {
   },
 
   statements: {
-    myStatements: "Mine indberetninger",
     turnoverExlMoms: "Omsætning excl. moms",
     taxIs: "Afgiften udgør",
     boughtPlants: "Indkøbte planter",
@@ -136,24 +159,66 @@ export const table: Locale = {
     signOff: "Underskriv og send",
     confirmSignOffButton: "Underskriv",
     confirmSignOffText: "Du er ved at underskrive dit oplysningsskema. Vil du fortsætte?",
+    downloadCsv: "Download CSV",
+    sendToAccountant: "Send til revisor el. konsulent",
+    sendToAccountantText1:
+      "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
+    sendToAccountantText2:
+      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
+
+    statusNotInvited: "Ikke inviteret",
+    statusInvited: "Inviteret",
+    statusEdited: "Har redigeret",
+    statusSignedOff: "Underskrevet",
+
+    invitationSentSuccessTitle: "Invitation sendt",
+    invitationSentSuccessText: "Invitation til at udfylde oplysningsskema blev sendt.",
+    invitationSentErrorTitle: "Invitation ikke sendt",
+    invitationSentErrorText: "Der skete en fejl, da vi forsøgte at sende invitationen.",
+
+    removeAccountant: "Fjern revisor",
+    removeConsultant: "Fjern konsulent",
+    confirmRemoveAccountant:
+      "Du er ved at fjerne revisoren for dette oplysningsskema. Vil du fortsætte?",
+    confirmRemoveApprovingAccountant:
+      "Du er ved at fjerne revisoren for dette oplysningsskema, selvom denne har godkendt skemaet. Hvis du fjerner revisor, fjernes godkendelsen. Vil du fortsætte?",
+    confirmRemoveConsultant:
+      "Du er ved at fjerne den uvildige konsulent for dette oplysningsskema. Vil du fortsætte?",
+    confirmRemoveApprovingConsultant:
+      "Du er ved at fjerne konsulenten for dette oplysningsskema, selvom denne har godkendt skemaet. Hvis du fjerner konsulenten, fjernes godkendelsen. Vil du fortsætte?",
+    sentToAccountant: "Anmodning om godkendelse sendt til revisor",
+    sentToConsultant: "Anmodning om godkendelse sendt til uvildig konsulent",
+    sentTo: "Anmodning sendt til",
+    notYetApprovedAccountant: "Revisor har endnu ikke godkendt skemaet",
+    notYetApprovedConsultant: "Konsulenten har endnu ikke godkendt skemaet",
+    approvedByAccountant: "Oplysningskema godkendt af revisor",
+    approvedByConsultant: "Oplysningsskema godkendt af konsulent",
+    approvedBy: "Godkendt af",
+    approvedAndReady: "Oplysningsskemaet er nu klar til at underskrives og indsendes",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
 
+    ApproveSuccessTitle: "Oplysningsskema godkendt",
+    ApproveSuccessText: "Du har nu signeret skemaet som værende godkendt.",
+    ApproveErrorTitle: "Fejl",
+    ApproveErrorText:
+      "Der skete en fejl, da vi forsøgte at behandle din anmodning om at godkende skemaet.",
+
     signOffExceeding:
       "Pga. størrelsen på den totale omsætning kræver oplysningsskemaet en revisors godkendelse.",
     signOffNeedsApproval: "Mangler godkendelse af den tilknyttede revisor.",
 
     section1: {
-      heading: "1. Grøntsager i væksthus",
+      heading: "Grøntsager i væksthus",
       mushrooms: "Svampe",
       tomatoCucumberHerbs: "Tomat, agurk, krydderurt",
       boughtPlantsDesc: "(excl. moms, ikke for svampe)"
     },
     section3: {
-      heading: "3. Grøntsager på friland",
+      heading: "Grøntsager på friland",
       turnoverExlPotatoes: "(excl. kartofler) Omsætning excl. moms",
       carrot: "Gulerod",
       pea: "Ært",
@@ -161,14 +226,14 @@ export const table: Locale = {
       boughtPlantsDesc: "(excl. moms kun vedr. stikløg eller andet)"
     },
     section4: {
-      heading: "4. Potteplanter m.v.",
+      heading: "Potteplanter m.v.",
       onions: "Løg og knolde",
       plants: "Potteplanter",
       flowers: "Snitblomster",
       boughtPlantsDesc: "(excl. moms kun vedr. snitblomster)"
     },
     section7: {
-      heading: "7. Planteskoleplanter",
+      heading: "Planteskoleplanter",
       description: "Inklusive videre- og detailsalg",
       plants: "Planteskoleplanter",
       turnoverDescription:
@@ -176,7 +241,7 @@ export const table: Locale = {
       boughtPlantsDesc: "(excl. moms)"
     },
     section8: {
-      heading: "8. Frugt og bær",
+      heading: "Frugt og bær",
       subHeading1: "Kernefrugt",
       subHeading2: "Stenfrugt",
       subHeading3: "Busk- og bærfrugt",
@@ -187,6 +252,25 @@ export const table: Locale = {
       plum: "Blommer",
       currant: "Ribs",
       strawberry: "Jordbær"
+    },
+    accountantSection: {
+      heading: "Sektion for revisor",
+      helpText:
+        "Før oplysningsskemaet kan signeres som godkendt, skal følgende erklæring downloades, udfyldes og uploades herunder.",
+      downloadPdf: "Hent erklæring",
+      dragAndDrop: "Træk og slip PDF med udfyldt erklæring her, eller klik for at vælge fil...",
+      dropFile: "Slip din fil her...",
+      signAndApprove: "Signér og godkend"
     }
+  },
+
+  myStatements: {
+    myStatements: "Mine indberetninger",
+    accountantApproved: "Godkendt",
+    awaitsYourApproval: "Afventer din godkendelse",
+    viewStatement: "Se oplysningsskema",
+    signedOffStatus: "Besvaret",
+    notSignedOffStatus: "Ikke besvaret",
+    fillOutStatement: "Besvar"
   }
 };

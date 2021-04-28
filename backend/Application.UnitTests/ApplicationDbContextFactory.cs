@@ -37,56 +37,34 @@ namespace Application.UnitTests
 
     public static void SeedSampleData(ApplicationDbContext context)
     {
-      context.ExampleParents.AddRange(
-          new ExampleParent() { Id = 1, Name = "Test 1" },
-          new ExampleParent() { Id = 2, Name = "Test 2" }
-      );
-
-      context.ExampleChildren.AddRange(
-          new ExampleChild { Id = 1, ParentId = 1, Name = "Bread", Type = ExampleEnum.Youngest },
-          new ExampleChild { Id = 2, ParentId = 1, Name = "Butter", Type = ExampleEnum.Youngest },
-          new ExampleChild { Id = 3, ParentId = 1, Name = "Milk", Type = ExampleEnum.Middle },
-          new ExampleChild { Id = 4, ParentId = 2, Name = "Sugar", Type = ExampleEnum.Middle },
-          new ExampleChild { Id = 5, ParentId = 2, Name = "Coffee", Type = ExampleEnum.Oldest }
-      );
-
-      var address1 = new Address { Id = 1, AddressLine1 = "test1 street 5", AddressLine2 = "2200 test1 city" };
-      var address2 = new Address { Id = 2, AddressLine1 = "test2 street 7", AddressLine2 = "2200 test2 city" };
+      var address1 = new Address { Id = 1, AddressAndPlace = "test1 street 5", City = "2200 test1 city" };
+      var address2 = new Address { Id = 2, AddressAndPlace = "test2 street 7", City = "2200 test2 city" };
 
       context.Addresses.AddRange(
         address1,
         address2
       );
 
-      var account1 = new Account { Id = 1, Name = "test1 account", Email = "test1@test1.dk", Tel = "59284756", AddressId = 1, Address = address1, CVRNumber = "10356245" };
-      var account2 = new Account { Id = 2, Name = "test2 account", Email = "test2@test2.dk", Tel = "64756453", AddressId = 2, Address = address2, CVRNumber = "10356457" };
-
-      context.Accounts.AddRange(
-          account1,
-          account2
-      );
-
       context.Users.AddRange(
-        new User { Id = 1, AccountId = 1, Account = account1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test1 client" },
-        new User { Id = 2, AccountId = 1, Account = account1, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Role = RoleEnum.Accountant, Name = "test1 accountant" },
-        new User { Id = 3, AccountId = 2, Account = account2, Email = "test2@test2.dk", Password = "Pa$$w0rd", Role = RoleEnum.Client, Name = "test2 client" }
-      );
-
-      context.Admins.AddRange(
-        new AdminUser { Id = 1, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name="Admin"},
-        new AdminUser { Id = 2, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" },
-        new AdminUser { Id = 3, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Role = RoleEnum.Admin, Name = "Admin" }
+        new Client { Id = 1, Email = "test1@test1.dk", Password = "Pa$$w0rd", Name = "test1 client" },
+        new Accountant { Id = 2, Email = "test1accountant@test.dk", Password = "Pa$$w0rd", Name = "test1 accountant" },
+        new Client { Id = 3, Email = "test2@test2.dk", Password = "Pa$$w0rd", Name = "test2 client" },
+        new Admin { Id = 4, Email = "admin1@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
+        new Admin { Id = 5, Email = "admin2@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
+        new Admin { Id = 6, Email = "admin3@admin.dk", Password = "Pa$$w0rd", Name = "Admin" },
+        new Accountant { Id = 7, Email = "test2accountant@test.dk", Password = "Pa$$w0rd", Name = "test2 accountant" }
       );
 
       context.Statements.AddRange(
-        new Statement { Id = 1, AccountId = 1, Account = account1, Status = StatementStatus.InvitedNotEdited, IsApproved = false, RevisionYear = 2021},
-        new Statement { Id = 2, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2020 },
-        new Statement { Id = 3, AccountId = 1, Account = account1, Status = StatementStatus.SignedOff, IsApproved = false, RevisionYear = 2019 },
-        new Statement { Id = 4, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = false, RevisionYear = 2021 },
-        new Statement { Id = 5, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2020 },
-        new Statement { Id = 6, AccountId = 2, Account = account2, Status = StatementStatus.InvitedAndEdited, IsApproved = false, RevisionYear = 2019, s1_mushrooms = 10000000},
-        new Statement { Id = 7, AccountId = 1, Account = account1, Status = StatementStatus.InvitedAndEdited, IsApproved = true, RevisionYear = 2018, s1_mushrooms = 10000000 }
-      );
+        new Statement { Id = 1, AccountingYear = 2021, ClientId = 1, AccountantId = 2, IsApproved = false },
+        new Statement { Id = 2, AccountingYear = 2022, ClientId = 3, AccountantId = 2, IsApproved = true},
+        new Statement { Id = 3, AccountingYear = 2022, ClientId = 3, AccountantId = 2, Status = StatementStatus.SignedOff},
+        new Statement { Id = 4, AccountingYear = 2022, ClientId = 3, AccountantId = 7, IsApproved = false},
+        new Statement { Id = 5, AccountingYear = 2022, ClientId = 1, IsApproved = false },
+        new Statement { Id = 6, AccountingYear = 2022, ClientId = 1, AccountantId = 2, IsApproved = true },
+        new Statement { Id = 7, AccountingYear = 2022, ClientId = 1, s1_mushrooms = 1000000000},
+        new Statement { Id = 8, AccountingYear = 2022, ClientId = 1, AccountantId = 2, IsApproved = true, s1_mushrooms = 1000000000 }
+      );;
 
       context.SaveChanges();
     }
