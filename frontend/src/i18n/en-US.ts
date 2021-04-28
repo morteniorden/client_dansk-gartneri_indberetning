@@ -169,13 +169,21 @@ export const table: Locale = {
     removeConsultant: "Remove consultant",
     confirmRemoveAccountant:
       "You are about to unassign the accountant for this statement. Do you want to continue?",
+    confirmRemoveApprovingAccountant:
+      "You are about to unassign the accountant for this statement, even though he/she has approved this statement. If you do, the statement will no longer be approved. Do you want to continue?",
     confirmRemoveConsultant:
       "You are about to unassign the consultant for this statement. Do you want to continue?",
+    confirmRemoveApprovingConsultant:
+      "You are about to unassign the consultant for this statement, even though he/she has approved this statement. If you do, the statement will no longer be approved. Do you want to continue?",
     sentToAccountant: "Request for approval sent to accountant",
     sentToConsultant: "Request for approval sent to consultant",
-    sentTo: "Request sent to:",
+    sentTo: "Request sent to",
     notYetApprovedAccountant: "The accountant has not yet approved the statement",
     notYetApprovedConsultant: "The consultant has not yet approved the statement",
+    approvedByAccountant: "Statement approved by accountant",
+    approvedByConsultant: "Statement approved by consultant",
+    approvedBy: "Approved by",
+    approvedAndReady: "The statement is now ready to be signed off",
 
     invitationSentSuccessTitle: "Invite sent",
     invitationSentSuccessText: "Invite to fill out statement has been sent",
@@ -186,6 +194,15 @@ export const table: Locale = {
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
+
+    ApproveSuccessTitle: "Statement signed",
+    ApproveSuccessText: "You have now signed the statement as approved.",
+    ApproveErrorTitle: "Sign-off unsuccesfull",
+    ApproveErrorText: "An error occured when we tried to process the sign-off.",
+
+    signOffExceeding:
+      "The total turnover is of an amount that requires the approval by an accounant.",
+    signOffNeedsApproval: "The statement has not yet been approved by the assigned accountant.",
 
     section1: {
       heading: "Grøntsager i væksthus",
@@ -245,8 +262,8 @@ export const table: Locale = {
     accountantApproved: "Approved",
     awaitsYourApproval: "Awaits your approval",
     viewStatement: "View statement",
-    signedOffstatus: "Finished",
-    notSignedOffstatus: "Pending",
+    signedOffStatus: "Finished",
+    notSignedOffStatus: "Pending",
     fillOutStatement: "Go to statement"
   }
 };

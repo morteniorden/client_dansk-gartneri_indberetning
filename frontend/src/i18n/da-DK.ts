@@ -172,18 +172,36 @@ export const table: Locale = {
     removeConsultant: "Fjern konsulent",
     confirmRemoveAccountant:
       "Du er ved at fjerne revisoren for dette oplysningsskema. Vil du fortsætte?",
+    confirmRemoveApprovingAccountant:
+      "Du er ved at fjerne revisoren for dette oplysningsskema, selvom denne har godkendt skemaet. Hvis du fjerner revisor, fjernes godkendelsen. Vil du fortsætte?",
     confirmRemoveConsultant:
       "Du er ved at fjerne den uvildige konsulent for dette oplysningsskema. Vil du fortsætte?",
+    confirmRemoveApprovingConsultant:
+      "Du er ved at fjerne konsulenten for dette oplysningsskema, selvom denne har godkendt skemaet. Hvis du fjerner konsulenten, fjernes godkendelsen. Vil du fortsætte?",
     sentToAccountant: "Anmodning om godkendelse sendt til revisor",
     sentToConsultant: "Anmodning om godkendelse sendt til uvildig konsulent",
-    sentTo: "Anmodning sendt til:",
+    sentTo: "Anmodning sendt til",
     notYetApprovedAccountant: "Revisor har endnu ikke godkendt skemaet",
     notYetApprovedConsultant: "Konsulenten har endnu ikke godkendt skemaet",
+    approvedByAccountant: "Oplysningskema godkendt af revisor",
+    approvedByConsultant: "Oplysningsskema godkendt af konsulent",
+    approvedBy: "Godkendt af",
+    approvedAndReady: "Oplysningsskemaet er nu klar til at underskrives og indsendes",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
+
+    ApproveSuccessTitle: "Oplysningsskema godkendt",
+    ApproveSuccessText: "Du har nu signeret skemaet som værende godkendt.",
+    ApproveErrorTitle: "Fejl",
+    ApproveErrorText:
+      "Der skete en fejl, da vi forsøgte at behandle din anmodning om at godkende skemaet.",
+
+    signOffExceeding:
+      "Pga. størrelsen på den totale omsætning kræver oplysningsskemaet en revisors godkendelse.",
+    signOffNeedsApproval: "Mangler godkendelse af den tilknyttede revisor.",
 
     section1: {
       heading: "Grøntsager i væksthus",
@@ -243,8 +261,8 @@ export const table: Locale = {
     accountantApproved: "Godkendt",
     awaitsYourApproval: "Afventer din godkendelse",
     viewStatement: "Se oplysningsskema",
-    signedOffstatus: "Besvaret",
-    notSignedOffstatus: "Ikke besvaret",
+    signedOffStatus: "Besvaret",
+    notSignedOffStatus: "Ikke besvaret",
     fillOutStatement: "Besvar"
   }
 };

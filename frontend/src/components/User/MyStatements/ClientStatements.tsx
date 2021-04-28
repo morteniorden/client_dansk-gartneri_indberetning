@@ -43,7 +43,7 @@ const ClientStatements: FC<Props> = ({ statements, isFetching }) => {
                       {statement.status != 2 && (
                         <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
                           <Button colorScheme="green" rounded="full">
-                            {t("myStatements.answer")}
+                            {t("myStatements.fillOutStatement")}
                           </Button>
                         </Link>
                       )}

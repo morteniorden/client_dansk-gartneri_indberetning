@@ -52,6 +52,7 @@ namespace Web
       services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.Tokens));
       services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
       services.Configure<SuperUserOptions>(Configuration.GetSection(SuperUserOptions.SuperUser));
+      services.Configure<StatementOptions>(Configuration.GetSection(StatementOptions.Statements));
 
       var corsOptions = Configuration.GetSection(CorsOptions.Cors).Get<CorsOptions>();
       services.AddCors(options =>

@@ -18,7 +18,7 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        StatementId = 1,
+        StatementId = 5,
         AccountantDto = new AccountantDto
         {
           Name = "test name",
@@ -38,7 +38,7 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
       accountant.Email.Should().Be(command.AccountantDto.Email);
       accountant.AccountantType.Should().Be(command.AccountantDto.AccountantType);
 
-      var statement = Context.Statements.Find(1);
+      var statement = Context.Statements.Find(command.StatementId);
       statement.Accountant.Should().Be(accountant);
       statement.AccountantId.Should().Be(accountant.Id);
     }
@@ -48,7 +48,7 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        StatementId = 1,
+        StatementId = 5,
         AccountantDto = new AccountantDto()
         {
           Name = "test name",
