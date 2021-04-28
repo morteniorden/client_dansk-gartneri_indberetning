@@ -62,7 +62,7 @@ namespace Application.Statements.Commands.ConsentToStatement
           throw new UnauthorizedAccessException("Tried to approve a statement that is not assigned to this accountant.");
         }
 
-        string fileType = request.Dto.File.ContentType.Substring(6);
+        string fileType = request.Dto.File.ContentType.Substring(12);
         var filename = request.Dto.StatementId + "." + fileType;
         string filePath = Path.Combine(_options.StatementPath, filename);
 

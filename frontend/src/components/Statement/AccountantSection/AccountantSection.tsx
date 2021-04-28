@@ -20,7 +20,7 @@ const AccountantSection: FC = () => {
   const onSubmit = useCallback(async () => {
     try {
       const statementClient = await genStatementClient();
-      await statementClient.consentToStatement(statement.id);
+      await statementClient.consentToStatement(statement.id, { data: file, fileName: file.name });
       toast({
         title: t("statements.ApproveSuccessTitle"),
         description: t("statements.ApproveSuccessText"),
