@@ -864,6 +864,7 @@ export interface IUserClient {
     getCurrentUser(): Promise<UserDto>;
     getAllClients(): Promise<ClientDto[]>;
     createClient(command: CreateClientCommand): Promise<number>;
+    createAdmin(command: CreateAdminCommand): Promise<number>;
     getAllAdmins(): Promise<UserDto[]>;
     createAndAddAccountant(command: CreateAccountantCommand): Promise<number>;
     updateUser(id: number, command: UpdateUserCommand): Promise<FileResponse>;
@@ -982,6 +983,46 @@ export class UserClient extends ClientBase implements IUserClient {
     }
 
     protected processCreateClient(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+
+    createAdmin(command: CreateAdminCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/User/admins";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateAdmin(_response));
+        });
+    }
+
+    protected processCreateAdmin(response: Response): Promise<number> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2672,6 +2713,87 @@ export class CreateClientCommand implements ICreateClientCommand {
 
 export interface ICreateClientCommand {
     clientDto?: IClientDto | null;
+}
+
+export class CreateAdminCommand implements ICreateAdminCommand {
+    admin?: CreateAdminDto | null;
+
+    constructor(data?: ICreateAdminCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.admin = data.admin && !(<any>data.admin).toJSON ? new CreateAdminDto(data.admin) : <CreateAdminDto>this.admin; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.admin = _data["admin"] ? CreateAdminDto.fromJS(_data["admin"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateAdminCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateAdminCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["admin"] = this.admin ? this.admin.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateAdminCommand {
+    admin?: ICreateAdminDto | null;
+}
+
+export class CreateAdminDto implements ICreateAdminDto {
+    name?: string | null;
+    email?: string | null;
+    password?: string | null;
+
+    constructor(data?: ICreateAdminDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
+            this.password = _data["password"] !== undefined ? _data["password"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateAdminDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateAdminDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        data["password"] = this.password !== undefined ? this.password : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateAdminDto {
+    name?: string | null;
+    email?: string | null;
+    password?: string | null;
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {
