@@ -20,8 +20,7 @@ namespace Application.Statements.Commands.ApproveStatement
   public class ConsentToStatementCommand : IRequest
   {
     [JsonIgnore]
-    public int StatementId { get; set; }
-    public IFormFile File { get; set; }
+    public StatementConsentDto Dto { get; set; }
 
     public class ConsentToStatementCommandHandler : IRequestHandler<ConsentToStatementCommand>
     {
@@ -38,11 +37,11 @@ namespace Application.Statements.Commands.ApproveStatement
 
       public async Task<Unit> Handle(ConsentToStatementCommand request, CancellationToken cancellationToken)
       {
-        var statementEntity = await _context.Statements.FindAsync(request.StatementId);
+        var statementEntity = await _context.Statements.FindAsync(request.Dto.StatementId);
 
         if (statementEntity == null)
         {
-          throw new NotFoundException(nameof(Statement), request.StatementId);
+          throw new NotFoundException(nameof(Statement), request.Dto.StatementId);
         }
 
         if (statementEntity.Status == StatementStatus.SignedOff)
@@ -61,18 +60,18 @@ namespace Application.Statements.Commands.ApproveStatement
           throw new UnauthorizedAccessException("Tried to approve a statement that belongs to another account");
         }
 
-        string fileType = request.File.ContentType.Substring(6);
-        var filename = request.StatementId + "." + fileType;
-        string filePath = Path.Combine(_options.CouponPath, filename);
+        string fileType = request.Dto.File.ContentType.Substring(6);
+        var filename = request.Dto.StatementId + "." + fileType;
+        string filePath = Path.Combine(_options.StatementPath, filename);
 
-        if (System.IO.File.Exists(filePath))
+        if (File.Exists(filePath))
         {
-          throw new ArgumentException("Consent file for statement with id " + request.StatementId + " already exists.");
+          throw new ArgumentException("Consent file for statement with id " + request.Dto.StatementId + " already exists.");
         }
 
         using (Stream fileStream = new FileStream(filePath, FileMode.Create))
         {
-          await request.File.CopyToAsync(fileStream);
+          await request.Dto.File.CopyToAsync(fileStream);
         }
 
         statementEntity.IsApproved = true;

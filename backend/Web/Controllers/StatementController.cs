@@ -67,9 +67,13 @@ namespace Web.Controllers
     public async Task<ActionResult> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
-      await Mediator.Send(new ApproveStatementCommand
+      await Mediator.Send(new ConsentToStatementCommand
       {
-        Id = id
+        Dto = new StatementConsentDto()
+        {
+          File = file,
+          StatementId = id
+        }
       });
 
       return NoContent();

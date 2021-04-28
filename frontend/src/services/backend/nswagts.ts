@@ -861,7 +861,7 @@ export interface IStatementClient {
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     createStatement(command: CreateStatementCommand): Promise<number>;
     signOffStatement(id: number): Promise<FileResponse>;
-    approveStatement(id: number): Promise<FileResponse>;
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -1112,14 +1112,19 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<FileResponse>(<any>null);
     }
 
-    approveStatement(id: number): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/Statement/{id}/approve";
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/{id}/consent";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = new FormData();
+        if (file !== null && file !== undefined)
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
         let options_ = <RequestInit>{
+            body: content_,
             method: "PUT",
             headers: {
                 "Accept": "application/octet-stream"
@@ -1129,11 +1134,11 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processApproveStatement(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processConsentToStatement(_response));
         });
     }
 
-    protected processApproveStatement(response: Response): Promise<FileResponse> {
+    protected processConsentToStatement(response: Response): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200 || status === 206) {
@@ -2687,6 +2692,11 @@ export enum CommandErrorCode {
     RegularExpressionValidator = 28,
     ScalePrecisionValidator = 29,
     StringEnumValidator = 30,
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export interface FileResponse {
