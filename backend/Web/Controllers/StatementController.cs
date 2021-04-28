@@ -8,6 +8,7 @@ using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -61,8 +62,9 @@ namespace Web.Controllers
       return NoContent();
     }
 
-    [HttpPut("{id}/approve")]
-    public async Task<ActionResult> ApproveStatement([FromRoute] int id)
+    [HttpPut("{id}/consent")]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
       await Mediator.Send(new ApproveStatementCommand

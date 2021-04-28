@@ -11,12 +11,12 @@ using Application.Statements.Commands.ApproveStatement;
 using Moq;
 using Xunit;
 
-namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
+namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
 {
-  public class ApproveStatementCommandTest : CommandTestBase
+  public class ConsentToStatementCommandTest : CommandTestBase
   {
     public Mock<ICurrentUserService> CurrentUserServiceMock { get; set; }
-    public ApproveStatementCommandTest()
+    public ConsentToStatementCommandTest()
     {
       CurrentUserServiceMock = new Mock<ICurrentUserService>();
       CurrentUserServiceMock.Setup(m => m.UserId)
@@ -27,12 +27,12 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     [Fact]
     public async Task Handle_GivenValidId_ShouldUpdatePersistedStatement()
     {
-      var command = new ApproveStatementCommand
+      var command = new ConsentToStatementCommand
       {
         Id = 1
       };
 
-      var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object);
 
       var entity = Context.Statements.Find(command.Id);
       entity.Should().NotBeNull();
@@ -46,12 +46,12 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     [Fact]
     public void Handle_GivenInvalidId_ThrowsException()
     {
-      var command = new ApproveStatementCommand
+      var command = new ConsentToStatementCommand
       {
         Id = 99
       };
 
-      var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -61,12 +61,12 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     [Fact]
     public void Handle_GivenAlreadyApproved_ThrowsException()
     {
-      var command = new ApproveStatementCommand
+      var command = new ConsentToStatementCommand
       {
         Id = 2
       };
 
-      var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -76,12 +76,12 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     [Fact]
     public void Handle_GivenAlreadySignedOff_ThrowsException()
     {
-      var command = new ApproveStatementCommand
+      var command = new ConsentToStatementCommand
       {
         Id = 3
       };
 
-      var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -91,12 +91,12 @@ namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
     [Fact]
     public void Handle_GivenInvalidAccount_ThrowsException()
     {
-      var command = new ApproveStatementCommand
+      var command = new ConsentToStatementCommand
       {
         Id = 4
       };
 
-      var handler = new ApproveStatementCommand.ApproveStatementCommandHandler(Context, CurrentUserServiceMock.Object);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
