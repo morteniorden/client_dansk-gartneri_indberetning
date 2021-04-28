@@ -36,7 +36,7 @@ export interface Locale {
     addAccount: string;
     street: string;
     streetNum: string;
-    postCode: string;
+    postalCode: string;
     city: string;
     country: string;
     addressLine1: string;
@@ -56,6 +56,10 @@ export interface Locale {
     tooltipShowInfo: string;
     tooltipHideInfo: string;
     tooltipReadStatement: string;
+
+    firmName: string;
+    ownerName: string;
+    addressAndPlace: string;
   };
 
   login: {

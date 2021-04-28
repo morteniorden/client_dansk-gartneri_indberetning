@@ -37,8 +37,8 @@ namespace Application.UnitTests
 
     public static void SeedSampleData(ApplicationDbContext context)
     {
-      var address1 = new Address { Id = 1, AddressLine1 = "test1 street 5", AddressLine2 = "2200 test1 city" };
-      var address2 = new Address { Id = 2, AddressLine1 = "test2 street 7", AddressLine2 = "2200 test2 city" };
+      var address1 = new Address { Id = 1, AddressAndPlace = "test1 street 5", City = "2200 test1 city" };
+      var address2 = new Address { Id = 2, AddressAndPlace = "test2 street 7", City = "2200 test2 city" };
 
       context.Addresses.AddRange(
         address1,

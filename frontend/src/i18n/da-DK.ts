@@ -31,14 +31,14 @@ export const table: Locale = {
     name: "Navn",
     email: "Email",
     tel: "Tlf.",
-    address: "Addresse",
+    address: "Adresse",
     address1: "Adresse 1",
     address2: "Adresse 2",
     cvrNumber: "CVR",
     addAccount: "Tilføj kunde",
     street: "Vej",
     streetNum: "Nr.",
-    postCode: "Postnr.",
+    postalCode: "Postnr.",
     city: "By",
     country: "Land",
     addressLine1: "Linje 1",
@@ -57,7 +57,11 @@ export const table: Locale = {
     tooltipEditAccountant: "Rediger revisor",
     tooltipShowInfo: "Vis info",
     tooltipHideInfo: "Skjul info",
-    tooltipReadStatement: "Se besvarelse"
+    tooltipReadStatement: "Se besvarelse",
+
+    firmName: "Firmanavn",
+    ownerName: "Ejernavn",
+    addressAndPlace: "Adresse (evt. sted)"
   },
 
   login: {

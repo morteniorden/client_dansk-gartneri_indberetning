@@ -38,7 +38,7 @@ export const table: Locale = {
     addAccount: "Add account",
     street: "Street",
     streetNum: "Number",
-    postCode: "Zip",
+    postalCode: "Zip",
     city: "City",
     country: "Country",
     addressLine1: "Line 1",
@@ -57,7 +57,11 @@ export const table: Locale = {
     tooltipEditAccountant: "Edit accountant",
     tooltipShowInfo: "Show info",
     tooltipHideInfo: "Hide info",
-    tooltipReadStatement: "See statement"
+    tooltipReadStatement: "See statement",
+
+    firmName: "Firm name",
+    ownerName: "Owner name",
+    addressAndPlace: "Address (optionally place)"
   },
 
   login: {
