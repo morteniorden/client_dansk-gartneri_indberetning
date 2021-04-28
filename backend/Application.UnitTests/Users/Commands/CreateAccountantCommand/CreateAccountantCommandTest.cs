@@ -27,7 +27,7 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
         }
       };
 
-      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context, PasswordHasherMock.Object);
+      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context, PasswordHasherMock.Object, MailServiceMock.Object, BackGroundJobClientMock.Object, TokenServiceMock.Object);
 
       var result = await handler.Handle(command, CancellationToken.None);
 
@@ -57,7 +57,7 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
         }
       };
 
-      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context, PasswordHasherMock.Object);
+      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context, PasswordHasherMock.Object, MailServiceMock.Object, BackGroundJobClientMock.Object, TokenServiceMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
       action.Should().Throw<ArgumentException>();
