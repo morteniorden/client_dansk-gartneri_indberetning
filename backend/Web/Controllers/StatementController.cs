@@ -31,7 +31,7 @@ namespace Web.Controllers
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<StatementDto>> getStatement([FromRoute] int id)
+    public async Task<ActionResult<StatementAndConsentDto>> getStatement([FromRoute] int id)
     {
       return await Mediator.Send(new GetStatementQuery
       {

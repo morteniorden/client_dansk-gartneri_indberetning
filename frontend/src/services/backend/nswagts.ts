@@ -490,7 +490,7 @@ export class MailClient extends ClientBase implements IMailClient {
 export interface IStatementClient {
     getAllStatements(): Promise<StatementDto[]>;
     getMyStatements(): Promise<StatementDto[]>;
-    getStatement(id: number): Promise<StatementDto>;
+    getStatement(id: number): Promise<StatementAndConsentDto>;
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     createStatement(command: CreateStatementCommand): Promise<number>;
     signOffStatement(id: number): Promise<FileResponse>;
@@ -590,7 +590,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<StatementDto[]>(<any>null);
     }
 
-    getStatement(id: number): Promise<StatementDto> {
+    getStatement(id: number): Promise<StatementAndConsentDto> {
         let url_ = this.baseUrl + "/api/Statement/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -611,14 +611,14 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processGetStatement(response: Response): Promise<StatementDto> {
+    protected processGetStatement(response: Response): Promise<StatementAndConsentDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = StatementDto.fromJS(resultData200);
+            result200 = StatementAndConsentDto.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -626,7 +626,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<StatementDto>(<any>null);
+        return Promise.resolve<StatementAndConsentDto>(<any>null);
     }
 
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse> {
@@ -2352,6 +2352,47 @@ export enum StatementStatus {
     InvitedNotEdited = 0,
     InvitedAndEdited = 1,
     SignedOff = 2,
+}
+
+export class StatementAndConsentDto implements IStatementAndConsentDto {
+    statement?: StatementDto | null;
+    consentStream?: string | null;
+
+    constructor(data?: IStatementAndConsentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.statement = data.statement && !(<any>data.statement).toJSON ? new StatementDto(data.statement) : <StatementDto>this.statement; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.statement = _data["statement"] ? StatementDto.fromJS(_data["statement"]) : <any>null;
+            this.consentStream = _data["consentStream"] !== undefined ? _data["consentStream"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): StatementAndConsentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatementAndConsentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["statement"] = this.statement ? this.statement.toJSON() : <any>null;
+        data["consentStream"] = this.consentStream !== undefined ? this.consentStream : <any>null;
+        return data; 
+    }
+}
+
+export interface IStatementAndConsentDto {
+    statement?: IStatementDto | null;
+    consentStream?: string | null;
 }
 
 export class CreateStatementCommand implements ICreateStatementCommand {

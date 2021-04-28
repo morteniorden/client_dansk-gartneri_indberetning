@@ -26,6 +26,7 @@ const Statement: FC<Props> = ({ id }) => {
   const [isFetching, setIsFetching] = useState(false);
   const { activeUser } = useAuth();
   const [total, setTotal] = useState(0);
+  const [consentFile, setConsentFile] = useState<string>();
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
@@ -33,8 +34,13 @@ const Statement: FC<Props> = ({ id }) => {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
 
-      if (data != null) setStatement(data);
-      else {
+      console.log(data);
+
+      if (data != null) {
+        if (data.statement != null) setStatement(data.statement);
+        if (data.consentStream != null)
+          setConsentFile("data:application/pdf;base64," + data.consentStream);
+      } else {
         logger.info("statementClient.get no data");
         router.push("mystatements");
       }
