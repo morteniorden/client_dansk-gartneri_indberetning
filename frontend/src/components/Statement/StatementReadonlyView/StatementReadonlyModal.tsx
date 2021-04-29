@@ -36,7 +36,7 @@ const StatementReadonlyModal: FC<Props> = ({ client, id }) => {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
 
-      if (data?.statement != null) setStatement(data.statement);
+      if (data != null) setStatement(data);
 
       if (data == null) {
         logger.info("statementClient.get no data");
@@ -82,8 +82,10 @@ const StatementReadonlyModal: FC<Props> = ({ client, id }) => {
                     total: null,
                     calcTotal: null
                   }}>
-                  <CurrentAccountant statement={statement} />
-                  <StatementForm />
+                  <Stack>
+                    <CurrentAccountant statement={statement} />
+                    <StatementForm />
+                  </Stack>
                 </EditStatementContext.Provider>
               </ModalBody>
               <ModalFooter></ModalFooter>

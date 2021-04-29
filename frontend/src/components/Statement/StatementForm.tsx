@@ -178,8 +178,9 @@ const StatementForm: FC = () => {
               </StatementTableRow>
             </StatementSectionTable>
           </StatementSection>
-          {statement.accountant != null &&
-            (activeUser?.role == RoleEnum.Accountant || readonly) && <AccountantSection />}
+          {statement.accountant != null && activeUser?.role == RoleEnum.Accountant && (
+            <AccountantSection />
+          )}
         </FormControlContext.Provider>
       </Stack>
     </form>

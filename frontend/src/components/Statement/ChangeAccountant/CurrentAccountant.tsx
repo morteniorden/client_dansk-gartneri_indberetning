@@ -5,7 +5,8 @@ import { useLocales } from "hooks/useLocales";
 import React, { FC, useCallback, useContext } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { genStatementClient } from "services/backend/apiClients";
-import { AccountantType, IStatementDto } from "services/backend/nswagts";
+import { AccountantType, IStatementDto, StatementStatus } from "services/backend/nswagts";
+import { logger } from "utils/logger";
 
 import RemoveAccountantModal from "./RemoveAccountantModal";
 
@@ -16,7 +17,7 @@ interface Props {
 const CurrentAccountant: FC<Props> = ({ statement }) => {
   const { t } = useLocales();
   const toast = useToast();
-  const { fetchData, isFetching } = useContext(EditStatementContext);
+  const { fetchData, isFetching, readonly } = useContext(EditStatementContext);
   const { boxBorder, lightOrange, statusIsSigned } = useColors();
 
   const handleDelete = useCallback(async () => {
@@ -93,13 +94,15 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
                 ? `${t("statements.approvedBy")}: ${statement.accountant.email}`
                 : `${t("statements.sentTo")}: ${statement.accountant.email}`}
             </Text>
-            <Text fontSize="sm">
-              {statement.isApproved
-                ? t("statements.approvedAndReady")
-                : statement.accountant.accountantType == AccountantType.Accountant
-                ? t("statements.notYetApprovedAccountant")
-                : t("statements.notYetApprovedConsultant")}
-            </Text>
+            {!readonly && (
+              <Text fontSize="sm">
+                {statement.isApproved
+                  ? t("statements.approvedAndReady")
+                  : statement.accountant.accountantType == AccountantType.Accountant
+                  ? t("statements.notYetApprovedAccountant")
+                  : t("statements.notYetApprovedConsultant")}
+              </Text>
+            )}
             {statement.isApproved && (
               <Button variant="link" w="min" onClick={fetchConsent}>
                 {t("statements.downloadConsent")}
@@ -107,7 +110,9 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
             )}
           </Stack>
         </HStack>
-        <RemoveAccountantModal statement={statement} cb={handleDelete} />
+        {!statement.status == StatementStatus.SignedOff && (
+          <RemoveAccountantModal statement={statement} cb={handleDelete} />
+        )}
       </Flex>
     </Skeleton>
   );
