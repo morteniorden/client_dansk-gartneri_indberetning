@@ -36,14 +36,6 @@ const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
       e.preventDefault();
       setLoading(true);
 
-      // const accountantDto = new AccountantDto({
-      //   id: 1,
-      //   name: name,
-      //   email: email,
-      //   role: RoleEnum.Accountant
-      // });
-      // //I don't know why, but I have to set accountantType here. If I do it when creating the dto, it is undefined afterwards.
-      // accountantDto.accountantType = accountantType;
       try {
         const userClient = await genUserClient();
         const command = new CreateAccountantCommand({
@@ -114,9 +106,3 @@ const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
   );
 };
 export default AddNewAccountantForm;
-/*
-        <FormControl id="name" isRequired isDisabled={formDisabled}>
-          <FormLabel htmlFor="name">{t("accounts.name")}</FormLabel>
-          <Input value={name} onChange={e => setName(e.target.value)}></Input>
-        </FormControl>
-*/
