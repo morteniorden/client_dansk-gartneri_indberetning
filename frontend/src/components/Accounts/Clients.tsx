@@ -13,11 +13,13 @@ import { logger } from "utils/logger";
 import AccountList from "./AccountList/AccountList";
 import DownloadCsvBtn from "./DownloadCsvBtn";
 import NewAccountModal from "./NewAccountModal";
+import SearchBar from "./SearchBar";
 
 const Accounts: FC = () => {
   const { t } = useLocales();
 
   const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
+  const [filteredClients, setFilteredClients] = useState<IClientDto[]>(clients);
   const [isFetching, setIsFetching] = useState(false);
 
   const accountingYears = useMemo(() => {
@@ -75,6 +77,7 @@ const Accounts: FC = () => {
               cb={setAccountingYear}
             />
             <HStack spacing={5}>
+              <SearchBar clients={clients} cb={value => setFilteredClients(value)} />
               <NewAccountModal onSubmit={fetchData} />
             </HStack>
           </Flex>
