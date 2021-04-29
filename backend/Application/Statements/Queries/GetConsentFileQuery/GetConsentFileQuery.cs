@@ -18,38 +18,31 @@ using Microsoft.Extensions.Options;
 namespace Application.Statements.Queries.GetMyStatements
 {
   [Authenticated]
-  public class GetStatementQuery : IRequest<StatementAndConsentDto>
+  public class GetConsentFileQuery : IRequest<ConsentFileDto>
   {
-    public int Id { get; set; }
+    public int StatementId { get; set; }
 
-    public class GetStatementQueryHandler : IRequestHandler<GetStatementQuery, StatementAndConsentDto>
+    public class GetConsentFileQueryHandler : IRequestHandler<GetConsentFileQuery, ConsentFileDto>
     {
       private readonly IApplicationDbContext _context;
-      private readonly IMapper _mapper;
       private readonly ICurrentUserService _currentUser;
       private readonly FileDriveOptions _options;
 
-      public GetStatementQueryHandler(IApplicationDbContext context, IMapper mapper, ICurrentUserService currentUser, IOptions<FileDriveOptions> options)
+      public GetConsentFileQueryHandler(IApplicationDbContext context, ICurrentUserService currentUser, IOptions<FileDriveOptions> options)
       {
         _context = context;
-        _mapper = mapper;
         _currentUser = currentUser;
         _options = options.Value;
       }
-      public async Task<StatementAndConsentDto> Handle(GetStatementQuery request, CancellationToken cancellationToken)
+      public async Task<ConsentFileDto> Handle(GetConsentFileQuery request, CancellationToken cancellationToken)
       {
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId, cancellationToken: cancellationToken);
 
-        //var statement = await _context.Statements
-        //  .Where(e => (e.ClientId == currentUser.Id || e.AccountantId == currentUser.Id) && e.Id == request.Id)
-        //  .ProjectTo<StatementDto>(_mapper.ConfigurationProvider)
-        //  .FirstOrDefaultAsync();
-
-        var statement = await _context.Statements.FindAsync(request.Id);
+        var statement = await _context.Statements.FindAsync(request.StatementId);
 
         if (statement == null)
         {
-          throw new NotFoundException(nameof(Statement), request.Id);
+          throw new NotFoundException(nameof(Statement), request.StatementId);
         }
 
         if (!(statement.Client == currentUser || statement.Accountant == currentUser || currentUser.Role == RoleEnum.Admin))
@@ -57,25 +50,23 @@ namespace Application.Statements.Queries.GetMyStatements
           throw new ForbiddenAccessException();
         }
 
-        //if (statement == null)
-        //{
-        //  throw new NotFoundException(nameof(Statement), request.Id);
-        //}
-
         var file = Directory.EnumerateFiles(_options.StatementPath, statement.Id + ".*")
           .FirstOrDefault();
 
-        var result = new StatementAndConsentDto
+        if (file == null)
         {
-          Statement = statement
-        };
+          throw new NotFoundException("File with consent for statement with id "+ statement.Id + " was not found.");
+        }
 
-        if (file == null) return result;
+        var result = new ConsentFileDto
+        {
+          StatementId = statement.Id,
+        };
 
         using (Stream fileStream = new FileStream(file, FileMode.Open))
         {
-          result.ConsentStream = new byte[fileStream.Length];
-          await fileStream.ReadAsync(result.ConsentStream);
+          result.Stream = new byte[fileStream.Length];
+          await fileStream.ReadAsync(result.Stream);
         }
 
         return result;

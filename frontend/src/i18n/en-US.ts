@@ -192,6 +192,7 @@ export const table: Locale = {
     approvedByConsultant: "Consultant has declared consent to the statement",
     approvedBy: "Consent by",
     approvedAndReady: "The statement is now ready to be signed off",
+    downloadConsent: "Download pdf with consent",
 
     invitationSentSuccessTitle: "Invite sent",
     invitationSentSuccessText: "Invite to fill out statement has been sent",
@@ -261,7 +262,10 @@ export const table: Locale = {
       downloadPdf: "Download statement",
       dragAndDrop: "Drag and drop PDF with statement of consent here, or click to choose file...",
       dropFile: "Drop your file here...",
-      signAndApprove: "Sign your consent"
+      signAndApprove: "Sign your consent",
+      consentSignedText:
+        "Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to Dansk Gartneri.",
+      downloadYourConsent: "Download your consent"
     }
   },
 

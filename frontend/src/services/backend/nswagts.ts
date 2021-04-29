@@ -497,6 +497,7 @@ export interface IStatementClient {
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse>;
+    getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -862,6 +863,46 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto> {
+        let url_ = this.baseUrl + "/api/Statement/consent?";
+        if (statementId === null)
+            throw new Error("The parameter 'statementId' cannot be null.");
+        else if (statementId !== undefined)
+            url_ += "statementId=" + encodeURIComponent("" + statementId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetConsentFile(_response));
+        });
+    }
+
+    protected processGetConsentFile(response: Response): Promise<ConsentFileDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ConsentFileDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ConsentFileDto>(<any>null);
     }
 }
 
@@ -1640,6 +1681,7 @@ export class StatementDto implements IStatementDto {
     client?: ClientNoStatementsDto | null;
     accountantId?: number | null;
     accountant?: Accountant | null;
+    accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
     isApproved?: boolean;
@@ -1684,6 +1726,7 @@ export class StatementDto implements IStatementDto {
             this.client = _data["client"] ? ClientNoStatementsDto.fromJS(_data["client"]) : <any>null;
             this.accountantId = _data["accountantId"] !== undefined ? _data["accountantId"] : <any>null;
             this.accountant = _data["accountant"] ? Accountant.fromJS(_data["accountant"]) : <any>null;
+            this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.isApproved = _data["isApproved"] !== undefined ? _data["isApproved"] : <any>null;
@@ -1726,6 +1769,7 @@ export class StatementDto implements IStatementDto {
         data["client"] = this.client ? this.client.toJSON() : <any>null;
         data["accountantId"] = this.accountantId !== undefined ? this.accountantId : <any>null;
         data["accountant"] = this.accountant ? this.accountant.toJSON() : <any>null;
+        data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["isApproved"] = this.isApproved !== undefined ? this.isApproved : <any>null;
@@ -1761,6 +1805,7 @@ export interface IStatementDto {
     client?: IClientNoStatementsDto | null;
     accountantId?: number | null;
     accountant?: IAccountant | null;
+    accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
     isApproved?: boolean;
@@ -2512,6 +2557,46 @@ export interface ICSVResponseDto {
     content?: string | null;
 }
 
+export class ConsentFileDto implements IConsentFileDto {
+    statementId?: number;
+    stream?: string | null;
+
+    constructor(data?: IConsentFileDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.statementId = _data["statementId"] !== undefined ? _data["statementId"] : <any>null;
+            this.stream = _data["stream"] !== undefined ? _data["stream"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ConsentFileDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConsentFileDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["statementId"] = this.statementId !== undefined ? this.statementId : <any>null;
+        data["stream"] = this.stream !== undefined ? this.stream : <any>null;
+        return data; 
+    }
+}
+
+export interface IConsentFileDto {
+    statementId?: number;
+    stream?: string | null;
+}
+
 export class ClientDto implements IClientDto {
     tel?: string | null;
     address?: AddressDto | null;
@@ -2597,6 +2682,7 @@ export interface IClientDto {
 }
 
 export class StatementNoUsersDto implements IStatementNoUsersDto {
+    id?: number;
     accountingYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;
@@ -2633,6 +2719,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
@@ -2669,6 +2756,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
         data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
@@ -2698,6 +2786,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
 }
 
 export interface IStatementNoUsersDto {
+    id?: number;
     accountingYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;

@@ -1,4 +1,4 @@
-import { Flex, Heading, HStack, Skeleton, Stack, Text, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, HStack, Skeleton, Stack, Text, useToast } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
@@ -44,6 +44,25 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
     }
   }, [statement]);
 
+  const fetchConsent = useCallback(async () => {
+    try {
+      const statementClient = await genStatementClient();
+      const data = await statementClient.getConsentFile(statement.id);
+
+      if (data != null) {
+        const downloadLink = document.createElement("a");
+        downloadLink.href = "data:application/pdf;base64," + data.stream;
+        downloadLink.download = `samtykkeerklæring ${statement.client.name} ${statement.accountingYear}`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+    } catch (err) {
+      logger.warn("statementClient.get Error", err);
+    }
+  }, [statement]);
+
   return (
     <Skeleton isLoaded={!isFetching}>
       <Flex
@@ -81,6 +100,11 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
                 ? t("statements.notYetApprovedAccountant")
                 : t("statements.notYetApprovedConsultant")}
             </Text>
+            {statement.isApproved && (
+              <Button variant="link" w="min" onClick={fetchConsent}>
+                {t("statements.downloadConsent")}
+              </Button>
+            )}
           </Stack>
         </HStack>
         <RemoveAccountantModal statement={statement} cb={handleDelete} />

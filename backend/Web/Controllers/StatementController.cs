@@ -101,5 +101,14 @@ namespace Web.Controllers
 
       return NoContent();
     }
+
+    [HttpGet("consent")]
+    public async Task<ConsentFileDto> GetConsentFile([FromQuery] int statementId)
+    {
+      return await Mediator.Send(new GetConsentFileQuery()
+      {
+        StatementId = statementId
+      });
+    }
   }
 }

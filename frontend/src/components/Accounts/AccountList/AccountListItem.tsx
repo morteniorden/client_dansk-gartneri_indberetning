@@ -49,7 +49,7 @@ const AccountListItem: FC<Props> = ({ client, accountingYear }) => {
                   <ViewStatementBtn disabled={true} />
                 )}
                 {statement && statement.status == StatementStatus.SignedOff && (
-                  <StatementReadonlyModal statement={statement} client={client} />
+                  <StatementReadonlyModal id={statement.id} client={client} />
                 )}
                 <Tooltip label={isExpanded ? "Skjul info" : "Vis info"}>
                   <AccordionButton

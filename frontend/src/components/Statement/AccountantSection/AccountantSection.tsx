@@ -43,28 +43,63 @@ const AccountantSection: FC = () => {
     }
   }, [statement, file]);
 
+  const fetchConsent = useCallback(async () => {
+    try {
+      const statementClient = await genStatementClient();
+      const data = await statementClient.getConsentFile(statement.id);
+
+      if (data != null) {
+        const downloadLink = document.createElement("a");
+        downloadLink.href = "data:application/pdf;base64," + data.stream;
+        downloadLink.download = `samtykkeerklæring ${statement.client.name} ${statement.accountingYear}`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+    } catch (err) {
+      logger.warn("statementClient.get Error", err);
+    }
+  }, [statement]);
+
   return (
     <Box shadow="sm" p={10} border="1px" borderColor={boxBorder} rounded="md">
       <Stack spacing={5}>
         <Heading size="md">{t("statements.accountantSection.heading")}</Heading>
-        <Text>{t("statements.accountantSection.helpText")}</Text>
-        <Center>
-          <HStack>
-            <FiDownload />
-            {/* TODO: insert actual URL */}
-            <Link href="https://danskgartneri.dk/-/media/danskgartneri/publikationer/tal-om-gartneriet/tal-om-gartneriet-2020.pdf">
-              <Button variant="link" w="min" colorScheme="green">
-                {t("statements.accountantSection.downloadPdf")}
+        {!statement.isApproved ? (
+          <>
+            <Text>{t("statements.accountantSection.helpText")}</Text>
+            <Center>
+              <HStack>
+                <FiDownload />
+                {/* TODO: insert actual URL */}
+                <Link href="https://danskgartneri.dk/-/media/danskgartneri/publikationer/tal-om-gartneriet/tal-om-gartneriet-2020.pdf">
+                  <Button variant="link" w="min" colorScheme="green">
+                    {t("statements.accountantSection.downloadPdf")}
+                  </Button>
+                </Link>
+              </HStack>
+            </Center>
+            <DropZone file={file} setFile={setFile} />
+            <Center>
+              <Button colorScheme="green" onClick={onSubmit} disabled={file == null}>
+                {t("statements.accountantSection.signAndApprove")}
               </Button>
-            </Link>
-          </HStack>
-        </Center>
-        <DropZone file={file} setFile={setFile} />
-        <Center>
-          <Button colorScheme="green" onClick={onSubmit} disabled={file == null}>
-            {t("statements.accountantSection.signAndApprove")}
-          </Button>
-        </Center>
+            </Center>
+          </>
+        ) : (
+          <>
+            <Text>{t("statements.accountantSection.consentSignedText")}</Text>
+            <Center>
+              <HStack>
+                <FiDownload />
+                <Button variant="link" w="min" colorScheme="green" onClick={fetchConsent}>
+                  {t("statements.accountantSection.downloadYourConsent")}
+                </Button>
+              </HStack>
+            </Center>
+          </>
+        )}
       </Stack>
     </Box>
   );
