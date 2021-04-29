@@ -18,10 +18,9 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        StatementId = 5,
-        AccountantDto = new AccountantDto
+        Dto = new AssignAccountantDto
         {
-          Name = "test name",
+          StatementId = 5,
           Email = "test@test.dk",
           AccountantType = AccountantType.Accountant
         }
@@ -34,13 +33,12 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
       var accountant = (Accountant) Context.Users.Find(result);
 
       accountant.Should().NotBeNull();
-      accountant.Name.Should().Be(command.AccountantDto.Name);
-      accountant.Email.Should().Be(command.AccountantDto.Email);
-      accountant.AccountantType.Should().Be(command.AccountantDto.AccountantType);
+      accountant.Email.Should().Be(command.Dto.Email);
 
-      var statement = Context.Statements.Find(command.StatementId);
+      var statement = Context.Statements.Find(command.Dto.StatementId);
       statement.Accountant.Should().Be(accountant);
       statement.AccountantId.Should().Be(accountant.Id);
+      statement.AccountantType.Should().Be(command.Dto.AccountantType);
     }
 
     [Fact]
@@ -48,11 +46,10 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        StatementId = 5,
-        AccountantDto = new AccountantDto()
+        Dto = new AssignAccountantDto
         {
-          Name = "test name",
-          Email = "test1@test1.dk", //Already used by an account and user defined in ApplicationDbContextFactory
+          StatementId = 5,
+          Email = "test1@test1.dk",
           AccountantType = AccountantType.Accountant
         }
       };
