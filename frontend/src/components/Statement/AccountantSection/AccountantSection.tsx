@@ -2,10 +2,10 @@ import { Box, Button, Center, Heading, HStack, Stack, Text, useToast } from "@ch
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import Link from "next/link";
 import { FC, useCallback, useContext, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import { genStatementClient } from "services/backend/apiClients";
+import { AccountantType } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import DropZone from "./DropZone";
@@ -74,12 +74,20 @@ const AccountantSection: FC = () => {
             <Center>
               <HStack>
                 <FiDownload />
-                {/* TODO: insert actual URL */}
-                <Link href="https://danskgartneri.dk/-/media/danskgartneri/publikationer/tal-om-gartneriet/tal-om-gartneriet-2020.pdf">
-                  <Button variant="link" w="min" colorScheme="green">
-                    {t("statements.accountantSection.downloadPdf")}
-                  </Button>
-                </Link>
+                <Button
+                  variant="link"
+                  w="min"
+                  colorScheme="green"
+                  onClick={e =>
+                    window.open(
+                      statement.accountantType == AccountantType.Accountant
+                        ? "/Revisorerklæring komplet.pdf"
+                        : "/Økonomikonsulenterklæring komplet.pdf",
+                      "_blank"
+                    )
+                  }>
+                  {t("statements.accountantSection.downloadPdf")}
+                </Button>
               </HStack>
             </Center>
             <DropZone file={file} setFile={setFile} />
