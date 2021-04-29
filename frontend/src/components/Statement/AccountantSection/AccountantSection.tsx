@@ -50,6 +50,8 @@ const AccountantSection: FC = () => {
 
       if (data != null) {
         const downloadLink = document.createElement("a");
+
+        //This assumes that the file is always a pdf. But what if we want to support different files?
         downloadLink.href = "data:application/pdf;base64," + data.stream;
         downloadLink.download = `samtykkeerklæring ${statement.client.name} ${statement.accountingYear}`;
 
