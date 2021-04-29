@@ -82,7 +82,7 @@ const Accounts: FC = () => {
             </HStack>
           </Flex>
           <FetchingSpinner isFetching={isFetching} text={t("accounts.fetching")} />
-          <AccountList data={clients} accountingYear={accountingYear} />
+          <AccountList data={filteredClients} accountingYear={accountingYear} />
         </Stack>
       </BasicLayout>
     </ClientsContext.Provider>
