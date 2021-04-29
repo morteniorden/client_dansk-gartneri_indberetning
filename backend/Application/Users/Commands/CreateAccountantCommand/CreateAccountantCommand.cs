@@ -15,8 +15,7 @@ namespace Application.Users.Commands.CreateAccountantCommand
   [Authorize(Role = RoleEnum.Client)]
   public class CreateAccountantCommand : IRequest<int>
   {
-    public int StatementId { get; set; }
-    public AccountantDto AccountantDto;
+    public AssignAccountantDto Dto { get; set; }
 
     public class CreateAccountantCommandHandler : IRequestHandler<CreateAccountantCommand, int>
     {
@@ -31,11 +30,11 @@ namespace Application.Users.Commands.CreateAccountantCommand
 
       public async Task<int> Handle(CreateAccountantCommand request, CancellationToken cancellationToken)
       {
-        var statement = await _context.Statements.FindAsync(request.StatementId);
+        var statement = await _context.Statements.FindAsync(request.Dto.StatementId);
 
         if (statement == null)
         {
-          throw new NotFoundException(nameof(Statement), request.StatementId);
+          throw new NotFoundException(nameof(Statement), request.Dto.StatementId);
         }
 
         if (statement.Accountant != null)
@@ -43,29 +42,21 @@ namespace Application.Users.Commands.CreateAccountantCommand
           throw new InvalidOperationException("Cannot assign a new accountant to the statement, as another accountant is already assigned.");
         }
 
-        if (_context.Users.Any(e => e.Email == request.AccountantDto.Email && e.Role != RoleEnum.Accountant))
+        if (_context.Users.Any(e => e.Email == request.Dto.Email && e.Role != RoleEnum.Accountant))
         {
           throw new ArgumentException("The provided email address is already used by another user.");
         }
 
         var existingAccountant = (Accountant) await _context.Users
-          .FirstOrDefaultAsync(e => e.Email == request.AccountantDto.Email && e.Role == RoleEnum.Accountant, cancellationToken: cancellationToken);
+          .FirstOrDefaultAsync(e => e.Email == request.Dto.Email && e.Role == RoleEnum.Accountant, cancellationToken: cancellationToken);
 
         //If the accountant exists
         if (existingAccountant != null)
         {
-          //TODO: This has been commented out, because it made sense when an accountant were assigned to accounts. But now, shouldn't we allow them to be assigned to multiple statements?
-          /*
-          if (existingAccountant.DeactivationTime == null && existingAccountant.Statements.Count > 0)
-          {
-            throw new InvalidOperationException(
-              "Cannot assign the given accountant to the statement, as the accountant is already assigned another statement. Unassign the accountant before assigning.");
-          }
-          */
-
           existingAccountant.DeactivationTime = null; //If the user was deactivated, activate it again
           statement.Accountant = existingAccountant;
           statement.AccountantId = existingAccountant.Id;
+          statement.AccountantType = request.Dto.AccountantType;
 
           await _context.SaveChangesAsync(cancellationToken);
 
@@ -76,15 +67,14 @@ namespace Application.Users.Commands.CreateAccountantCommand
         //If the accountant doesn't exists, create a new one
         var accountantEntity = new Accountant
         {
-          Name = request.AccountantDto.Name,
-          Email = request.AccountantDto.Email,
+          Email = request.Dto.Email,
           Role = RoleEnum.Accountant,
-          AccountantType = request.AccountantDto.AccountantType,
           Password = _passwordHasher.Hash("password123") //TODO: REMOVE
         };
 
         statement.AccountantId = accountantEntity.Id;
         statement.Accountant = accountantEntity;
+        statement.AccountantType = request.Dto.AccountantType;
 
         _context.Users.Add(accountantEntity);
 

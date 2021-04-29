@@ -2055,7 +2055,6 @@ export interface IUser extends IAuditableEntity {
 
 export class Accountant extends User implements IAccountant {
     role?: RoleEnum;
-    accountantType?: AccountantType;
     statements?: Statement[] | null;
 
     constructor(data?: IAccountant) {
@@ -2066,7 +2065,6 @@ export class Accountant extends User implements IAccountant {
         super.init(_data);
         if (_data) {
             this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
-            this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             if (Array.isArray(_data["statements"])) {
                 this.statements = [] as any;
                 for (let item of _data["statements"])
@@ -2085,7 +2083,6 @@ export class Accountant extends User implements IAccountant {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["role"] = this.role !== undefined ? this.role : <any>null;
-        data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         if (Array.isArray(this.statements)) {
             data["statements"] = [];
             for (let item of this.statements)
@@ -2098,13 +2095,7 @@ export class Accountant extends User implements IAccountant {
 
 export interface IAccountant extends IUser {
     role?: RoleEnum;
-    accountantType?: AccountantType;
     statements?: Statement[] | null;
-}
-
-export enum AccountantType {
-    Accountant = 0,
-    Consultant = 1,
 }
 
 export class Statement extends AuditableEntity implements IStatement {
@@ -2391,6 +2382,11 @@ export interface IAddress {
     addressAndPlace?: string | null;
     postalCode?: string | null;
     city?: string | null;
+}
+
+export enum AccountantType {
+    Accountant = 0,
+    Consultant = 1,
 }
 
 export enum StatementStatus {
@@ -2891,8 +2887,7 @@ export interface ICreateAdminDto {
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {
-    accountantDto?: AccountantDto | null;
-    statementId?: number;
+    dto?: AssignAccountantDto | null;
 
     constructor(data?: ICreateAccountantCommand) {
         if (data) {
@@ -2900,14 +2895,13 @@ export class CreateAccountantCommand implements ICreateAccountantCommand {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
-            this.accountantDto = data.accountantDto && !(<any>data.accountantDto).toJSON ? new AccountantDto(data.accountantDto) : <AccountantDto>this.accountantDto; 
+            this.dto = data.dto && !(<any>data.dto).toJSON ? new AssignAccountantDto(data.dto) : <AssignAccountantDto>this.dto; 
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.accountantDto = _data["accountantDto"] ? AccountantDto.fromJS(_data["accountantDto"]) : <any>null;
-            this.statementId = _data["statementId"] !== undefined ? _data["statementId"] : <any>null;
+            this.dto = _data["dto"] ? AssignAccountantDto.fromJS(_data["dto"]) : <any>null;
         }
     }
 
@@ -2920,69 +2914,57 @@ export class CreateAccountantCommand implements ICreateAccountantCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["accountantDto"] = this.accountantDto ? this.accountantDto.toJSON() : <any>null;
-        data["statementId"] = this.statementId !== undefined ? this.statementId : <any>null;
+        data["dto"] = this.dto ? this.dto.toJSON() : <any>null;
         return data; 
     }
 }
 
 export interface ICreateAccountantCommand {
-    accountantDto?: IAccountantDto | null;
-    statementId?: number;
+    dto?: IAssignAccountantDto | null;
 }
 
-export class AccountantDto extends UserDto implements IAccountantDto {
+export class AssignAccountantDto implements IAssignAccountantDto {
+    statementId?: number;
+    email?: string | null;
     accountantType?: AccountantType;
-    statements?: StatementDto[] | null;
 
-    constructor(data?: IAccountantDto) {
-        super(data);
+    constructor(data?: IAssignAccountantDto) {
         if (data) {
-            if (data.statements) {
-                this.statements = [];
-                for (let i = 0; i < data.statements.length; i++) {
-                    let item = data.statements[i];
-                    this.statements[i] = item && !(<any>item).toJSON ? new StatementDto(item) : <StatementDto>item;
-                }
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
 
     init(_data?: any) {
-        super.init(_data);
         if (_data) {
+            this.statementId = _data["statementId"] !== undefined ? _data["statementId"] : <any>null;
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
             this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
-            if (Array.isArray(_data["statements"])) {
-                this.statements = [] as any;
-                for (let item of _data["statements"])
-                    this.statements!.push(StatementDto.fromJS(item));
-            }
         }
     }
 
-    static fromJS(data: any): AccountantDto {
+    static fromJS(data: any): AssignAccountantDto {
         data = typeof data === 'object' ? data : {};
-        let result = new AccountantDto();
+        let result = new AssignAccountantDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["statementId"] = this.statementId !== undefined ? this.statementId : <any>null;
+        data["email"] = this.email !== undefined ? this.email : <any>null;
         data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
-        if (Array.isArray(this.statements)) {
-            data["statements"] = [];
-            for (let item of this.statements)
-                data["statements"].push(item.toJSON());
-        }
-        super.toJSON(data);
         return data; 
     }
 }
 
-export interface IAccountantDto extends IUserDto {
+export interface IAssignAccountantDto {
+    statementId?: number;
+    email?: string | null;
     accountantType?: AccountantType;
-    statements?: IStatementDto[] | null;
 }
 
 export class UpdateUserCommand implements IUpdateUserCommand {

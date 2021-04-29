@@ -82,10 +82,10 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
           <Stack spacing={0}>
             <Heading size="sm" colorScheme="green">
               {statement.isApproved
-                ? statement.accountant.accountantType == AccountantType.Accountant
+                ? statement.accountantType == AccountantType.Accountant
                   ? t("statements.approvedByAccountant")
                   : t("statements.approvedByConsultant")
-                : statement.accountant.accountantType == AccountantType.Accountant
+                : statement.accountantType == AccountantType.Accountant
                 ? t("statements.sentToAccountant")
                 : t("statements.sentToConsultant")}
             </Heading>
@@ -98,7 +98,7 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
               <Text fontSize="sm">
                 {statement.isApproved
                   ? t("statements.approvedAndReady")
-                  : statement.accountant.accountantType == AccountantType.Accountant
+                  : statement.accountantType == AccountantType.Accountant
                   ? t("statements.notYetApprovedAccountant")
                   : t("statements.notYetApprovedConsultant")}
               </Text>

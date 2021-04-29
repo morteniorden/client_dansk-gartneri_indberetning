@@ -14,13 +14,7 @@ import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { genUserClient } from "services/backend/apiClients";
-import {
-  AccountantDto,
-  AccountantType,
-  CreateAccountantCommand,
-  IStatementDto,
-  RoleEnum
-} from "services/backend/nswagts";
+import { AccountantType, CreateAccountantCommand, IStatementDto } from "services/backend/nswagts";
 
 interface Props {
   statement: IStatementDto;
@@ -42,19 +36,22 @@ const AddNewAccountantForm: FC<Props> = ({ statement, onSubmit }) => {
       e.preventDefault();
       setLoading(true);
 
-      const accountantDto = new AccountantDto({
-        id: 1,
-        name: name,
-        email: email,
-        role: RoleEnum.Accountant
-      });
-      //I don't know why, but I have to set accountantType here. If I do it when creating the dto, it is undefined afterwards.
-      accountantDto.accountantType = accountantType;
+      // const accountantDto = new AccountantDto({
+      //   id: 1,
+      //   name: name,
+      //   email: email,
+      //   role: RoleEnum.Accountant
+      // });
+      // //I don't know why, but I have to set accountantType here. If I do it when creating the dto, it is undefined afterwards.
+      // accountantDto.accountantType = accountantType;
       try {
         const userClient = await genUserClient();
         const command = new CreateAccountantCommand({
-          statementId: statement.id,
-          accountantDto: accountantDto
+          dto: {
+            statementId: statement.id,
+            email: email,
+            accountantType: accountantType
+          }
         });
         await userClient.createAndAddAccountant(command);
         toast({
