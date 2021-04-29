@@ -31,7 +31,7 @@ const SearchBar: FC<Props> = ({ clients, cb }) => {
 
   useEffect(() => {
     cb(filteredClients);
-  }, [filteredClients, searchString]);
+  }, [filteredClients]);
 
   return (
     <InputGroup w="15em">
