@@ -271,8 +271,8 @@ export const table: Locale = {
 
   myStatements: {
     myStatements: "Mine indberetninger",
-    accountantApproved: "Approved",
-    awaitsYourApproval: "Awaits your approval",
+    accountantApproved: "Consent declared",
+    awaitsYourApproval: "Awaits your consent",
     viewStatement: "View statement",
     signedOffStatus: "Finished",
     notSignedOffStatus: "Pending",

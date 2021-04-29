@@ -110,7 +110,7 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
             )}
           </Stack>
         </HStack>
-        {!statement.status == StatementStatus.SignedOff && (
+        {statement.status != StatementStatus.SignedOff && (
           <RemoveAccountantModal statement={statement} cb={handleDelete} />
         )}
       </Flex>

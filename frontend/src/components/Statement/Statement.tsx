@@ -8,7 +8,12 @@ import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, RoleEnum, UpdateStatementCommand } from "services/backend/nswagts";
+import {
+  IStatementDto,
+  RoleEnum,
+  StatementStatus,
+  UpdateStatementCommand
+} from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementForm from "./StatementForm";
@@ -26,6 +31,8 @@ const Statement: FC<Props> = ({ id }) => {
   const [isFetching, setIsFetching] = useState(false);
   const { activeUser } = useAuth();
   const [total, setTotal] = useState(0);
+
+  const readonly = useMemo(() => statement?.status == StatementStatus.SignedOff, [statement]);
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
@@ -147,7 +154,7 @@ const Statement: FC<Props> = ({ id }) => {
             save: onSaveChanges,
             isSaving: isSaving,
             submit: onSubmit,
-            readonly: false,
+            readonly: readonly,
             fetchData: fetchData,
             isFetching: isFetching,
             total: total,

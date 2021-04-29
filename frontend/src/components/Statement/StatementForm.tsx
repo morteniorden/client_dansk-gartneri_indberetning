@@ -49,7 +49,7 @@ const StatementForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} id="statement_form">
-      <Stack>
+      <Stack sx={readonly && { "input:disabled": { opacity: 1, cursor: "text" } }}>
         <FormControlContext.Provider
           value={{
             control,

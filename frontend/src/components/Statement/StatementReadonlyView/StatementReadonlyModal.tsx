@@ -22,11 +22,10 @@ import CurrentAccountant from "../ChangeAccountant/CurrentAccountant";
 import StatementForm from "../StatementForm";
 
 interface Props {
-  client: IClientDto;
   id: number;
 }
 
-const StatementReadonlyModal: FC<Props> = ({ client, id }) => {
+const StatementReadonlyModal: FC<Props> = ({ id }) => {
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [statement, setStatement] = useState<IStatementDto>();
@@ -64,11 +63,11 @@ const StatementReadonlyModal: FC<Props> = ({ client, id }) => {
                   <Heading size="md">{`${t("statements.editStatementHeading")}, ${t(
                     "statements.accountingYear"
                   ).toLowerCase()}: ${statement.accountingYear}`}</Heading>
-                  <Heading size="sm">{client.name}</Heading>
+                  <Heading size="sm">{statement.client.name}</Heading>
                 </Stack>
               </ModalHeader>
               <ModalCloseButton />
-              <ModalBody sx={{ "input:disabled": { opacity: 1, cursor: "text" } }}>
+              <ModalBody>
                 <EditStatementContext.Provider
                   value={{
                     statement: statement,

@@ -254,7 +254,7 @@ export const table: Locale = {
       strawberry: "Jordbær"
     },
     accountantSection: {
-      heading: "Sektion for revisor",
+      heading: "Sektion for revisor el. konsulent",
       helpText:
         "For at signere dit samtykke til oplysningskemaet, skal følgende samtykkeerklæring downloades, udfyldes og uploades herunder.",
       downloadPdf: "Hent samtykkeerklæring",
@@ -270,8 +270,8 @@ export const table: Locale = {
 
   myStatements: {
     myStatements: "Mine indberetninger",
-    accountantApproved: "Godkendt",
-    awaitsYourApproval: "Afventer din godkendelse",
+    accountantApproved: "Samtykke givet",
+    awaitsYourApproval: "Afventer dit samtykke",
     viewStatement: "Se oplysningsskema",
     signedOffStatus: "Besvaret",
     notSignedOffStatus: "Ikke besvaret",

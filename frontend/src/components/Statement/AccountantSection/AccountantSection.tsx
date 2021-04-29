@@ -14,7 +14,7 @@ const AccountantSection: FC = () => {
   const { t } = useLocales();
   const { boxBorder } = useColors();
   const [file, setFile] = useState<File>(null);
-  const { statement, readonly, fetchData } = useContext(EditStatementContext);
+  const { statement, fetchData } = useContext(EditStatementContext);
   const toast = useToast();
 
   const onSubmit = useCallback(async () => {
