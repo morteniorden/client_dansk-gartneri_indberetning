@@ -67,6 +67,7 @@ namespace Application.Users.Commands.CreateAccountantCommand
         //If the accountant doesn't exists, create a new one
         var accountantEntity = new Accountant
         {
+          Name = "", //TODO: What should we do with accountant name?
           Email = request.Dto.Email,
           Role = RoleEnum.Accountant,
           Password = _passwordHasher.Hash("password123") //TODO: REMOVE
