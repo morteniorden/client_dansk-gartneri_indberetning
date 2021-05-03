@@ -68,9 +68,18 @@ export const table: Locale = {
     email: "Email:",
     password: "Password:",
     login: "Log in",
-    forgotPassword: "Forgot password?",
+    forgotPassword: "Forgot password",
+    forgotPasswordText:
+      "Please enter your email, and we will send you a mail with a link to choose a new password.",
     invalidMsg: "Invalid credentials. Please try again.",
-    logout: "Logout"
+    logout: "Logout",
+    sendResetPW: "Send mail",
+
+    sendResetPWSuccesTitle: "Mail sent",
+    sendResetPWSuccesText: "A mail has been sent with a link to reset your password.",
+    sendResetPWErrorTitle: "Error",
+    sendResetPWErrorText:
+      "An error occured when trying to sent a mail to the provided mail address."
   },
 
   admins: {

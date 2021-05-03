@@ -67,8 +67,15 @@ export interface Locale {
     password: string;
     login: string;
     forgotPassword: string;
+    forgotPasswordText: string;
     invalidMsg: string;
     logout: string;
+    sendResetPW: string;
+
+    sendResetPWSuccesTitle: string;
+    sendResetPWSuccesText: string;
+    sendResetPWErrorTitle: string;
+    sendResetPWErrorText: string;
   };
 
   admins: {
