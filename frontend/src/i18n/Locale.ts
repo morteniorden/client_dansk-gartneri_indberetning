@@ -187,6 +187,7 @@ export interface Locale {
     approvedByConsultant: string;
     approvedBy: string;
     approvedAndReady: string;
+    downloadConsent: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
@@ -249,6 +250,8 @@ export interface Locale {
       dragAndDrop: string;
       dropFile: string;
       signAndApprove: string;
+      consentSignedText: string;
+      downloadYourConsent: string;
     };
   };
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Statements;
-using Application.Statements.Commands.ApproveStatement;
+using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
@@ -11,6 +11,7 @@ using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSVQuery;
 using Application.Users.Commands.UnassignAccountantCommand;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -84,16 +85,30 @@ namespace Web.Controllers
       return NoContent();
     }
 
-    [HttpPut("{id}/approve")]
-    public async Task<ActionResult> ApproveStatement([FromRoute] int id)
+    [HttpPut("{id}/consent")]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
-      await Mediator.Send(new ApproveStatementCommand
+      await Mediator.Send(new ConsentToStatementCommand
       {
-        Id = id
+        Dto = new StatementConsentDto()
+        {
+          File = file,
+          StatementId = id
+        }
       });
 
       return NoContent();
+    }
+
+    [HttpGet("consent")]
+    public async Task<ConsentFileDto> GetConsentFile([FromQuery] int statementId)
+    {
+      return await Mediator.Send(new GetConsentFileQuery()
+      {
+        StatementId = statementId
+      });
     }
   }
 }

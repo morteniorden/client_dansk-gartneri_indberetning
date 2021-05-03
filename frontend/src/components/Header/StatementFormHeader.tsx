@@ -14,7 +14,7 @@ import Navbar from "./Navbar";
 
 const StatementFormHeader: FC = () => {
   const { t } = useLocales();
-  const { save, statement } = useContext(EditStatementContext);
+  const { save, statement, readonly } = useContext(EditStatementContext);
   const { activeUser } = useAuth();
   const { headerBg } = useColors();
   const router = useRouter();
@@ -31,13 +31,15 @@ const StatementFormHeader: FC = () => {
       w="100vw"
       zIndex={100}>
       <Image src={logoPath} position="relative" pb="15px" h="60px"></Image>
-      <HStack position="absolute" left="50%" transform="translateX(-50%)">
-        <Button colorScheme="green" onClick={save}>
-          {t("actions.saveChanges")}
-        </Button>
-        {activeUser?.role == RoleEnum.Client && <ChangeAccountantModal statement={statement} />}
-        {activeUser?.role == RoleEnum.Client && <ConfirmSignOffModal />}
-      </HStack>
+      {!readonly && (
+        <HStack position="absolute" left="50%" transform="translateX(-50%)">
+          <Button colorScheme="green" onClick={save}>
+            {t("actions.saveChanges")}
+          </Button>
+          {activeUser?.role == RoleEnum.Client && <ChangeAccountantModal statement={statement} />}
+          {activeUser?.role == RoleEnum.Client && <ConfirmSignOffModal />}
+        </HStack>
+      )}
       <HStack display={["none", null, "flex"]}>
         <Navbar />
         <Spacer w="40px" />

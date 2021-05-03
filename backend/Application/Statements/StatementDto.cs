@@ -12,6 +12,7 @@ namespace Application.Statements
     public virtual ClientNoStatementsDto Client { get; set; }
     public int? AccountantId { get; set; }
     public virtual Accountant? Accountant { get; set; }
+    public AccountantType AccountantType { get; set; }
     public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
     public bool IsApproved { get; set; }

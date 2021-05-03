@@ -178,20 +178,21 @@ export const table: Locale = {
     confirmRemoveAccountant:
       "You are about to unassign the accountant for this statement. Do you want to continue?",
     confirmRemoveApprovingAccountant:
-      "You are about to unassign the accountant for this statement, even though he/she has approved this statement. If you do, the statement will no longer be approved. Do you want to continue?",
+      "You are about to unassign the accountant for this statement, even though he/she has declared consent to the statement. If you do, the consent will be withdrawn. Do you want to continue?",
     confirmRemoveConsultant:
       "You are about to unassign the consultant for this statement. Do you want to continue?",
     confirmRemoveApprovingConsultant:
-      "You are about to unassign the consultant for this statement, even though he/she has approved this statement. If you do, the statement will no longer be approved. Do you want to continue?",
-    sentToAccountant: "Request for approval sent to accountant",
-    sentToConsultant: "Request for approval sent to consultant",
+      "You are about to unassign the consultant for this statement, even though he/she has approved this statement. If you do, the consent will be withdrawn. Do you want to continue?",
+    sentToAccountant: "Request for consent sent to accountant",
+    sentToConsultant: "Request for consent sent to consultant",
     sentTo: "Request sent to",
-    notYetApprovedAccountant: "The accountant has not yet approved the statement",
-    notYetApprovedConsultant: "The consultant has not yet approved the statement",
-    approvedByAccountant: "Statement approved by accountant",
-    approvedByConsultant: "Statement approved by consultant",
-    approvedBy: "Approved by",
+    notYetApprovedAccountant: "The accountant has not yet declared consent to the statement",
+    notYetApprovedConsultant: "The consultant has not yet declared consent to the statement",
+    approvedByAccountant: "Accountant has declared consent to the statement",
+    approvedByConsultant: "Consultant has declared consent to the statement",
+    approvedBy: "Consent by",
     approvedAndReady: "The statement is now ready to be signed off",
+    downloadConsent: "Download pdf with consent",
 
     invitationSentSuccessTitle: "Invite sent",
     invitationSentSuccessText: "Invite to fill out statement has been sent",
@@ -203,8 +204,8 @@ export const table: Locale = {
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
 
-    ApproveSuccessTitle: "Statement signed",
-    ApproveSuccessText: "You have now signed the statement as approved.",
+    ApproveSuccessTitle: "Declaration of consent signed",
+    ApproveSuccessText: "You have now signed your consent to the statement.",
     ApproveErrorTitle: "Sign-off unsuccesfull",
     ApproveErrorText: "An error occured when we tried to process the sign-off.",
 
@@ -257,18 +258,21 @@ export const table: Locale = {
     accountantSection: {
       heading: "Section for accountant or consultant",
       helpText:
-        "Please download and fill out the following statement PDF. Upload it here to before signing off.",
+        "To sign off your consent for this statement, please download and fill out the following statemenent of consent, and uploaded it in the field below.",
       downloadPdf: "Download statement",
-      dragAndDrop: "Drag and drop PDF with statement here, or click to choose file...",
+      dragAndDrop: "Drag and drop PDF with statement of consent here, or click to choose file...",
       dropFile: "Drop your file here...",
-      signAndApprove: "Sign-off and approve"
+      signAndApprove: "Sign your consent",
+      consentSignedText:
+        "Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to Dansk Gartneri.",
+      downloadYourConsent: "Download your consent"
     }
   },
 
   myStatements: {
     myStatements: "Mine indberetninger",
-    accountantApproved: "Approved",
-    awaitsYourApproval: "Awaits your approval",
+    accountantApproved: "Consent declared",
+    awaitsYourApproval: "Awaits your consent",
     viewStatement: "View statement",
     signedOffStatus: "Finished",
     notSignedOffStatus: "Pending",

@@ -7,13 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Options;
-using Application.Statements.Commands.ApproveStatement;
 using Application.Statements.Commands.SignOffStatement;
 using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
-namespace Application.UnitTests.Statements.Commands.ApproveStatementTest
+namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
 {
   public class SignOffStatementCommandTest : CommandTestBase
   {

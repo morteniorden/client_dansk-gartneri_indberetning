@@ -49,7 +49,7 @@ const StatementForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} id="statement_form">
-      <Stack>
+      <Stack sx={readonly && { "input:disabled": { opacity: 1, cursor: "text" } }}>
         <FormControlContext.Provider
           value={{
             control,
@@ -178,8 +178,9 @@ const StatementForm: FC = () => {
               </StatementTableRow>
             </StatementSectionTable>
           </StatementSection>
-          {statement.accountant != null &&
-            (activeUser?.role == RoleEnum.Accountant || readonly) && <AccountantSection />}
+          {statement.accountant != null && activeUser?.role == RoleEnum.Accountant && (
+            <AccountantSection />
+          )}
         </FormControlContext.Provider>
       </Stack>
     </form>
