@@ -30,8 +30,8 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           CVRNumber = "13243546",
           Address = new AddressDto
           {
-            AddressLine1 = "test street 5",
-            AddressLine2 = "1234 test city"
+            AddressAndPlace = "test street 5",
+            City = "1234 test city"
           }
         }
       };
@@ -65,8 +65,8 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           CVRNumber = "13243546",
           Address = new AddressDto
           {
-            AddressLine1 = "test street 5",
-            AddressLine2 = "1234 test city"
+            AddressAndPlace = "test street 5",
+            City = "1234 test city"
           }
         }
       };
@@ -82,8 +82,8 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           CVRNumber = "43546578",
           Address = new AddressDto
           {
-            AddressLine1 = "test street 5",
-            AddressLine2 = "1234 test city"
+            AddressAndPlace = "test street 5",
+            City = "1234 test city"
           }
         }
       };
@@ -109,8 +109,8 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           CVRNumber = "13243546",
           Address = new AddressDto
           {
-            AddressLine1 = "test street 5",
-            AddressLine2 = "1234 test city"
+            AddressAndPlace = "test street 5",
+            City = "1234 test city"
           }
         }
       };
@@ -125,8 +125,8 @@ namespace Application.UnitTests.Users.Commands.CreateClient
           CVRNumber = "13243546",
           Address = new AddressDto
           {
-            AddressLine1 = "test street 5",
-            AddressLine2 = "1234 test city"
+            AddressAndPlace = "test street 5",
+            City = "1234 test city"
           }
         }
       };

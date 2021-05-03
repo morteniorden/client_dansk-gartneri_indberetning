@@ -31,14 +31,14 @@ export const table: Locale = {
     name: "Navn",
     email: "Email",
     tel: "Tlf.",
-    address: "Addresse",
+    address: "Adresse",
     address1: "Adresse 1",
     address2: "Adresse 2",
     cvrNumber: "CVR",
     addAccount: "Tilføj kunde",
     street: "Vej",
     streetNum: "Nr.",
-    postCode: "Postnr.",
+    postalCode: "Postnr.",
     city: "By",
     country: "Land",
     addressLine1: "Linje 1",
@@ -57,6 +57,11 @@ export const table: Locale = {
     tooltipEditAccountant: "Rediger revisor",
     tooltipShowInfo: "Vis info",
     tooltipHideInfo: "Skjul info",
+    tooltipReadStatement: "Se besvarelse",
+
+    firmName: "Firmanavn",
+    ownerName: "Ejernavn",
+    addressAndPlace: "Adresse (evt. sted)"
     tooltipReadStatement: "Se besvarelse",
 
     deactivateClient: "Deaktivér kunde",
@@ -79,7 +84,14 @@ export const table: Locale = {
   },
 
   admins: {
-    admins: "Administratorer"
+    admins: "Administratorer",
+    addAdmin: "Tilføj admin",
+    addAdminSuccessTitle: "Administrator oprettet",
+    addAdminSuccessText: "En ny administrator er nu oprettet",
+    addAdminErrorTitle: "Fejl",
+    addAdminErrorText: "Der skete en fejl, da vi forsøgte at oprette ny administrator.",
+    deactivateAdmin: "Deaktivér admininistrator",
+    deactivateAdminText: "Du er ved at deaktivere denne administrator. Vil du fortsætte?"
   },
 
   actions: {
@@ -160,9 +172,9 @@ export const table: Locale = {
     downloadCsv: "Download CSV",
     sendToAccountant: "Send til revisor el. konsulent",
     sendToAccountantText1:
-      "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
+      "Herunder kan du anmode en revisor eller uvildig konsulent om at erklære sit samtykke til dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
     sendToAccountantText2:
-      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
+      "Når revisoren eller konsulenten har erklæret samtykke, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Ikke inviteret",
     statusInvited: "Inviteret",
@@ -178,18 +190,36 @@ export const table: Locale = {
     removeConsultant: "Fjern konsulent",
     confirmRemoveAccountant:
       "Du er ved at fjerne revisoren for dette oplysningsskema. Vil du fortsætte?",
+    confirmRemoveApprovingAccountant:
+      "Du er ved at fjerne revisoren for dette oplysningsskema, selvom denne har erklæret sit samtykke hertil. Hvis du fjerner revisor, frafalder samtykket. Vil du fortsætte?",
     confirmRemoveConsultant:
       "Du er ved at fjerne den uvildige konsulent for dette oplysningsskema. Vil du fortsætte?",
-    sentToAccountant: "Anmodning om godkendelse sendt til revisor",
-    sentToConsultant: "Anmodning om godkendelse sendt til uvildig konsulent",
-    sentTo: "Anmodning sendt til:",
-    notYetApprovedAccountant: "Revisor har endnu ikke godkendt skemaet",
-    notYetApprovedConsultant: "Konsulenten har endnu ikke godkendt skemaet",
+    confirmRemoveApprovingConsultant:
+      "Du er ved at fjerne konsulenten for dette oplysningsskema, selvom denne har erklæret sit samtykke hertil. Hvis du fjerner konsulenten, frafalder samtykket. Vil du fortsætte?",
+    sentToAccountant: "Anmodning om samtykke sendt til revisor",
+    sentToConsultant: "Anmodning om samtykke sendt til uvildig konsulent",
+    sentTo: "Anmodning sendt til",
+    notYetApprovedAccountant: "Revisor har endnu ikke erklæret samtykke til skemaet",
+    notYetApprovedConsultant: "Konsulenten har endnu ikke erklæret samtykke til skemaet",
+    approvedByAccountant: "Revisor har erklæret samtykke til skemaet",
+    approvedByConsultant: "Konsulenten har eklæret samtykke til skemaet",
+    approvedBy: "Samtykke erklæret af",
+    approvedAndReady: "Oplysningsskemaet er nu klar til at underskrives og indsendes",
+    downloadConsent: "Hent samtykkeeklæring",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
+
+    ApproveSuccessTitle: "Samtykke underskrevet",
+    ApproveSuccessText: "Du har nu underskrevet dit samtykke til skemaet.",
+    ApproveErrorTitle: "Fejl",
+    ApproveErrorText: "Der skete en fejl, da vi forsøgte at behandle dit samtykke til skemaet.",
+
+    signOffExceeding:
+      "Pga. størrelsen på den totale omsætning kræver oplysningsskemaet samtykke fra en revisor.",
+    signOffNeedsApproval: "Mangler samtykke af den tilknyttede revisor.",
 
     section1: {
       heading: "Grøntsager i væksthus",
@@ -234,23 +264,27 @@ export const table: Locale = {
       strawberry: "Jordbær"
     },
     accountantSection: {
-      heading: "Sektion for revisor",
+      heading: "Sektion for revisor el. konsulent",
       helpText:
-        "Før oplysningsskemaet kan signeres som godkendt, skal følgende erklæring downloades, udfyldes og uploades herunder.",
-      downloadPdf: "Hent erklæring",
-      dragAndDrop: "Træk og slip PDF med udfyldt erklæring her, eller klik for at vælge fil...",
+        "For at signere dit samtykke til oplysningskemaet, skal følgende samtykkeerklæring downloades, udfyldes og uploades herunder.",
+      downloadPdf: "Hent samtykkeerklæring",
+      dragAndDrop:
+        "Træk og slip PDF med udfyldt samtykkeerklæring her, eller klik for at vælge fil...",
       dropFile: "Slip din fil her...",
-      signAndApprove: "Signér og godkend"
+      signAndApprove: "Signér samtykke",
+      consentSignedText:
+        "Dit samtykke til oplysningsskemaet er nu underskrevet. Klienten kan nu se, at du har givet dit samtykke til oplysningsskemaet og kan nu selv endelig underskrive og indsende skemaet.",
+      downloadYourConsent: "Hent din samtykkeerklæring"
     }
   },
 
   myStatements: {
     myStatements: "Mine indberetninger",
-    accountantApproved: "Godkendt",
-    awaitsYourApproval: "Afventer din godkendelse",
+    accountantApproved: "Samtykke givet",
+    awaitsYourApproval: "Afventer dit samtykke",
     viewStatement: "Se oplysningsskema",
-    signedOffstatus: "Besvaret",
-    notSignedOffstatus: "Ikke besvaret",
+    signedOffStatus: "Besvaret",
+    notSignedOffStatus: "Ikke besvaret",
     fillOutStatement: "Besvar"
   }
 };

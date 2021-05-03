@@ -38,7 +38,7 @@ export const table: Locale = {
     addAccount: "Add account",
     street: "Street",
     streetNum: "Number",
-    postCode: "Zip",
+    postalCode: "Zip",
     city: "City",
     country: "Country",
     addressLine1: "Line 1",
@@ -57,6 +57,11 @@ export const table: Locale = {
     tooltipEditAccountant: "Edit accountant",
     tooltipShowInfo: "Show info",
     tooltipHideInfo: "Hide info",
+    tooltipReadStatement: "See statement",
+
+    firmName: "Firm name",
+    ownerName: "Owner name",
+    addressAndPlace: "Address (optionally place)"
     tooltipReadStatement: "See statement",
 
     deactivateClient: "Deactivate client",
@@ -79,7 +84,14 @@ export const table: Locale = {
   },
 
   admins: {
-    admins: "Admins"
+    admins: "Admins",
+    addAdmin: "Add admin",
+    addAdminSuccessTitle: "Admin created",
+    addAdminSuccessText: "The new admin was successfully created.",
+    addAdminErrorTitle: "Error",
+    addAdminErrorText: "An error occured when trying to add the new admin.",
+    deactivateAdmin: "Deactivate admin",
+    deactivateAdminText: "You are about to deactivate this admin. Do you want to proceed?"
   },
 
   actions: {
@@ -175,13 +187,22 @@ export const table: Locale = {
     removeConsultant: "Remove consultant",
     confirmRemoveAccountant:
       "You are about to unassign the accountant for this statement. Do you want to continue?",
+    confirmRemoveApprovingAccountant:
+      "You are about to unassign the accountant for this statement, even though he/she has declared consent to the statement. If you do, the consent will be withdrawn. Do you want to continue?",
     confirmRemoveConsultant:
       "You are about to unassign the consultant for this statement. Do you want to continue?",
-    sentToAccountant: "Request for approval sent to accountant",
-    sentToConsultant: "Request for approval sent to consultant",
-    sentTo: "Request sent to:",
-    notYetApprovedAccountant: "The accountant has not yet approved the statement",
-    notYetApprovedConsultant: "The consultant has not yet approved the statement",
+    confirmRemoveApprovingConsultant:
+      "You are about to unassign the consultant for this statement, even though he/she has approved this statement. If you do, the consent will be withdrawn. Do you want to continue?",
+    sentToAccountant: "Request for consent sent to accountant",
+    sentToConsultant: "Request for consent sent to consultant",
+    sentTo: "Request sent to",
+    notYetApprovedAccountant: "The accountant has not yet declared consent to the statement",
+    notYetApprovedConsultant: "The consultant has not yet declared consent to the statement",
+    approvedByAccountant: "Accountant has declared consent to the statement",
+    approvedByConsultant: "Consultant has declared consent to the statement",
+    approvedBy: "Consent by",
+    approvedAndReady: "The statement is now ready to be signed off",
+    downloadConsent: "Download pdf with consent",
 
     invitationSentSuccessTitle: "Invite sent",
     invitationSentSuccessText: "Invite to fill out statement has been sent",
@@ -192,6 +213,15 @@ export const table: Locale = {
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
     signOffErrorTitle: "Fejl",
     signOffErrorText: "Der skete en fejl, da vi forsøgte at behandle din underskrivning.",
+
+    ApproveSuccessTitle: "Declaration of consent signed",
+    ApproveSuccessText: "You have now signed your consent to the statement.",
+    ApproveErrorTitle: "Sign-off unsuccesfull",
+    ApproveErrorText: "An error occured when we tried to process the sign-off.",
+
+    signOffExceeding:
+      "The total turnover is of an amount that requires the approval by an accounant.",
+    signOffNeedsApproval: "The statement has not yet been approved by the assigned accountant.",
 
     section1: {
       heading: "Grøntsager i væksthus",
@@ -238,21 +268,24 @@ export const table: Locale = {
     accountantSection: {
       heading: "Section for accountant or consultant",
       helpText:
-        "Please download and fill out the following statement PDF. Upload it here to before signing off.",
+        "To sign off your consent for this statement, please download and fill out the following statemenent of consent, and uploaded it in the field below.",
       downloadPdf: "Download statement",
-      dragAndDrop: "Drag and drop PDF with statement here, or click to choose file...",
+      dragAndDrop: "Drag and drop PDF with statement of consent here, or click to choose file...",
       dropFile: "Drop your file here...",
-      signAndApprove: "Sign-off and approve"
+      signAndApprove: "Sign your consent",
+      consentSignedText:
+        "Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to Dansk Gartneri.",
+      downloadYourConsent: "Download your consent"
     }
   },
 
   myStatements: {
     myStatements: "Mine indberetninger",
-    accountantApproved: "Approved",
-    awaitsYourApproval: "Awaits your approval",
+    accountantApproved: "Consent declared",
+    awaitsYourApproval: "Awaits your consent",
     viewStatement: "View statement",
-    signedOffstatus: "Finished",
-    notSignedOffstatus: "Pending",
+    signedOffStatus: "Finished",
+    notSignedOffStatus: "Pending",
     fillOutStatement: "Go to statement"
   }
 };

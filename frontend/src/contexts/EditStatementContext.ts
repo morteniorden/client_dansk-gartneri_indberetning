@@ -10,6 +10,8 @@ type ContextType = {
   readonly: boolean;
   fetchData: () => Promise<void>;
   isFetching: boolean;
+  total: number;
+  calcTotal: () => number;
 };
 
 export const EditStatementContext = createContext<ContextType>({
@@ -20,5 +22,7 @@ export const EditStatementContext = createContext<ContextType>({
   submit: (data: IStatementDto) => null,
   readonly: false,
   fetchData: () => null,
-  isFetching: false
+  isFetching: false,
+  total: 0,
+  calcTotal: () => 0
 });

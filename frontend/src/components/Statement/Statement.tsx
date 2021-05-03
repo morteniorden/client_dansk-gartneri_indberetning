@@ -6,9 +6,14 @@ import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, RoleEnum, UpdateStatementCommand } from "services/backend/nswagts";
+import {
+  IStatementDto,
+  RoleEnum,
+  StatementStatus,
+  UpdateStatementCommand
+} from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementForm from "./StatementForm";
@@ -25,6 +30,9 @@ const Statement: FC<Props> = ({ id }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { activeUser } = useAuth();
+  const [total, setTotal] = useState(0);
+
+  const readonly = useMemo(() => statement?.status == StatementStatus.SignedOff, [statement]);
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
@@ -35,7 +43,7 @@ const Statement: FC<Props> = ({ id }) => {
       if (data != null) setStatement(data);
       else {
         logger.info("statementClient.get no data");
-        router.push("mystatements");
+        router.push("/mystatements");
       }
     } catch (err) {
       logger.warn("statementClient.get Error", err);
@@ -74,6 +82,34 @@ const Statement: FC<Props> = ({ id }) => {
       });
     }
     setIsSaving(false);
+  }, [statement]);
+
+  const calcTotal = useCallback(() => {
+    if (statement == null) return 0;
+    setTotal(
+      statement.s1_boughtPlants +
+        statement.s1_mushrooms +
+        statement.s1_tomatoCucumberHerb +
+        statement.s3_boughtPlants +
+        statement.s3_carrots +
+        statement.s3_onions +
+        statement.s3_other +
+        statement.s3_peas +
+        statement.s4_boughtPlants +
+        statement.s4_cutFlowers +
+        statement.s4_onions +
+        statement.s4_plants +
+        statement.s7_boughtPlants +
+        statement.s7_plants +
+        statement.s8_applesPearsEtc +
+        statement.s8_cherries +
+        statement.s8_currant +
+        statement.s8_otherBerryFruit +
+        statement.s8_otherStoneFruit +
+        statement.s8_packaging +
+        statement.s8_plums +
+        statement.s8_strawberries
+    );
   }, [statement]);
 
   const onSubmit = useCallback(
@@ -118,9 +154,11 @@ const Statement: FC<Props> = ({ id }) => {
             save: onSaveChanges,
             isSaving: isSaving,
             submit: onSubmit,
-            readonly: false,
+            readonly: readonly,
             fetchData: fetchData,
-            isFetching: isFetching
+            isFetching: isFetching,
+            total: total,
+            calcTotal: calcTotal
           }}>
           <BasicLayout variant="statementHeader" maxW="1000px">
             <Stack spacing={5}>

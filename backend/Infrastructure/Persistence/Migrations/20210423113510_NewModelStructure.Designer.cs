@@ -28,16 +28,16 @@ namespace Infrastructure.Persistence.Migrations
                       .HasColumnType("int")
                       .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            b.Property<string>("AddressLine1")
+            b.Property<string>("FirmName")
                       .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("AddressLine2")
+            b.Property<string>("OwnerName")
                       .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("AddressLine3")
+            b.Property<string>("AddressAndPlace")
                       .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("AddressLine4")
+            b.Property<string>("PostalCode")
                       .HasColumnType("nvarchar(max)");
 
             b.Property<int>("ClientId")

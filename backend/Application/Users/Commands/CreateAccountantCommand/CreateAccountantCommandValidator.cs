@@ -6,9 +6,9 @@ namespace Application.Users.Commands.CreateAccountantCommand
   {
     public CreateAccountantCommandValidator()
     {
-      RuleFor(e => e.AccountantDto)
+      RuleFor(e => e.Dto)
         .NotNull();
-      RuleFor(e => e.AccountantDto.Email)
+      RuleFor(e => e.Dto.Email)
         .NotEmpty()
         .EmailAddress();
     }

@@ -9,6 +9,7 @@ namespace Application.Statements
 {
   public class StatementNoUsersDto : IAutoMap<Statement>
   {
+    public int Id { get; set; }
     public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
 

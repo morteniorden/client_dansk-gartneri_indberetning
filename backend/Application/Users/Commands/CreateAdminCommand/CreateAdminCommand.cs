@@ -12,7 +12,7 @@ namespace Application.Accounts.Commands.CreateAdmin
   [Authorize(Role = RoleEnum.Admin)]
   public class CreateAdminCommand : IRequest<int>
   {
-    public CreateAdminDto Admin;
+    public CreateAdminDto Admin { get; set; }
 
     public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, int>
     {

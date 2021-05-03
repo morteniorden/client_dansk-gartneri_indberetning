@@ -11,5 +11,7 @@ namespace Application.Common.Interfaces
     Task SendForgotPasswordEmail(string email, string token);
     Task<string> GeneratePreview(EmailDto emailDto);
     Task SendStatementInvitationEmail(string email);
+    Task SendInviteNewAccountantEmail(string email, string token);
+    Task SendInviteExistingAccountantEmail(string email);
   }
 }

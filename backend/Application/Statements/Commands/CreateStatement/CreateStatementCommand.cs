@@ -46,8 +46,10 @@ namespace Application.Statements.Commands.CreateStatementCommand
           ClientId = request.ClientId,
           Client = (Client) userEntity,
           AccountingYear = request.RevisionYear,
-          Status = StatementStatus.InvitedNotEdited
+          Status = StatementStatus.InvitedNotEdited,
+          IsApproved = false
         };
+
         _context.Statements.Add(statement);
 
         _jobClient.Enqueue(() => _mailService.SendStatementInvitationEmail(userEntity.Email));

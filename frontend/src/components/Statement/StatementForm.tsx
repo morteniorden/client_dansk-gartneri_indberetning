@@ -1,12 +1,12 @@
 import { Stack } from "@chakra-ui/react";
+import AccountantSection from "components/Statement/AccountantSection/AccountantSection";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useContext } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
 
-import AccountantSection from "./AccountantSection/AccountantSection";
 import { FormControlContext } from "./FormControlContext";
 import InputDKK from "./InputDKK";
 import StatementSection from "./StatementSection";
@@ -19,7 +19,7 @@ const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
   const { activeUser } = useAuth();
-  const { statement, setStatement, submit, readonly } = useContext(EditStatementContext);
+  const { statement, setStatement, submit, readonly, calcTotal } = useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementNoUsersDto, value: IStatementNoUsersDto[keyof IStatementNoUsersDto]) => {
@@ -27,8 +27,9 @@ const StatementForm: FC = () => {
         (x[key] as unknown) = value;
         return x;
       });
+      calcTotal();
     },
-    []
+    [setStatement, calcTotal]
   );
 
   const onValid = useCallback(
@@ -48,7 +49,7 @@ const StatementForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} id="statement_form">
-      <Stack>
+      <Stack sx={readonly && { "input:disabled": { opacity: 1, cursor: "text" } }}>
         <FormControlContext.Provider
           value={{
             control,
@@ -177,8 +178,9 @@ const StatementForm: FC = () => {
               </StatementTableRow>
             </StatementSectionTable>
           </StatementSection>
-          {statement.accountant != null &&
-            (activeUser?.role == RoleEnum.Accountant || readonly) && <AccountantSection />}
+          {statement.accountant != null && activeUser?.role == RoleEnum.Accountant && (
+            <AccountantSection />
+          )}
         </FormControlContext.Provider>
       </Stack>
     </form>
