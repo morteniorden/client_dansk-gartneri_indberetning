@@ -19,7 +19,7 @@ const Accounts: FC = () => {
   const { t } = useLocales();
 
   const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
-  const [filteredClients, setFilteredClients] = useState<IClientDto[]>(clients);
+  const [searchString, setSearchString] = useState<string>("");
   const [isFetching, setIsFetching] = useState(false);
 
   const accountingYears = useMemo(() => {
@@ -58,6 +58,16 @@ const Accounts: FC = () => {
     fetchData();
   }, [fetchData]);
 
+  const filteredClients = useMemo(
+    () =>
+      clients.filter(client =>
+        [client.name, client.email].some(s =>
+          s.toLowerCase().includes(searchString.toLocaleLowerCase())
+        )
+      ),
+    [clients, searchString]
+  );
+
   return (
     <ClientsContext.Provider
       value={{
@@ -77,7 +87,7 @@ const Accounts: FC = () => {
               cb={setAccountingYear}
             />
             <HStack spacing={5}>
-              <SearchBar clients={clients} cb={value => setFilteredClients(value)} />
+              <SearchBar cb={value => setSearchString(value)} />
               <NewAccountModal onSubmit={fetchData} />
             </HStack>
           </Flex>

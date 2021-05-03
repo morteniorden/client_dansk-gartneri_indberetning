@@ -6,41 +6,26 @@ import {
   InputRightElement
 } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import { BiSearch, BiX } from "react-icons/bi";
-import { IClientDto } from "services/backend/nswagts";
 
 interface Props {
-  clients: IClientDto[];
-  cb?: (clients: IClientDto[]) => void;
+  cb?: (value: string) => void;
 }
 
-const SearchBar: FC<Props> = ({ clients, cb }) => {
+const SearchBar: FC<Props> = ({ cb }) => {
   const { t } = useLocales();
-  const [searchString, setSearchString] = useState<string>("");
-
-  const filteredClients = useMemo(
-    () =>
-      clients.filter(client =>
-        [client.name, client.email].some(s =>
-          s.toLowerCase().includes(searchString.toLocaleLowerCase())
-        )
-      ),
-    [clients, searchString]
-  );
-
-  useEffect(() => {
-    cb(filteredClients);
-  }, [filteredClients]);
+  const [value, setValue] = useState<string>("");
 
   const timeoutms = 200;
   const timer = useRef<NodeJS.Timeout>(null);
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
       clearTimeout(timer.current);
       timer.current = setTimeout(
-        () => setSearchString(e.target.value.length >= 3 ? e.target.value : ""),
+        () => cb(e.target.value.length >= 3 ? e.target.value : ""),
         timeoutms
       );
     },
@@ -52,12 +37,15 @@ const SearchBar: FC<Props> = ({ clients, cb }) => {
       <InputLeftElement>
         <BiSearch opacity={0.5} />
       </InputLeftElement>
-      <Input onChange={onChange} placeholder={t("common.search")}></Input>
+      <Input value={value} onChange={onChange} placeholder={t("common.search")}></Input>
       <InputRightElement>
         <IconButton
           aria-label="Clear search"
           icon={<BiX opacity={0.5} />}
-          onClick={e => setSearchString("")}
+          onClick={e => {
+            setValue("");
+            cb("");
+          }}
           variant="ghost"></IconButton>
       </InputRightElement>
     </InputGroup>
