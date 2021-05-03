@@ -28,16 +28,11 @@ namespace Application.Mails.Commands.SendResetPasswordMailCommand
 
       public async Task<Unit> Handle(SendResetPasswordCommand request, CancellationToken cancellationToken)
       {
-        IUser userEntity = await _context.Users.FirstOrDefaultAsync(e => e.Email == request.Email);
+        User userEntity = await _context.Users.FirstOrDefaultAsync(e => e.Email == request.Email);
 
         if (userEntity == null)
         {
-          userEntity = await _context.Admins.FirstOrDefaultAsync(e => e.Email == request.Email);
-        }
-
-        if (userEntity == null)
-        {
-          throw new NotFoundException(nameof(IUser), request.Email);
+          throw new NotFoundException(nameof(User), request.Email);
         }
 
         var (tokenId, token) = await _tokenService.CreateSSOToken(userEntity);

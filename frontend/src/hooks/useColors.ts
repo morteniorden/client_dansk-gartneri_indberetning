@@ -14,6 +14,7 @@ export const useColors = () => {
   const warningColor = useColorModeValue("orange.100", "orange.600");
   const errorColor = useColorModeValue("red.100", "red.600");
   const iconGreenColor = useColorModeValue("green.600", "green.400");
+  const lightOrange = useColorModeValue("orange.100", "orange.900");
 
   const statusNotSent = useColorModeValue("gray.100", "gray.600");
   const statusIsSent = useColorModeValue("orange.100", "orange.600");
@@ -32,6 +33,7 @@ export const useColors = () => {
     warningColor,
     errorColor,
     infoColor,
+    lightOrange,
     statusNotSent,
     statusIsSent,
     statusIsEdited,

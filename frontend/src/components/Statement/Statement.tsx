@@ -1,12 +1,14 @@
 import { Heading, Stack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import BasicLayout from "components/Layouts/BasicLayout";
+import CurrentAccountant from "components/Statement/ChangeAccountant/CurrentAccountant";
 import { EditStatementContext } from "contexts/EditStatementContext";
+import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, IStatementInfoDto, UpdateStatementCommand } from "services/backend/nswagts";
+import { IStatementDto, RoleEnum, UpdateStatementCommand } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementForm from "./StatementForm";
@@ -22,8 +24,12 @@ const Statement: FC<Props> = ({ id }) => {
   const [statement, setStatement] = useState<IStatementDto>(null);
   const [statementInfo, setStatementInfo] = useState<IStatementInfoDto>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const { activeUser } = useAuth();
+  const [total, setTotal] = useState(0);
 
   const fetchData = useCallback(async () => {
+    setIsFetching(true);
     try {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
@@ -34,12 +40,13 @@ const Statement: FC<Props> = ({ id }) => {
         console.log(data.statementInfo);
       } else {
         logger.info("statementClient.get no data");
-        router.push("/mystatements");
+        router.push("mystatements");
       }
     } catch (err) {
       logger.warn("statementClient.get Error", err);
       router.push("mystatements");
     }
+    setIsFetching(false);
   }, [id]);
 
   useEffect(() => {
@@ -72,6 +79,34 @@ const Statement: FC<Props> = ({ id }) => {
       });
     }
     setIsSaving(false);
+  }, [statement]);
+
+  const calcTotal = useCallback(() => {
+    if (statement == null) return 0;
+    setTotal(
+      statement.s1_boughtPlants +
+        statement.s1_mushrooms +
+        statement.s1_tomatoCucumberHerb +
+        statement.s3_boughtPlants +
+        statement.s3_carrots +
+        statement.s3_onions +
+        statement.s3_other +
+        statement.s3_peas +
+        statement.s4_boughtPlants +
+        statement.s4_cutFlowers +
+        statement.s4_onions +
+        statement.s4_plants +
+        statement.s7_boughtPlants +
+        statement.s7_plants +
+        statement.s8_applesPearsEtc +
+        statement.s8_cherries +
+        statement.s8_currant +
+        statement.s8_otherBerryFruit +
+        statement.s8_otherStoneFruit +
+        statement.s8_packaging +
+        statement.s8_plums +
+        statement.s8_strawberries
+    );
   }, [statement]);
 
   const onSubmit = useCallback(
@@ -108,7 +143,7 @@ const Statement: FC<Props> = ({ id }) => {
 
   return (
     <>
-      {statement && (
+      {statement && activeUser && (
         <EditStatementContext.Provider
           value={{
             statement: statement,
@@ -116,15 +151,22 @@ const Statement: FC<Props> = ({ id }) => {
             save: onSaveChanges,
             isSaving: isSaving,
             submit: onSubmit,
-            disabled: false,
-            statementInfo: statementInfo
+            readonly: false,
+            fetchData: fetchData,
+            isFetching: isFetching,
+            total: total,
+              calcTotal: calcTotal,
+              statementInfo: statementInfo
           }}>
           <BasicLayout variant="statementHeader" maxW="1000px">
             <Stack spacing={5}>
               <Heading>{t("statements.editStatementHeading")}</Heading>
               <Heading size="sm">{`${t("statements.accountingYear")}: ${
-                statement.revisionYear
+                statement.accountingYear
               }`}</Heading>
+              {statement.accountant && activeUser.role == RoleEnum.Client && (
+                <CurrentAccountant statement={statement} />
+              )}
               <StatementForm />
             </Stack>
           </BasicLayout>

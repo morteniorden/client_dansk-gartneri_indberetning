@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 
-namespace Application.StatementInfos.Commands.UpdateStatementÍnfo
+namespace Application.StatementInfos.Commands.UpdateStatementInfo
 {
   public class UpdateStatementInfoCommand : IRequest
   {

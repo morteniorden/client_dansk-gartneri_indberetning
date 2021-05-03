@@ -2,15 +2,17 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.StatementInfos;
-using Application.StatementInfos.Commands.UpdateStatementÍnfo;
+using Application.StatementInfos.Commands.UpdateStatementInfo;
 using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
+using Application.Statements.Commands.ApproveStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSVQuery;
+using Application.Users.Commands.UnassignAccountantCommand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -72,6 +74,29 @@ namespace Web.Controllers
       {
         AccountingYear = accountingYear
       });
+    }
+
+    [HttpPut("statement/{id}/unassignAccountant")]
+    public async Task<ActionResult> UnassignAccountant([FromRoute] int id)
+    {
+      await Mediator.Send(new UnassignAccountantCommand
+      {
+        StatementId = id
+      });
+
+      return NoContent();
+    }
+
+    [HttpPut("{id}/approve")]
+    public async Task<ActionResult> ApproveStatement([FromRoute] int id)
+    {
+
+      await Mediator.Send(new ApproveStatementCommand
+      {
+        Id = id
+      });
+
+      return NoContent();
     }
 
     [HttpGet("statementInfo")]

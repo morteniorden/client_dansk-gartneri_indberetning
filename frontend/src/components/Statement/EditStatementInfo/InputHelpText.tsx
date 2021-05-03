@@ -16,7 +16,7 @@ const InputHelpText: FC<Props> = ({ name }) => {
 
   const {
     field: { ref, onChange, value, onBlur },
-    meta: { isDirty, isTouched, invalid }
+    fieldState: { invalid, isDirty, isTouched }
   } = useController({
     name,
     control,

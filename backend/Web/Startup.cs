@@ -20,8 +20,6 @@ using Application.Common.Options;
 using Application.Common.Services;
 using Application.Security;
 using Hangfire;
-using Hangfire.Dashboard;
-using Hangfire.Server;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
@@ -54,6 +52,7 @@ namespace Web
       services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.Tokens));
       services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
       services.Configure<SuperUserOptions>(Configuration.GetSection(SuperUserOptions.SuperUser));
+      services.Configure<StatementOptions>(Configuration.GetSection(StatementOptions.Statements));
 
       var corsOptions = Configuration.GetSection(CorsOptions.Cors).Get<CorsOptions>();
       services.AddCors(options =>

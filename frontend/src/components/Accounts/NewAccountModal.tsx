@@ -32,13 +32,7 @@ const NewAccountModal: FC<Props> = (props: Props) => {
 
   return (
     <>
-      <Button
-        rounded="md"
-        colorScheme="blue"
-        textColor={buttonFont}
-        onClick={onOpen}
-        pl="30px"
-        pr="30px">
+      <Button rounded="md" colorScheme="blue" textColor={buttonFont} onClick={onOpen}>
         {t("accounts.addAccount")}
       </Button>
 

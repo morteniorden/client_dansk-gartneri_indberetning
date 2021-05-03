@@ -36,7 +36,7 @@ export interface Locale {
     addAccount: string;
     street: string;
     streetNum: string;
-    postCode: string;
+    postalCode: string;
     city: string;
     country: string;
     addressLine1: string;
@@ -56,6 +56,10 @@ export interface Locale {
     tooltipShowInfo: string;
     tooltipHideInfo: string;
     tooltipReadStatement: string;
+
+    firmName: string;
+    ownerName: string;
+    addressAndPlace: string;
   };
 
   login: {
@@ -69,17 +73,27 @@ export interface Locale {
 
   admins: {
     admins: string;
+    addAdmin: string;
+    addAdminSuccessTitle: string;
+    addAdminSuccessText: string;
+    addAdminErrorTitle: string;
+    addAdminErrorText: string;
+    deactivateAdmin: string;
+    deactivateAdminText: string;
   };
 
   actions: {
     update: string;
     delete: string;
+    remove: string;
+    deactivate: string;
     saveSuccessTitle: string;
     saveSuccessText: string;
     saveErrorTitle: string;
     saveErrorText: string;
     saveChanges: string;
     back: string;
+    sendRequest: string;
     edit: string;
   };
 
@@ -114,6 +128,9 @@ export interface Locale {
     deleteErrorText: string;
     alreadyAssignedTitle: string;
     alreadyAssignedText: string;
+    accountant: string;
+    consultant: string;
+    accountantType: string;
   };
 
   mailEditor: {
@@ -131,7 +148,6 @@ export interface Locale {
   };
 
   statements: {
-    myStatements: string;
     turnoverExlMoms: string;
     taxIs: string;
     boughtPlants: string;
@@ -143,6 +159,9 @@ export interface Locale {
     confirmSignOffButton: string;
     confirmSignOffText: string;
     downloadCsv: string;
+    sendToAccountant: string;
+    sendToAccountantText1: string;
+    sendToAccountantText2: string;
 
     statusNotInvited: string;
     statusInvited: string;
@@ -154,10 +173,34 @@ export interface Locale {
     invitationSentErrorTitle: string;
     invitationSentErrorText: string;
 
+    removeAccountant: string;
+    removeConsultant: string;
+    confirmRemoveAccountant: string;
+    confirmRemoveApprovingAccountant: string;
+    confirmRemoveConsultant: string;
+    confirmRemoveApprovingConsultant: string;
+    sentToAccountant: string;
+    sentToConsultant: string;
+    sentTo: string;
+    notYetApprovedAccountant: string;
+    notYetApprovedConsultant: string;
+    approvedByAccountant: string;
+    approvedByConsultant: string;
+    approvedBy: string;
+    approvedAndReady: string;
+
     signOffSuccessTitle: string;
     signOffSuccessText: string;
     signOffErrorTitle: string;
     signOffErrorText: string;
+
+    ApproveSuccessTitle: string;
+    ApproveSuccessText: string;
+    ApproveErrorTitle: string;
+    ApproveErrorText: string;
+
+    signOffExceeding: string;
+    signOffNeedsApproval: string;
 
     section1: {
       heading: string;
@@ -200,6 +243,24 @@ export interface Locale {
       currant: string;
       strawberry: string;
     };
+    accountantSection: {
+      heading: string;
+      helpText: string;
+      downloadPdf: string;
+      dragAndDrop: string;
+      dropFile: string;
+      signAndApprove: string;
+    };
+  };
+
+  myStatements: {
+    myStatements: string;
+    accountantApproved: string;
+    awaitsYourApproval: string;
+    viewStatement: string;
+    signedOffStatus: string;
+    notSignedOffStatus: string;
+    fillOutStatement: string;
   };
 
   statementInfo: {

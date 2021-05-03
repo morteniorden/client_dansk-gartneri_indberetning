@@ -22,11 +22,11 @@ const InputPerMille: FC<Props> = ({ name }) => {
 
   const {
     field: { ref, onChange, value, onBlur },
-    meta: { isDirty, isTouched, invalid }
+    fieldState: { invalid, isDirty, isTouched }
   } = useController({
     name,
     control,
-    rules: { required: false, valueAsNumber: true },
+    rules: { required: false },
     defaultValue: form[name]
   });
 

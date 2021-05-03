@@ -11,9 +11,6 @@ namespace Application.Users.Commands.CreateAccountantCommand
       RuleFor(e => e.AccountantDto.Email)
         .NotEmpty()
         .EmailAddress();
-      RuleFor(e => e.AccountantDto.Name)
-        .NotEmpty()
-        .MaximumLength(200);
     }
   }
 }

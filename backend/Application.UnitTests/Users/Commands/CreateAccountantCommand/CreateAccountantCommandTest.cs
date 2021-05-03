@@ -6,6 +6,7 @@ using Application.Users.Commands.CreateAccountantCommand;
 using Domain.Enums;
 using FluentAssertions;
 using Application.Common.Exceptions;
+using Domain.Entities;
 using Xunit;
 
 namespace Application.UnitTests.Users.Commands.CreateAccountant
@@ -17,47 +18,29 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        AccountantDto = new UserAccountIdDto()
+        StatementId = 5,
+        AccountantDto = new AccountantDto
         {
-
           Name = "test name",
           Email = "test@test.dk",
-          AccountId = 2
+          AccountantType = AccountantType.Accountant
         }
       };
 
-      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context);
+      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context, PasswordHasherMock.Object, MailServiceMock.Object, BackGroundJobClientMock.Object, TokenServiceMock.Object);
 
       var result = await handler.Handle(command, CancellationToken.None);
 
-      var entity = Context.Users.Find(result);
-      var account = Context.Accounts.Find(command.AccountantDto.AccountId);
+      var accountant = (Accountant) Context.Users.Find(result);
 
-      entity.Should().NotBeNull();
-      entity.Name.Should().Be(command.AccountantDto.Name);
-      entity.Email.Should().Be(command.AccountantDto.Email);
-      entity.AccountId.Should().Be(command.AccountantDto.AccountId);
-      entity.Account.Should().Be(account);
-    }
+      accountant.Should().NotBeNull();
+      accountant.Name.Should().Be(command.AccountantDto.Name);
+      accountant.Email.Should().Be(command.AccountantDto.Email);
+      accountant.AccountantType.Should().Be(command.AccountantDto.AccountantType);
 
-    [Fact]
-    public async Task Handle_GivenInvalidAccountThrowException()
-    {
-      var command = new CreateAccountantCommand
-      {
-        AccountantDto = new UserAccountIdDto()
-        {
-
-          Name = "test name",
-          Email = "test@test.dk",
-          AccountId = 99
-        }
-      };
-
-      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context);
-
-      Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
-      action.Should().Throw<NotFoundException>();
+      var statement = Context.Statements.Find(command.StatementId);
+      statement.Accountant.Should().Be(accountant);
+      statement.AccountantId.Should().Be(accountant.Id);
     }
 
     [Fact]
@@ -65,58 +48,19 @@ namespace Application.UnitTests.Users.Commands.CreateAccountant
     {
       var command = new CreateAccountantCommand
       {
-        AccountantDto = new UserAccountIdDto()
+        StatementId = 5,
+        AccountantDto = new AccountantDto()
         {
-
           Name = "test name",
           Email = "test1@test1.dk", //Already used by an account and user defined in ApplicationDbContextFactory
-          AccountId = 2
+          AccountantType = AccountantType.Accountant
         }
       };
 
-      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context);
+      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context, PasswordHasherMock.Object, MailServiceMock.Object, BackGroundJobClientMock.Object, TokenServiceMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
       action.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public async Task Handle_GivenAccountHasAccountantThrowException()
-    {
-      var command = new CreateAccountantCommand
-      {
-        AccountantDto = new UserAccountIdDto()
-        {
-
-          Name = "test name",
-          Email = "test@test.dk",
-          AccountId = 1
-        }
-      };
-
-      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context);
-
-      Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
-      action.Should().Throw<InvalidOperationException>();
-    }
-
-    [Fact]
-    public async Task Handle_GivenAccountantHasAccountThrowException()
-    {
-      var command = new CreateAccountantCommand
-      {
-        AccountantDto = new UserAccountIdDto()
-        {
-          Name = "test name",
-          Email = "test1accountant@test.dk", //Matches an existing accountant in ApplicationDbContextFactory
-          AccountId = 2
-        }
-      };
-
-      var handler = new CreateAccountantCommand.CreateAccountantCommandHandler(Context);
-
-      Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
-      action.Should().Throw<InvalidOperationException>();
     }
   }
 }

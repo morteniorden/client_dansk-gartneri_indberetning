@@ -1,6 +1,4 @@
 using Application.Common.Exceptions;
-using Application.ExampleChildren;
-using Application.ExampleChildren.Commands.UpdateExampleChild;
 using Domain.Enums;
 using FluentAssertions;
 using System;
@@ -9,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Mappings;
 using Application.StatementInfos;
-using Application.StatementInfos.Commands.UpdateStatementÍnfo;
+using Application.StatementInfos.Commands.UpdateStatementInfo;
 using AutoMapper;
 using Xunit;
 

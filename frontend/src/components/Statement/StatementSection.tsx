@@ -1,11 +1,10 @@
 import { Box, Heading } from "@chakra-ui/react";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 
 interface Props {
   heading: string;
-  children: ReactNode;
 }
 
 const StatementSection: FC<Props> = ({ heading, children }) => {

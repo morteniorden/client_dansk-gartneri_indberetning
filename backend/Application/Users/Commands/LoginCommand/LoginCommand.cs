@@ -30,14 +30,8 @@ namespace Application.Users.Commands.Login
 
       public async Task<UserTokenDto> Handle(LoginCommand request, CancellationToken cancellationToken)
       {
-        IUser user = await _context.Users
-          .FirstOrDefaultAsync(x => x.Email.Equals(request.LoginDetails.Email.ToLower()));
-
-        if (user == null)
-        {
-          user = await _context.Admins
-          .FirstOrDefaultAsync(x => x.Email.Equals(request.LoginDetails.Email.ToLower()));
-        }
+        User user = await _context.Users
+          .FirstOrDefaultAsync(x => x.Email.Equals(request.LoginDetails.Email.ToLower()), cancellationToken: cancellationToken);
 
         if (user == null)
         {

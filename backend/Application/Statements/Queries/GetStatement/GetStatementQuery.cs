@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,10 +34,10 @@ namespace Application.Statements.Queries.GetMyStatements
       }
       public async Task<StatementAndInfoDto> Handle(GetStatementQuery request, CancellationToken cancellationToken)
       {
-        var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
+        var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId, cancellationToken: cancellationToken);
 
         var statement = await _context.Statements
-          .Where(e => e.AccountId == currentUser.AccountId && e.Id == request.Id)
+          .Where(e => (e.ClientId == currentUser.Id || e.AccountantId == currentUser.Id) && e.Id == request.Id)
           .ProjectTo<StatementDto>(_mapper.ConfigurationProvider)
           .FirstOrDefaultAsync();
 
@@ -47,17 +46,17 @@ namespace Application.Statements.Queries.GetMyStatements
           throw new NotFoundException(nameof(Statement), request.Id);
         }
 
-        var statementInfo = await FindInfo(statement.RevisionYear);
+        var statementInfo = await FindInfo(statement.AccountingYear);
 
         if (statementInfo == null)
         {
           //Check if, for some reason, the statementInfo for this year has not been created. 
           await _statementInfoService.CheckMissingYearsInfo();
-          statementInfo = await FindInfo(statement.RevisionYear);
+          statementInfo = await FindInfo(statement.AccountingYear);
 
           if (statementInfo == null)
           {
-            throw new NotFoundException(nameof(StatementInfo), statement.RevisionYear);
+            throw new NotFoundException(nameof(StatementInfo), statement.AccountingYear);
           }
         }
 

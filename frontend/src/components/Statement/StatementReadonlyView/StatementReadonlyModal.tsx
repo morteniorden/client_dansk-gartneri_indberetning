@@ -14,16 +14,16 @@ import ViewStatementBtn from "components/Accounts/AccountList/AccountListItemBut
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
 import { FC } from "react";
-import { IAccountDto, IStatementDto } from "services/backend/nswagts";
+import { IClientDto, IStatementDto } from "services/backend/nswagts";
 
 import StatementForm from "../StatementForm";
 
 interface Props {
-  account: IAccountDto;
+  client: IClientDto;
   statement: IStatementDto;
 }
 
-const StatementReadonlyModal: FC<Props> = ({ account, statement }) => {
+const StatementReadonlyModal: FC<Props> = ({ client, statement }) => {
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -38,8 +38,8 @@ const StatementReadonlyModal: FC<Props> = ({ account, statement }) => {
             <Stack>
               <Heading size="md">{`${t("statements.editStatementHeading")}, ${t(
                 "statements.accountingYear"
-              ).toLowerCase()}: ${statement.revisionYear}`}</Heading>
-              <Heading size="sm">{account.name}</Heading>
+              ).toLowerCase()}: ${statement.accountingYear}`}</Heading>
+              <Heading size="sm">{client.name}</Heading>
             </Stack>
           </ModalHeader>
           <ModalCloseButton />
@@ -51,7 +51,11 @@ const StatementReadonlyModal: FC<Props> = ({ account, statement }) => {
                 save: null,
                 isSaving: false,
                 submit: null,
-                disabled: true
+                readonly: true,
+                fetchData: null,
+                isFetching: false,
+                total: null,
+                calcTotal: null
               }}>
               <StatementForm />
             </EditStatementContext.Provider>

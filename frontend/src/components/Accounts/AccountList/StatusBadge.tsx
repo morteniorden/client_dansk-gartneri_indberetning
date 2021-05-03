@@ -2,14 +2,14 @@ import { Flex, Text, useColorMode } from "@chakra-ui/react";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useMemo } from "react";
-import { IAccountDto, StatementStatus } from "services/backend/nswagts";
+import { IClientDto, StatementStatus } from "services/backend/nswagts";
 
 interface Props {
-  account: IAccountDto;
+  client: IClientDto;
   accountingYear: number;
 }
 
-const StatusBadge: FC<Props> = ({ account, accountingYear }) => {
+const StatusBadge: FC<Props> = ({ client, accountingYear }) => {
   const { t } = useLocales();
   const {
     statusNotSent,
@@ -22,7 +22,7 @@ const StatusBadge: FC<Props> = ({ account, accountingYear }) => {
   const locales = useLocales();
 
   const genStatus: { msg: string; color: string } = useMemo(() => {
-    const statement = account.statements.find(s => s.revisionYear == accountingYear);
+    const statement = client.statements.find(s => s.accountingYear == accountingYear);
     if (statement) {
       switch (statement.status) {
         case StatementStatus.InvitedNotEdited:
@@ -35,7 +35,7 @@ const StatusBadge: FC<Props> = ({ account, accountingYear }) => {
     } else {
       return { msg: t("statements.statusNotInvited"), color: statusNotSent };
     }
-  }, [account.statements, accountingYear, colorMode, locales]);
+  }, [client.statements, accountingYear, colorMode, locales]);
 
   return (
     <Flex

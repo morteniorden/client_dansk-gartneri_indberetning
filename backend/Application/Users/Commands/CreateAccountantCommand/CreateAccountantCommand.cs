@@ -6,44 +6,48 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
 using Domain.Entities;
-using Domain.EntityExtensions;
 using Domain.Enums;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.Commands.CreateAccountantCommand
 {
-  [Authorize(Role = RoleEnum.Admin)]
+  [Authorize(Role = RoleEnum.Client)]
   public class CreateAccountantCommand : IRequest<int>
   {
-    public UserAccountIdDto AccountantDto;
+    public int StatementId { get; set; }
+    public AccountantDto AccountantDto;
 
     public class CreateAccountantCommandHandler : IRequestHandler<CreateAccountantCommand, int>
     {
       private readonly IApplicationDbContext _context;
+      private readonly IPasswordHasher _passwordHasher;
+      private readonly IMailService _mailService;
+      private readonly IBackgroundJobClient _jobClient;
+      private readonly ITokenService _tokenService;
 
-      public CreateAccountantCommandHandler(IApplicationDbContext context)
+      public CreateAccountantCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, IMailService mailService, IBackgroundJobClient jobClient, ITokenService tokenService)
       {
         _context = context;
+        _passwordHasher = passwordHasher;
+        _mailService = mailService;
+        _jobClient = jobClient;
+        _tokenService = tokenService;
       }
 
       public async Task<int> Handle(CreateAccountantCommand request, CancellationToken cancellationToken)
       {
-        var account = await _context.Accounts.FindAsync(request.AccountantDto.AccountId);
+        var statement = await _context.Statements.FindAsync(request.StatementId);
 
-        if (account == null)
+        if (statement == null)
         {
-          throw new NotFoundException("The provided account id does not correspond to any existing account.");
+          throw new NotFoundException(nameof(Statement), request.StatementId);
         }
 
-        if (account.GetActiveAccountant() != null)
+        if (statement.Accountant != null)
         {
-          throw new InvalidOperationException("Cannot assign a new accountant, because the account already has an active accountant. Unassign the accountant before assigning a new.");
-        }
-
-        if (_context.Admins.Any(e => e.Email == request.AccountantDto.Email))
-        {
-          throw new ArgumentException("The provided email address is already used by another user.");
+          throw new InvalidOperationException("Cannot assign a new accountant to the statement, as another accountant is already assigned.");
         }
 
         if (_context.Users.Any(e => e.Email == request.AccountantDto.Email && e.Role != RoleEnum.Accountant))
@@ -51,43 +55,54 @@ namespace Application.Users.Commands.CreateAccountantCommand
           throw new ArgumentException("The provided email address is already used by another user.");
         }
 
-        var existingAccountant = await _context.Users
-          .Include(x => x.Account)
-          .FirstOrDefaultAsync(e => e.Email == request.AccountantDto.Email && e.Role == RoleEnum.Accountant);
+        var existingAccountant = (Accountant) await _context.Users
+          .FirstOrDefaultAsync(e => e.Email == request.AccountantDto.Email && e.Role == RoleEnum.Accountant, cancellationToken: cancellationToken);
 
         //If the accountant exists
         if (existingAccountant != null)
         {
-          if (existingAccountant.DeactivationTime == null && existingAccountant.Account != null)
+          //TODO: This has been commented out, because it made sense when an accountant were assigned to accounts. But now, shouldn't we allow them to be assigned to multiple statements?
+          /*
+          if (existingAccountant.DeactivationTime == null && existingAccountant.Statements.Count > 0)
           {
             throw new InvalidOperationException(
-              "Cannot assign the given accountant to a new account, as the accountant is already assigned another account. Unassign the accountant before assigning.");
+              "Cannot assign the given accountant to the statement, as the accountant is already assigned another statement. Unassign the accountant before assigning.");
           }
+          */
 
-          existingAccountant.Account = account;
-          existingAccountant.AccountId = account.Id;
           existingAccountant.DeactivationTime = null; //If the user was deactivated, activate it again
+          statement.Accountant = existingAccountant;
+          statement.AccountantId = existingAccountant.Id;
 
           await _context.SaveChangesAsync(cancellationToken);
 
-          //TODO: Send email to accountant to notify that he/she has been assigned a new account
+          _jobClient.Enqueue(() => _mailService.SendInviteExistingAccountantEmail(existingAccountant.Email));
+
           return existingAccountant.Id;
         }
 
         //If the accountant doesn't exists, create a new one
-        var accountantEntity = new User
+        var accountantEntity = new Accountant
         {
           Name = request.AccountantDto.Name,
           Email = request.AccountantDto.Email,
           Role = RoleEnum.Accountant,
-          Account = account,
-          AccountId = account.Id
+          AccountantType = request.AccountantDto.AccountantType,
+          Password = _passwordHasher.Hash("password123") //TODO: REMOVE
         };
 
+        statement.AccountantId = accountantEntity.Id;
+        statement.Accountant = accountantEntity;
+
+        var (tokenId, token) = await _tokenService.CreateSSOToken(accountantEntity);
+        accountantEntity.SSOTokenId = tokenId;
+
         _context.Users.Add(accountantEntity);
+
         await _context.SaveChangesAsync(cancellationToken);
 
-        //TODO: Send email to accountant
+        _jobClient.Enqueue(() => _mailService.SendInviteNewAccountantEmail(accountantEntity.Email, token));
+
         return accountantEntity.Id;
       }
     }

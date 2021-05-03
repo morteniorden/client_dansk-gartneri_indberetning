@@ -32,8 +32,9 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
       {
         //Find all signed-off statements of the provided accounting year, or all if no year is provided
         var statements = await _context.Statements
-          .Where(e => (request.AccountingYear == null || e.RevisionYear == request.AccountingYear) && e.Status == StatementStatus.SignedOff)
-          .Include(e => e.Account)
+          .Where(e => (request.AccountingYear == null || e.AccountingYear == request.AccountingYear) && e.Status == StatementStatus.SignedOff)
+          .Include(e => e.Client)
+          .Include(e => e.Accountant)
           .ProjectTo<StatementCSVDto>(_mapper.ConfigurationProvider)
           .ToListAsync(cancellationToken);
 

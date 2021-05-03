@@ -5,31 +5,35 @@ import {
   NumberInput,
   NumberInputField
 } from "@chakra-ui/react";
+import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementNoUsersDto } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";
 
 interface Props {
-  name: keyof IStatementDto;
+  name: keyof IStatementNoUsersDto;
 }
 
 const InputDKK: FC<Props> = ({ name }) => {
   const { formatCurrency } = useLocales();
 
-  const { control, form, updatedFormAttribute, disabled } = useContext(FormControlContext);
+  const { control, form, updatedFormAttribute } = useContext(FormControlContext);
+  const { readonly } = useContext(EditStatementContext);
   const colors = useColors();
 
   const {
     field: { ref, onChange, value, onBlur },
-    meta: { isDirty, isTouched, invalid }
+    fieldState: { invalid, isDirty, isTouched }
   } = useController({
     name,
     control,
-    rules: { required: false, valueAsNumber: true },
+    rules: {
+      required: false
+    },
     defaultValue: form[name]
   });
 
@@ -48,14 +52,14 @@ const InputDKK: FC<Props> = ({ name }) => {
         <NumberInputField
           name={name}
           ref={ref}
-          disabled={disabled}
+          disabled={readonly}
           roundedLeft={leftOrRight === "left" ? "none" : "base"}
           roundedRight={leftOrRight === "right" ? "none" : "base"}
           bgColor={bgColor}
           value={value}
           onBlur={onBlur}
           onChange={e => {
-            onChange(e.target.value);
+            onChange(parseInt(e.target.value));
             updatedFormAttribute(name, parseInt(e.target.value));
           }}
         />
