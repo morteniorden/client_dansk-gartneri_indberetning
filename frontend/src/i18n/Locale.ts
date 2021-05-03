@@ -36,7 +36,7 @@ export interface Locale {
     addAccount: string;
     street: string;
     streetNum: string;
-    postCode: string;
+    postalCode: string;
     city: string;
     country: string;
     addressLine1: string;
@@ -56,6 +56,10 @@ export interface Locale {
     tooltipShowInfo: string;
     tooltipHideInfo: string;
     tooltipReadStatement: string;
+
+    firmName: string;
+    ownerName: string;
+    addressAndPlace: string;
   };
 
   login: {
@@ -76,12 +80,20 @@ export interface Locale {
 
   admins: {
     admins: string;
+    addAdmin: string;
+    addAdminSuccessTitle: string;
+    addAdminSuccessText: string;
+    addAdminErrorTitle: string;
+    addAdminErrorText: string;
+    deactivateAdmin: string;
+    deactivateAdminText: string;
   };
 
   actions: {
     update: string;
     delete: string;
     remove: string;
+    deactivate: string;
     saveSuccessTitle: string;
     saveSuccessText: string;
     saveErrorTitle: string;
@@ -170,17 +182,32 @@ export interface Locale {
     removeAccountant: string;
     removeConsultant: string;
     confirmRemoveAccountant: string;
+    confirmRemoveApprovingAccountant: string;
     confirmRemoveConsultant: string;
+    confirmRemoveApprovingConsultant: string;
     sentToAccountant: string;
     sentToConsultant: string;
     sentTo: string;
     notYetApprovedAccountant: string;
     notYetApprovedConsultant: string;
+    approvedByAccountant: string;
+    approvedByConsultant: string;
+    approvedBy: string;
+    approvedAndReady: string;
+    downloadConsent: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
     signOffErrorTitle: string;
     signOffErrorText: string;
+
+    ApproveSuccessTitle: string;
+    ApproveSuccessText: string;
+    ApproveErrorTitle: string;
+    ApproveErrorText: string;
+
+    signOffExceeding: string;
+    signOffNeedsApproval: string;
 
     section1: {
       heading: string;
@@ -230,6 +257,8 @@ export interface Locale {
       dragAndDrop: string;
       dropFile: string;
       signAndApprove: string;
+      consentSignedText: string;
+      downloadYourConsent: string;
     };
   };
 
@@ -238,8 +267,8 @@ export interface Locale {
     accountantApproved: string;
     awaitsYourApproval: string;
     viewStatement: string;
-    signedOffstatus: string;
-    notSignedOffstatus: string;
+    signedOffStatus: string;
+    notSignedOffStatus: string;
     fillOutStatement: string;
   };
 }

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Accounts;
 using Application.Common.Security;
+using Domain.Entities;
 using Domain.Enums;
 
 namespace Application.Users.Queries.GetClientsQuery

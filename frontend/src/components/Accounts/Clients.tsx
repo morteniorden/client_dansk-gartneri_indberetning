@@ -19,7 +19,6 @@ const Accounts: FC = () => {
 
   const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
   const [isFetching, setIsFetching] = useState(false);
-  const [searchString, setSearchString] = useState<string>("");
 
   const accountingYears = useMemo(() => {
     const startYear = 2021;

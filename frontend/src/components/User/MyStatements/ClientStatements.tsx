@@ -4,7 +4,7 @@ import { useLocales } from "hooks/useLocales";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useContext } from "react";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementDto, StatementStatus } from "services/backend/nswagts";
 
 interface Props {
   statements: IStatementDto[];
@@ -35,20 +35,20 @@ const ClientStatements: FC<Props> = ({ statements, isFetching }) => {
                   <Tr key={statement.id}>
                     <Td>{statement.accountingYear}</Td>
                     <Td>
-                      {statement.status == 2
+                      {statement.status == StatementStatus.SignedOff
                         ? t("myStatements.signedOffStatus")
                         : t("myStatements.notSignedOffStatus")}
                     </Td>
                     <Td>
-                      {statement.status != 2 && (
+                      {statement.status != StatementStatus.SignedOff && (
                         <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
-                          <Button colorScheme="green" rounded="full">
-                            {t("myStatements.answer")}
-                          </Button>
+                          <Button colorScheme="green">{t("myStatements.fillOutStatement")}</Button>
                         </Link>
                       )}
-                      {statement.status == 2 && (
-                        <Button rounded="full">{t("myStatements.viewStatement")}</Button>
+                      {statement.status == StatementStatus.SignedOff && (
+                        <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
+                          <Button>{t("myStatements.viewStatement")}</Button>
+                        </Link>
                       )}
                     </Td>
                   </Tr>

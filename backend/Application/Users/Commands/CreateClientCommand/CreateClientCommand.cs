@@ -54,10 +54,11 @@ namespace Application.Users.Commands.CreateClientCommand
           CVRNumber = request.ClientDto.CVRNumber,
           Address = new Address
           {
-            AddressLine1 = request.ClientDto.Address.AddressLine1,
-            AddressLine2 = request.ClientDto.Address.AddressLine2,
-            AddressLine3 = request.ClientDto.Address.AddressLine3,
-            AddressLine4 = request.ClientDto.Address.AddressLine4
+            FirmName = request.ClientDto.Address.FirmName,
+            OwnerName = request.ClientDto.Address.OwnerName,
+            AddressAndPlace = request.ClientDto.Address.AddressAndPlace,
+            PostalCode = request.ClientDto.Address.PostalCode,
+            City = request.ClientDto.Address.City
           },
           Password = _passwordHasher.Hash("password123") //TODO: REMOVE
         };

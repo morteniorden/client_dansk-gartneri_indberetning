@@ -1,11 +1,12 @@
-import { Flex, Heading, HStack, Skeleton, Stack, Text, useToast } from "@chakra-ui/react";
+import { Button, Flex, Heading, HStack, Skeleton, Stack, Text, useToast } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import React, { FC, useCallback, useContext } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { genStatementClient } from "services/backend/apiClients";
-import { AccountantType, IStatementDto } from "services/backend/nswagts";
+import { AccountantType, IStatementDto, StatementStatus } from "services/backend/nswagts";
+import { logger } from "utils/logger";
 
 import RemoveAccountantModal from "./RemoveAccountantModal";
 
@@ -16,8 +17,8 @@ interface Props {
 const CurrentAccountant: FC<Props> = ({ statement }) => {
   const { t } = useLocales();
   const toast = useToast();
-  const { fetchData, isFetching } = useContext(EditStatementContext);
-  const { boxBorder, lightOrange } = useColors();
+  const { fetchData, isFetching, readonly } = useContext(EditStatementContext);
+  const { boxBorder, lightOrange, statusIsSigned } = useColors();
 
   const handleDelete = useCallback(async () => {
     try {
@@ -44,6 +45,27 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
     }
   }, [statement]);
 
+  const fetchConsent = useCallback(async () => {
+    try {
+      const statementClient = await genStatementClient();
+      const data = await statementClient.getConsentFile(statement.id);
+
+      if (data != null) {
+        const downloadLink = document.createElement("a");
+
+        //This assumes that the file is always a pdf. But what if we want to support different files?
+        downloadLink.href = "data:application/pdf;base64," + data.stream;
+        downloadLink.download = `samtykkeerklæring ${statement.client.name} ${statement.accountingYear}`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+    } catch (err) {
+      logger.warn("statementClient.get Error", err);
+    }
+  }, [statement]);
+
   return (
     <Skeleton isLoaded={!isFetching}>
       <Flex
@@ -54,26 +76,45 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
         border="1px"
         borderColor={boxBorder}
         rounded="md"
-        background={lightOrange}
+        background={statement.isApproved ? statusIsSigned : lightOrange}
         justifyContent="space-between"
         alignItems="center">
         <HStack spacing="5">
           <BsFillPeopleFill size="40px" />
           <Stack spacing={0}>
             <Heading size="sm" colorScheme="green">
-              {statement.accountant.accountantType == AccountantType.Accountant
+              {statement.isApproved
+                ? statement.accountantType == AccountantType.Accountant
+                  ? t("statements.approvedByAccountant")
+                  : t("statements.approvedByConsultant")
+                : statement.accountantType == AccountantType.Accountant
                 ? t("statements.sentToAccountant")
                 : t("statements.sentToConsultant")}
             </Heading>
-            <Text fontSize="sm">{`${t("statements.sentTo")} ${statement.accountant.email}`}</Text>
             <Text fontSize="sm">
-              {statement.accountant.accountantType == AccountantType.Accountant
-                ? t("statements.notYetApprovedAccountant")
-                : t("statements.notYetApprovedConsultant")}
+              {statement.isApproved
+                ? `${t("statements.approvedBy")}: ${statement.accountant.email}`
+                : `${t("statements.sentTo")}: ${statement.accountant.email}`}
             </Text>
+            {!readonly && (
+              <Text fontSize="sm">
+                {statement.isApproved
+                  ? t("statements.approvedAndReady")
+                  : statement.accountantType == AccountantType.Accountant
+                  ? t("statements.notYetApprovedAccountant")
+                  : t("statements.notYetApprovedConsultant")}
+              </Text>
+            )}
+            {statement.isApproved && (
+              <Button variant="link" w="min" onClick={fetchConsent}>
+                {t("statements.downloadConsent")}
+              </Button>
+            )}
           </Stack>
         </HStack>
-        <RemoveAccountantModal accountant={statement.accountant} cb={handleDelete} />
+        {statement.status != StatementStatus.SignedOff && (
+          <RemoveAccountantModal statement={statement} cb={handleDelete} />
+        )}
       </Flex>
     </Skeleton>
   );

@@ -14,6 +14,7 @@ namespace Domain.Entities
     public AccountantType AccountantType { get; set; }
     public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
+    public bool IsApproved { get; set; }
 
     public int s1_mushrooms { get; set; }
     public int s1_tomatoCucumberHerb { get; set; }
