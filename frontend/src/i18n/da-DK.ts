@@ -61,8 +61,7 @@ export const table: Locale = {
 
     firmName: "Firmanavn",
     ownerName: "Ejernavn",
-    addressAndPlace: "Adresse (evt. sted)"
-    tooltipReadStatement: "Se besvarelse",
+    addressAndPlace: "Adresse (evt. sted)",
 
     deactivateClient: "Deaktivér kunde",
     confirmDeactivateUser: "Du er ved at deaktivere denne bruger. Vil du fortsætte?",
