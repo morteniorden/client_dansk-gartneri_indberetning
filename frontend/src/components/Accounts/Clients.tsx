@@ -8,10 +8,12 @@ import { FC, useCallback, useEffect, useMemo, useReducer, useState } from "react
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
 import { genUserClient } from "services/backend/apiClients";
 import { IClientDto } from "services/backend/nswagts";
+import { ClientFilter } from "types/ClientFilter";
 import { logger } from "utils/logger";
 
 import AccountList from "./AccountList/AccountList";
 import DownloadCsvBtn from "./DownloadCsvBtn";
+import { SearchFilter } from "./Filters/ClientFilters";
 import NewAccountModal from "./NewAccountModal";
 import SearchBar from "./SearchBar";
 
@@ -20,6 +22,7 @@ const Accounts: FC = () => {
 
   const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
   const [searchString, setSearchString] = useState<string>("");
+  const [filters, setFilters] = useState<ClientFilter[]>([SearchFilter]);
   const [isFetching, setIsFetching] = useState(false);
 
   const accountingYears = useMemo(() => {
@@ -58,16 +61,6 @@ const Accounts: FC = () => {
     fetchData();
   }, [fetchData]);
 
-  const filteredClients = useMemo(
-    () =>
-      clients.filter(client =>
-        [client.name, client.email].some(s =>
-          s.toLowerCase().includes(searchString.toLocaleLowerCase())
-        )
-      ),
-    [clients, searchString]
-  );
-
   return (
     <ClientsContext.Provider
       value={{
@@ -92,7 +85,10 @@ const Accounts: FC = () => {
             </HStack>
           </Flex>
           <FetchingSpinner isFetching={isFetching} text={t("accounts.fetching")} />
-          <AccountList data={filteredClients} accountingYear={accountingYear} />
+          <AccountList
+            data={clients.filter(client => filters.every(f => f.predicate(client, searchString)))}
+            accountingYear={accountingYear}
+          />
         </Stack>
       </BasicLayout>
     </ClientsContext.Provider>
