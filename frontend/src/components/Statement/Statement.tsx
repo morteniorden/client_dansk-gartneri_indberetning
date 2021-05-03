@@ -8,7 +8,12 @@ import { useLocales } from "hooks/useLocales";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IStatementDto, RoleEnum, UpdateStatementCommand } from "services/backend/nswagts";
+import {
+  IStatementDto,
+  IStatementInfoDto,
+  RoleEnum,
+  UpdateStatementCommand
+} from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import StatementForm from "./StatementForm";

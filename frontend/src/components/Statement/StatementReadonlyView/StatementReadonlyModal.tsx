@@ -55,7 +55,8 @@ const StatementReadonlyModal: FC<Props> = ({ client, statement }) => {
                 fetchData: null,
                 isFetching: false,
                 total: null,
-                calcTotal: null
+                              calcTotal: null,
+                statementInfo: null,
               }}>
               <StatementForm />
             </EditStatementContext.Provider>

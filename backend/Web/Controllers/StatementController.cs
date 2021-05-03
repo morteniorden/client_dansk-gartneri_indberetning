@@ -57,8 +57,9 @@ namespace Web.Controllers
     }
 
     [HttpPut("{id}/signoff")]
-    public async Task<ActionResult> SignOffStatement([FromRoute] int id) { 
-    
+    public async Task<ActionResult> SignOffStatement([FromRoute] int id)
+    {
+
       await Mediator.Send(new SignOffStatementCommand
       {
         Id = id
@@ -105,13 +106,11 @@ namespace Web.Controllers
       return await Mediator.Send(new GetAllStatementInfoQuery());
     }
 
-    [HttpPut("{year}/statementInfo")]
-    public async Task<ActionResult> UpdateStatementInfo([FromRoute] int year, UpdateStatementInfoCommand command)
+    [HttpPut("statementInfo/{year}")]
+    public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
     {
       command.AccountingYear = year;
-      await Mediator.Send(command);
-
-      return NoContent();
+      return await Mediator.Send(command);
     }
   }
 }

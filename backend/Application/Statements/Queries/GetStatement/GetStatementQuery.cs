@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace Application.Statements.Queries.GetMyStatements
 
         if (statementInfo == null)
         {
-          //Check if, for some reason, the statementInfo for this year has not been created. 
+          //Check if, for some reason, the statementInfo for this year has not been created.
           await _statementInfoService.CheckMissingYearsInfo();
           statementInfo = await FindInfo(statement.AccountingYear);
 
@@ -65,6 +66,11 @@ namespace Application.Statements.Queries.GetMyStatements
           Statement = statement,
           StatementInfo = statementInfo
         };
+      }
+
+      private object Statement()
+      {
+        throw new NotImplementedException();
       }
 
       private async Task<StatementInfoDto> FindInfo(int year)

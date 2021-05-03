@@ -498,7 +498,7 @@ export interface IStatementClient {
     unassignAccountant(id: number): Promise<FileResponse>;
     approveStatement(id: number): Promise<FileResponse>;
     getAllStatementInfo(): Promise<StatementInfoDto[]>;
-    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<FileResponse>;
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -901,8 +901,8 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<StatementInfoDto[]>(<any>null);
     }
 
-    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/Statement/{year}/statementInfo";
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit> {
+        let url_ = this.baseUrl + "/api/Statement/statementInfo/{year}";
         if (year === undefined || year === null)
             throw new Error("The parameter 'year' must be defined.");
         url_ = url_.replace("{year}", encodeURIComponent("" + year));
@@ -915,7 +915,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
+                "Accept": "application/json"
             }
         };
 
@@ -926,20 +926,22 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processUpdateStatementInfo(response: Response): Promise<FileResponse> {
+    protected processUpdateStatementInfo(response: Response): Promise<Unit> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Unit.fromJS(resultData200);
+            return result200;
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(<any>null);
+        return Promise.resolve<Unit>(<any>null);
     }
 }
 
@@ -2805,6 +2807,36 @@ export class CSVResponseDto implements ICSVResponseDto {
 export interface ICSVResponseDto {
     fileName?: string | null;
     content?: string | null;
+}
+
+export class Unit implements IUnit {
+
+    constructor(data?: IUnit) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): Unit {
+        data = typeof data === 'object' ? data : {};
+        let result = new Unit();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data; 
+    }
+}
+
+export interface IUnit {
 }
 
 export class UpdateStatementInfoCommand implements IUpdateStatementInfoCommand {
