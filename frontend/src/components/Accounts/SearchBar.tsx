@@ -6,7 +6,7 @@ import {
   InputRightElement
 } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BiSearch, BiX } from "react-icons/bi";
 import { IClientDto } from "services/backend/nswagts";
 
@@ -33,15 +33,26 @@ const SearchBar: FC<Props> = ({ clients, cb }) => {
     cb(filteredClients);
   }, [filteredClients]);
 
+  const timeoutms = 200;
+  const timer = useRef<NodeJS.Timeout>(null);
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      clearTimeout(timer.current);
+      timer.current = setTimeout(
+        () => setSearchString(e.target.value.length >= 3 ? e.target.value : ""),
+        timeoutms
+      );
+    },
+    [timer, timeoutms]
+  );
+
   return (
     <InputGroup w="15em">
       <InputLeftElement>
         <BiSearch opacity={0.5} />
       </InputLeftElement>
-      <Input
-        value={searchString}
-        onChange={e => setSearchString(e.target.value)}
-        placeholder={t("common.search")}></Input>
+      <Input onChange={onChange} placeholder={t("common.search")}></Input>
       <InputRightElement>
         <IconButton
           aria-label="Clear search"
