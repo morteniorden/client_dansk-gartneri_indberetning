@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.IntegrationTests", "Infrastructure.IntegrationTests\Infrastructure.IntegrationTests.csproj", "{F07BC6BD-5B2A-4994-B78A-150CB15C86BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorEmails", "RazorEmails\RazorEmails.csproj", "{02C3B15D-50AB-43CF-A244-3C9955FDE94B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorEmails", "RazorEmails\RazorEmails.csproj", "{02C3B15D-50AB-43CF-A244-3C9955FDE94B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Signing", "Signing\Signing.csproj", "{72687D1D-FCA7-4AD7-B576-E822F10F881E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{02C3B15D-50AB-43CF-A244-3C9955FDE94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02C3B15D-50AB-43CF-A244-3C9955FDE94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02C3B15D-50AB-43CF-A244-3C9955FDE94B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72687D1D-FCA7-4AD7-B576-E822F10F881E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72687D1D-FCA7-4AD7-B576-E822F10F881E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72687D1D-FCA7-4AD7-B576-E822F10F881E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72687D1D-FCA7-4AD7-B576-E822F10F881E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

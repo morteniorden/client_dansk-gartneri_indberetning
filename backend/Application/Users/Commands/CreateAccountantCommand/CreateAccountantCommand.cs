@@ -7,6 +7,7 @@ using Application.Common.Interfaces;
 using Application.Common.Security;
 using Domain.Entities;
 using Domain.Enums;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,11 +22,17 @@ namespace Application.Users.Commands.CreateAccountantCommand
     {
       private readonly IApplicationDbContext _context;
       private readonly IPasswordHasher _passwordHasher;
+      private readonly IMailService _mailService;
+      private readonly IBackgroundJobClient _jobClient;
+      private readonly ITokenService _tokenService;
 
-      public CreateAccountantCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher)
+      public CreateAccountantCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher, IMailService mailService, IBackgroundJobClient jobClient, ITokenService tokenService)
       {
         _context = context;
         _passwordHasher = passwordHasher;
+        _mailService = mailService;
+        _jobClient = jobClient;
+        _tokenService = tokenService;
       }
 
       public async Task<int> Handle(CreateAccountantCommand request, CancellationToken cancellationToken)
@@ -60,7 +67,8 @@ namespace Application.Users.Commands.CreateAccountantCommand
 
           await _context.SaveChangesAsync(cancellationToken);
 
-          //TODO: Send email to accountant to notify that he/she has been assigned a new account
+          _jobClient.Enqueue(() => _mailService.SendInviteExistingAccountantEmail(existingAccountant.Email));
+
           return existingAccountant.Id;
         }
 
@@ -77,11 +85,15 @@ namespace Application.Users.Commands.CreateAccountantCommand
         statement.Accountant = accountantEntity;
         statement.AccountantType = request.Dto.AccountantType;
 
+        var (tokenId, token) = await _tokenService.CreateSSOToken(accountantEntity);
+        accountantEntity.SSOTokenId = tokenId;
+
         _context.Users.Add(accountantEntity);
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        //TODO: Send email to accountant
+        _jobClient.Enqueue(() => _mailService.SendInviteNewAccountantEmail(accountantEntity.Email, token));
+
         return accountantEntity.Id;
       }
     }
