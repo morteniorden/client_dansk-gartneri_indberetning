@@ -1,7 +1,7 @@
 import { IClientDto } from "services/backend/nswagts";
-import { AccountFilter } from "types/AccountFilter";
+import { ClientFilter } from "types/ClientFilter";
 
-export const SearchFilter: AccountFilter = {
+export const SearchFilter: ClientFilter = {
   id: 0,
   predicate: (client: IClientDto, searchString: string) =>
     [client.name, client.email].some(s =>
