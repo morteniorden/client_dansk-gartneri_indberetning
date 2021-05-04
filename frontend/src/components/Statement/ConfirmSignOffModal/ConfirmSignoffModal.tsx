@@ -61,10 +61,8 @@ const ConfirmSignOffModal: FC = () => {
           </ModalBody>
           <ModalFooter>
             <HStack>
-              <Button rounded="full" onClick={onClose}>
-                {t("actions.back")}
-              </Button>
-              <Button colorScheme="green" rounded="full" type="submit" form="statement_form">
+              <Button onClick={onClose}>{t("actions.back")}</Button>
+              <Button colorScheme="green" type="submit" form="statement_form">
                 {t("statements.confirmSignOffButton")}
               </Button>
             </HStack>

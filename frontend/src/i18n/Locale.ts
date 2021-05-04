@@ -60,6 +60,15 @@ export interface Locale {
     firmName: string;
     ownerName: string;
     addressAndPlace: string;
+
+    deactivateClient: string;
+    confirmDeactivateUser: string;
+    deactivateUserSuccessTitle: string;
+    deactivateUserSuccessText: string;
+    deactivateUserErrorTitle: string;
+    deactivateUserErrorText: string;
+    deactivated: string;
+    showDeactive: string;
   };
 
   login: {

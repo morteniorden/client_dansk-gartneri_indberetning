@@ -61,7 +61,16 @@ export const table: Locale = {
 
     firmName: "Firm name",
     ownerName: "Owner name",
-    addressAndPlace: "Address (optionally place)"
+    addressAndPlace: "Address (optionally place)",
+
+    deactivateClient: "Deactivate client",
+    confirmDeactivateUser: "You are about to deactivate this user. Do you want to proceed?",
+    deactivateUserSuccessTitle: "User deactivated",
+    deactivateUserSuccessText: "The user has now been deactivated.",
+    deactivateUserErrorTitle: "Deactivation error",
+    deactivateUserErrorText: "An error occured when trying to deactivate the user.",
+    deactivated: "deactivated",
+    showDeactive: "Show deactive"
   },
 
   login: {

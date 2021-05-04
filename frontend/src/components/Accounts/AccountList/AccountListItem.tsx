@@ -17,6 +17,7 @@ import { IClientDto, StatementStatus } from "services/backend/nswagts";
 
 import AccountItemExpandedPanel from "./AccountItemExpandedPanel";
 import InviteBtn from "./AccountListItemButtons/InviteBtn";
+import OptionsBtn from "./AccountListItemButtons/OptionsBtn";
 import ViewStatementBtn from "./AccountListItemButtons/ViewStatementBtn";
 import StatusBadge from "./StatusBadge";
 
@@ -34,13 +35,24 @@ const AccountListItem: FC<Props> = ({ client, accountingYear }) => {
   }, [client.statements, accountingYear]);
 
   return (
-    <Flex shadow="sm" p={2} border="1px" borderColor={boxBorder} rounded="md" mb={2}>
+    <Flex
+      shadow="sm"
+      p={2}
+      border="1px"
+      borderColor={boxBorder}
+      rounded="md"
+      mb={2}
+      opacity={client.deactivationTime == null ? "1" : "0.5"}>
       <AccordionItem w="100%" border="none">
         {({ isExpanded }) => (
           <>
             <Flex justifyContent="space-between" pl={3}>
               <HStack spacing={5}>
-                <Text>{client.name}</Text>
+                <Text>
+                  {client.deactivationTime == null
+                    ? client.name
+                    : `${client.name} — (${t("accounts.deactivated")})`}
+                </Text>
               </HStack>
               <HStack>
                 <StatusBadge client={client} accountingYear={accountingYear} />
@@ -51,6 +63,7 @@ const AccountListItem: FC<Props> = ({ client, accountingYear }) => {
                 {statement && statement.status == StatementStatus.SignedOff && (
                   <StatementReadonlyModal id={statement.id} />
                 )}
+                <OptionsBtn client={client} />
                 <Tooltip label={isExpanded ? "Skjul info" : "Vis info"}>
                   <AccordionButton
                     as={IconButton}
