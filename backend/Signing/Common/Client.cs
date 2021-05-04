@@ -1,11 +1,13 @@
+using Application.Common.Interfaces;
 using Microsoft.Extensions.Options;
 
 using Penneo;
 using Signing.Options;
+using Application.Statements;
 
 namespace Signing.Common
 {
-  public class PenneoClient
+  public class PenneoClient : IPenneoClient
   {
     private PenneoConnector connector;
 

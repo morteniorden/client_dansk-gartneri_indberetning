@@ -1,4 +1,4 @@
-namespace Signing.Common
+namespace Application.Statements
 {
   public class StandardSignDTO
   {
