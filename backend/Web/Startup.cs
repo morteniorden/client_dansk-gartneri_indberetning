@@ -1,34 +1,34 @@
-using System;
+using System.Linq;
+using System.Text;
 using Application;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Hubs;
-using FluentValidation.AspNetCore;
-using Infrastructure;
-using Infrastructure.Persistence;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using Serilog;
-using System.Linq;
-using System.Text;
 using Application.Common.Options;
 using Application.Common.Services;
 using Application.Security;
+using FluentValidation.AspNetCore;
 using Hangfire;
+using Infrastructure;
+using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using NSwag;
+using NSwag.Generation.Processors.Security;
+using Serilog;
+using Signing.Options;
 using Web.DocumentProcessors;
 using Web.Filters;
 using Web.Hubs;
-using Web.Services;
 using Web.Options;
-using Microsoft.EntityFrameworkCore;
+using Web.Services;
 
 namespace Web
 {
@@ -53,6 +53,8 @@ namespace Web
       services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
       services.Configure<SuperUserOptions>(Configuration.GetSection(SuperUserOptions.SuperUser));
       services.Configure<StatementOptions>(Configuration.GetSection(StatementOptions.Statements));
+      services.Configure<FileDriveOptions>(Configuration.GetSection(FileDriveOptions.FileDrive));
+      services.Configure<SignOptions>(Configuration.GetSection(SignOptions.SignOptionsKey));
 
       var corsOptions = Configuration.GetSection(CorsOptions.Cors).Get<CorsOptions>();
       services.AddCors(options =>

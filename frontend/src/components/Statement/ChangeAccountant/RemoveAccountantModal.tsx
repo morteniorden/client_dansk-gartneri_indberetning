@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
 import { FC } from "react";
-import { AccountantType, IAccountantDto, IStatementDto } from "services/backend/nswagts";
+import { AccountantType, IStatementDto } from "services/backend/nswagts";
 
 interface Props {
   statement: IStatementDto;
@@ -26,7 +26,7 @@ const RemoveAccountantModal: FC<Props> = ({ statement, cb }) => {
   return (
     <>
       <Button onClick={onOpen} colorScheme="red" variant="outline">
-        {statement.accountant.accountantType == AccountantType.Accountant
+        {statement.accountantType == AccountantType.Accountant
           ? t("statements.removeAccountant")
           : t("statements.removeConsultant")}
       </Button>
@@ -35,7 +35,7 @@ const RemoveAccountantModal: FC<Props> = ({ statement, cb }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            {statement.accountant.accountantType == AccountantType.Accountant
+            {statement.accountantType == AccountantType.Accountant
               ? t("statements.removeAccountant")
               : t("statements.removeConsultant")}
           </ModalHeader>
@@ -43,10 +43,10 @@ const RemoveAccountantModal: FC<Props> = ({ statement, cb }) => {
           <ModalBody>
             <Text>
               {statement.isApproved
-                ? statement.accountant.accountantType == AccountantType.Accountant
+                ? statement.accountantType == AccountantType.Accountant
                   ? t("statements.confirmRemoveApprovingAccountant")
                   : t("statements.confirmRemoveApprovingConsultant")
-                : statement.accountant.accountantType == AccountantType.Accountant
+                : statement.accountantType == AccountantType.Accountant
                 ? t("statements.confirmRemoveAccountant")
                 : t("statements.confirmRemoveConsultant")}
             </Text>

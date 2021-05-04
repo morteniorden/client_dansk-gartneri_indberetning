@@ -128,6 +128,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
                     b.Property<DateTimeOffset?>("LastModified")
                         .HasColumnType("datetimeoffset");
 
@@ -266,9 +269,6 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Accountant", b =>
                 {
                     b.HasBaseType("Domain.Entities.User");
-
-                    b.Property<int>("AccountantType")
-                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(1);
                 });

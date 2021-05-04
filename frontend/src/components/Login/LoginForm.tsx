@@ -74,9 +74,6 @@ const LoginForm: FC = () => {
             {t("login.login")}
           </Button>
           {!loginSuccess && <Center color="red">{t("login.invalidMsg")}</Center>}
-          <Center textColor="blue.400" mt={2}>
-            {t("login.forgotPassword")}
-          </Center>
         </Stack>
       </form>
     </Box>

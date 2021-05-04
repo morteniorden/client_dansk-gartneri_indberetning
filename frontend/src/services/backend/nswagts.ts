@@ -496,7 +496,8 @@ export interface IStatementClient {
     signOffStatement(id: number): Promise<FileResponse>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
-    approveStatement(id: number): Promise<FileResponse>;
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse>;
+    getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -822,14 +823,19 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<FileResponse>(<any>null);
     }
 
-    approveStatement(id: number): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/Statement/{id}/approve";
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/{id}/consent";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = new FormData();
+        if (file !== null && file !== undefined)
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
         let options_ = <RequestInit>{
+            body: content_,
             method: "PUT",
             headers: {
                 "Accept": "application/octet-stream"
@@ -839,11 +845,11 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processApproveStatement(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processConsentToStatement(_response));
         });
     }
 
-    protected processApproveStatement(response: Response): Promise<FileResponse> {
+    protected processConsentToStatement(response: Response): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200 || status === 206) {
@@ -857,6 +863,46 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto> {
+        let url_ = this.baseUrl + "/api/Statement/consent?";
+        if (statementId === null)
+            throw new Error("The parameter 'statementId' cannot be null.");
+        else if (statementId !== undefined)
+            url_ += "statementId=" + encodeURIComponent("" + statementId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetConsentFile(_response));
+        });
+    }
+
+    protected processGetConsentFile(response: Response): Promise<ConsentFileDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ConsentFileDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ConsentFileDto>(<any>null);
     }
 }
 
@@ -1635,6 +1681,7 @@ export class StatementDto implements IStatementDto {
     client?: ClientNoStatementsDto | null;
     accountantId?: number | null;
     accountant?: Accountant | null;
+    accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
     isApproved?: boolean;
@@ -1679,6 +1726,7 @@ export class StatementDto implements IStatementDto {
             this.client = _data["client"] ? ClientNoStatementsDto.fromJS(_data["client"]) : <any>null;
             this.accountantId = _data["accountantId"] !== undefined ? _data["accountantId"] : <any>null;
             this.accountant = _data["accountant"] ? Accountant.fromJS(_data["accountant"]) : <any>null;
+            this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.isApproved = _data["isApproved"] !== undefined ? _data["isApproved"] : <any>null;
@@ -1721,6 +1769,7 @@ export class StatementDto implements IStatementDto {
         data["client"] = this.client ? this.client.toJSON() : <any>null;
         data["accountantId"] = this.accountantId !== undefined ? this.accountantId : <any>null;
         data["accountant"] = this.accountant ? this.accountant.toJSON() : <any>null;
+        data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["isApproved"] = this.isApproved !== undefined ? this.isApproved : <any>null;
@@ -1756,6 +1805,7 @@ export interface IStatementDto {
     client?: IClientNoStatementsDto | null;
     accountantId?: number | null;
     accountant?: IAccountant | null;
+    accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
     isApproved?: boolean;
@@ -2005,7 +2055,6 @@ export interface IUser extends IAuditableEntity {
 
 export class Accountant extends User implements IAccountant {
     role?: RoleEnum;
-    accountantType?: AccountantType;
     statements?: Statement[] | null;
 
     constructor(data?: IAccountant) {
@@ -2016,7 +2065,6 @@ export class Accountant extends User implements IAccountant {
         super.init(_data);
         if (_data) {
             this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
-            this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             if (Array.isArray(_data["statements"])) {
                 this.statements = [] as any;
                 for (let item of _data["statements"])
@@ -2035,7 +2083,6 @@ export class Accountant extends User implements IAccountant {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["role"] = this.role !== undefined ? this.role : <any>null;
-        data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         if (Array.isArray(this.statements)) {
             data["statements"] = [];
             for (let item of this.statements)
@@ -2048,13 +2095,7 @@ export class Accountant extends User implements IAccountant {
 
 export interface IAccountant extends IUser {
     role?: RoleEnum;
-    accountantType?: AccountantType;
     statements?: Statement[] | null;
-}
-
-export enum AccountantType {
-    Accountant = 0,
-    Consultant = 1,
 }
 
 export class Statement extends AuditableEntity implements IStatement {
@@ -2343,6 +2384,11 @@ export interface IAddress {
     city?: string | null;
 }
 
+export enum AccountantType {
+    Accountant = 0,
+    Consultant = 1,
+}
+
 export enum StatementStatus {
     InvitedNotEdited = 0,
     InvitedAndEdited = 1,
@@ -2466,6 +2512,46 @@ export interface ICSVResponseDto {
     content?: string | null;
 }
 
+export class ConsentFileDto implements IConsentFileDto {
+    statementId?: number;
+    stream?: string | null;
+
+    constructor(data?: IConsentFileDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.statementId = _data["statementId"] !== undefined ? _data["statementId"] : <any>null;
+            this.stream = _data["stream"] !== undefined ? _data["stream"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ConsentFileDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConsentFileDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["statementId"] = this.statementId !== undefined ? this.statementId : <any>null;
+        data["stream"] = this.stream !== undefined ? this.stream : <any>null;
+        return data; 
+    }
+}
+
+export interface IConsentFileDto {
+    statementId?: number;
+    stream?: string | null;
+}
+
 export class ClientDto implements IClientDto {
     tel?: string | null;
     address?: AddressDto | null;
@@ -2551,6 +2637,7 @@ export interface IClientDto {
 }
 
 export class StatementNoUsersDto implements IStatementNoUsersDto {
+    id?: number;
     accountingYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;
@@ -2587,6 +2674,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
@@ -2623,6 +2711,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
         data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
@@ -2652,6 +2741,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
 }
 
 export interface IStatementNoUsersDto {
+    id?: number;
     accountingYear?: number;
     status?: StatementStatus;
     s1_mushrooms?: number;
@@ -2797,8 +2887,7 @@ export interface ICreateAdminDto {
 }
 
 export class CreateAccountantCommand implements ICreateAccountantCommand {
-    accountantDto?: AccountantDto | null;
-    statementId?: number;
+    dto?: AssignAccountantDto | null;
 
     constructor(data?: ICreateAccountantCommand) {
         if (data) {
@@ -2806,14 +2895,13 @@ export class CreateAccountantCommand implements ICreateAccountantCommand {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
-            this.accountantDto = data.accountantDto && !(<any>data.accountantDto).toJSON ? new AccountantDto(data.accountantDto) : <AccountantDto>this.accountantDto; 
+            this.dto = data.dto && !(<any>data.dto).toJSON ? new AssignAccountantDto(data.dto) : <AssignAccountantDto>this.dto; 
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.accountantDto = _data["accountantDto"] ? AccountantDto.fromJS(_data["accountantDto"]) : <any>null;
-            this.statementId = _data["statementId"] !== undefined ? _data["statementId"] : <any>null;
+            this.dto = _data["dto"] ? AssignAccountantDto.fromJS(_data["dto"]) : <any>null;
         }
     }
 
@@ -2826,69 +2914,57 @@ export class CreateAccountantCommand implements ICreateAccountantCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["accountantDto"] = this.accountantDto ? this.accountantDto.toJSON() : <any>null;
-        data["statementId"] = this.statementId !== undefined ? this.statementId : <any>null;
+        data["dto"] = this.dto ? this.dto.toJSON() : <any>null;
         return data; 
     }
 }
 
 export interface ICreateAccountantCommand {
-    accountantDto?: IAccountantDto | null;
-    statementId?: number;
+    dto?: IAssignAccountantDto | null;
 }
 
-export class AccountantDto extends UserDto implements IAccountantDto {
+export class AssignAccountantDto implements IAssignAccountantDto {
+    statementId?: number;
+    email?: string | null;
     accountantType?: AccountantType;
-    statements?: StatementDto[] | null;
 
-    constructor(data?: IAccountantDto) {
-        super(data);
+    constructor(data?: IAssignAccountantDto) {
         if (data) {
-            if (data.statements) {
-                this.statements = [];
-                for (let i = 0; i < data.statements.length; i++) {
-                    let item = data.statements[i];
-                    this.statements[i] = item && !(<any>item).toJSON ? new StatementDto(item) : <StatementDto>item;
-                }
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
 
     init(_data?: any) {
-        super.init(_data);
         if (_data) {
+            this.statementId = _data["statementId"] !== undefined ? _data["statementId"] : <any>null;
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
             this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
-            if (Array.isArray(_data["statements"])) {
-                this.statements = [] as any;
-                for (let item of _data["statements"])
-                    this.statements!.push(StatementDto.fromJS(item));
-            }
         }
     }
 
-    static fromJS(data: any): AccountantDto {
+    static fromJS(data: any): AssignAccountantDto {
         data = typeof data === 'object' ? data : {};
-        let result = new AccountantDto();
+        let result = new AssignAccountantDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["statementId"] = this.statementId !== undefined ? this.statementId : <any>null;
+        data["email"] = this.email !== undefined ? this.email : <any>null;
         data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
-        if (Array.isArray(this.statements)) {
-            data["statements"] = [];
-            for (let item of this.statements)
-                data["statements"].push(item.toJSON());
-        }
-        super.toJSON(data);
         return data; 
     }
 }
 
-export interface IAccountantDto extends IUserDto {
+export interface IAssignAccountantDto {
+    statementId?: number;
+    email?: string | null;
     accountantType?: AccountantType;
-    statements?: IStatementDto[] | null;
 }
 
 export class UpdateUserCommand implements IUpdateUserCommand {
@@ -3036,6 +3112,11 @@ export enum CommandErrorCode {
     RegularExpressionValidator = 28,
     ScalePrecisionValidator = 29,
     StringEnumValidator = 30,
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export interface FileResponse {

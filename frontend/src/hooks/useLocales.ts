@@ -44,10 +44,10 @@ export const useLocales = () => {
     [locale]
   );
 
-  const currencyFormatter = useMemo(
-    () => new Intl.NumberFormat(locale, { style: "currency", currency: t("currencyCode") }),
-    [locale, t]
-  );
+  const currencyFormatter = useMemo(() => {
+    const currency = t("currencyCode") || "USD";
+    return new Intl.NumberFormat(locale, { style: "currency", currency });
+  }, [locale, t]);
 
   const formatCurrency = useCallback(
     (number: number) => {

@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Persistence.Migrations
 {
-    public partial class StatementApprovedStatus : Migration
+    public partial class StatementIsApproved : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
