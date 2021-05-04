@@ -13,18 +13,21 @@ import { logger } from "utils/logger";
 
 import AccountList from "./AccountList/AccountList";
 import DownloadCsvBtn from "./DownloadCsvBtn";
-import { ActiveFilter } from "./Filters/ClientFilters";
+import { ActiveFilter, SearchFilter } from "./Filters/ClientFilters";
 import NewAccountModal from "./NewAccountModal";
+import SearchBar from "./SearchBar";
 
 const Accounts: FC = () => {
   const { t } = useLocales();
 
   const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
+  const [searchString, setSearchString] = useState<string>("");
+  //  const [filters, setFilters] = useState<ClientFilter[]>([SearchFilter]);
   const [isFetching, setIsFetching] = useState(false);
   const [showDeactive, setShowDeactive] = useState(false);
 
   const filters = useMemo(() => {
-    const filters = [];
+    const filters = [SearchFilter];
     if (!showDeactive) filters.push(ActiveFilter);
     return filters;
   }, [showDeactive]);
@@ -86,6 +89,7 @@ const Accounts: FC = () => {
               />
             </HStack>
             <HStack spacing={5}>
+              <SearchBar cb={value => setSearchString(value)} />
               <NewAccountModal onSubmit={fetchData} />
             </HStack>
           </Flex>
@@ -97,7 +101,7 @@ const Accounts: FC = () => {
             </HStack>
           </Flex>
           <AccountList
-            data={clients.filter(client => filters.every(f => f.predicate(client)))}
+            data={clients.filter(client => filters.every(f => f.predicate(client, searchString)))}
             accountingYear={accountingYear}
           />
         </Stack>
