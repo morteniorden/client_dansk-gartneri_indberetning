@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210503082947_StatementApproved")]
-    partial class StatementApproved
+    [Migration("20210429084133_AccountantTypeOnlyOnStatement")]
+    partial class AccountantTypeOnlyOnStatement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -218,156 +218,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Statements");
                 });
 
-            modelBuilder.Entity("Domain.Entities.StatementInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountingYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("s1_boughtPlants_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s1_boughtPlants_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s1_mushrooms_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s1_mushrooms_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s1_tomatoCucumberHerb_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s1_tomatoCucumberHerb_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s3_boughtPlants_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s3_boughtPlants_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s3_carrots_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s3_carrots_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s3_onions_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s3_onions_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s3_other_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s3_other_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s3_peas_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s3_peas_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s4_boughtPlants_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s4_boughtPlants_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s4_cutFlowers_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s4_cutFlowers_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s4_onions_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s4_onions_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s4_plants_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s4_plants_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s7_boughtPlants_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s7_boughtPlants_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s7_plants_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s7_plants_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_applesPearsEtc_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_applesPearsEtc_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_cherries_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_cherries_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_currant_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_currant_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_otherBerryFruit_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_otherBerryFruit_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_otherStoneFruit_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_otherStoneFruit_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_packaging_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_packaging_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_plums_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_plums_permille")
-                        .HasColumnType("real");
-
-                    b.Property<string>("s8_strawberries_help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("s8_strawberries_permille")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountingYear")
-                        .IsUnique();
-
-                    b.ToTable("StatementInfo");
-                });
-
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -421,9 +271,6 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Accountant", b =>
                 {
                     b.HasBaseType("Domain.Entities.User");
-
-                    b.Property<int>("AccountantType")
-                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(1);
                 });
