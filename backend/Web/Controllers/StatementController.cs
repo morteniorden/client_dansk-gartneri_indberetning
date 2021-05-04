@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Application.StatementInfos;
+using Application.StatementInfos.Commands.UpdateStatementInfo;
+using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
 using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatementCommand;
@@ -30,14 +33,14 @@ namespace Web.Controllers
       return await Mediator.Send(new GetMyStatementsQuery());
     }
 
-    // [HttpGet("{id}")]
-    // public async Task<ActionResult<StatementAndInfoDto>> getStatement([FromRoute] int id)
-    // {
-    //   return await Mediator.Send(new GetStatementQuery
-    //   {
-    //     Id = id
-    //   });
-    // }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<StatementAndInfoDto>> getStatement([FromRoute] int id)
+    {
+      return await Mediator.Send(new GetStatementQuery
+      {
+        Id = id
+      });
+    }
 
     [HttpPost("statement")]
     public async Task<ActionResult<int>> CreateStatement([FromBody] CreateStatementCommand command)
@@ -103,18 +106,18 @@ namespace Web.Controllers
       return NoContent();
     }
 
-    // [HttpGet("statementInfo")]
-    // public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
-    // {
-    //   return await Mediator.Send(new GetAllStatementInfoQuery());
-    // }
+    [HttpGet("statementInfo")]
+    public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
+    {
+      return await Mediator.Send(new GetAllStatementInfoQuery());
+    }
 
-    // [HttpPut("statementInfo/{year}")]
-    // public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
-    // {
-    //   command.AccountingYear = year;
-    //   return await Mediator.Send(command);
-    // }
+    [HttpPut("statementInfo/{year}")]
+    public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
+    {
+      command.AccountingYear = year;
+      return await Mediator.Send(command);
+    }
 
     [HttpGet("consent")]
     public async Task<ConsentFileDto> GetConsentFile([FromQuery] int statementId)
