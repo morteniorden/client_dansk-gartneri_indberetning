@@ -12,7 +12,7 @@ namespace Signing
   [ExcludeFromCodeCoverage]
   public static class DependencyInjection
   {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
+    public static IServiceCollection AddSigning(this IServiceCollection services, IConfiguration configuration)
     {
       services.AddScoped<IPenneoClient, PenneoClient>();
 

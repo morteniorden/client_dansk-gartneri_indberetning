@@ -496,7 +496,7 @@ export interface IStatementClient {
     signOffStatement(id: number): Promise<FileResponse>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
-    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse>;
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<string>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
 }
 
@@ -823,7 +823,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<FileResponse>(<any>null);
     }
 
-    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse> {
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<string> {
         let url_ = this.baseUrl + "/api/Statement/{id}/consent";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -838,7 +838,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             body: content_,
             method: "PUT",
             headers: {
-                "Accept": "application/octet-stream"
+                "Accept": "application/json"
             }
         };
 
@@ -849,20 +849,22 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processConsentToStatement(response: Response): Promise<FileResponse> {
+    protected processConsentToStatement(response: Response): Promise<string> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(<any>null);
+        return Promise.resolve<string>(<any>null);
     }
 
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto> {

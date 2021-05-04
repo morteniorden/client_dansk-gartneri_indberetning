@@ -87,10 +87,10 @@ namespace Web.Controllers
 
     [HttpPut("{id}/consent")]
     [Consumes("multipart/form-data")]
-    public async Task<ActionResult> ConsentToStatement([FromRoute] int id, IFormFile file)
+    public async Task<ActionResult<string>> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
-      await Mediator.Send(new ConsentToStatementCommand
+      return await Mediator.Send(new ConsentToStatementCommand
       {
         Dto = new StatementConsentDto()
         {
@@ -99,7 +99,7 @@ namespace Web.Controllers
         }
       });
 
-      return NoContent();
+      //return NoContent();
     }
 
     [HttpGet("consent")]
