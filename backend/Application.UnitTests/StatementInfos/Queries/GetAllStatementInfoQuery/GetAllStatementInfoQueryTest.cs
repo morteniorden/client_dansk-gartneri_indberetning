@@ -36,7 +36,7 @@ namespace Application.UnitTests.StatementInfos.Queries.GetAllStatementInfo
       var result = await handler.Handle(query, CancellationToken.None);
 
       result.Should().BeOfType<List<StatementInfoDto>>();
-      result.Count.Should().Be(2);
+      result.Count.Should().Be(4);
     }
   }
 }

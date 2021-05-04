@@ -34,7 +34,7 @@ namespace Application.UnitTests.Common.Services
 
       await service.CheckMissingYearsInfo();
 
-      _context.StatementInfo.Count().Should().Be(3);
+      _context.StatementInfo.Count().Should().Be(4);
 
       var newInfo = await _context.StatementInfo
         .Where(e => e.AccountingYear == _context.StatementInfo.Max(y => y.AccountingYear))
