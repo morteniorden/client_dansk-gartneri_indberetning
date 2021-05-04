@@ -3,7 +3,7 @@ import AccountantSection from "components/Statement/AccountantSection/Accountant
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useContext, useEffect, useState } from "react";
+import { FC, useCallback, useContext } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
 
@@ -19,7 +19,9 @@ const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
   const { activeUser } = useAuth();
-  const { statement, setStatement, submit, readonly, calcTotal, statementInfo } = useContext(EditStatementContext);
+  const { statement, setStatement, submit, readonly, calcTotal, statementInfo } = useContext(
+    EditStatementContext
+  );
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementNoUsersDto, value: IStatementNoUsersDto[keyof IStatementNoUsersDto]) => {
