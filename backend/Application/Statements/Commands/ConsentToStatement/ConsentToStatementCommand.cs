@@ -82,11 +82,11 @@ namespace Application.Statements.Commands.ConsentToStatement
         _penneoClient.StartConnection();
         var link = _penneoClient.SignDoc(new StandardSignDTO
         {
-          DocPath = filePath,
+          DocPath = "test",
           SignerName = currentUser.Email,
           SignerCompany = statementEntity.Client.Name,
-          RequestFailureUrl = "",
-          RequestSuccessUrl = ""
+          RequestFailureUrl = "http://localhost:3000",
+          RequestSuccessUrl = "http://localhost:3000"
         });
 
         //statementEntity.IsApproved = true;
