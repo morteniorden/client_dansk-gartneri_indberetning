@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Text;
 using Application;
@@ -9,8 +8,6 @@ using Application.Common.Services;
 using Application.Security;
 using FluentValidation.AspNetCore;
 using Hangfire;
-using Hangfire.Dashboard;
-using Hangfire.Server;
 using Infrastructure;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
+using Signing.Options;
 using Web.DocumentProcessors;
 using Web.Filters;
 using Web.Hubs;
@@ -55,6 +53,8 @@ namespace Web
       services.Configure<MailOptions>(Configuration.GetSection(MailOptions.MailSettings));
       services.Configure<SuperUserOptions>(Configuration.GetSection(SuperUserOptions.SuperUser));
       services.Configure<StatementOptions>(Configuration.GetSection(StatementOptions.Statements));
+      services.Configure<FileDriveOptions>(Configuration.GetSection(FileDriveOptions.FileDrive));
+      services.Configure<SignOptions>(Configuration.GetSection(SignOptions.SignOptionsKey));
 
       var corsOptions = Configuration.GetSection(CorsOptions.Cors).Get<CorsOptions>();
       services.AddCors(options =>
@@ -112,7 +112,7 @@ namespace Web
       services.AddScoped<IMailService, MailService>();
       services.AddScoped<SuperAdminService>();
       services.AddScoped<DefaultEmailsService>();
-      services.AddScoped<IStatementInfoService, StatementInfoService>();
+      // services.AddScoped<IStatementInfoService, StatementInfoService>();
       services.AddSignalR();
 
       var key = Encoding.ASCII.GetBytes("VERY_SECRET_SECRET");
@@ -136,7 +136,7 @@ namespace Web
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, SuperAdminService superAdminService, DefaultEmailsService defaultEmailsService, IStatementInfoService statementInfoService)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, SuperAdminService superAdminService, DefaultEmailsService defaultEmailsService)
     {
       if (env.IsDevelopment())
       {

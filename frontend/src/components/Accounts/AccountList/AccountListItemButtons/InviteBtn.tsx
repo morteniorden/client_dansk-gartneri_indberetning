@@ -56,6 +56,7 @@ const InviteBtn: FC<Props> = ({ client, accountingYear }) => {
         aria-label="Invite to fill out statement"
         icon={isProcessing ? <Spinner size="sm" /> : <MdMessage />}
         onClick={e => onInvite()}
+        disabled={client.deactivationTime != null}
       />
     </Tooltip>
   );

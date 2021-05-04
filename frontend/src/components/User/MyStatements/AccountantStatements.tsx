@@ -2,7 +2,7 @@ import { Box, Button, Skeleton, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-
 import { useLocales } from "hooks/useLocales";
 import Link from "next/link";
 import { FC } from "react";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementDto, StatementStatus } from "services/backend/nswagts";
 
 interface Props {
   statements: IStatementDto[];
@@ -33,20 +33,20 @@ const AccountantStatements: FC<Props> = ({ statements, isFetching, accountingYea
                   <Tr key={statement.id}>
                     <Td>{statement.client.name}</Td>
                     <Td>
-                      {statement.status == 2
+                      {statement.status == StatementStatus.SignedOff
                         ? t("myStatements.accountantApproved")
                         : t("myStatements.awaitsYourApproval")}
                     </Td>
                     <Td>
-                      {statement.status != 2 && (
+                      {statement.status != StatementStatus.SignedOff && (
                         <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
-                          <Button colorScheme="green" rounded="full">
-                            {t("myStatements.viewStatement")}
-                          </Button>
+                          <Button colorScheme="green">{t("myStatements.viewStatement")}</Button>
                         </Link>
                       )}
-                      {statement.status == 2 && (
-                        <Button rounded="full">{t("myStatements.viewStatement")}</Button>
+                      {statement.status == StatementStatus.SignedOff && (
+                        <Link href={`/statement/${encodeURIComponent(statement.id)}`}>
+                          <Button>{t("myStatements.viewStatement")}</Button>
+                        </Link>
                       )}
                     </Td>
                   </Tr>

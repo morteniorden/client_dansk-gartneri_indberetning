@@ -37,7 +37,10 @@ namespace Web.Controllers
     [HttpPost("resetPassword")]
     public async Task<ActionResult> SendMailToResetPassword([FromBody] string email)
     {
-      var result = await Mediator.Send(new SendResetPasswordCommand());
+      var result = await Mediator.Send(new SendResetPasswordCommand
+      {
+        Email = email
+      });
       return NoContent();
     }
   }

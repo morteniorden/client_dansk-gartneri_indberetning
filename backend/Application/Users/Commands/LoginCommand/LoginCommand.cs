@@ -38,6 +38,11 @@ namespace Application.Users.Commands.Login
           throw new ArgumentException("The provided email could not be found.");
         }
 
+        if (user.DeactivationTime != null)
+        {
+          throw new ArgumentException("This user is deactivated.");
+        }
+
         var (verified, needsUpgrade) = _passwordHasher.Check(user.Password, request.LoginDetails.Password);
 
         if (!verified)

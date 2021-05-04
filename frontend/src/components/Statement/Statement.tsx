@@ -12,6 +12,7 @@ import {
   IStatementDto,
   IStatementInfoDto,
   RoleEnum,
+  StatementStatus,
   UpdateStatementCommand
 } from "services/backend/nswagts";
 import { logger } from "utils/logger";
@@ -33,6 +34,8 @@ const Statement: FC<Props> = ({ id }) => {
   const { activeUser } = useAuth();
   const [total, setTotal] = useState(0);
 
+  const readonly = useMemo(() => statement?.status == StatementStatus.SignedOff, [statement]);
+
   const fetchData = useCallback(async () => {
     setIsFetching(true);
     try {
@@ -45,7 +48,7 @@ const Statement: FC<Props> = ({ id }) => {
         console.log(data.statementInfo);
       } else {
         logger.info("statementClient.get no data");
-        router.push("mystatements");
+        router.push("/mystatements");
       }
     } catch (err) {
       logger.warn("statementClient.get Error", err);
@@ -156,12 +159,12 @@ const Statement: FC<Props> = ({ id }) => {
             save: onSaveChanges,
             isSaving: isSaving,
             submit: onSubmit,
-            readonly: false,
+            readonly: readonly,
             fetchData: fetchData,
             isFetching: isFetching,
             total: total,
-              calcTotal: calcTotal,
-              statementInfo: statementInfo
+            calcTotal: calcTotal,
+            statementInfo: statementInfo
           }}>
           <BasicLayout variant="statementHeader" maxW="1000px">
             <Stack spacing={5}>

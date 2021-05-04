@@ -60,6 +60,15 @@ export interface Locale {
     firmName: string;
     ownerName: string;
     addressAndPlace: string;
+
+    deactivateClient: string;
+    confirmDeactivateUser: string;
+    deactivateUserSuccessTitle: string;
+    deactivateUserSuccessText: string;
+    deactivateUserErrorTitle: string;
+    deactivateUserErrorText: string;
+    deactivated: string;
+    showDeactive: string;
   };
 
   login: {
@@ -67,8 +76,15 @@ export interface Locale {
     password: string;
     login: string;
     forgotPassword: string;
+    forgotPasswordText: string;
     invalidMsg: string;
     logout: string;
+    sendResetPW: string;
+
+    sendResetPWSuccesTitle: string;
+    sendResetPWSuccesText: string;
+    sendResetPWErrorTitle: string;
+    sendResetPWErrorText: string;
   };
 
   admins: {
@@ -188,6 +204,7 @@ export interface Locale {
     approvedByConsultant: string;
     approvedBy: string;
     approvedAndReady: string;
+    downloadConsent: string;
 
     signOffSuccessTitle: string;
     signOffSuccessText: string;
@@ -250,6 +267,8 @@ export interface Locale {
       dragAndDrop: string;
       dropFile: string;
       signAndApprove: string;
+      consentSignedText: string;
+      downloadYourConsent: string;
     };
   };
 

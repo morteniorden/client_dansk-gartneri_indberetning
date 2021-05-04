@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Application.StatementInfos;
-using Application.StatementInfos.Commands.UpdateStatementInfo;
-using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
-using Application.Statements.Commands.ApproveStatement;
+using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
@@ -14,6 +11,7 @@ using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSVQuery;
 using Application.Users.Commands.UnassignAccountantCommand;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -32,14 +30,14 @@ namespace Web.Controllers
       return await Mediator.Send(new GetMyStatementsQuery());
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<StatementAndInfoDto>> getStatement([FromRoute] int id)
-    {
-      return await Mediator.Send(new GetStatementQuery
-      {
-        Id = id
-      });
-    }
+    // [HttpGet("{id}")]
+    // public async Task<ActionResult<StatementAndInfoDto>> getStatement([FromRoute] int id)
+    // {
+    //   return await Mediator.Send(new GetStatementQuery
+    //   {
+    //     Id = id
+    //   });
+    // }
 
     [HttpPost("statement")]
     public async Task<ActionResult<int>> CreateStatement([FromBody] CreateStatementCommand command)
@@ -88,29 +86,43 @@ namespace Web.Controllers
       return NoContent();
     }
 
-    [HttpPut("{id}/approve")]
-    public async Task<ActionResult> ApproveStatement([FromRoute] int id)
+    [HttpPut("{id}/consent")]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
-      await Mediator.Send(new ApproveStatementCommand
+      await Mediator.Send(new ConsentToStatementCommand
       {
-        Id = id
+        Dto = new StatementConsentDto()
+        {
+          File = file,
+          StatementId = id
+        }
       });
 
       return NoContent();
     }
 
-    [HttpGet("statementInfo")]
-    public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
-    {
-      return await Mediator.Send(new GetAllStatementInfoQuery());
-    }
+    // [HttpGet("statementInfo")]
+    // public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
+    // {
+    //   return await Mediator.Send(new GetAllStatementInfoQuery());
+    // }
 
-    [HttpPut("statementInfo/{year}")]
-    public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
+    // [HttpPut("statementInfo/{year}")]
+    // public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
+    // {
+    //   command.AccountingYear = year;
+    //   return await Mediator.Send(command);
+    // }
+
+    [HttpGet("consent")]
+    public async Task<ConsentFileDto> GetConsentFile([FromQuery] int statementId)
     {
-      command.AccountingYear = year;
-      return await Mediator.Send(command);
+      return await Mediator.Send(new GetConsentFileQuery()
+      {
+        StatementId = statementId
+      });
     }
   }
 }
