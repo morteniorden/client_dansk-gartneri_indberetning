@@ -82,7 +82,7 @@ namespace Application.Statements.Commands.ConsentToStatement
         _penneoClient.StartConnection();
         var link = _penneoClient.SignDoc(new StandardSignDTO
         {
-          DocPath = "test",
+          DocPath = filePath,
           SignerName = currentUser.Email,
           SignerCompany = statementEntity.Client.Name,
           RequestFailureUrl = "http://localhost:3000",

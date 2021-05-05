@@ -59,6 +59,8 @@ namespace Signing.Common
 
       signingRequest.Persist(connector);
 
+      myCaseFile.Send(connector);
+
       var link = signingRequest.GetLink(connector);
 
       signingRequest.Send(connector);

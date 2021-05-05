@@ -2,6 +2,7 @@ import { Box, Button, Center, Heading, HStack, Stack, Text, useToast } from "@ch
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
+import { useRouter } from "next/router";
 import { FC, useCallback, useContext, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import { genStatementClient } from "services/backend/apiClients";
@@ -20,7 +21,22 @@ const AccountantSection: FC = () => {
   const onSubmit = useCallback(async () => {
     try {
       const statementClient = await genStatementClient();
-      await statementClient.consentToStatement(statement.id, { data: file, fileName: file.name });
+      const res = await statementClient.consentToStatement(statement.id, {
+        data: file,
+        fileName: file.name
+      });
+      if (res) {
+        const h = window.top.innerHeight * 0.6;
+        const w = window.top.innerWidth * 0.6;
+        const y = window.top.innerHeight / 2 + window.top.screenY - h / 2;
+        const x = window.top.innerWidth / 2 + window.top.screenX - w / 2;
+        window.open(
+          res,
+          "Signing",
+          `width=${w}, height=${h}, left=${x}, top=${y}, toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes`
+        );
+      }
+
       toast({
         title: t("statements.ApproveSuccessTitle"),
         description: t("statements.ApproveSuccessText"),
