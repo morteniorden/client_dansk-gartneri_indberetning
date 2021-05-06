@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Options;
 
@@ -26,7 +27,7 @@ namespace Signing.Common
     // We need two signature - one for the document and one for the form in general.
     // With the form we sign a default document.
 
-    public string SignDoc(StandardSignDTO dto)
+    public (string, int?) SignDoc(StandardSignDTO dto)
     {
       var myCaseFile = new CaseFile("Demo case file");
       myCaseFile.Persist(connector);
@@ -65,7 +66,14 @@ namespace Signing.Common
 
       signingRequest.Send(connector);
 
-      return link;
+      return (link, myCaseFile.Id);
+    }
+
+    public bool IsCaseFileCompleted(int id)
+    {
+      var query = new Query(connector);
+      var myCaseFile = query.Find<CaseFile>(id);
+      return myCaseFile.GetStatus() == CaseFile.CaseFileStatus.Completed;
     }
   }
 }

@@ -15,35 +15,33 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Application.Statements.Queries.GetMyStatements
+namespace Application.Statements.Queries.GetPenneoStatus
 {
   [Authenticated]
-  public class GetStatementQuery : IRequest<StatementDto>
+  public class GetPenneoStatusQuery : IRequest<StatementDto>
   {
-    public int Id { get; set; }
-    public bool CheckPenneoCompletion { get; set; }
+    public int StatementId { get; set; }
 
-    public class GetStatementQueryHandler : IRequestHandler<GetStatementQuery, StatementDto>
+    public class GetPenneoStatusQueryHandler : IRequestHandler<GetPenneoStatusQuery, StatementDto>
     {
       private readonly IApplicationDbContext _context;
       private readonly IMapper _mapper;
       private readonly ICurrentUserService _currentUser;
-      private readonly IPenneoClient _penneoClient;
 
-      public GetStatementQueryHandler(IApplicationDbContext context, IMapper mapper, ICurrentUserService currentUser, IPenneoClient penneoClient)
+      public GetPenneoStatusQueryHandler(IApplicationDbContext context, IMapper mapper, ICurrentUserService currentUser)
       {
         _context = context;
         _mapper = mapper;
         _currentUser = currentUser;
-        _penneoClient = penneoClient;
       }
-      public async Task<StatementDto> Handle(GetStatementQuery request, CancellationToken cancellationToken)
+      public async Task<StatementDto> Handle(GetPenneoStatusQuery request, CancellationToken cancellationToken)
       {
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId, cancellationToken: cancellationToken);
 
         var statement = await _context.Statements
           .Include(e => e.Accountant)
           .Include(e => e.Client)
+          .ProjectTo<StatementDto>(_mapper.ConfigurationProvider)
           .FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
 
         if (statement == null)
@@ -56,17 +54,7 @@ namespace Application.Statements.Queries.GetMyStatements
           throw new ForbiddenAccessException();
         }
 
-        if (request.CheckPenneoCompletion && statement.CaseFileId.HasValue)
-        {
-          _penneoClient.StartConnection();
-          if (_penneoClient.IsCaseFileCompleted(statement.CaseFileId.GetValueOrDefault()))
-          {
-            statement.IsApproved = true;
-            await _context.SaveChangesAsync(cancellationToken);
-          }
-        }
-
-        return _mapper.Map<StatementDto>(statement);
+        return statement;
       }
     }
   }

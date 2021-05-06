@@ -2109,6 +2109,7 @@ export class Statement extends AuditableEntity implements IStatement {
     accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
+    caseFileId?: number | null;
     isApproved?: boolean;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;
@@ -2152,6 +2153,7 @@ export class Statement extends AuditableEntity implements IStatement {
             this.accountantType = _data["accountantType"] !== undefined ? _data["accountantType"] : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.caseFileId = _data["caseFileId"] !== undefined ? _data["caseFileId"] : <any>null;
             this.isApproved = _data["isApproved"] !== undefined ? _data["isApproved"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
             this.s1_tomatoCucumberHerb = _data["s1_tomatoCucumberHerb"] !== undefined ? _data["s1_tomatoCucumberHerb"] : <any>null;
@@ -2195,6 +2197,7 @@ export class Statement extends AuditableEntity implements IStatement {
         data["accountantType"] = this.accountantType !== undefined ? this.accountantType : <any>null;
         data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["caseFileId"] = this.caseFileId !== undefined ? this.caseFileId : <any>null;
         data["isApproved"] = this.isApproved !== undefined ? this.isApproved : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
         data["s1_tomatoCucumberHerb"] = this.s1_tomatoCucumberHerb !== undefined ? this.s1_tomatoCucumberHerb : <any>null;
@@ -2232,6 +2235,7 @@ export interface IStatement extends IAuditableEntity {
     accountantType?: AccountantType;
     accountingYear?: number;
     status?: StatementStatus;
+    caseFileId?: number | null;
     isApproved?: boolean;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;

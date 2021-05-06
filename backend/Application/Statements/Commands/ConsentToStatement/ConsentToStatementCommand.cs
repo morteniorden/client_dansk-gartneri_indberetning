@@ -80,7 +80,7 @@ namespace Application.Statements.Commands.ConsentToStatement
         }
 
         _penneoClient.StartConnection();
-        var link = _penneoClient.SignDoc(new StandardSignDTO
+        var (link, id) = _penneoClient.SignDoc(new StandardSignDTO
         {
           DocPath = filePath,
           SignerName = currentUser.Email,
@@ -88,6 +88,8 @@ namespace Application.Statements.Commands.ConsentToStatement
           RequestFailureUrl = "http://localhost:3000",
           RequestSuccessUrl = "http://localhost:3000"
         });
+
+        statementEntity.CaseFileId = id;
 
         //statementEntity.IsApproved = true;
 
