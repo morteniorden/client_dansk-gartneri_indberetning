@@ -17,6 +17,48 @@ const AccountantSection: FC = () => {
   const { statement, fetchData } = useContext(EditStatementContext);
   const toast = useToast();
 
+  const waitForSigningCompletion = useCallback(
+    async (window: Window, caseFileid: number) => {
+      try {
+        const statementClient = await genStatementClient();
+        let iterations = 0;
+        const id = setInterval(async function () {
+          iterations++;
+          if (iterations > 20) {
+            clearInterval(id);
+            window.close();
+            toast({
+              title: t("statements.ApproveErrorTitle"),
+              description: t("statements.ApproveErrorText"),
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom-left"
+            });
+          }
+          const completed = await statementClient.checkIsSigned(statement.id, caseFileid);
+          console.log("Result: " + completed);
+          if (completed) {
+            clearInterval(id);
+            window.close();
+            toast({
+              title: t("statements.ApproveSuccessTitle"),
+              description: t("statements.ApproveSuccessText"),
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom-left"
+            });
+            fetchData();
+          }
+        }, 10000);
+      } catch (error) {
+        console.debug(error);
+      }
+    },
+    [statement, fetchData]
+  );
+
   const onSubmit = useCallback(async () => {
     try {
       const statementClient = await genStatementClient();
@@ -30,7 +72,7 @@ const AccountantSection: FC = () => {
         const y = window.top.innerHeight / 2 + window.top.screenY - h / 2;
         const x = window.top.innerWidth / 2 + window.top.screenX - w / 2;
         const win = window.open(
-          res,
+          res.link,
           "Signing",
           `width=${w}, height=${h}, left=${x}, top=${y}, toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes`
         );
@@ -44,36 +86,27 @@ const AccountantSection: FC = () => {
             ) {
               clearInterval(id);
               //ready to close the window.
-              await statementClient.checkCaseFileStatus(statement.id);
-              fetchData();
+              //fetchData();
+              waitForSigningCompletion(win, res.caseFileId);
             }
           } catch (error) {
             console.debug(error);
           }
         }, 500);
       }
-
+    } catch (err) {
+      logger.warn("statementClient.put Error", err);
       // toast({
-      //   title: t("statements.ApproveSuccessTitle"),
-      //   description: t("statements.ApproveSuccessText"),
-      //   status: "success",
+      //   title: t("statements.ApproveErrorTitle"),
+      //   description: t("statements.ApproveErrorText"),
+      //   status: "error",
       //   duration: 5000,
       //   isClosable: true,
       //   position: "bottom-left"
       // });
-      // fetchData();
-    } catch (err) {
-      logger.warn("statementClient.put Error", err);
-      toast({
-        title: t("statements.ApproveErrorTitle"),
-        description: t("statements.ApproveErrorText"),
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left"
-      });
+      console.log("fejl");
     }
-  }, [statement, file]);
+  }, [statement, file, waitForSigningCompletion]);
 
   const fetchConsent = useCallback(async () => {
     try {

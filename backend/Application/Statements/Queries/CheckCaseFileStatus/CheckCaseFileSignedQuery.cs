@@ -18,23 +18,22 @@ using Microsoft.Extensions.Options;
 namespace Application.Statements.Queries.CheckCasefileStatus
 {
   [Authenticated]
-  public class CheckCaseFileStatusQuery : IRequest
+  public class CheckCaseFileSignedQuery : IRequest<bool>
   {
     public int StatementId { get; set; }
+    public int CaseFileId { get; set; }
 
-    public class GetPenneoStatusQueryHandler : IRequestHandler<CheckCaseFileStatusQuery>
+    public class CheckCaseFileSignedQueryHandler : IRequestHandler<CheckCaseFileSignedQuery, bool>
     {
       private readonly IApplicationDbContext _context;
-      private readonly IMapper _mapper;
       private readonly IPenneoClient _penneoClient;
 
-      public GetPenneoStatusQueryHandler(IApplicationDbContext context, IMapper mapper, IPenneoClient penneoClient)
+      public CheckCaseFileSignedQueryHandler(IApplicationDbContext context, IPenneoClient penneoClient)
       {
         _context = context;
-        _mapper = mapper;
         _penneoClient = penneoClient;
       }
-      public async Task<Unit> Handle(CheckCaseFileStatusQuery request, CancellationToken cancellationToken)
+      public async Task<bool> Handle(CheckCaseFileSignedQuery request, CancellationToken cancellationToken)
       {
         var statement = await _context.Statements.FindAsync(request.StatementId);
 
@@ -44,19 +43,21 @@ namespace Application.Statements.Queries.CheckCasefileStatus
         }
 
         _penneoClient.StartConnection();
-        if (statement.Status != StatementStatus.SignedOff && statement.ClientCaseFileId.HasValue && _penneoClient.IsCaseFileCompleted(statement.ClientCaseFileId.GetValueOrDefault()))
+        var completed = _penneoClient.IsCaseFileSigned(request.CaseFileId);
+
+        if (completed && request.CaseFileId == statement.ClientCaseFileId && statement.Status != StatementStatus.SignedOff)
         {
           statement.Status = StatementStatus.SignedOff;
         }
 
-        if (!statement.IsApproved && statement.AccountantCaseFileId.HasValue && _penneoClient.IsCaseFileCompleted(statement.AccountantCaseFileId.GetValueOrDefault()))
+        if (completed && request.CaseFileId == statement.AccountantCaseFileId && !statement.IsApproved)
         {
           statement.IsApproved = true;
         }
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return completed;
       }
     }
   }

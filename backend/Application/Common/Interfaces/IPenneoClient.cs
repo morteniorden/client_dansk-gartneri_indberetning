@@ -6,6 +6,6 @@ namespace Application.Common.Interfaces
   {
     void StartConnection();
     (string, int?) SignDoc(StandardSignDTO dto);
-    bool IsCaseFileCompleted(int id);
+    bool IsCaseFileSigned(int id);
   }
 }

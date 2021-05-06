@@ -69,11 +69,11 @@ namespace Signing.Common
       return (link, myCaseFile.Id);
     }
 
-    public bool IsCaseFileCompleted(int id)
+    public bool IsCaseFileSigned(int id)
     {
       var query = new Query(connector);
       var myCaseFile = query.Find<CaseFile>(id);
-      return myCaseFile.GetStatus() == CaseFile.CaseFileStatus.Completed;
+      return myCaseFile.GetStatus() == CaseFile.CaseFileStatus.Signed || myCaseFile.GetStatus() == CaseFile.CaseFileStatus.Completed;
     }
   }
 }

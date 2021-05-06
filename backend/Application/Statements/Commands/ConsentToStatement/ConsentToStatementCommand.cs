@@ -17,12 +17,12 @@ using Microsoft.Extensions.Options;
 namespace Application.Statements.Commands.ConsentToStatement
 {
   [Authorize(Role = RoleEnum.Accountant)]
-  public class ConsentToStatementCommand : IRequest<string>
+  public class ConsentToStatementCommand : IRequest<GetSigningLinkDto>
   {
     [JsonIgnore]
     public StatementConsentDto Dto { get; set; }
 
-    public class ConsentToStatementCommandHandler : IRequestHandler<ConsentToStatementCommand, string>
+    public class ConsentToStatementCommandHandler : IRequestHandler<ConsentToStatementCommand, GetSigningLinkDto>
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUser;
@@ -39,7 +39,7 @@ namespace Application.Statements.Commands.ConsentToStatement
         _statementOptions = statementOptions.Value;
       }
 
-      public async Task<string> Handle(ConsentToStatementCommand request, CancellationToken cancellationToken)
+      public async Task<GetSigningLinkDto> Handle(ConsentToStatementCommand request, CancellationToken cancellationToken)
       {
         var statementEntity = await _context.Statements
           .Include(e => e.Accountant)
@@ -98,7 +98,11 @@ namespace Application.Statements.Commands.ConsentToStatement
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return link;
+        return new GetSigningLinkDto
+        {
+          Link = link,
+          CaseFileId = id.GetValueOrDefault()
+        };
         //return Unit.Value;
       }
     }

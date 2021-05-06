@@ -40,14 +40,14 @@ namespace Web.Controllers
       });
     }
 
-    [HttpGet("{id}/caseFileStatus")]
-    public async Task<ActionResult> CheckCaseFileStatus([FromRoute] int id)
+    [HttpGet("{id}/isSigned")]
+    public async Task<ActionResult<bool>> CheckIsSigned([FromRoute] int id, [FromQuery] int caseFileId)
     {
-      await Mediator.Send(new CheckCaseFileStatusQuery
+      return await Mediator.Send(new CheckCaseFileSignedQuery
       {
-        StatementId = id
+        StatementId = id,
+        CaseFileId = caseFileId
       });
-      return NoContent();
     }
 
     [HttpPost("statement")]
@@ -98,7 +98,7 @@ namespace Web.Controllers
 
     [HttpPut("{id}/consent")]
     [Consumes("multipart/form-data")]
-    public async Task<ActionResult<string>> ConsentToStatement([FromRoute] int id, IFormFile file)
+    public async Task<ActionResult<GetSigningLinkDto>> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
       return await Mediator.Send(new ConsentToStatementCommand
