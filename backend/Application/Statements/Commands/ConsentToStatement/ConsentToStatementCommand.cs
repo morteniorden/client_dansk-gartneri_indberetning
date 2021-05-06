@@ -28,13 +28,15 @@ namespace Application.Statements.Commands.ConsentToStatement
       private readonly ICurrentUserService _currentUser;
       private readonly FileDriveOptions _options;
       private readonly IPenneoClient _penneoClient;
+      private readonly StatementOptions _statementOptions;
 
-      public ConsentToStatementCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IOptions<FileDriveOptions> options, IPenneoClient penneoClient)
+      public ConsentToStatementCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IOptions<FileDriveOptions> options, IPenneoClient penneoClient, IOptions<StatementOptions> statementOptions)
       {
         _context = context;
         _currentUser = currentUser;
         _options = options.Value;
         _penneoClient = penneoClient;
+        _statementOptions = statementOptions.Value;
       }
 
       public async Task<string> Handle(ConsentToStatementCommand request, CancellationToken cancellationToken)
@@ -85,11 +87,11 @@ namespace Application.Statements.Commands.ConsentToStatement
           DocPath = filePath,
           SignerName = currentUser.Email,
           SignerCompany = statementEntity.Client.Name,
-          RequestFailureUrl = "http://localhost:3000",
-          RequestSuccessUrl = "http://localhost:3000"
+          RequestFailureUrl = _statementOptions.SigningFailureUrl,
+          RequestSuccessUrl = _statementOptions.SigningSuccessUrl
         });
 
-        statementEntity.CaseFileId = id;
+        statementEntity.AccountantCaseFileId = id;
 
         //statementEntity.IsApproved = true;
 

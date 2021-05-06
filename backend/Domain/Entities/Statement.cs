@@ -14,7 +14,8 @@ namespace Domain.Entities
     public AccountantType AccountantType { get; set; }
     public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
-    public int? CaseFileId { get; set; }
+    public int? ClientCaseFileId { get; set; }
+    public int? AccountantCaseFileId { get; set; }
     public bool IsApproved { get; set; }
 
     public int s1_mushrooms { get; set; }

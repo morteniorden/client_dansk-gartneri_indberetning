@@ -6,6 +6,7 @@ using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
+using Application.Statements.Queries.CheckCasefileStatus;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSVQuery;
@@ -31,12 +32,22 @@ namespace Web.Controllers
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<StatementDto>> getStatement([FromRoute] int id)
+    public async Task<ActionResult<StatementDto>> GetStatement([FromRoute] int id)
     {
       return await Mediator.Send(new GetStatementQuery
       {
         Id = id
       });
+    }
+
+    [HttpGet("{id}/caseFileStatus")]
+    public async Task<ActionResult> CheckCaseFileStatus([FromRoute] int id)
+    {
+      await Mediator.Send(new CheckCaseFileStatusQuery
+      {
+        StatementId = id
+      });
+      return NoContent();
     }
 
     [HttpPost("statement")]

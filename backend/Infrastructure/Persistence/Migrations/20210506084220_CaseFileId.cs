@@ -7,7 +7,13 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "CaseFileId",
+                name: "AccountantCaseFileId",
+                table: "Statements",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "ClientCaseFileId",
                 table: "Statements",
                 type: "int",
                 nullable: true);
@@ -16,7 +22,11 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CaseFileId",
+                name: "AccountantCaseFileId",
+                table: "Statements");
+
+            migrationBuilder.DropColumn(
+                name: "ClientCaseFileId",
                 table: "Statements");
         }
     }

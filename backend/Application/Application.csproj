@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Services\" />
-    <Folder Include="Statements\Queries\GetPenneoStatus\" />
   </ItemGroup>
 
 </Project>

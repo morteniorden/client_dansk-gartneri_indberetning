@@ -2,7 +2,6 @@ import { Box, Button, Center, Heading, HStack, Stack, Text, useToast } from "@ch
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
-import { useRouter } from "next/router";
 import { FC, useCallback, useContext, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import { genStatementClient } from "services/backend/apiClients";
@@ -30,22 +29,39 @@ const AccountantSection: FC = () => {
         const w = window.top.innerWidth * 0.6;
         const y = window.top.innerHeight / 2 + window.top.screenY - h / 2;
         const x = window.top.innerWidth / 2 + window.top.screenX - w / 2;
-        window.open(
+        const win = window.open(
           res,
           "Signing",
           `width=${w}, height=${h}, left=${x}, top=${y}, toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes`
         );
+        const id = setInterval(async function () {
+          //Try/catch because this will throw a cors error every half second.
+          try {
+            if (
+              win.closed ||
+              win.location.href.indexOf("/signingSuccess") < 0 ||
+              win.location.href.indexOf("/signingFailure") < 0
+            ) {
+              clearInterval(id);
+              //ready to close the window.
+              await statementClient.checkCaseFileStatus(statement.id);
+              fetchData();
+            }
+          } catch (error) {
+            console.debug(error);
+          }
+        }, 500);
       }
 
-      toast({
-        title: t("statements.ApproveSuccessTitle"),
-        description: t("statements.ApproveSuccessText"),
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left"
-      });
-      fetchData();
+      // toast({
+      //   title: t("statements.ApproveSuccessTitle"),
+      //   description: t("statements.ApproveSuccessText"),
+      //   status: "success",
+      //   duration: 5000,
+      //   isClosable: true,
+      //   position: "bottom-left"
+      // });
+      // fetchData();
     } catch (err) {
       logger.warn("statementClient.put Error", err);
       toast({

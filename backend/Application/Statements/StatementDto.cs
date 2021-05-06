@@ -16,6 +16,8 @@ namespace Application.Statements
     public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
     public bool IsApproved { get; set; }
+    public int? ClientCaseFileId { get; set; }
+    public int? AccountantCaseFileId { get; set; }
 
     public int s1_mushrooms { get; set; }
     public int s1_tomatoCucumberHerb { get; set; }

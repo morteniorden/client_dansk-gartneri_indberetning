@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210506073303_CaseFileId")]
+    [Migration("20210506084220_CaseFileId")]
     partial class CaseFileId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,6 +112,9 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AccountantCaseFileId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("AccountantId")
                         .HasColumnType("int");
 
@@ -121,7 +124,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("AccountingYear")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CaseFileId")
+                    b.Property<int?>("ClientCaseFileId")
                         .HasColumnType("int");
 
                     b.Property<int>("ClientId")
