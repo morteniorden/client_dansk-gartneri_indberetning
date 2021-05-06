@@ -24,7 +24,8 @@ const AccountantSection: FC = () => {
         let iterations = 0;
         const id = setInterval(async function () {
           iterations++;
-          if (iterations > 20) {
+          //Wait maximum 10 seconds
+          if (iterations > 5) {
             clearInterval(id);
             window.close();
             toast({
@@ -37,7 +38,6 @@ const AccountantSection: FC = () => {
             });
           }
           const completed = await statementClient.checkIsSigned(statement.id, caseFileid);
-          console.log("Result: " + completed);
           if (completed) {
             clearInterval(id);
             window.close();
@@ -51,7 +51,7 @@ const AccountantSection: FC = () => {
             });
             fetchData();
           }
-        }, 10000);
+        }, 2000);
       } catch (error) {
         console.debug(error);
       }
@@ -96,14 +96,14 @@ const AccountantSection: FC = () => {
       }
     } catch (err) {
       logger.warn("statementClient.put Error", err);
-      // toast({
-      //   title: t("statements.ApproveErrorTitle"),
-      //   description: t("statements.ApproveErrorText"),
-      //   status: "error",
-      //   duration: 5000,
-      //   isClosable: true,
-      //   position: "bottom-left"
-      // });
+      toast({
+        title: t("statements.ApproveErrorTitle"),
+        description: t("statements.ApproveErrorText"),
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left"
+      });
       console.log("fejl");
     }
   }, [statement, file, waitForSigningCompletion]);
