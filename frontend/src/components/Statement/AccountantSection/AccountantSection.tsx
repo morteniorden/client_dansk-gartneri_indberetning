@@ -2,6 +2,7 @@ import { Box, Button, Center, Heading, HStack, Stack, Text, useToast } from "@ch
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
+import { useSignoffWindow } from "hooks/useSignoffWindow";
 import { FC, useCallback, useContext, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import { genStatementClient } from "services/backend/apiClients";
@@ -16,93 +17,18 @@ const AccountantSection: FC = () => {
   const [file, setFile] = useState<File>(null);
   const { statement, fetchData } = useContext(EditStatementContext);
   const toast = useToast();
-
-  const waitForSigningCompletion = useCallback(
-    async (window: Window, caseFileid: number) => {
-      try {
-        const statementClient = await genStatementClient();
-        let iterations = 0;
-        const id = setInterval(async function () {
-          iterations++;
-          //Wait maximum 10 seconds
-          if (iterations > 5) {
-            clearInterval(id);
-            window.close();
-            toast({
-              title: t("statements.ApproveErrorTitle"),
-              description: t("statements.ApproveErrorText"),
-              status: "error",
-              duration: 5000,
-              isClosable: true,
-              position: "bottom-left"
-            });
-          }
-          const completed = await statementClient.checkIsSigned(statement.id, caseFileid);
-          if (completed) {
-            clearInterval(id);
-            window.close();
-            toast({
-              title: t("statements.ApproveSuccessTitle"),
-              description: t("statements.ApproveSuccessText"),
-              status: "success",
-              duration: 5000,
-              isClosable: true,
-              position: "bottom-left"
-            });
-            fetchData();
-          }
-        }, 2000);
-      } catch (error) {
-        window.close();
-        console.error(error);
-        toast({
-          title: t("statements.ApproveSuccessTitle"),
-          description: t("statements.ApproveSuccessText"),
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left"
-        });
-      }
-    },
-    [statement, fetchData]
-  );
+  const { openSignoffWindow } = useSignoffWindow();
+  const [isSigning, setIsSigning] = useState(false);
 
   const onSubmit = useCallback(async () => {
+    setIsSigning(true);
     try {
       const statementClient = await genStatementClient();
       const res = await statementClient.consentToStatement(statement.id, {
         data: file,
         fileName: file.name
       });
-      if (res) {
-        const h = window.top.innerHeight * 0.6;
-        const w = window.top.innerWidth * 0.6;
-        const y = window.top.innerHeight / 2 + window.top.screenY - h / 2;
-        const x = window.top.innerWidth / 2 + window.top.screenX - w / 2;
-        const win = window.open(
-          res.link,
-          "Signing",
-          `width=${w}, height=${h}, left=${x}, top=${y}, toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes`
-        );
-        const id = setInterval(async function () {
-          //Try/catch because this will throw a cors error every half second.
-          try {
-            if (
-              win.closed ||
-              win.location.href.indexOf("/signingSuccess") < 0 ||
-              win.location.href.indexOf("/signingFailure") < 0
-            ) {
-              clearInterval(id);
-              //ready to close the window.
-              //fetchData();
-              waitForSigningCompletion(win, res.caseFileId);
-            }
-          } catch (error) {
-            console.debug(error);
-          }
-        }, 500);
-      }
+      openSignoffWindow(res.link, res.caseFileId, statement.id, fetchData);
     } catch (err) {
       logger.warn("statementClient.put Error", err);
       toast({
@@ -113,9 +39,9 @@ const AccountantSection: FC = () => {
         isClosable: true,
         position: "bottom-left"
       });
-      console.log("fejl");
     }
-  }, [statement, file, waitForSigningCompletion]);
+    setIsSigning(false);
+  }, [statement, file]);
 
   const fetchConsent = useCallback(async () => {
     try {
@@ -166,7 +92,11 @@ const AccountantSection: FC = () => {
             </Center>
             <DropZone file={file} setFile={setFile} />
             <Center>
-              <Button colorScheme="green" onClick={onSubmit} disabled={file == null}>
+              <Button
+                colorScheme="green"
+                onClick={onSubmit}
+                disabled={file == null}
+                isLoading={isSigning}>
                 {t("statements.accountantSection.signAndApprove")}
               </Button>
             </Center>
