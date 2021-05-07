@@ -1,6 +1,7 @@
 using Infrastructure.Persistence;
 using System;
 using Application.Common.Interfaces;
+using Application.Statements;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -15,6 +16,7 @@ namespace Application.UnitTests
     public Mock<ITokenService> TokenServiceMock;
     public Mock<IMailService> MailServiceMock;
     public Mock<IBackgroundJobClient> BackGroundJobClientMock;
+    public Mock<IPenneoClient> PenneoClientMock;
 
 
     public CommandTestBase()
@@ -29,10 +31,11 @@ namespace Application.UnitTests
       AccessorMock.Setup(req => req.HttpContext.Request.Host).Returns(new HostString("localhost", 3000));
 
       TokenServiceMock = new Mock<ITokenService>();
-
       MailServiceMock = new Mock<IMailService>();
-
       BackGroundJobClientMock = new Mock<IBackgroundJobClient>();
+
+      PenneoClientMock = new Mock<IPenneoClient>();
+      PenneoClientMock.Setup(m => m.SignDoc(new StandardSignDTO())).Returns(("test", 1));
     }
 
     public ApplicationDbContext Context { get; }
