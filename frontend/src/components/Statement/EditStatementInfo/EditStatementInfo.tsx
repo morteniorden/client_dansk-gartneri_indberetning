@@ -25,7 +25,6 @@ const EditStatementInfo: FC = () => {
 
       if (data && data.length > 0) {
         setData(data);
-        setStatementInfo(data.sort((a, b) => a.accountingYear - b.accountingYear)[0]);
       } else logger.info("statementClient.get no data");
     } catch (err) {
       logger.warn("statementClient.get Error", err);
@@ -36,6 +35,11 @@ const EditStatementInfo: FC = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    if (data.length > 0)
+      setStatementInfo(data.sort((a, b) => a.accountingYear - b.accountingYear)[0]);
+  }, [data.length]);
 
   return (
     <BasicLayout maxW="1000px">
@@ -52,7 +56,13 @@ const EditStatementInfo: FC = () => {
           </Button>
         </Flex>
         <FetchingSpinner isFetching={fetching} text={t("common.fetchingData")} />
-        {statementInfo && <StatementInfoForm form={statementInfo} setSaving={b => setSaving(b)} />}
+        {statementInfo && (
+          <StatementInfoForm
+            form={statementInfo}
+            setSaving={b => setSaving(b)}
+            onSave={fetchData}
+          />
+        )}
       </Stack>
     </BasicLayout>
   );

@@ -1,6 +1,6 @@
 import { Heading, Stack, useToast } from "@chakra-ui/react";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { genStatementClient } from "services/backend/apiClients";
 import { IStatementInfoDto, UpdateStatementInfoCommand } from "services/backend/nswagts";
@@ -14,22 +14,31 @@ import StatementInfoTableRow from "./StatementInfoTableRow";
 interface Props {
   form: IStatementInfoDto;
   setSaving: (b: boolean) => void;
+  onSave: () => void;
 }
 
-const StatementInfoForm: FC<Props> = ({ form, setSaving }) => {
+const StatementInfoForm: FC<Props> = ({ form, setSaving, onSave }) => {
   const { t } = useLocales();
-  const { handleSubmit, control } = useForm<IStatementInfoDto>();
+  const { handleSubmit, control, reset } = useForm<IStatementInfoDto>();
   const toast = useToast();
+
+  useEffect(() => {
+    reset(form);
+    console.log("resetting!");
+  }, [form.accountingYear]);
 
   const saveChanges = useCallback(
     async (data: IStatementInfoDto) => {
       setSaving(true);
       try {
         const statementClient = await genStatementClient();
+        const newInfo = { ...form, ...data };
         const command = new UpdateStatementInfoCommand({
-          newInfo: { ...form, ...data }
+          newInfo: newInfo
         });
-        await statementClient.updateStatementInfo(form.accountingYear, command);
+        console.log(command);
+        await statementClient.updateStatementInfo(newInfo.accountingYear, command);
+        onSave();
         toast({
           title: t("common.saveSuccessTitle"),
           description: t("common.saveSuccessText"),
