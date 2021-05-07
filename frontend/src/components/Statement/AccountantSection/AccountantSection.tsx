@@ -53,7 +53,16 @@ const AccountantSection: FC = () => {
           }
         }, 2000);
       } catch (error) {
-        console.debug(error);
+        window.close();
+        console.error(error);
+        toast({
+          title: t("statements.ApproveSuccessTitle"),
+          description: t("statements.ApproveSuccessText"),
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
       }
     },
     [statement, fetchData]
