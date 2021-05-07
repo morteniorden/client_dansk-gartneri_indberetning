@@ -16,15 +16,6 @@ namespace Signing
     {
       services.AddScoped<IPenneoClient, PenneoClient>();
 
-
-      //TODO Add needed authentication here
-      // services.AddAuthentication(options => {
-      //     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-      // })
-      // .AddJwtBearer(options => {
-      //     ///
-      // });
-
       return services;
     }
   }
