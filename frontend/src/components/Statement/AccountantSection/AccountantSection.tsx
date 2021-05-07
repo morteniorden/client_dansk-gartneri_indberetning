@@ -29,7 +29,7 @@ const AccountantSection: FC = () => {
         fileName: file.name
       });
       openSignoffWindow(
-        res.link,
+        res.url,
         res.caseFileId,
         statement.id,
         () => {

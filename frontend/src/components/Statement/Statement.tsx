@@ -126,7 +126,7 @@ const Statement: FC<Props> = ({ id }) => {
         const res = await statementClient.signOffStatement(id);
 
         openSignoffWindow(
-          res.link,
+          res.url,
           res.caseFileId,
           statement.id,
           () => {

@@ -17,12 +17,12 @@ using Microsoft.Extensions.Options;
 namespace Application.Statements.Commands.ConsentToStatement
 {
   [Authorize(Role = RoleEnum.Accountant)]
-  public class ConsentToStatementCommand : IRequest<GetSigningLinkDto>
+  public class ConsentToStatementCommand : IRequest<GetSigningUrlDto>
   {
     [JsonIgnore]
     public StatementConsentDto Dto { get; set; }
 
-    public class ConsentToStatementCommandHandler : IRequestHandler<ConsentToStatementCommand, GetSigningLinkDto>
+    public class ConsentToStatementCommandHandler : IRequestHandler<ConsentToStatementCommand, GetSigningUrlDto>
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUser;
@@ -39,7 +39,7 @@ namespace Application.Statements.Commands.ConsentToStatement
         _statementOptions = statementOptions.Value;
       }
 
-      public async Task<GetSigningLinkDto> Handle(ConsentToStatementCommand request, CancellationToken cancellationToken)
+      public async Task<GetSigningUrlDto> Handle(ConsentToStatementCommand request, CancellationToken cancellationToken)
       {
         var statementEntity = await _context.Statements
           .Include(e => e.Accountant)
@@ -83,7 +83,7 @@ namespace Application.Statements.Commands.ConsentToStatement
         }
 
         _penneoClient.StartConnection();
-        var (link, id) = _penneoClient.SignDoc(new StandardSignDTO
+        var (url, id) = _penneoClient.SignDoc(new StandardSignDTO
         {
           DocPath = filePath,
           SignerName = currentUser.Email, //TODO: Is email OK to use for the accountant?
@@ -97,9 +97,9 @@ namespace Application.Statements.Commands.ConsentToStatement
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new GetSigningLinkDto
+        return new GetSigningUrlDto
         {
-          Link = link,
+          Url = url,
           CaseFileId = id.GetValueOrDefault()
         };
       }

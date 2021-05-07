@@ -1,8 +1,8 @@
 namespace Application.Statements
 {
-  public class GetSigningLinkDto
+  public class GetSigningUrlDto
   {
-    public string Link { get; set; }
+    public string Url { get; set; }
     public int CaseFileId { get; set; }
   }
 }

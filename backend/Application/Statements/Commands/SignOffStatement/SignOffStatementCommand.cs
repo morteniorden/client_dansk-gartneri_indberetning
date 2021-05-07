@@ -16,12 +16,12 @@ using Microsoft.Extensions.Options;
 namespace Application.Statements.Commands.SignOffStatement
 {
   [Authenticated]
-  public class SignOffStatementCommand : IRequest<GetSigningLinkDto>
+  public class SignOffStatementCommand : IRequest<GetSigningUrlDto>
   {
     [JsonIgnore]
     public int Id { get; set; }
 
-    public class SignOffStatementCommandHandler : IRequestHandler<SignOffStatementCommand, GetSigningLinkDto>
+    public class SignOffStatementCommandHandler : IRequestHandler<SignOffStatementCommand, GetSigningUrlDto>
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUser;
@@ -36,7 +36,7 @@ namespace Application.Statements.Commands.SignOffStatement
         _penneoClient = penneoClient;
       }
 
-      public async Task<GetSigningLinkDto> Handle(SignOffStatementCommand request, CancellationToken cancellationToken)
+      public async Task<GetSigningUrlDto> Handle(SignOffStatementCommand request, CancellationToken cancellationToken)
       {
         var statementEntity = await _context.Statements
           .Include(e => e.Client)
@@ -70,7 +70,7 @@ namespace Application.Statements.Commands.SignOffStatement
         }
 
         _penneoClient.StartConnection();
-        var (link, id) = _penneoClient.SignDoc(new StandardSignDTO
+        var (url, id) = _penneoClient.SignDoc(new StandardSignDTO
         {
           DocPath = _options.ClientSigningPdfPath,
           SignerName = currentUser.Name, //TODO: Name, id or email?
@@ -84,9 +84,9 @@ namespace Application.Statements.Commands.SignOffStatement
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new GetSigningLinkDto
+        return new GetSigningUrlDto
         {
-          Link = link,
+          Url = url,
           CaseFileId = id.GetValueOrDefault()
         };
       }

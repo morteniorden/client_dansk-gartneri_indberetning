@@ -494,10 +494,10 @@ export interface IStatementClient {
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     checkIsSigned(id: number, caseFileId?: number | undefined): Promise<boolean>;
     createStatement(command: CreateStatementCommand): Promise<number>;
-    signOffStatement(id: number): Promise<GetSigningLinkDto>;
+    signOffStatement(id: number): Promise<GetSigningUrlDto>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
-    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningLinkDto>;
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
 }
 
@@ -755,7 +755,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<number>(<any>null);
     }
 
-    signOffStatement(id: number): Promise<GetSigningLinkDto> {
+    signOffStatement(id: number): Promise<GetSigningUrlDto> {
         let url_ = this.baseUrl + "/api/Statement/{id}/signoff";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -776,14 +776,14 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processSignOffStatement(response: Response): Promise<GetSigningLinkDto> {
+    protected processSignOffStatement(response: Response): Promise<GetSigningUrlDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetSigningLinkDto.fromJS(resultData200);
+            result200 = GetSigningUrlDto.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -791,7 +791,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<GetSigningLinkDto>(<any>null);
+        return Promise.resolve<GetSigningUrlDto>(<any>null);
     }
 
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto> {
@@ -869,7 +869,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<FileResponse>(<any>null);
     }
 
-    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningLinkDto> {
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto> {
         let url_ = this.baseUrl + "/api/Statement/{id}/consent";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -895,14 +895,14 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processConsentToStatement(response: Response): Promise<GetSigningLinkDto> {
+    protected processConsentToStatement(response: Response): Promise<GetSigningUrlDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetSigningLinkDto.fromJS(resultData200);
+            result200 = GetSigningUrlDto.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -910,7 +910,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<GetSigningLinkDto>(<any>null);
+        return Promise.resolve<GetSigningUrlDto>(<any>null);
     }
 
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto> {
@@ -2536,11 +2536,11 @@ export interface IUpdateStatementCommand {
     statementDto?: IStatementDto | null;
 }
 
-export class GetSigningLinkDto implements IGetSigningLinkDto {
-    link?: string | null;
+export class GetSigningUrlDto implements IGetSigningUrlDto {
+    url?: string | null;
     caseFileId?: number;
 
-    constructor(data?: IGetSigningLinkDto) {
+    constructor(data?: IGetSigningUrlDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2551,28 +2551,28 @@ export class GetSigningLinkDto implements IGetSigningLinkDto {
 
     init(_data?: any) {
         if (_data) {
-            this.link = _data["link"] !== undefined ? _data["link"] : <any>null;
+            this.url = _data["url"] !== undefined ? _data["url"] : <any>null;
             this.caseFileId = _data["caseFileId"] !== undefined ? _data["caseFileId"] : <any>null;
         }
     }
 
-    static fromJS(data: any): GetSigningLinkDto {
+    static fromJS(data: any): GetSigningUrlDto {
         data = typeof data === 'object' ? data : {};
-        let result = new GetSigningLinkDto();
+        let result = new GetSigningUrlDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["link"] = this.link !== undefined ? this.link : <any>null;
+        data["url"] = this.url !== undefined ? this.url : <any>null;
         data["caseFileId"] = this.caseFileId !== undefined ? this.caseFileId : <any>null;
         return data; 
     }
 }
 
-export interface IGetSigningLinkDto {
-    link?: string | null;
+export interface IGetSigningUrlDto {
+    url?: string | null;
     caseFileId?: number;
 }
 

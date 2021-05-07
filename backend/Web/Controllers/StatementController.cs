@@ -66,7 +66,7 @@ namespace Web.Controllers
     }
 
     [HttpPut("{id}/signoff")]
-    public async Task<GetSigningLinkDto> SignOffStatement([FromRoute] int id) { 
+    public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id) { 
     
       return await Mediator.Send(new SignOffStatementCommand
       {
@@ -96,7 +96,7 @@ namespace Web.Controllers
 
     [HttpPut("{id}/consent")]
     [Consumes("multipart/form-data")]
-    public async Task<ActionResult<GetSigningLinkDto>> ConsentToStatement([FromRoute] int id, IFormFile file)
+    public async Task<ActionResult<GetSigningUrlDto>> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
       return await Mediator.Send(new ConsentToStatementCommand
