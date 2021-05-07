@@ -54,7 +54,7 @@ const ConfirmSignOffModal: FC = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{t("accounts.addAccount")}</ModalHeader>
+          <ModalHeader>{t("statements.signOff")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text>{t("statements.confirmSignOffText")}</Text>
