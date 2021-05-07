@@ -50,7 +50,7 @@ namespace Application.Statements.Queries.GetMyStatements
           throw new ForbiddenAccessException();
         }
 
-        var file = Directory.EnumerateFiles(_options.StatementPath, statement.Id + ".*")
+        var file = Directory.EnumerateFiles(_options.ConsentPath, statement.Id + ".*")
           .FirstOrDefault();
 
         if (file == null)

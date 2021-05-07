@@ -69,7 +69,7 @@ namespace Application.Statements.Commands.ConsentToStatement
 
         string fileType = request.Dto.File.ContentType.Substring(12);
         var filename = request.Dto.StatementId + "." + fileType;
-        string filePath = Path.Combine(_options.StatementPath, filename);
+        string filePath = Path.Combine(_options.ConsentPath, filename);
 
         //TODO: Not sure if we should prevent writing the file, if one already exists
         //if (File.Exists(filePath))
