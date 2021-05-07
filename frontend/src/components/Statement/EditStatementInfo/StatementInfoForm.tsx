@@ -24,7 +24,6 @@ const StatementInfoForm: FC<Props> = ({ form, setSaving, onSave }) => {
 
   useEffect(() => {
     reset(form);
-    console.log("resetting!");
   }, [form.accountingYear]);
 
   const saveChanges = useCallback(
