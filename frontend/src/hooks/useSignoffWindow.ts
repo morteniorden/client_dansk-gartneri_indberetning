@@ -1,19 +1,27 @@
-import { useToast } from "@chakra-ui/toast";
 import { useCallback } from "react";
 import { genStatementClient } from "services/backend/apiClients";
 
 import { useLocales } from "./useLocales";
 
 type SignoffHook = {
-  openSignoffWindow: (url: string, caseFileId: number, statementId: number, cb: () => void) => void;
+  openSignoffWindow: (
+    url: string,
+    caseFileId: number,
+    statementId: number,
+    onSuccess: () => void,
+    onFailure: () => void
+  ) => void;
 };
 
 export const useSignoffWindow = (): SignoffHook => {
-  const { t } = useLocales();
-  const toast = useToast();
-
   const openSignoffWindow = useCallback(
-    (url: string, caseFileId: number, statementId: number, cb: () => void) => {
+    (
+      url: string,
+      caseFileId: number,
+      statementId: number,
+      onSuccess: () => void,
+      onFailure: () => void
+    ) => {
       const h = window.top.innerHeight * 0.6;
       const w = window.top.innerWidth * 0.6;
       const y = window.top.innerHeight / 2 + window.top.screenY - h / 2;
@@ -32,7 +40,7 @@ export const useSignoffWindow = (): SignoffHook => {
             win.location.href.indexOf("/signingFailure") < 0
           ) {
             clearInterval(id);
-            waitForSigningCompletion(win, caseFileId, statementId, cb);
+            waitForSigningCompletion(win, caseFileId, statementId, onSuccess, onFailure);
           }
         } catch (error) {
           console.debug(error);
@@ -43,7 +51,13 @@ export const useSignoffWindow = (): SignoffHook => {
   );
 
   const waitForSigningCompletion = useCallback(
-    async (window: Window, caseFileid: number, statementId: number, cb: () => void) => {
+    async (
+      window: Window,
+      caseFileid: number,
+      statementId: number,
+      onSucces: () => void,
+      onFailure: () => void
+    ) => {
       try {
         const statementClient = await genStatementClient();
         let iterations = 0;
@@ -53,43 +67,20 @@ export const useSignoffWindow = (): SignoffHook => {
           if (iterations > 5) {
             clearInterval(id);
             window.close();
-            toast({
-              title: t("statements.ApproveErrorTitle"),
-              description: t("statements.ApproveErrorText"),
-              status: "error",
-              duration: 5000,
-              isClosable: true,
-              position: "bottom-left"
-            });
+            onFailure();
           }
           //Call backend to check if the caseFile has been signed
           const completed = await statementClient.checkIsSigned(statementId, caseFileid);
           if (completed) {
             clearInterval(id);
             window.close();
-            toast({
-              title: t("statements.ApproveSuccessTitle"),
-              description: t("statements.ApproveSuccessText"),
-              status: "success",
-              duration: 5000,
-              isClosable: true,
-              position: "bottom-left"
-            });
-            //Call callback
-            cb();
+            onSucces();
           }
         }, 2000);
       } catch (error) {
         window.close();
         console.error(error);
-        toast({
-          title: t("statements.ApproveSuccessTitle"),
-          description: t("statements.ApproveSuccessText"),
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left"
-        });
+        onFailure();
       }
     },
     []

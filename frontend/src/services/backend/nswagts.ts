@@ -494,7 +494,7 @@ export interface IStatementClient {
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     checkIsSigned(id: number, caseFileId?: number | undefined): Promise<boolean>;
     createStatement(command: CreateStatementCommand): Promise<number>;
-    signOffStatement(id: number): Promise<FileResponse>;
+    signOffStatement(id: number): Promise<GetSigningLinkDto>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningLinkDto>;
@@ -755,7 +755,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<number>(<any>null);
     }
 
-    signOffStatement(id: number): Promise<FileResponse> {
+    signOffStatement(id: number): Promise<GetSigningLinkDto> {
         let url_ = this.baseUrl + "/api/Statement/{id}/signoff";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -765,7 +765,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         let options_ = <RequestInit>{
             method: "PUT",
             headers: {
-                "Accept": "application/octet-stream"
+                "Accept": "application/json"
             }
         };
 
@@ -776,20 +776,22 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processSignOffStatement(response: Response): Promise<FileResponse> {
+    protected processSignOffStatement(response: Response): Promise<GetSigningLinkDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetSigningLinkDto.fromJS(resultData200);
+            return result200;
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(<any>null);
+        return Promise.resolve<GetSigningLinkDto>(<any>null);
     }
 
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto> {
@@ -2534,46 +2536,6 @@ export interface IUpdateStatementCommand {
     statementDto?: IStatementDto | null;
 }
 
-export class CSVResponseDto implements ICSVResponseDto {
-    fileName?: string | null;
-    content?: string | null;
-
-    constructor(data?: ICSVResponseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.fileName = _data["fileName"] !== undefined ? _data["fileName"] : <any>null;
-            this.content = _data["content"] !== undefined ? _data["content"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): CSVResponseDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CSVResponseDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["fileName"] = this.fileName !== undefined ? this.fileName : <any>null;
-        data["content"] = this.content !== undefined ? this.content : <any>null;
-        return data; 
-    }
-}
-
-export interface ICSVResponseDto {
-    fileName?: string | null;
-    content?: string | null;
-}
-
 export class GetSigningLinkDto implements IGetSigningLinkDto {
     link?: string | null;
     caseFileId?: number;
@@ -2612,6 +2574,46 @@ export class GetSigningLinkDto implements IGetSigningLinkDto {
 export interface IGetSigningLinkDto {
     link?: string | null;
     caseFileId?: number;
+}
+
+export class CSVResponseDto implements ICSVResponseDto {
+    fileName?: string | null;
+    content?: string | null;
+
+    constructor(data?: ICSVResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.fileName = _data["fileName"] !== undefined ? _data["fileName"] : <any>null;
+            this.content = _data["content"] !== undefined ? _data["content"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CSVResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CSVResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fileName"] = this.fileName !== undefined ? this.fileName : <any>null;
+        data["content"] = this.content !== undefined ? this.content : <any>null;
+        return data; 
+    }
+}
+
+export interface ICSVResponseDto {
+    fileName?: string | null;
+    content?: string | null;
 }
 
 export class ConsentFileDto implements IConsentFileDto {

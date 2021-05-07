@@ -28,7 +28,32 @@ const AccountantSection: FC = () => {
         data: file,
         fileName: file.name
       });
-      openSignoffWindow(res.link, res.caseFileId, statement.id, fetchData);
+      openSignoffWindow(
+        res.link,
+        res.caseFileId,
+        statement.id,
+        () => {
+          toast({
+            title: t("statements.ApproveSuccessTitle"),
+            description: t("statements.ApproveSuccessText"),
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom-left"
+          });
+          fetchData();
+        },
+        () => {
+          toast({
+            title: t("statements.ApproveErrorTitle"),
+            description: t("statements.ApproveErrorText"),
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom-left"
+          });
+        }
+      );
     } catch (err) {
       logger.warn("statementClient.put Error", err);
       toast({

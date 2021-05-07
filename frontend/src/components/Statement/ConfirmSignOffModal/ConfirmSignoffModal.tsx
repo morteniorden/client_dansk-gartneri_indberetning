@@ -21,7 +21,7 @@ const ConfirmSignOffModal: FC = () => {
   const { buttonFont } = useColors();
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { statement, total } = useContext(EditStatementContext);
+  const { statement, total, isSigning } = useContext(EditStatementContext);
 
   const maxTotal = 100000;
 
@@ -62,7 +62,7 @@ const ConfirmSignOffModal: FC = () => {
           <ModalFooter>
             <HStack>
               <Button onClick={onClose}>{t("actions.back")}</Button>
-              <Button colorScheme="green" type="submit" form="statement_form">
+              <Button colorScheme="green" type="submit" form="statement_form" isLoading={isSigning}>
                 {t("statements.confirmSignOffButton")}
               </Button>
             </HStack>

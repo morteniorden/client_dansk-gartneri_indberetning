@@ -71,10 +71,11 @@ namespace Application.Statements.Commands.ConsentToStatement
         var filename = request.Dto.StatementId + "." + fileType;
         string filePath = Path.Combine(_options.StatementPath, filename);
 
-        if (File.Exists(filePath))
-        {
-          //throw new ArgumentException("Consent file for statement with id " + request.Dto.StatementId + " already exists.");
-        }
+        //TODO: Not sure if we should prevent writing the file, if one already exists
+        //if (File.Exists(filePath))
+        //{
+        //  throw new ArgumentException("Consent file for statement with id " + request.Dto.StatementId + " already exists.");
+        //}
 
         using (Stream fileStream = new FileStream(filePath, FileMode.Create))
         {
@@ -85,15 +86,13 @@ namespace Application.Statements.Commands.ConsentToStatement
         var (link, id) = _penneoClient.SignDoc(new StandardSignDTO
         {
           DocPath = filePath,
-          SignerName = currentUser.Email,
-          SignerCompany = statementEntity.Client.Name,
+          SignerName = currentUser.Email, //TODO: Is email OK to use for the accountant?
+          SignerCompany = statementEntity.Client.Name, //TODO: Name, id or email?
           RequestFailureUrl = _statementOptions.SigningFailureUrl,
           RequestSuccessUrl = _statementOptions.SigningSuccessUrl
         });
 
         statementEntity.AccountantCaseFileId = id;
-
-        //statementEntity.IsApproved = true;
 
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
@@ -103,7 +102,6 @@ namespace Application.Statements.Commands.ConsentToStatement
           Link = link,
           CaseFileId = id.GetValueOrDefault()
         };
-        //return Unit.Value;
       }
     }
   }

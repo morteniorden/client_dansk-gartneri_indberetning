@@ -66,14 +66,12 @@ namespace Web.Controllers
     }
 
     [HttpPut("{id}/signoff")]
-    public async Task<ActionResult> SignOffStatement([FromRoute] int id) { 
+    public async Task<GetSigningLinkDto> SignOffStatement([FromRoute] int id) { 
     
-      await Mediator.Send(new SignOffStatementCommand
+      return await Mediator.Send(new SignOffStatementCommand
       {
         Id = id
       });
-
-      return NoContent();
     }
 
     [HttpGet("csv")]
