@@ -74,6 +74,7 @@ const StatementReadonlyModal: FC<Props> = ({ id }) => {
                     setStatement: null,
                     save: null,
                     isSaving: false,
+                    isSigning: false,
                     submit: null,
                     readonly: true,
                     fetchData: null,

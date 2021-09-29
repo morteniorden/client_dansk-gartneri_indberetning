@@ -6,6 +6,7 @@ using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
+using Application.Statements.Queries.CheckCasefileStatus;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSVQuery;
@@ -31,11 +32,21 @@ namespace Web.Controllers
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<StatementDto>> getStatement([FromRoute] int id)
+    public async Task<ActionResult<StatementDto>> GetStatement([FromRoute] int id)
     {
       return await Mediator.Send(new GetStatementQuery
       {
         Id = id
+      });
+    }
+
+    [HttpGet("{id}/isSigned")]
+    public async Task<ActionResult<bool>> CheckIsSigned([FromRoute] int id, [FromQuery] int caseFileId)
+    {
+      return await Mediator.Send(new CheckCaseFileSignedQuery
+      {
+        StatementId = id,
+        CaseFileId = caseFileId
       });
     }
 
@@ -55,14 +66,12 @@ namespace Web.Controllers
     }
 
     [HttpPut("{id}/signoff")]
-    public async Task<ActionResult> SignOffStatement([FromRoute] int id) { 
+    public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id) { 
     
-      await Mediator.Send(new SignOffStatementCommand
+      return await Mediator.Send(new SignOffStatementCommand
       {
         Id = id
       });
-
-      return NoContent();
     }
 
     [HttpGet("csv")]
@@ -87,10 +96,10 @@ namespace Web.Controllers
 
     [HttpPut("{id}/consent")]
     [Consumes("multipart/form-data")]
-    public async Task<ActionResult> ConsentToStatement([FromRoute] int id, IFormFile file)
+    public async Task<ActionResult<GetSigningUrlDto>> ConsentToStatement([FromRoute] int id, IFormFile file)
     {
 
-      await Mediator.Send(new ConsentToStatementCommand
+      return await Mediator.Send(new ConsentToStatementCommand
       {
         Dto = new StatementConsentDto()
         {
@@ -99,7 +108,7 @@ namespace Web.Controllers
         }
       });
 
-      return NoContent();
+      //return NoContent();
     }
 
     [HttpGet("consent")]

@@ -57,7 +57,7 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType): ReactElement =>
         <ChakraProvider theme={theme}>
           <AuthContext.Provider value={auth}>
             {/* <SignalRContext.Provider value={{ connection }}> */}
-            {router.pathname == "/changepassword" ? (
+            {router.pathname == "/changepassword" || router.pathname == "/processingsignoff" ? (
               <Component {...pageProps} />
             ) : auth.authStage == AuthStage.AUTHENTICATED ? (
               <Component {...pageProps} />

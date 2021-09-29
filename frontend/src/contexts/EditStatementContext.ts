@@ -6,6 +6,7 @@ type ContextType = {
   setStatement: Dispatch<SetStateAction<IStatementDto>>;
   save: () => void;
   isSaving: boolean;
+  isSigning: boolean;
   submit: (data: IStatementDto) => Promise<void>;
   readonly: boolean;
   fetchData: () => Promise<void>;
@@ -19,6 +20,7 @@ export const EditStatementContext = createContext<ContextType>({
   setStatement: () => null,
   save: () => null,
   isSaving: false,
+  isSigning: false,
   submit: (data: IStatementDto) => null,
   readonly: false,
   fetchData: () => null,

@@ -16,25 +16,27 @@ using Microsoft.Extensions.Options;
 namespace Application.Statements.Commands.SignOffStatement
 {
   [Authenticated]
-  public class SignOffStatementCommand : IRequest
+  public class SignOffStatementCommand : IRequest<GetSigningUrlDto>
   {
     [JsonIgnore]
     public int Id { get; set; }
 
-    public class SignOffStatementCommandHandler : IRequestHandler<SignOffStatementCommand>
+    public class SignOffStatementCommandHandler : IRequestHandler<SignOffStatementCommand, GetSigningUrlDto>
     {
       private readonly IApplicationDbContext _context;
       private readonly ICurrentUserService _currentUser;
       private readonly StatementOptions _options;
+      private readonly IPenneoClient _penneoClient;
 
-      public SignOffStatementCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IOptions<StatementOptions> options)
+      public SignOffStatementCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser, IOptions<StatementOptions> options, IPenneoClient penneoClient)
       {
         _context = context;
         _currentUser = currentUser;
         _options = options.Value;
+        _penneoClient = penneoClient;
       }
 
-      public async Task<Unit> Handle(SignOffStatementCommand request, CancellationToken cancellationToken)
+      public async Task<GetSigningUrlDto> Handle(SignOffStatementCommand request, CancellationToken cancellationToken)
       {
         var statementEntity = await _context.Statements
           .Include(e => e.Client)
@@ -67,12 +69,26 @@ namespace Application.Statements.Commands.SignOffStatement
           throw new InvalidOperationException("The total turnover of the statement exceeds DKK " + _options.LimitForRequiredAccountant + ", which then requires an approval by an accountant.");
         }
 
-        statementEntity.Status = StatementStatus.SignedOff;
+        _penneoClient.StartConnection();
+        var (url, id) = _penneoClient.SignDoc(new StandardSignDTO
+        {
+          DocPath = _options.ClientSigningPdfPath,
+          SignerName = currentUser.Name, //TODO: Name, id or email?
+          SignerCompany = statementEntity.Client.Name, //TODO: Name, id or email?
+          RequestFailureUrl = _options.SigningFailureUrl,
+          RequestSuccessUrl = _options.SigningSuccessUrl
+        });
+
+        statementEntity.ClientCaseFileId = id;
 
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return new GetSigningUrlDto
+        {
+          Url = url,
+          CaseFileId = id.GetValueOrDefault()
+        };
       }
     }
   }

@@ -4,6 +4,7 @@ namespace Application.Common.Options
   {
     public const string FileDrive = "FileDrive";
 
-    public string StatementPath { get; set; }
+    public string ConsentPath { get; set; }
+    public string ClientSignoffPath { get; set; }
   }
 }
