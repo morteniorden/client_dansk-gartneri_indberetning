@@ -1,17 +1,17 @@
 using System;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Domain.Entities;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Options;
 using Application.Common.Security;
+using Domain.Entities;
 using Domain.EntityExtensions;
 using Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Application.Statements.Commands.SignOffStatement
 {
@@ -69,25 +69,25 @@ namespace Application.Statements.Commands.SignOffStatement
           throw new InvalidOperationException("The total turnover of the statement exceeds DKK " + _options.LimitForRequiredAccountant + ", which then requires an approval by an accountant.");
         }
 
-        _penneoClient.StartConnection();
-        var (url, id) = _penneoClient.SignDoc(new StandardSignDTO
-        {
-          DocPath = _options.ClientSigningPdfPath,
-          SignerName = currentUser.Name, //TODO: Name, id or email?
-          SignerCompany = statementEntity.Client.Name, //TODO: Name, id or email?
-          RequestFailureUrl = _options.SigningFailureUrl,
-          RequestSuccessUrl = _options.SigningSuccessUrl
-        });
+        // _penneoClient.StartConnection();
+        // var (url, id) = _penneoClient.SignDoc(new StandardSignDTO
+        // {
+        //   DocPath = _options.ClientSigningPdfPath,
+        //   SignerName = currentUser.Name, //TODO: Name, id or email?
+        //   SignerCompany = statementEntity.Client.Name, //TODO: Name, id or email?
+        //   RequestFailureUrl = _options.SigningFailureUrl,
+        //   RequestSuccessUrl = _options.SigningSuccessUrl
+        // });
 
-        statementEntity.ClientCaseFileId = id;
+        statementEntity.ClientCaseFileId = 3;
 
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
 
         return new GetSigningUrlDto
         {
-          Url = url,
-          CaseFileId = id.GetValueOrDefault()
+          Url = "",
+          CaseFileId = 3
         };
       }
     }
