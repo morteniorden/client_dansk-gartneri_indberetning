@@ -61,10 +61,10 @@ export const useAuth = (): AuthHook<IUserDto> => {
   }, []);
 
   const logout = useCallback(() => {
-    setAuthStage(AuthStage.CHECKING);
+    setAuthStage(AuthStage.UNAUTHENTICATED);
     deleteCookie();
     setAuthToken("invalid_token");
-    setAuthCounter(c => c + 1);
+    // setAuthCounter(c => c + 1);
     router.push("/");
   }, []);
 
