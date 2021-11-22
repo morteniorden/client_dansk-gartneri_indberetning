@@ -81,6 +81,7 @@ namespace Application.Statements.Commands.SignOffStatement
 
         statementEntity.ClientCaseFileId = 3;
         statementEntity.Status = StatementStatus.SignedOff;
+        statementEntity.IsApproved = true;
 
         _context.Statements.Update(statementEntity);
         await _context.SaveChangesAsync(cancellationToken);
