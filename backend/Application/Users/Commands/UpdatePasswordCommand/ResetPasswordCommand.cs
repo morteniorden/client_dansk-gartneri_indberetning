@@ -6,6 +6,7 @@ using Application.Common.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Users.Commands.UpdatePassword
 {
@@ -21,12 +22,15 @@ namespace Application.Users.Commands.UpdatePassword
       private readonly IPasswordHasher _passwordHasher;
       private readonly IMapper _mapper;
 
-      public ResetPasswordCommandHandler(IApplicationDbContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IMapper mapper)
+      private readonly ILogger _logger;
+
+      public ResetPasswordCommandHandler(IApplicationDbContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IMapper mapper, ILogger logger)
       {
         _context = context;
         _tokenService = tokenService;
         _passwordHasher = passwordHasher;
         _mapper = mapper;
+        _logger = logger;
       }
 
       public async Task<UserTokenDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
@@ -39,7 +43,7 @@ namespace Application.Users.Commands.UpdatePassword
         }
         catch (Exception ex)
         {
-          Console.WriteLine(ex.ToString());
+          _logger.LogError(ex, "The provided token was invalid");
           throw new ArgumentException("The provided token was invalid");
         }
 
