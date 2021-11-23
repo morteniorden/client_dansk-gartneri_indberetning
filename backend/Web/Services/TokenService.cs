@@ -68,7 +68,7 @@ namespace Web.Services
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_options.Secret);
 
-      tokenHandler.ValidateToken(token, new TokenValidationParameters
+      var claims = tokenHandler.ValidateToken(token, new TokenValidationParameters
       {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -77,7 +77,7 @@ namespace Web.Services
       }, out SecurityToken validatedToken);
 
       var jwtToken = (JwtSecurityToken)validatedToken;
-      var userEmail = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+      var userEmail = claims.FindFirstValue(ClaimTypes.NameIdentifier);
 
       return (userEmail, validatedToken.Id);
     }
