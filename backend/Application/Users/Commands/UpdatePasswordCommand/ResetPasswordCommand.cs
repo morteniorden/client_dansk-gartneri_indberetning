@@ -37,8 +37,9 @@ namespace Application.Users.Commands.UpdatePassword
         {
           (userEmail, tokenId) = await _tokenService.ValidateSSOToken(request.SSOToken);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+          Console.WriteLine(ex.ToString());
           throw new ArgumentException("The provided token was invalid");
         }
 
