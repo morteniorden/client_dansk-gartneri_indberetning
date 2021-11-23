@@ -6,6 +6,7 @@ using Application.Common.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Users.Commands.UpdatePassword
@@ -47,7 +48,7 @@ namespace Application.Users.Commands.UpdatePassword
           throw new ArgumentException("The provided token was invalid");
         }
 
-        var userEntity = await _context.Users.FindAsync(userEmail);
+        var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmail);
 
         if (userEntity == null)
         {
