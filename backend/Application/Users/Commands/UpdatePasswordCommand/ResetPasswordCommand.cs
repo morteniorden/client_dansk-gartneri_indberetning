@@ -1,11 +1,11 @@
 using System;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Domain.Entities;
-using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using AutoMapper;
+using Domain.Entities;
+using MediatR;
 
 namespace Application.Users.Commands.UpdatePassword
 {
@@ -37,7 +37,7 @@ namespace Application.Users.Commands.UpdatePassword
         {
           (userEmail, tokenId) = await _tokenService.ValidateSSOToken(request.SSOToken);
         }
-        catch (Exception e)
+        catch (Exception)
         {
           throw new ArgumentException("The provided token was invalid");
         }
@@ -51,7 +51,7 @@ namespace Application.Users.Commands.UpdatePassword
 
         if (userEntity.SSOTokenId != tokenId)
         {
-          throw new ArgumentException("The provided token did not match the expected token.");
+          throw new ArgumentException($"The provided token did not match the expected token. Expected '{userEntity.SSOTokenId}' found '{tokenId}'.");
         }
 
         userEntity.SSOTokenId = null;
