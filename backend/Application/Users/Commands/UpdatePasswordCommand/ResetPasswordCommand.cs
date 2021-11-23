@@ -22,9 +22,9 @@ namespace Application.Users.Commands.UpdatePassword
       private readonly IPasswordHasher _passwordHasher;
       private readonly IMapper _mapper;
 
-      private readonly ILogger _logger;
+      private readonly ILogger<ResetPasswordCommandHandler> _logger;
 
-      public ResetPasswordCommandHandler(IApplicationDbContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IMapper mapper, ILogger logger)
+      public ResetPasswordCommandHandler(IApplicationDbContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IMapper mapper, ILogger<ResetPasswordCommandHandler> logger)
       {
         _context = context;
         _tokenService = tokenService;
