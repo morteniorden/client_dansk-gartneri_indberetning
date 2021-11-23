@@ -77,7 +77,7 @@ namespace Web.Services
       }, out SecurityToken validatedToken);
 
       var jwtToken = (JwtSecurityToken)validatedToken;
-      var userEmail = (jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
+      var userEmail = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
 
       return (userEmail, validatedToken.Id);
     }
