@@ -13,8 +13,9 @@ const TaxTotal: FC<Props> = ({ name, tax }) => {
   const { form } = useContext(FormControlContext);
 
   const total = useMemo(() => {
+    if (!form) return "";
     return ((form[name] as number) * tax) / 1000;
-  }, [form]);
+  }, [form, name, tax]);
 
   return <Text>{total}</Text>;
 };

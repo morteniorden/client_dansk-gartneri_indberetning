@@ -62,7 +62,7 @@ const StatementTableRow: FC<Props> = ({ text, subText, tax, helpInfo, children, 
       </Td>
       <Td>{children}</Td>
       <Td>{tax && tax + "‰"}</Td>
-      <Td>{TaxTotal ?? TaxTotal}</Td>
+      <Td>{TaxTotal && TaxTotal}</Td>
     </Tr>
   );
 };

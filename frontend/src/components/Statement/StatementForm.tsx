@@ -6,16 +6,16 @@ import { useLocales } from "hooks/useLocales";
 import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
-import TaxTotal from "./TaxTotal";
 
 import { FormControlContext } from "./FormControlContext";
 import InputDKK from "./InputDKK";
+import StandardStatementRow from "./StandardStatementRow";
 import StatementSection from "./StatementSection";
 import StatementSectionTable from "./StatementSectionTable";
 import StatementTableColHeadings from "./StatementTableColHeadings";
 import StatementTableRow from "./StatementTableRow";
 import StatementTableSubHeading from "./StatementTableSubHeading";
-import StandardStatementRow from "./StandardStatementRow";
+import TaxTotal from "./TaxTotal";
 
 const StatementForm: FC = () => {
   const { t } = useLocales();
