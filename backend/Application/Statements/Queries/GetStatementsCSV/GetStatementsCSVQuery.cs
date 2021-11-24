@@ -44,7 +44,7 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
           var displayName = property.GetCustomAttributes(typeof(DisplayNameAttribute), false)
             .Cast<DisplayNameAttribute>()
             .SingleOrDefault()?.DisplayName;
-          if (displayName != null ) return displayName;
+          if (displayName != null) return displayName;
           return property.Name;
         });
         var colHeadersString = string.Join(",", propNames);
@@ -52,8 +52,7 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
         //Construct list of comma-seperated strings of all the given statements
         var rows = statements.Select(statement =>
         {
-          var rowData = typeof(StatementCSVDto).GetProperties()
-            .Select(prop => prop.GetValue(statement, null).ToString());
+          var rowData = typeof(StatementCSVDto).GetProperties().Select(prop => prop.GetValue(statement, null)?.ToString() ?? "");
           var rowString = string.Join(",", rowData);
           return rowString;
         });
@@ -64,7 +63,7 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
           ? "oplysningsskemaer_" + request.AccountingYear + ".csv"
           : "oplysningsskemaer_alle.csv";
 
-        return new CSVResponseDto {FileName = fileName, Content = csv};
+        return new CSVResponseDto { FileName = fileName, Content = csv };
       }
     }
   }
