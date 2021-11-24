@@ -184,7 +184,7 @@ const Statement: FC<Props> = ({ id }) => {
             total: total,
             calcTotal: calcTotal
           }}>
-          <BasicLayout variant="statementHeader" maxW="1000px">
+          <BasicLayout variant="statementHeader" maxW="1500px">
             <Stack spacing={5}>
               <Heading>{t("statements.editStatementHeading")}</Heading>
               <Heading size="sm">{`${t("statements.accountingYear")}: ${

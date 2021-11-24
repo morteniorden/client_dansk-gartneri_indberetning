@@ -104,7 +104,7 @@ const EditEmails: FC = () => {
   );
 
   return (
-    <BasicLayout maxW="1000px">
+    <BasicLayout maxW="1500px">
       <Stack>
         <Heading mb={5}>{t("mailEditor.editEmails")}</Heading>
         <Flex justifyContent="space-between">

@@ -1,6 +1,4 @@
-using System;
 using System.ComponentModel;
-using Application.Accounts;
 using Application.Common.Mappings;
 using AutoMapper;
 using Domain.Entities;
@@ -76,7 +74,11 @@ namespace Application.Statements
       profile.CreateMap<Statement, StatementCSVDto>()
         .ForMember(dest => dest.ClientName, map => map.MapFrom(from => from.Client.Name))
         .ForMember(dest => dest.ClientCVR, map => map.MapFrom(from => from.Client.CVRNumber))
-        .ForMember(dest => dest.AccountantName, map => map.MapFrom(from => from.Accountant.Name));
+        .ForMember(dest => dest.AccountantName, map =>
+        {
+          map.Condition(from => from.Accountant != null);
+          map.MapFrom(from => from.Accountant.Name);
+        });
     }
   }
 }

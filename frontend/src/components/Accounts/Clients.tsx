@@ -76,7 +76,7 @@ const Accounts: FC = () => {
         fetchData: fetchData,
         isFetching: isFetching
       }}>
-      <BasicLayout maxW="1000px">
+      <BasicLayout maxW="1500px">
         <Stack spacing={4}>
           <Heading>{t("accounts.accounts")}</Heading>
           <Flex justifyContent="space-between" alignItems="center">

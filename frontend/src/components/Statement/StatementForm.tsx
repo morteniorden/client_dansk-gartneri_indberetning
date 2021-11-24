@@ -3,9 +3,10 @@ import AccountantSection from "components/Statement/AccountantSection/Accountant
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useContext, useEffect, useState } from "react";
+import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
+import TaxTotal from "./TaxTotal";
 
 import { FormControlContext } from "./FormControlContext";
 import InputDKK from "./InputDKK";
@@ -14,6 +15,7 @@ import StatementSectionTable from "./StatementSectionTable";
 import StatementTableColHeadings from "./StatementTableColHeadings";
 import StatementTableRow from "./StatementTableRow";
 import StatementTableSubHeading from "./StatementTableSubHeading";
+import StandardStatementRow from "./StandardStatementRow";
 
 const StatementForm: FC = () => {
   const { t } = useLocales();
@@ -59,9 +61,12 @@ const StatementForm: FC = () => {
           }}>
           <StatementSection heading={t("statements.section1.heading")}>
             <StatementSectionTable>
-              <StatementTableRow text={t("statements.section1.mushrooms")} tax="0.25">
-                <InputDKK name="s1_mushrooms" />
-              </StatementTableRow>
+              <StandardStatementRow
+                text={t("statements.section1.mushrooms")}
+                tax={0.25}
+                key={"s1_mushrooms"}
+              />
+
               <StatementTableRow text={t("statements.section1.tomatoCucumberHerbs")} tax="2.00">
                 <InputDKK name="s1_tomatoCucumberHerb" />
               </StatementTableRow>

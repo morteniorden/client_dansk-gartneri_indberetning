@@ -28,6 +28,9 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
         _context = context;
         _mapper = mapper;
       }
+
+
+      private readonly string SEPERATOR = ";";
       public async Task<CSVResponseDto> Handle(GetStatementsCSVQuery request, CancellationToken cancellationToken)
       {
         //Find all signed-off statements of the provided accounting year, or all if no year is provided
@@ -44,27 +47,28 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
           var displayName = property.GetCustomAttributes(typeof(DisplayNameAttribute), false)
             .Cast<DisplayNameAttribute>()
             .SingleOrDefault()?.DisplayName;
-          if (displayName != null ) return displayName;
+          if (displayName != null) return displayName;
           return property.Name;
         });
-        var colHeadersString = string.Join(",", propNames);
+        var colHeadersString = string.Join(SEPERATOR, propNames);
 
         //Construct list of comma-seperated strings of all the given statements
         var rows = statements.Select(statement =>
         {
-          var rowData = typeof(StatementCSVDto).GetProperties()
-            .Select(prop => prop.GetValue(statement, null).ToString());
-          var rowString = string.Join(",", rowData);
+          var rowData = typeof(StatementCSVDto).GetProperties().Select(prop => prop.GetValue(statement, null)?.ToString() ?? "");
+          var rowString = string.Join(SEPERATOR, rowData);
           return rowString;
         });
 
+        var rowString = string.Join(Environment.NewLine, rows);
+
         //Prepend the table keys to the data and join to single string. Choose filename, and return the results
-        string csv = string.Join(Environment.NewLine, rows.Prepend(colHeadersString));
+        string csv = string.Join(Environment.NewLine, colHeadersString, rowString);
         string fileName = request.AccountingYear != null
           ? "oplysningsskemaer_" + request.AccountingYear + ".csv"
           : "oplysningsskemaer_alle.csv";
 
-        return new CSVResponseDto {FileName = fileName, Content = csv};
+        return new CSVResponseDto { FileName = fileName, Content = csv };
       }
     }
   }
