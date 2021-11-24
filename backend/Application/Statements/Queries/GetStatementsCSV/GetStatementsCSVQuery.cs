@@ -60,8 +60,10 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
           return rowString;
         });
 
+        var rowString = string.Join(NEWLINE, rows);
+
         //Prepend the table keys to the data and join to single string. Choose filename, and return the results
-        string csv = string.Join(NEWLINE, colHeadersString, rows);
+        string csv = string.Join(NEWLINE, colHeadersString, rowString);
         string fileName = request.AccountingYear != null
           ? "oplysningsskemaer_" + request.AccountingYear + ".csv"
           : "oplysningsskemaer_alle.csv";
