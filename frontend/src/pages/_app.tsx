@@ -2,7 +2,6 @@ import "../theme/styles.global.css";
 import "isomorphic-unfetch";
 
 import { ChakraProvider } from "@chakra-ui/react";
-import BasicLayout from "components/Layouts/BasicLayout";
 import { AuthContext } from "contexts/AuthContext";
 import { AuthStage, useAuth } from "hooks/useAuth";
 import { useEffectAsync } from "hooks/useEffectAsync";
