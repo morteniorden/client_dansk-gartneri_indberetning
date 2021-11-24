@@ -26,7 +26,6 @@ interface Props {
 }
 
 const StatementTableRow: FC<Props> = ({ text, subText, tax, helpInfo, children, TaxTotal }) => {
-  const { t } = useLocales();
   const { subTextColor } = useColors();
 
   return (

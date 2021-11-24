@@ -17,7 +17,7 @@ const TaxTotal: FC<Props> = ({ name, tax }) => {
     return ((form[name] as number) * tax) / 1000;
   }, [form, name, tax]);
 
-  return <Text>{total}</Text>;
+  return <Text>{total} Kr.</Text>;
 };
 
 export default TaxTotal;

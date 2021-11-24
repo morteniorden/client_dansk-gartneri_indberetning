@@ -5,7 +5,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { AuthContext } from "contexts/AuthContext";
 import { AuthStage, useAuth } from "hooks/useAuth";
 import { useEffectAsync } from "hooks/useEffectAsync";
-import { AppPropsType } from "next/dist/next-server/lib/utils";
+import { AppPropsType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { I18nProvider } from "next-rosetta";
