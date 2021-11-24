@@ -30,7 +30,7 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
 
 
       private readonly string SEPERATOR = ";";
-      private readonly string NEWLINE = "\n";
+      private readonly string NEWLINE = "\r\n";
       public async Task<CSVResponseDto> Handle(GetStatementsCSVQuery request, CancellationToken cancellationToken)
       {
         //Find all signed-off statements of the provided accounting year, or all if no year is provided
