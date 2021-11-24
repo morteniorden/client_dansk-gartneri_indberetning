@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -30,7 +31,6 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
 
 
       private readonly string SEPERATOR = ";";
-      private readonly string NEWLINE = "\r\n";
       public async Task<CSVResponseDto> Handle(GetStatementsCSVQuery request, CancellationToken cancellationToken)
       {
         //Find all signed-off statements of the provided accounting year, or all if no year is provided
@@ -60,10 +60,10 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
           return rowString;
         });
 
-        var rowString = string.Join(NEWLINE, rows);
+        var rowString = string.Join(Environment.NewLine, rows);
 
         //Prepend the table keys to the data and join to single string. Choose filename, and return the results
-        string csv = string.Join(NEWLINE, colHeadersString, rowString);
+        string csv = string.Join(Environment.NewLine, colHeadersString, rowString);
         string fileName = request.AccountingYear != null
           ? "oplysningsskemaer_" + request.AccountingYear + ".csv"
           : "oplysningsskemaer_alle.csv";
