@@ -1,12 +1,15 @@
-using System;
-using System.ComponentModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Security;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +32,6 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
         _mapper = mapper;
       }
 
-
-      private readonly string SEPERATOR = ";";
       public async Task<CSVResponseDto> Handle(GetStatementsCSVQuery request, CancellationToken cancellationToken)
       {
         //Find all signed-off statements of the provided accounting year, or all if no year is provided
@@ -41,34 +42,26 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
           .ProjectTo<StatementCSVDto>(_mapper.ConfigurationProvider)
           .ToListAsync(cancellationToken);
 
-        //Find display names of properties on dto and construct comma-seperated string of the table keys
-        var propNames = typeof(StatementCSVDto).GetProperties().Select(property =>
+        byte[] bin;
+        using (MemoryStream stream = new MemoryStream())
         {
-          var displayName = property.GetCustomAttributes(typeof(DisplayNameAttribute), false)
-            .Cast<DisplayNameAttribute>()
-            .SingleOrDefault()?.DisplayName;
-          if (displayName != null) return displayName;
-          return property.Name;
-        });
-        var colHeadersString = string.Join(SEPERATOR, propNames);
+          using (var writer = new StreamWriter(stream))
+          using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
+          {
+            Encoding = Encoding.UTF8,
+            Delimiter = ";"
+          }))
+          {
+            csv.WriteRecords(statements);
+          }
+          bin = stream.ToArray();
+        }
 
-        //Construct list of comma-seperated strings of all the given statements
-        var rows = statements.Select(statement =>
-        {
-          var rowData = typeof(StatementCSVDto).GetProperties().Select(prop => prop.GetValue(statement, null)?.ToString() ?? "");
-          var rowString = string.Join(SEPERATOR, rowData);
-          return rowString;
-        });
-
-        var rowString = string.Join(Environment.NewLine, rows);
-
-        //Prepend the table keys to the data and join to single string. Choose filename, and return the results
-        string csv = string.Join(Environment.NewLine, colHeadersString, rowString);
         string fileName = request.AccountingYear != null
           ? "oplysningsskemaer_" + request.AccountingYear + ".csv"
           : "oplysningsskemaer_alle.csv";
 
-        return new CSVResponseDto { FileName = fileName, Content = csv };
+        return new CSVResponseDto { FileName = fileName, Content = bin };
       }
     }
   }

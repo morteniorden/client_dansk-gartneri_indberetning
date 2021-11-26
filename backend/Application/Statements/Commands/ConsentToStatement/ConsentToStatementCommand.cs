@@ -1,18 +1,17 @@
 using System;
 using System.IO;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Domain.Entities;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Options;
 using Application.Common.Security;
+using Domain.Entities;
 using Domain.Enums;
-using Microsoft.AspNetCore.Http;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Application.Statements.Commands.ConsentToStatement
 {
