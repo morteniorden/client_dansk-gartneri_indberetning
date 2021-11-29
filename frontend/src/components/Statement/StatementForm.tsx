@@ -3,17 +3,19 @@ import AccountantSection from "components/Statement/AccountantSection/Accountant
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
-import { FC, useCallback, useContext } from "react";
+import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";
 import InputDKK from "./InputDKK";
+import StandardStatementRow from "./StandardStatementRow";
 import StatementSection from "./StatementSection";
 import StatementSectionTable from "./StatementSectionTable";
 import StatementTableColHeadings from "./StatementTableColHeadings";
 import StatementTableRow from "./StatementTableRow";
 import StatementTableSubHeading from "./StatementTableSubHeading";
+import TaxTotal from "./TaxTotal";
 
 const StatementForm: FC = () => {
   const { t } = useLocales();
@@ -61,18 +63,17 @@ const StatementForm: FC = () => {
           }}>
           <StatementSection heading={t("statements.section1.heading")}>
             <StatementSectionTable>
-              <StatementTableRow
+              <StandardStatementRow
                 text={t("statements.section1.mushrooms")}
-                tax={statementInfo?.s1_mushrooms_permille}
-                helpInfo={statementInfo?.s1_mushrooms_help}>
-                <InputDKK name="s1_mushrooms" />
-              </StatementTableRow>
-              <StatementTableRow
+                tax={0.25}
+                name={"s1_mushrooms"}
+              />
+
+              <StandardStatementRow
                 text={t("statements.section1.tomatoCucumberHerbs")}
-                tax={statementInfo?.s1_tomatoCucumberHerb_permille}
-                helpInfo={statementInfo?.s1_tomatoCucumberHerb_help}>
-                <InputDKK name="s1_tomatoCucumberHerb" />
-              </StatementTableRow>
+                tax={2}
+                name={"s1_tomatoCucumberHerb"}
+              />
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
@@ -84,30 +85,18 @@ const StatementForm: FC = () => {
           </StatementSection>
           <StatementSection heading={t("statements.section3.heading")}>
             <StatementSectionTable>
-              <StatementTableRow
+              <StandardStatementRow
                 text={t("statements.section3.carrot")}
-                tax={statementInfo?.s3_carrots_permille}
-                helpInfo={statementInfo?.s3_carrots_help}>
-                <InputDKK name="s3_carrots" />
-              </StatementTableRow>
-              <StatementTableRow
-                text={t("statements.section3.pea")}
-                tax={statementInfo?.s3_peas_permille}
-                helpInfo={statementInfo?.s3_peas_help}>
-                <InputDKK name="s3_peas" />
-              </StatementTableRow>
-              <StatementTableRow
+                tax={3}
+                name={"s3_carrots"}
+              />
+              <StandardStatementRow text={t("statements.section3.pea")} tax={3} name={"s3_peas"} />
+              <StandardStatementRow
                 text={t("statements.section3.onion")}
-                tax={statementInfo?.s3_onions_permille}
-                helpInfo={statementInfo?.s3_onions_help}>
-                <InputDKK name="s3_onions" />
-              </StatementTableRow>
-              <StatementTableRow
-                text={t("statements.other")}
-                tax={statementInfo?.s3_other_permille}
-                helpInfo={statementInfo?.s3_other_help}>
-                <InputDKK name="s3_other" />
-              </StatementTableRow>
+                tax={3}
+                name={"s3_onions"}
+              />
+              <StandardStatementRow text={t("statements.other")} tax={3} name={"s3_other"} />
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
@@ -119,24 +108,21 @@ const StatementForm: FC = () => {
           </StatementSection>
           <StatementSection heading={t("statements.section4.heading")}>
             <StatementSectionTable>
-              <StatementTableRow
+              <StandardStatementRow
                 text={t("statements.section4.onions")}
-                tax={statementInfo?.s4_onions_permille}
-                helpInfo={statementInfo?.s4_onions_help}>
-                <InputDKK name="s4_onions" />
-              </StatementTableRow>
-              <StatementTableRow
+                tax={1.6}
+                name={"s4_onions"}
+              />
+              <StandardStatementRow
                 text={t("statements.section4.plants")}
-                tax={statementInfo?.s4_plants_permille}
-                helpInfo={statementInfo?.s4_plants_help}>
-                <InputDKK name="s4_plants" />
-              </StatementTableRow>
-              <StatementTableRow
+                tax={1.6}
+                name={"s4_plants"}
+              />
+              <StandardStatementRow
                 text={t("statements.section4.flowers")}
-                tax={statementInfo?.s4_cutFlowers_permille}
-                helpInfo={statementInfo?.s4_cutFlowers_help}>
-                <InputDKK name="s4_cutFlowers" />
-              </StatementTableRow>
+                tax={1.6}
+                name={"s4_cutFlowers"}
+              />
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
@@ -148,12 +134,11 @@ const StatementForm: FC = () => {
           </StatementSection>
           <StatementSection heading={t("statements.section7.heading")}>
             <StatementSectionTable>
-              <StatementTableRow
+              <StandardStatementRow
                 text={t("statements.section7.plants")}
-                tax={statementInfo?.s7_plants_permille}
-                helpInfo={statementInfo?.s7_plants_help}>
-                <InputDKK name="s7_plants" />
-              </StatementTableRow>
+                tax={4.5}
+                name={"s7_plants"}
+              />
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
@@ -171,12 +156,11 @@ const StatementForm: FC = () => {
                 h2={t("statements.turnoverExlMoms")}
                 h3={t("statements.taxIs")}
               />
-              <StatementTableRow
+              <StandardStatementRow
                 text={t("statements.section8.applesPearsOther")}
-                tax={statementInfo?.s8_applesPearsEtc_permille}
-                helpInfo={statementInfo?.s8_applesPearsEtc_help}>
-                <InputDKK name="s8_applesPearsEtc" />
-              </StatementTableRow>
+                tax={5}
+                name={"s8_applesPearsEtc"}
+              />
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.section8.packagingCost")}
@@ -191,24 +175,21 @@ const StatementForm: FC = () => {
                 h2={t("statements.turnoverExlMoms")}
                 h3={t("statements.taxIs")}
               />
-              <StatementTableRow
+              <StandardStatementRow
                 text={t("statements.section8.cherry")}
-                tax={statementInfo?.s8_cherries_permille}
-                helpInfo={statementInfo?.s8_cherries_help}>
-                <InputDKK name="s8_cherries" />
-              </StatementTableRow>
-              <StatementTableRow
+                tax={4.65}
+                name={"s8_cherries"}
+              />
+              <StandardStatementRow
                 text={t("statements.section8.plum")}
-                tax={statementInfo?.s8_plums_permille}
-                helpInfo={statementInfo?.s8_plums_help}>
-                <InputDKK name="s8_plums" />
-              </StatementTableRow>
-              <StatementTableRow
+                tax={4.65}
+                name={"s8_plums"}
+              />
+              <StandardStatementRow
                 text={t("statements.other")}
-                tax={statementInfo?.s8_otherStoneFruit_permille}
-                helpInfo={statementInfo?.s8_otherStoneFruit_help}>
-                <InputDKK name="s8_otherStoneFruit" />
-              </StatementTableRow>
+                tax={4.65}
+                name={"s8_otherStoneFruit"}
+              />
               <StatementTableSubHeading>
                 {t("statements.section8.subHeading3")}
               </StatementTableSubHeading>
@@ -216,24 +197,21 @@ const StatementForm: FC = () => {
                 h2={t("statements.turnoverExlMoms")}
                 h3={t("statements.taxIs")}
               />
-              <StatementTableRow
-                text={t("statements.section8.currant")}
-                tax={statementInfo?.s8_currant_permille}
-                helpInfo={statementInfo?.s8_currant_help}>
-                <InputDKK name="s8_currant" />
-              </StatementTableRow>
-              <StatementTableRow
-                text={t("statements.section8.strawberry")}
-                tax={statementInfo?.s8_strawberries_permille}
-                helpInfo={statementInfo?.s8_strawberries_help}>
-                <InputDKK name="s8_strawberries" />
-              </StatementTableRow>
-              <StatementTableRow
+              <StandardStatementRow
+                text={t("statements.section8.cherry")}
+                tax={4.6}
+                name={"s8_currant"}
+              />
+              <StandardStatementRow
+                text={t("statements.section8.cherry")}
+                tax={4.6}
+                name={"s8_strawberries"}
+              />
+              <StandardStatementRow
                 text={t("statements.other")}
-                tax={statementInfo?.s8_otherBerryFruit_permille}
-                helpInfo={statementInfo?.s8_otherBerryFruit_help}>
-                <InputDKK name="s8_otherBerryFruit" />
-              </StatementTableRow>
+                tax={4.6}
+                name={"s8_otherBerryFruit"}
+              />
             </StatementSectionTable>
           </StatementSection>
           {statement.accountant != null && activeUser?.role == RoleEnum.Accountant && (

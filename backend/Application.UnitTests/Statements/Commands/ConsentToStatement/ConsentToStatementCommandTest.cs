@@ -22,6 +22,7 @@ namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
   {
     public Mock<ICurrentUserService> CurrentUserServiceMock { get; set; }
     public IOptions<FileDriveOptions> options { get; set; }
+    public IOptions<StatementOptions> StatementOptions { get; set; }
     public ConsentToStatementCommandTest()
     {
       CurrentUserServiceMock = new Mock<ICurrentUserService>();
@@ -29,6 +30,7 @@ namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
         .Returns("test1accountant@test.dk");
 
       options = Options.Create(new FileDriveOptions());
+      StatementOptions = Options.Create(new StatementOptions());
     }
 
     //TODO: Not working properly. Find solution
@@ -57,7 +59,7 @@ namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
         }
       };
 
-      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options, PenneoClientMock.Object, StatementOptions);
 
       var entity = Context.Statements.Find(command.Dto.StatementId);
       entity.Should().NotBeNull();
@@ -80,7 +82,7 @@ namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
         }
       };
 
-      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options, PenneoClientMock.Object, StatementOptions);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -99,7 +101,7 @@ namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
         }
       };
 
-      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options, PenneoClientMock.Object, StatementOptions);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -118,7 +120,7 @@ namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
         }
       };
 
-      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options, PenneoClientMock.Object, StatementOptions);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -137,7 +139,7 @@ namespace Application.UnitTests.Statements.Commands.ConsentToStatementTest
         }
       };
 
-      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options);
+      var handler = new ConsentToStatementCommand.ConsentToStatementCommandHandler(Context, CurrentUserServiceMock.Object, options, PenneoClientMock.Object, StatementOptions);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 

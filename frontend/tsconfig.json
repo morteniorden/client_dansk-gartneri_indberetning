@@ -14,8 +14,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": "src",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "custom.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

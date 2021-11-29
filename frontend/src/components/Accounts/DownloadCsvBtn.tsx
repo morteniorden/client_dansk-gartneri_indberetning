@@ -8,6 +8,17 @@ interface Props {
   accountingYear: number;
 }
 
+function base64ToArrayBuffer(base64: string) {
+  const binaryString = window.atob(base64);
+  const binaryLen = binaryString.length;
+  const bytes = new Uint8Array(binaryLen);
+  for (let i = 0; i < binaryLen; i++) {
+    const ascii = binaryString.charCodeAt(i);
+    bytes[i] = ascii;
+  }
+  return bytes;
+}
+
 const DownloadCsvBtn: FC<Props> = ({ accountingYear }) => {
   const { t } = useLocales();
 
@@ -15,10 +26,11 @@ const DownloadCsvBtn: FC<Props> = ({ accountingYear }) => {
     try {
       const statementclient = await genStatementClient();
       const res = await statementclient.getStatementsCSV(accountingYear);
-      const uri = "data:text/csv;charset=utf-8," + res.content;
+
+      const blob = new Blob([base64ToArrayBuffer(res.content)], { type: "text/csv" });
 
       const downloadLink = document.createElement("a");
-      downloadLink.href = uri;
+      downloadLink.href = window.URL.createObjectURL(blob);
       downloadLink.download = res.fileName;
 
       document.body.appendChild(downloadLink);

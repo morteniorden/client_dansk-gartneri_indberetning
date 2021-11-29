@@ -5,6 +5,7 @@ import CurrentAccountant from "components/Statement/ChangeAccountant/CurrentAcco
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
+import { useSignoffWindow } from "hooks/useSignoffWindow";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
@@ -33,6 +34,8 @@ const Statement: FC<Props> = ({ id }) => {
   const [isFetching, setIsFetching] = useState(false);
   const { activeUser } = useAuth();
   const [total, setTotal] = useState(0);
+  const { openSignoffWindow } = useSignoffWindow();
+  const [isSigning, setIsSigning] = useState(false);
 
   const readonly = useMemo(() => statement?.status == StatementStatus.SignedOff, [statement]);
 
@@ -119,21 +122,40 @@ const Statement: FC<Props> = ({ id }) => {
 
   const onSubmit = useCallback(
     async (data: IStatementDto) => {
+      setIsSigning(true);
       try {
         const commandData = { ...statement, ...data };
         const statementClient = await genStatementClient();
         const command = new UpdateStatementCommand({ statementDto: commandData });
         await statementClient.updateStatement(statement.id, command);
-        await statementClient.signOffStatement(id);
-        toast({
-          title: t("statements.signOffSuccessTitle"),
-          description: t("statements.signOffSuccessText"),
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left"
-        });
-        router.push("/mystatements");
+        const res = await statementClient.signOffStatement(id);
+
+        openSignoffWindow(
+          res.url,
+          res.caseFileId,
+          statement.id,
+          () => {
+            toast({
+              title: t("statements.signOffSuccessTitle"),
+              description: t("statements.signOffSuccessText"),
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom-left"
+            });
+            router.push("/mystatements");
+          },
+          () => {
+            toast({
+              title: t("statements.signOffErrorTitle"),
+              description: t("statements.signOffErrorText"),
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom-left"
+            });
+          }
+        );
       } catch (err) {
         logger.warn("statementClient.put Error", err);
         toast({
@@ -145,6 +167,7 @@ const Statement: FC<Props> = ({ id }) => {
           position: "bottom-left"
         });
       }
+      setIsSigning(false);
     },
     [id, statement]
   );
@@ -158,6 +181,7 @@ const Statement: FC<Props> = ({ id }) => {
             setStatement: setStatement,
             save: onSaveChanges,
             isSaving: isSaving,
+            isSigning: isSigning,
             submit: onSubmit,
             readonly: readonly,
             fetchData: fetchData,
@@ -166,7 +190,7 @@ const Statement: FC<Props> = ({ id }) => {
             calcTotal: calcTotal,
             statementInfo: statementInfo
           }}>
-          <BasicLayout variant="statementHeader" maxW="1000px">
+          <BasicLayout variant="statementHeader" maxW="1500px">
             <Stack spacing={5}>
               <Heading>{t("statements.editStatementHeading")}</Heading>
               <Heading size="sm">{`${t("statements.accountingYear")}: ${

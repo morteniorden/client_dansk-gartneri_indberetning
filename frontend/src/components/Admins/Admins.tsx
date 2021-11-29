@@ -42,7 +42,7 @@ const Admins: FC = () => {
   }, [fetchData]);
 
   return (
-    <BasicLayout maxW="1000px">
+    <BasicLayout maxW="1500px">
       <Stack spacing={4}>
         <Heading>{t("admins.admins")}</Heading>
         <Flex justifyContent="flex-end">

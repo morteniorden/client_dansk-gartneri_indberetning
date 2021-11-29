@@ -1,11 +1,13 @@
 using System;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Domain.Entities;
-using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using AutoMapper;
+using Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Users.Commands.UpdatePassword
 {
@@ -21,12 +23,15 @@ namespace Application.Users.Commands.UpdatePassword
       private readonly IPasswordHasher _passwordHasher;
       private readonly IMapper _mapper;
 
-      public ResetPasswordCommandHandler(IApplicationDbContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IMapper mapper)
+      private readonly ILogger<ResetPasswordCommandHandler> _logger;
+
+      public ResetPasswordCommandHandler(IApplicationDbContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IMapper mapper, ILogger<ResetPasswordCommandHandler> logger)
       {
         _context = context;
         _tokenService = tokenService;
         _passwordHasher = passwordHasher;
         _mapper = mapper;
+        _logger = logger;
       }
 
       public async Task<UserTokenDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
@@ -37,12 +42,13 @@ namespace Application.Users.Commands.UpdatePassword
         {
           (userEmail, tokenId) = await _tokenService.ValidateSSOToken(request.SSOToken);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
+          _logger.LogError(ex, "The provided token was invalid");
           throw new ArgumentException("The provided token was invalid");
         }
 
-        var userEntity = await _context.Users.FindAsync(userEmail);
+        var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmail);
 
         if (userEntity == null)
         {
@@ -51,7 +57,7 @@ namespace Application.Users.Commands.UpdatePassword
 
         if (userEntity.SSOTokenId != tokenId)
         {
-          throw new ArgumentException("The provided token did not match the expected token.");
+          throw new ArgumentException($"The provided token did not match the expected token. Expected '{userEntity.SSOTokenId}' found '{tokenId}'.");
         }
 
         userEntity.SSOTokenId = null;

@@ -2,11 +2,10 @@ import "../theme/styles.global.css";
 import "isomorphic-unfetch";
 
 import { ChakraProvider } from "@chakra-ui/react";
-import BasicLayout from "components/Layouts/BasicLayout";
 import { AuthContext } from "contexts/AuthContext";
 import { AuthStage, useAuth } from "hooks/useAuth";
 import { useEffectAsync } from "hooks/useEffectAsync";
-import { AppPropsType } from "next/dist/next-server/lib/utils";
+import { AppPropsType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { I18nProvider } from "next-rosetta";
@@ -57,7 +56,7 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType): ReactElement =>
         <ChakraProvider theme={theme}>
           <AuthContext.Provider value={auth}>
             {/* <SignalRContext.Provider value={{ connection }}> */}
-            {router.pathname == "/changepassword" ? (
+            {router.pathname == "/changepassword" || router.pathname == "/processingsignoff" ? (
               <Component {...pageProps} />
             ) : auth.authStage == AuthStage.AUTHENTICATED ? (
               <Component {...pageProps} />

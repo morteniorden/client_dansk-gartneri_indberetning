@@ -29,7 +29,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
       OptionsMock.Setup(m => m.Value).Returns(statementOptions);
     }
 
-    [Fact]
+    [Fact(Skip = "Command no longer actually signs off statement, but returns an url to penneo")]
     public async Task Handle_GivenValidIdAndNoAccountant_ShouldUpdatePersistedStatement()
     {
       var command = new SignOffStatementCommand
@@ -37,7 +37,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 5
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       var entity = Context.Statements.Find(command.Id);
       entity.Should().NotBeNull();
@@ -48,7 +48,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
       entity.Status.Should().Be(StatementStatus.SignedOff);
     }
 
-    [Fact]
+    [Fact(Skip = "Command no longer actually signs off statement, but returns an url to penneo")]
     public async Task Handle_GivenValidIdAndApproval_ShouldUpdatePersistedStatement()
     {
       var command = new SignOffStatementCommand
@@ -56,7 +56,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 6
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       var entity = Context.Statements.Find(command.Id);
       entity.Should().NotBeNull();
@@ -75,7 +75,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 99
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -90,7 +90,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 3
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -105,7 +105,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 2
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -120,7 +120,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 1
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
@@ -135,14 +135,14 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 7
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       Func<Task> action = async () => await handler.Handle(command, CancellationToken.None);
 
       action.Should().Throw<InvalidOperationException>();
     }
 
-    [Fact]
+    [Fact(Skip = "Command no longer actually signs off statement, but returns an url to penneo")]
     public async Task Handle_GivenAccountantAndExceedingTotal_ShouldUpdatePersistedStatement()
     {
       var command = new SignOffStatementCommand
@@ -150,7 +150,7 @@ namespace Application.UnitTests.Statements.Commands.SignOffStatementTest
         Id = 8
       };
 
-      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object);
+      var handler = new SignOffStatementCommand.SignOffStatementCommandHandler(Context, CurrentUserServiceMock.Object, OptionsMock.Object, PenneoClientMock.Object);
 
       var entity = Context.Statements.Find(command.Id);
       entity.Should().NotBeNull();

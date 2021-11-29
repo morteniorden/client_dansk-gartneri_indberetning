@@ -46,6 +46,8 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="wwwroot\debugFiles\statements\AccountantConsents\" />
+    <Folder Include="wwwroot\debugFiles\statements\ClientSignoffs\" />
   </ItemGroup>
 
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">

@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Options;
 using Application.Common.Security;
 using Application.StatementInfos;
 using AutoMapper;
@@ -15,7 +14,6 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Application.Statements.Queries.GetMyStatements
 {
@@ -53,7 +51,7 @@ namespace Application.Statements.Queries.GetMyStatements
           throw new NotFoundException(nameof(Statement), request.Id);
         }
 
-        if (!(statement.Client.Id == currentUser.Id || statement.Accountant.Id == currentUser.Id || currentUser.Role == RoleEnum.Admin))
+        if (!(statement.Client.Id == currentUser.Id || statement.Accountant?.Id == currentUser.Id || currentUser.Role == RoleEnum.Admin))
         {
           throw new ForbiddenAccessException();
         }

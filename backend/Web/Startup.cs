@@ -23,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
+using Signing;
 using Signing.Options;
 using Web.DocumentProcessors;
 using Web.Filters;
@@ -71,6 +72,7 @@ namespace Web
 
       services.AddApplication(Configuration);
       services.AddInfrastructure(Configuration, Environment);
+      services.AddSigning(Configuration);
 
       services.AddHttpContextAccessor();
 
