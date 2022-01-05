@@ -39,8 +39,16 @@ export const useFormatNumber = () => {
     return formatValue;
   }, []);
 
+  const formatNumberThousandSepDecimal = useCallback(
+    (formatValue: number) => {
+      return formatCurrency(formatValue).numberPartsOnly;
+    },
+    [formatCurrency]
+  );
+
   return {
     formatNumberThousandSep,
+    formatNumberThousandSepDecimal,
     parseFormat
   };
 };
