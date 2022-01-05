@@ -1,16 +1,12 @@
-import {
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
-  NumberInput,
-  NumberInputField
-} from "@chakra-ui/react";
+import { Input, InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
+import { useFormatNumber } from "hooks/useFormatNumber";
 import { useLocales } from "hooks/useLocales";
-import { FC, useContext, useMemo } from "react";
+import { FC, useCallback, useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
 import { IStatementNoUsersDto } from "services/backend/nswagts";
+import { StringDecoder } from "string_decoder";
 
 import { FormControlContext } from "./FormControlContext";
 
@@ -20,6 +16,7 @@ interface Props {
 
 const InputDKK: FC<Props> = ({ name }) => {
   const { formatCurrency } = useLocales();
+  const { formatNumberThousandSep: formatNumber, parseFormat } = useFormatNumber();
 
   const { control, form, updatedFormAttribute } = useContext(FormControlContext);
   const { readonly } = useContext(EditStatementContext);
@@ -48,22 +45,22 @@ const InputDKK: FC<Props> = ({ name }) => {
   return (
     <InputGroup>
       {leftOrRight === "left" && <InputLeftAddon>Kr.</InputLeftAddon>}
-      <NumberInput defaultValue={value} min={0} max={1000000000} >
-        <NumberInputField
-          name={name}
-          ref={ref}
-          disabled={readonly}
-          roundedLeft={leftOrRight === "left" ? "none" : "base"}
-          roundedRight={leftOrRight === "right" ? "none" : "base"}
-          bgColor={bgColor}
-          value={value}
-          onBlur={onBlur}
-          onChange={e => {
-            onChange(parseInt(e.target.value));
-            updatedFormAttribute(name, parseInt(e.target.value));
-          }}
-        />
-      </NumberInput>
+      <Input
+        defaultValue={value}
+        name={name}
+        pattern={"[0-9,.]*"}
+        ref={ref}
+        disabled={readonly}
+        roundedLeft={leftOrRight === "left" ? "none" : "base"}
+        roundedRight={leftOrRight === "right" ? "none" : "base"}
+        bgColor={bgColor}
+        value={formatNumber(value, leftOrRight)}
+        onBlur={onBlur}
+        onChange={e => {
+          onChange(parseFormat(e.target.value, leftOrRight));
+          updatedFormAttribute(name, parseFormat(e.target.value, leftOrRight));
+        }}
+      />
       {leftOrRight === "right" && <InputRightAddon>Kr.</InputRightAddon>}
     </InputGroup>
   );
