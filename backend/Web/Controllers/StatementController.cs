@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Application.Statements;
 using Application.Statements.Commands.ConsentToStatement;
@@ -9,9 +8,8 @@ using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.CheckCasefileStatus;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
-using Application.Statements.Queries.GetStatementsCSVQuery;
+using Application.Statements.Queries.GetStatementsCSV;
 using Application.Users.Commands.UnassignAccountantCommand;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,14 +58,15 @@ namespace Web.Controllers
     public async Task<ActionResult> UpdateStatement([FromRoute] int id, UpdateStatementCommand command)
     {
       command.Id = id;
-      await Mediator.Send(command);
+      _ = await Mediator.Send(command);
 
       return NoContent();
     }
 
     [HttpPut("{id}/signoff")]
-    public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id) { 
-    
+    public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id)
+    {
+
       return await Mediator.Send(new SignOffStatementCommand
       {
         Id = id
@@ -86,7 +85,7 @@ namespace Web.Controllers
     [HttpPut("statement/{id}/unassignAccountant")]
     public async Task<ActionResult> UnassignAccountant([FromRoute] int id)
     {
-      await Mediator.Send(new UnassignAccountantCommand
+      _ = await Mediator.Send(new UnassignAccountantCommand
       {
         StatementId = id
       });
