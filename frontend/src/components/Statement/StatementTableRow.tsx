@@ -13,7 +13,6 @@ import {
   Tr
 } from "@chakra-ui/react";
 import { useColors } from "hooks/useColors";
-import { useLocales } from "hooks/useLocales";
 import { FC, ReactElement, ReactText } from "react";
 import { BsInfoCircle } from "react-icons/bs";
 
@@ -60,7 +59,7 @@ const StatementTableRow: FC<Props> = ({ text, subText, tax, helpInfo, children, 
         </HStack>
       </Td>
       <Td>{children}</Td>
-      <Td>{tax && tax.toFixed(2) + "‰"}</Td>
+      <Td>{tax && Number(tax).toFixed(2) + "‰"}</Td>
       <Td>{TaxTotal && TaxTotal}</Td>
     </Tr>
   );
