@@ -283,6 +283,11 @@ export const table: Locale = {
       consentSignedText:
         "Dit samtykke til oplysningsskemaet er nu underskrevet. Klienten kan nu se, at du har givet dit samtykke til oplysningsskemaet og kan nu selv endelig underskrive og indsende skemaet.",
       downloadYourConsent: "Hent din samtykkeerklæring"
+    },
+    sort: {
+      sortBy: "Sorter efter",
+      Name: "Navn",
+      Status: "Status"
     }
   },
 

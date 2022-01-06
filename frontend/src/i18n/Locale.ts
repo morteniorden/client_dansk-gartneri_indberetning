@@ -269,6 +269,11 @@ export interface Locale {
       consentSignedText: string;
       downloadYourConsent: string;
     };
+    sort: {
+      sortBy: string;
+      Name: string;
+      Status: string;
+    };
   };
 
   myStatements: {
