@@ -93,8 +93,12 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
             </Heading>
             <Text fontSize="sm">
               {statement.isApproved
-                ? `${t("statements.approvedBy")}: ${statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"}`
-                : `${t("statements.sentTo")}: ${statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"}`}
+                ? `${t("statements.approvedBy")}: ${
+                    statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"
+                  }`
+                : `${t("statements.sentTo")}: ${
+                    statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"
+                  }`}
             </Text>
             {!readonly && (
               <Text fontSize="sm">

@@ -48,7 +48,7 @@ const InputDKK: FC<Props> = ({ name }) => {
   return (
     <InputGroup>
       {leftOrRight === "left" && <InputLeftAddon>Kr.</InputLeftAddon>}
-      <NumberInput defaultValue={value} min={0} max={1000000000} >
+      <NumberInput defaultValue={value} min={0} max={1000000000}>
         <NumberInputField
           name={name}
           ref={ref}
