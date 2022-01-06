@@ -213,7 +213,7 @@ export const table: Locale = {
     approvedByConsultant: "Konsulenten har eklæret samtykke til skemaet",
     approvedBy: "Samtykke erklæret af",
     approvedAndReady: "Oplysningsskemaet er nu klar til at underskrives og indsendes",
-    downloadConsent: "Hent samtykkeeklæring",
+    downloadConsent: "Hent eklæring",
 
     signOffSuccessTitle: "Indberetning underskrevet",
     signOffSuccessText: "Din indberetning er nu underskrevet og indsendt.",
@@ -274,15 +274,14 @@ export const table: Locale = {
     accountantSection: {
       heading: "Sektion for revisor el. konsulent",
       helpText:
-        "For at signere dit samtykke til oplysningskemaet, skal følgende samtykkeerklæring downloades, udfyldes og uploades herunder.",
-      downloadPdf: "Hent samtykkeerklæring",
-      dragAndDrop:
-        "Træk og slip PDF med udfyldt samtykkeerklæring her, eller klik for at vælge fil...",
+        "For at signere dit samtykke til oplysningskemaet, skal følgende erklæring downloades, udfyldes og uploades herunder.",
+      downloadPdf: "Hent erklæring",
+      dragAndDrop: "Træk og slip PDF med udfyldt erklæring her, eller klik for at vælge fil...",
       dropFile: "Slip din fil her...",
       signAndApprove: "Signér samtykke",
       consentSignedText:
         "Dit samtykke til oplysningsskemaet er nu underskrevet. Klienten kan nu se, at du har givet dit samtykke til oplysningsskemaet og kan nu selv endelig underskrive og indsende skemaet.",
-      downloadYourConsent: "Hent din samtykkeerklæring"
+      downloadYourConsent: "Hent din erklæring"
     }
   },
 
