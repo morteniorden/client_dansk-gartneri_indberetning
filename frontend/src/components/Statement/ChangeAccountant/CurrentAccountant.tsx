@@ -1,14 +1,4 @@
-import {
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Link,
-  Skeleton,
-  Stack,
-  Text,
-  useToast
-} from "@chakra-ui/react";
+import { Button, Flex, Heading, HStack, Skeleton, Stack, Text, useToast } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
@@ -55,6 +45,27 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
     }
   }, [statement]);
 
+  const fetchConsent = useCallback(async () => {
+    try {
+      const statementClient = await genStatementClient();
+      const data = await statementClient.getConsentFile(statement.id);
+
+      if (data != null) {
+        const downloadLink = document.createElement("a");
+
+        //This assumes that the file is always a pdf. But what if we want to support different files?
+        downloadLink.href = "data:application/pdf;base64," + data.stream;
+        downloadLink.download = `samtykkeerklæring ${statement.client.name} ${statement.accountingYear}`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+    } catch (err) {
+      logger.warn("statementClient.get Error", err);
+    }
+  }, [statement]);
+
   return (
     <Skeleton isLoaded={!isFetching}>
       <Flex
@@ -82,12 +93,8 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
             </Heading>
             <Text fontSize="sm">
               {statement.isApproved
-                ? `${t("statements.approvedBy")}: ${
-                    statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"
-                  }`
-                : `${t("statements.sentTo")}: ${
-                    statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"
-                  }`}
+                ? `${t("statements.approvedBy")}: ${statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"}`
+                : `${t("statements.sentTo")}: ${statement.accountant?.email ?? "ACCOUNT_NULL_ERROR"}`}
             </Text>
             {!readonly && (
               <Text fontSize="sm">
@@ -99,9 +106,9 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
               </Text>
             )}
             {statement.isApproved && (
-              <Link w="min" href="https://lbst.dk/om-os/tilsyn-med-fonde/#c81749" isExternal>
+              <Button variant="link" w="min" onClick={fetchConsent}>
                 {t("statements.downloadConsent")}
-              </Link>
+              </Button>
             )}
           </Stack>
         </HStack>

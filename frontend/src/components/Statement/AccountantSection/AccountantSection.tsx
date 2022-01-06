@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Center,
-  Heading,
-  HStack,
-  Link,
-  Stack,
-  Text,
-  useToast
-} from "@chakra-ui/react";
+import { Box, Button, Center, Heading, HStack, Stack, Text, useToast } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
@@ -78,6 +68,27 @@ const AccountantSection: FC = () => {
     setIsSigning(false);
   }, [statement, file]);
 
+  const fetchConsent = useCallback(async () => {
+    try {
+      const statementClient = await genStatementClient();
+      const data = await statementClient.getConsentFile(statement.id);
+
+      if (data != null) {
+        const downloadLink = document.createElement("a");
+
+        //This assumes that the file is always a pdf. But what if we want to support different files?
+        downloadLink.href = "data:application/pdf;base64," + data.stream;
+        downloadLink.download = `samtykkeerklæring ${statement.client.name} ${statement.accountingYear}`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+    } catch (err) {
+      logger.warn("statementClient.get Error", err);
+    }
+  }, [statement]);
+
   return (
     <Box shadow="sm" p={10} border="1px" borderColor={boxBorder} rounded="md">
       <Stack spacing={5}>
@@ -121,13 +132,9 @@ const AccountantSection: FC = () => {
             <Center>
               <HStack>
                 <FiDownload />
-                <Link
-                  w="min"
-                  colorScheme="green"
-                  href="https://lbst.dk/om-os/tilsyn-med-fonde/#c81749"
-                  isExternal>
+                <Button variant="link" w="min" colorScheme="green" onClick={fetchConsent}>
                   {t("statements.accountantSection.downloadYourConsent")}
-                </Link>
+                </Button>
               </HStack>
             </Center>
           </>
