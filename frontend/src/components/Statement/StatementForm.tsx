@@ -1,8 +1,9 @@
-import { Stack } from "@chakra-ui/react";
+import { Stack, useDisclosure } from "@chakra-ui/react";
 import AccountantSection from "components/Statement/AccountantSection/AccountantSection";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
+import { useRouter } from "next/router";
 import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
@@ -16,15 +17,20 @@ import StatementTableColHeadings from "./StatementTableColHeadings";
 import StatementTableRow from "./StatementTableRow";
 import StatementTableSubHeading from "./StatementTableSubHeading";
 import TaxTotal from "./TaxTotal";
+import UnsavedChangesModal from "./UnsavedChangesModal";
 
 const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
   const { activeUser } = useAuth();
-  const { statement, setStatement, submit, readonly, calcTotal } = useContext(EditStatementContext);
+  const { isOpen: modalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
+  const { statement, setStatement, submit, readonly, calcTotal, isDirty, setIsDirty } =
+    useContext(EditStatementContext);
+  const router = useRouter();
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementNoUsersDto, value: IStatementNoUsersDto[keyof IStatementNoUsersDto]) => {
+      setIsDirty(true);
       setStatement(x => {
         (x[key] as unknown) = value;
         return x;
@@ -33,6 +39,13 @@ const StatementForm: FC = () => {
     },
     [setStatement, calcTotal]
   );
+
+  useEffect(() => {
+    router.beforePopState(({ url, as, options }) => {
+      if (isDirty) openModal();
+      return !isDirty;
+    });
+  }, [isDirty, openModal]);
 
   const onValid = useCallback(
     (data: IStatementNoUsersDto) => {
@@ -51,6 +64,7 @@ const StatementForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} id="statement_form">
+      <UnsavedChangesModal isOpen={modalOpen} onClose={closeModal} />
       <Stack sx={readonly && { "input:disabled": { opacity: 1, cursor: "text" } }}>
         <FormControlContext.Provider
           value={{
