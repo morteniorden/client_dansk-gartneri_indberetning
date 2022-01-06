@@ -13,6 +13,8 @@ type ContextType = {
   isFetching: boolean;
   total: number;
   calcTotal: () => number;
+  isDirty: boolean;
+  setIsDirty: Dispatch<SetStateAction<boolean>>;
 };
 
 export const EditStatementContext = createContext<ContextType>({
@@ -26,5 +28,7 @@ export const EditStatementContext = createContext<ContextType>({
   fetchData: () => null,
   isFetching: false,
   total: 0,
-  calcTotal: () => 0
+  calcTotal: () => 0,
+  isDirty: false,
+  setIsDirty: () => null
 });

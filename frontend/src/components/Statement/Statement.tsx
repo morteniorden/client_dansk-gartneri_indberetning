@@ -28,6 +28,7 @@ const Statement: FC<Props> = ({ id }) => {
   const router = useRouter();
   const toast = useToast();
   const [statement, setStatement] = useState<IStatementDto>(null);
+  const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { activeUser } = useAuth();
@@ -60,6 +61,7 @@ const Statement: FC<Props> = ({ id }) => {
   }, [fetchData, id]);
 
   const onSaveChanges = useCallback(async () => {
+    setIsDirty(false);
     setIsSaving(true);
     try {
       const statementClient = await genStatementClient();
@@ -182,7 +184,9 @@ const Statement: FC<Props> = ({ id }) => {
             fetchData: fetchData,
             isFetching: isFetching,
             total: total,
-            calcTotal: calcTotal
+            calcTotal: calcTotal,
+            isDirty: isDirty,
+            setIsDirty: setIsDirty
           }}>
           <BasicLayout variant="statementHeader" maxW="1500px">
             <Stack spacing={5}>
