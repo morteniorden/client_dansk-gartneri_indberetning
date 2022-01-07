@@ -11,14 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useRouter } from "next/router";
-import React, { FC, useContext, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useContext } from "react";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  setIsDirty: Dispatch<SetStateAction<boolean>>;
 }
 
-const UnsavedChangesModal: FC<Props> = ({ isOpen, onClose }) => {
+const UnsavedChangesModal: FC<Props> = ({ isOpen, onClose, setIsDirty }) => {
   const { save } = useContext(EditStatementContext);
   const router = useRouter();
 
@@ -45,7 +46,13 @@ const UnsavedChangesModal: FC<Props> = ({ isOpen, onClose }) => {
             <Button m={1} colorScheme="yellow" onClick={onClose}>
               Close
             </Button>
-            <Button m={1} colorScheme="red" onClick={() => router.push("/mystatements")}>
+            <Button
+              m={1}
+              colorScheme="red"
+              onClick={() => {
+                setIsDirty(false);
+                router.push("/mystatements");
+              }}>
               Ignore
             </Button>
           </ModalFooter>
