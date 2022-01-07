@@ -1,4 +1,4 @@
-import { Flex, Heading, HStack, Stack, Switch, Text } from "@chakra-ui/react";
+import { Button, Flex, Heading, HStack, Stack, Switch, Text } from "@chakra-ui/react";
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
@@ -98,6 +98,13 @@ const Accounts: FC = () => {
             <HStack>
               <Text>{t("accounts.showDeactive")}</Text>
               <Switch checked={showDeactive} onChange={e => setShowDeactive(e.target.checked)} />
+            </HStack>
+          </Flex>
+          <Flex justifyContent="space-between" alignItems="center">
+            <HStack></HStack>
+            <HStack>
+              <Button>Inviter alle</Button>
+              <Button>Send rykker til alle</Button>
             </HStack>
           </Flex>
           <AccountList
