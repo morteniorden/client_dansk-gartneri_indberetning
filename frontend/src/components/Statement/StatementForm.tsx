@@ -3,6 +3,7 @@ import AccountantSection from "components/Statement/AccountantSection/Accountant
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
+import { route } from "next/dist/server/router";
 import { useRouter } from "next/router";
 import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
@@ -40,12 +41,49 @@ const StatementForm: FC = () => {
     [setStatement, calcTotal]
   );
 
+  //Handles the back button, aka. going to the previous page
   useEffect(() => {
-    router.beforePopState(({ url, as, options }) => {
+    router.beforePopState(_ => {
       if (isDirty) openModal();
       return !isDirty;
     });
   }, [isDirty, openModal]);
+
+  const beforeUnloadEventHandler = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        if (e) e.returnValue = "";
+        return "";
+      }
+    },
+    [isDirty]
+  );
+
+  //Handles refresh page (F5/realod button top left) and close page (x on the tab)
+  useEffect(() => {
+    window.addEventListener("beforeunload", beforeUnloadEventHandler);
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadEventHandler);
+    };
+  }, [isDirty, openModal, beforeUnloadEventHandler]);
+
+  const routeChangeModalHandler = useCallback(() => {
+    if (isDirty) {
+      openModal();
+      router.events.emit("routeChangeError");
+      // An error object is not thrown as to not cause the error popup as this is not an actual error, but needed to prevent the route change
+      throw "Preventing changing page due to unsaved changes, this error can be safely ignored";
+    }
+  }, [isDirty, openModal, router]);
+
+  //Handles when trying to navigate to a different page/pressing a link
+  useEffect(() => {
+    router.events.on("routeChangeStart", routeChangeModalHandler);
+    return () => {
+      router.events.off("routeChangeStart", routeChangeModalHandler);
+    };
+  }, [routeChangeModalHandler]);
 
   const onValid = useCallback(
     (data: IStatementNoUsersDto) => {
@@ -64,7 +102,7 @@ const StatementForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} id="statement_form">
-      <UnsavedChangesModal isOpen={modalOpen} onClose={closeModal} />
+      <UnsavedChangesModal isOpen={modalOpen} onClose={closeModal} setIsDirty={setIsDirty} />
       <Stack sx={readonly && { "input:disabled": { opacity: 1, cursor: "text" } }}>
         <FormControlContext.Provider
           value={{
