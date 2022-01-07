@@ -80,7 +80,9 @@ const StatementReadonlyModal: FC<Props> = ({ id }) => {
                     fetchData: null,
                     isFetching: false,
                     total: null,
-                    calcTotal: null
+                    calcTotal: null,
+                    isDirty: false,
+                    setIsDirty: null
                   }}>
                   <Stack>
                     <CurrentAccountant statement={statement} />
