@@ -66,6 +66,11 @@ namespace Application.UnitTests
         new Statement { Id = 8, AccountingYear = 2022, ClientId = 1, AccountantId = 2, IsApproved = true, s1_mushrooms = 1000000000 }
       );;
 
+      context.StatementInfo.AddRange(
+        new StatementInfo { Id = 1, AccountingYear = 2019, s1_boughtPlants_permille = 0.25f, s1_boughtPlants_help = "help"},
+        new StatementInfo { Id = 2, AccountingYear = 2020, s1_boughtPlants_permille = 0.30f, s1_boughtPlants_help = "help help" }
+      );
+
       context.SaveChanges();
     }
 

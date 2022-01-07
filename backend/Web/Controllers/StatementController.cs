@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Application.StatementInfos;
+using Application.StatementInfos.Commands.UpdateStatementInfo;
+using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
 using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatementCommand;
@@ -32,7 +35,7 @@ namespace Web.Controllers
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<StatementDto>> GetStatement([FromRoute] int id)
+    public async Task<ActionResult<StatementAndInfoDto>> GetStatement([FromRoute] int id)
     {
       return await Mediator.Send(new GetStatementQuery
       {
@@ -66,8 +69,8 @@ namespace Web.Controllers
     }
 
     [HttpPut("{id}/signoff")]
-    public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id) { 
-    
+    public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id)
+    { 
       return await Mediator.Send(new SignOffStatementCommand
       {
         Id = id
@@ -109,6 +112,19 @@ namespace Web.Controllers
       });
 
       //return NoContent();
+    }
+
+    [HttpGet("statementInfo")]
+    public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
+    {
+      return await Mediator.Send(new GetAllStatementInfoQuery());
+    }
+
+    [HttpPut("statementInfo/{year}")]
+    public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
+    {
+      command.AccountingYear = year;
+      return await Mediator.Send(command);
     }
 
     [HttpGet("consent")]

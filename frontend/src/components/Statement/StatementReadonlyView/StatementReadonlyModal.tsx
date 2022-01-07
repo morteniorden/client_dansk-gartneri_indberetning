@@ -15,7 +15,7 @@ import { EditStatementContext } from "contexts/EditStatementContext";
 import { useLocales } from "hooks/useLocales";
 import { FC, useCallback, useEffect, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
-import { IClientDto, IStatementDto } from "services/backend/nswagts";
+import { IStatementDto, IStatementInfoDto } from "services/backend/nswagts";
 import { logger } from "utils/logger";
 
 import CurrentAccountant from "../ChangeAccountant/CurrentAccountant";
@@ -29,13 +29,17 @@ const StatementReadonlyModal: FC<Props> = ({ id }) => {
   const { t } = useLocales();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [statement, setStatement] = useState<IStatementDto>();
+  const [statementInfo, setStatementInfo] = useState<IStatementInfoDto>();
 
   const fetchData = useCallback(async () => {
     try {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
 
-      if (data != null) setStatement(data);
+      if (data != null) {
+        setStatement(data.statement);
+        setStatementInfo(data.statementInfo);
+      }
 
       if (data == null) {
         logger.info("statementClient.get no data");
@@ -67,10 +71,11 @@ const StatementReadonlyModal: FC<Props> = ({ id }) => {
                 </Stack>
               </ModalHeader>
               <ModalCloseButton />
-              <ModalBody>
+              <ModalBody sx={{ "input:disabled": { opacity: 1, cursor: "text" } }}>
                 <EditStatementContext.Provider
                   value={{
-                    statement: statement,
+                    statement,
+                    statementInfo,
                     setStatement: null,
                     save: null,
                     isSaving: false,
