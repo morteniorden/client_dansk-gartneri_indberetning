@@ -1,6 +1,7 @@
-import { Text } from "@chakra-ui/react";
+import { HStack, Text } from "@chakra-ui/react";
 import { useFormatNumber } from "hooks/useFormatNumber";
 import { FC, useContext, useMemo } from "react";
+import NumberFormat from "react-number-format";
 import { IStatementNoUsersDto } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";
@@ -12,14 +13,18 @@ interface Props {
 
 const TaxTotal: FC<Props> = ({ name, tax }) => {
   const { form } = useContext(FormControlContext);
-  const { formatNumberThousandSepDecimal } = useFormatNumber();
 
   const total = useMemo(() => {
     if (!form) return "";
-    return formatNumberThousandSepDecimal(((form[name] as number) * tax) / 1000);
+    return ((form[name] as number) * tax) / 1000;
   }, [form, name, tax]);
 
-  return <Text>{total} Kr.</Text>;
+  return (
+    <HStack>
+      <NumberFormat thousandSeparator="." decimalSeparator="," value={total} displayType="text" />
+      <Text>Kr.</Text>
+    </HStack>
+  );
 };
 
 export default TaxTotal;
