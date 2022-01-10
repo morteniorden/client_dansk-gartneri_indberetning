@@ -1,8 +1,8 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
@@ -36,27 +36,41 @@ namespace Application.Statements.Queries.GetStatementsCSV
       public async Task<CSVResponseDto> Handle(GetStatementsCSVQuery request, CancellationToken cancellationToken)
       {
         //Find all signed-off statements of the provided accounting year, or all if no year is provided
-        System.Collections.Generic.List<StatementCSVDto> statements = await _context.Statements
+        List<StatementCSVDto> statements = await _context.Statements
           .Where(e => (request.AccountingYear == null || e.AccountingYear == request.AccountingYear) && e.Status == StatementStatus.SignedOff)
           .Include(e => e.Client)
           .Include(e => e.Accountant)
           .ProjectTo<StatementCSVDto>(_mapper.ConfigurationProvider)
           .ToListAsync(cancellationToken);
 
-        string pattern = @"^s\d_";
         foreach (StatementCSVDto statement in statements)
         {
-          foreach (System.Reflection.PropertyInfo property in statement.GetType().GetProperties())
-          {
-            // Regex to check whether the property starts with "s<number>_" which only the values that must be negated does
-            if (!Regex.IsMatch(property.Name, pattern))
-            {
-              continue;
-            }
+          statement.s1_boughtPlants *= -1;
+          statement.s1_mushrooms *= -1;
+          statement.s1_tomatoCucumberHerb *= -1;
 
-            int value = (int)property.GetValue(statement);
-            property.SetValue(statement, value * -1);
-          }
+          statement.s3_boughtPlants *= -1;
+          statement.s3_carrots *= -1;
+          statement.s3_onions *= -1;
+          statement.s3_other *= -1;
+          statement.s3_peas *= -1;
+
+          statement.s4_boughtPlants *= -1;
+          statement.s4_cutFlowers *= -1;
+          statement.s4_onions *= -1;
+          statement.s4_plants *= -1;
+
+          statement.s7_boughtPlants *= -1;
+          statement.s7_plants *= -1;
+
+          statement.s8_applesPearsEtc *= -1;
+          statement.s8_cherries *= -1;
+          statement.s8_currant *= -1;
+          statement.s8_otherBerryFruit *= -1;
+          statement.s8_otherStoneFruit *= -1;
+          statement.s8_packaging *= -1;
+          statement.s8_plums *= -1;
+          statement.s8_strawberries *= -1;
         }
 
         byte[] bin;
