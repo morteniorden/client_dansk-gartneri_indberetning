@@ -124,7 +124,7 @@ const AccountantSection: FC = () => {
                 <Link
                   w="min"
                   colorScheme="green"
-                  href="https://lbst.dk/om-os/tilsyn-med-fonde/#c81749"
+                  href={process.env.NEXT_PUBLIC_ERKLERING_LINK}
                   isExternal>
                   {t("statements.accountantSection.downloadYourConsent")}
                 </Link>

@@ -99,7 +99,7 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
               </Text>
             )}
             {statement.isApproved && (
-              <Link w="min" href="https://lbst.dk/om-os/tilsyn-med-fonde/#c81749" isExternal>
+              <Link w="min" href={process.env.NEXT_PUBLIC_ERKLERING_LINK} isExternal>
                 {t("statements.downloadConsent")}
               </Link>
             )}
