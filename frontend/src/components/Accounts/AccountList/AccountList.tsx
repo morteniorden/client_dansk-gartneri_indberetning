@@ -23,9 +23,6 @@ const AccountList: FC<Props> = ({ data, accountingYear, sortBy }) => {
           else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
           return 0;
         case Sorting.indexOf("Status"): {
-          console.log(a);
-          console.log(b);
-
           let aVal, bVal;
 
           try {
