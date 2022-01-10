@@ -490,13 +490,16 @@ export class MailClient extends ClientBase implements IMailClient {
 export interface IStatementClient {
     getAllStatements(): Promise<StatementDto[]>;
     getMyStatements(): Promise<StatementDto[]>;
-    getStatement(id: number): Promise<StatementDto>;
+    getStatement(id: number): Promise<StatementAndInfoDto>;
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     checkIsSigned(id: number, caseFileId?: number | undefined): Promise<boolean>;
     createStatement(command: CreateStatementCommand): Promise<number>;
     signOffStatement(id: number): Promise<GetSigningUrlDto>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
+    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse>;
+    getAllStatementInfo(): Promise<StatementInfoDto[]>;
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
 }
@@ -592,7 +595,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<StatementDto[]>(<any>null);
     }
 
-    getStatement(id: number): Promise<StatementDto> {
+    getStatement(id: number): Promise<StatementAndInfoDto> {
         let url_ = this.baseUrl + "/api/Statement/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -613,14 +616,14 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processGetStatement(response: Response): Promise<StatementDto> {
+    protected processGetStatement(response: Response): Promise<StatementAndInfoDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = StatementDto.fromJS(resultData200);
+            result200 = StatementAndInfoDto.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -628,7 +631,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<StatementDto>(<any>null);
+        return Promise.resolve<StatementAndInfoDto>(<any>null);
     }
 
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse> {
@@ -911,6 +914,89 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<GetSigningUrlDto>(<any>null);
+    }
+
+    getAllStatementInfo(): Promise<StatementInfoDto[]> {
+        let url_ = this.baseUrl + "/api/Statement/statementInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllStatementInfo(_response));
+        });
+    }
+
+    protected processGetAllStatementInfo(response: Response): Promise<StatementInfoDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(StatementInfoDto.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<StatementInfoDto[]>(<any>null);
+    }
+
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit> {
+        let url_ = this.baseUrl + "/api/Statement/statementInfo/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdateStatementInfo(_response));
+        });
+    }
+
+    protected processUpdateStatementInfo(response: Response): Promise<Unit> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Unit.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Unit>(<any>null);
     }
 
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto> {
@@ -2459,6 +2545,264 @@ export enum StatementStatus {
     SignedOff = 2,
 }
 
+export class StatementAndInfoDto implements IStatementAndInfoDto {
+    statement?: StatementDto | null;
+    statementInfo?: StatementInfoDto | null;
+
+    constructor(data?: IStatementAndInfoDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.statement = data.statement && !(<any>data.statement).toJSON ? new StatementDto(data.statement) : <StatementDto>this.statement; 
+            this.statementInfo = data.statementInfo && !(<any>data.statementInfo).toJSON ? new StatementInfoDto(data.statementInfo) : <StatementInfoDto>this.statementInfo; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.statement = _data["statement"] ? StatementDto.fromJS(_data["statement"]) : <any>null;
+            this.statementInfo = _data["statementInfo"] ? StatementInfoDto.fromJS(_data["statementInfo"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): StatementAndInfoDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatementAndInfoDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["statement"] = this.statement ? this.statement.toJSON() : <any>null;
+        data["statementInfo"] = this.statementInfo ? this.statementInfo.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IStatementAndInfoDto {
+    statement?: IStatementDto | null;
+    statementInfo?: IStatementInfoDto | null;
+}
+
+export class StatementInfoDto implements IStatementInfoDto {
+    id?: number;
+    accountingYear?: number;
+    s1_mushrooms_permille?: number;
+    s1_mushrooms_help?: string | null;
+    s1_tomatoCucumberHerb_permille?: number;
+    s1_tomatoCucumberHerb_help?: string | null;
+    s1_boughtPlants_permille?: number;
+    s1_boughtPlants_help?: string | null;
+    s3_carrots_permille?: number;
+    s3_carrots_help?: string | null;
+    s3_peas_permille?: number;
+    s3_peas_help?: string | null;
+    s3_onions_permille?: number;
+    s3_onions_help?: string | null;
+    s3_other_permille?: number;
+    s3_other_help?: string | null;
+    s3_boughtPlants_permille?: number;
+    s3_boughtPlants_help?: string | null;
+    s4_onions_permille?: number;
+    s4_onions_help?: string | null;
+    s4_plants_permille?: number;
+    s4_plants_help?: string | null;
+    s4_cutFlowers_permille?: number;
+    s4_cutFlowers_help?: string | null;
+    s4_boughtPlants_permille?: number;
+    s4_boughtPlants_help?: string | null;
+    s7_plants_permille?: number;
+    s7_plants_help?: string | null;
+    s7_boughtPlants_permille?: number;
+    s7_boughtPlants_help?: string | null;
+    s8_applesPearsEtc_permille?: number;
+    s8_applesPearsEtc_help?: string | null;
+    s8_packaging_permille?: number;
+    s8_packaging_help?: string | null;
+    s8_cherries_permille?: number;
+    s8_cherries_help?: string | null;
+    s8_plums_permille?: number;
+    s8_plums_help?: string | null;
+    s8_otherStoneFruit_permille?: number;
+    s8_otherStoneFruit_help?: string | null;
+    s8_currant_permille?: number;
+    s8_currant_help?: string | null;
+    s8_strawberries_permille?: number;
+    s8_strawberries_help?: string | null;
+    s8_otherBerryFruit_permille?: number;
+    s8_otherBerryFruit_help?: string | null;
+
+    constructor(data?: IStatementInfoDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
+            this.s1_mushrooms_permille = _data["s1_mushrooms_permille"] !== undefined ? _data["s1_mushrooms_permille"] : <any>null;
+            this.s1_mushrooms_help = _data["s1_mushrooms_help"] !== undefined ? _data["s1_mushrooms_help"] : <any>null;
+            this.s1_tomatoCucumberHerb_permille = _data["s1_tomatoCucumberHerb_permille"] !== undefined ? _data["s1_tomatoCucumberHerb_permille"] : <any>null;
+            this.s1_tomatoCucumberHerb_help = _data["s1_tomatoCucumberHerb_help"] !== undefined ? _data["s1_tomatoCucumberHerb_help"] : <any>null;
+            this.s1_boughtPlants_permille = _data["s1_boughtPlants_permille"] !== undefined ? _data["s1_boughtPlants_permille"] : <any>null;
+            this.s1_boughtPlants_help = _data["s1_boughtPlants_help"] !== undefined ? _data["s1_boughtPlants_help"] : <any>null;
+            this.s3_carrots_permille = _data["s3_carrots_permille"] !== undefined ? _data["s3_carrots_permille"] : <any>null;
+            this.s3_carrots_help = _data["s3_carrots_help"] !== undefined ? _data["s3_carrots_help"] : <any>null;
+            this.s3_peas_permille = _data["s3_peas_permille"] !== undefined ? _data["s3_peas_permille"] : <any>null;
+            this.s3_peas_help = _data["s3_peas_help"] !== undefined ? _data["s3_peas_help"] : <any>null;
+            this.s3_onions_permille = _data["s3_onions_permille"] !== undefined ? _data["s3_onions_permille"] : <any>null;
+            this.s3_onions_help = _data["s3_onions_help"] !== undefined ? _data["s3_onions_help"] : <any>null;
+            this.s3_other_permille = _data["s3_other_permille"] !== undefined ? _data["s3_other_permille"] : <any>null;
+            this.s3_other_help = _data["s3_other_help"] !== undefined ? _data["s3_other_help"] : <any>null;
+            this.s3_boughtPlants_permille = _data["s3_boughtPlants_permille"] !== undefined ? _data["s3_boughtPlants_permille"] : <any>null;
+            this.s3_boughtPlants_help = _data["s3_boughtPlants_help"] !== undefined ? _data["s3_boughtPlants_help"] : <any>null;
+            this.s4_onions_permille = _data["s4_onions_permille"] !== undefined ? _data["s4_onions_permille"] : <any>null;
+            this.s4_onions_help = _data["s4_onions_help"] !== undefined ? _data["s4_onions_help"] : <any>null;
+            this.s4_plants_permille = _data["s4_plants_permille"] !== undefined ? _data["s4_plants_permille"] : <any>null;
+            this.s4_plants_help = _data["s4_plants_help"] !== undefined ? _data["s4_plants_help"] : <any>null;
+            this.s4_cutFlowers_permille = _data["s4_cutFlowers_permille"] !== undefined ? _data["s4_cutFlowers_permille"] : <any>null;
+            this.s4_cutFlowers_help = _data["s4_cutFlowers_help"] !== undefined ? _data["s4_cutFlowers_help"] : <any>null;
+            this.s4_boughtPlants_permille = _data["s4_boughtPlants_permille"] !== undefined ? _data["s4_boughtPlants_permille"] : <any>null;
+            this.s4_boughtPlants_help = _data["s4_boughtPlants_help"] !== undefined ? _data["s4_boughtPlants_help"] : <any>null;
+            this.s7_plants_permille = _data["s7_plants_permille"] !== undefined ? _data["s7_plants_permille"] : <any>null;
+            this.s7_plants_help = _data["s7_plants_help"] !== undefined ? _data["s7_plants_help"] : <any>null;
+            this.s7_boughtPlants_permille = _data["s7_boughtPlants_permille"] !== undefined ? _data["s7_boughtPlants_permille"] : <any>null;
+            this.s7_boughtPlants_help = _data["s7_boughtPlants_help"] !== undefined ? _data["s7_boughtPlants_help"] : <any>null;
+            this.s8_applesPearsEtc_permille = _data["s8_applesPearsEtc_permille"] !== undefined ? _data["s8_applesPearsEtc_permille"] : <any>null;
+            this.s8_applesPearsEtc_help = _data["s8_applesPearsEtc_help"] !== undefined ? _data["s8_applesPearsEtc_help"] : <any>null;
+            this.s8_packaging_permille = _data["s8_packaging_permille"] !== undefined ? _data["s8_packaging_permille"] : <any>null;
+            this.s8_packaging_help = _data["s8_packaging_help"] !== undefined ? _data["s8_packaging_help"] : <any>null;
+            this.s8_cherries_permille = _data["s8_cherries_permille"] !== undefined ? _data["s8_cherries_permille"] : <any>null;
+            this.s8_cherries_help = _data["s8_cherries_help"] !== undefined ? _data["s8_cherries_help"] : <any>null;
+            this.s8_plums_permille = _data["s8_plums_permille"] !== undefined ? _data["s8_plums_permille"] : <any>null;
+            this.s8_plums_help = _data["s8_plums_help"] !== undefined ? _data["s8_plums_help"] : <any>null;
+            this.s8_otherStoneFruit_permille = _data["s8_otherStoneFruit_permille"] !== undefined ? _data["s8_otherStoneFruit_permille"] : <any>null;
+            this.s8_otherStoneFruit_help = _data["s8_otherStoneFruit_help"] !== undefined ? _data["s8_otherStoneFruit_help"] : <any>null;
+            this.s8_currant_permille = _data["s8_currant_permille"] !== undefined ? _data["s8_currant_permille"] : <any>null;
+            this.s8_currant_help = _data["s8_currant_help"] !== undefined ? _data["s8_currant_help"] : <any>null;
+            this.s8_strawberries_permille = _data["s8_strawberries_permille"] !== undefined ? _data["s8_strawberries_permille"] : <any>null;
+            this.s8_strawberries_help = _data["s8_strawberries_help"] !== undefined ? _data["s8_strawberries_help"] : <any>null;
+            this.s8_otherBerryFruit_permille = _data["s8_otherBerryFruit_permille"] !== undefined ? _data["s8_otherBerryFruit_permille"] : <any>null;
+            this.s8_otherBerryFruit_help = _data["s8_otherBerryFruit_help"] !== undefined ? _data["s8_otherBerryFruit_help"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): StatementInfoDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatementInfoDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
+        data["s1_mushrooms_permille"] = this.s1_mushrooms_permille !== undefined ? this.s1_mushrooms_permille : <any>null;
+        data["s1_mushrooms_help"] = this.s1_mushrooms_help !== undefined ? this.s1_mushrooms_help : <any>null;
+        data["s1_tomatoCucumberHerb_permille"] = this.s1_tomatoCucumberHerb_permille !== undefined ? this.s1_tomatoCucumberHerb_permille : <any>null;
+        data["s1_tomatoCucumberHerb_help"] = this.s1_tomatoCucumberHerb_help !== undefined ? this.s1_tomatoCucumberHerb_help : <any>null;
+        data["s1_boughtPlants_permille"] = this.s1_boughtPlants_permille !== undefined ? this.s1_boughtPlants_permille : <any>null;
+        data["s1_boughtPlants_help"] = this.s1_boughtPlants_help !== undefined ? this.s1_boughtPlants_help : <any>null;
+        data["s3_carrots_permille"] = this.s3_carrots_permille !== undefined ? this.s3_carrots_permille : <any>null;
+        data["s3_carrots_help"] = this.s3_carrots_help !== undefined ? this.s3_carrots_help : <any>null;
+        data["s3_peas_permille"] = this.s3_peas_permille !== undefined ? this.s3_peas_permille : <any>null;
+        data["s3_peas_help"] = this.s3_peas_help !== undefined ? this.s3_peas_help : <any>null;
+        data["s3_onions_permille"] = this.s3_onions_permille !== undefined ? this.s3_onions_permille : <any>null;
+        data["s3_onions_help"] = this.s3_onions_help !== undefined ? this.s3_onions_help : <any>null;
+        data["s3_other_permille"] = this.s3_other_permille !== undefined ? this.s3_other_permille : <any>null;
+        data["s3_other_help"] = this.s3_other_help !== undefined ? this.s3_other_help : <any>null;
+        data["s3_boughtPlants_permille"] = this.s3_boughtPlants_permille !== undefined ? this.s3_boughtPlants_permille : <any>null;
+        data["s3_boughtPlants_help"] = this.s3_boughtPlants_help !== undefined ? this.s3_boughtPlants_help : <any>null;
+        data["s4_onions_permille"] = this.s4_onions_permille !== undefined ? this.s4_onions_permille : <any>null;
+        data["s4_onions_help"] = this.s4_onions_help !== undefined ? this.s4_onions_help : <any>null;
+        data["s4_plants_permille"] = this.s4_plants_permille !== undefined ? this.s4_plants_permille : <any>null;
+        data["s4_plants_help"] = this.s4_plants_help !== undefined ? this.s4_plants_help : <any>null;
+        data["s4_cutFlowers_permille"] = this.s4_cutFlowers_permille !== undefined ? this.s4_cutFlowers_permille : <any>null;
+        data["s4_cutFlowers_help"] = this.s4_cutFlowers_help !== undefined ? this.s4_cutFlowers_help : <any>null;
+        data["s4_boughtPlants_permille"] = this.s4_boughtPlants_permille !== undefined ? this.s4_boughtPlants_permille : <any>null;
+        data["s4_boughtPlants_help"] = this.s4_boughtPlants_help !== undefined ? this.s4_boughtPlants_help : <any>null;
+        data["s7_plants_permille"] = this.s7_plants_permille !== undefined ? this.s7_plants_permille : <any>null;
+        data["s7_plants_help"] = this.s7_plants_help !== undefined ? this.s7_plants_help : <any>null;
+        data["s7_boughtPlants_permille"] = this.s7_boughtPlants_permille !== undefined ? this.s7_boughtPlants_permille : <any>null;
+        data["s7_boughtPlants_help"] = this.s7_boughtPlants_help !== undefined ? this.s7_boughtPlants_help : <any>null;
+        data["s8_applesPearsEtc_permille"] = this.s8_applesPearsEtc_permille !== undefined ? this.s8_applesPearsEtc_permille : <any>null;
+        data["s8_applesPearsEtc_help"] = this.s8_applesPearsEtc_help !== undefined ? this.s8_applesPearsEtc_help : <any>null;
+        data["s8_packaging_permille"] = this.s8_packaging_permille !== undefined ? this.s8_packaging_permille : <any>null;
+        data["s8_packaging_help"] = this.s8_packaging_help !== undefined ? this.s8_packaging_help : <any>null;
+        data["s8_cherries_permille"] = this.s8_cherries_permille !== undefined ? this.s8_cherries_permille : <any>null;
+        data["s8_cherries_help"] = this.s8_cherries_help !== undefined ? this.s8_cherries_help : <any>null;
+        data["s8_plums_permille"] = this.s8_plums_permille !== undefined ? this.s8_plums_permille : <any>null;
+        data["s8_plums_help"] = this.s8_plums_help !== undefined ? this.s8_plums_help : <any>null;
+        data["s8_otherStoneFruit_permille"] = this.s8_otherStoneFruit_permille !== undefined ? this.s8_otherStoneFruit_permille : <any>null;
+        data["s8_otherStoneFruit_help"] = this.s8_otherStoneFruit_help !== undefined ? this.s8_otherStoneFruit_help : <any>null;
+        data["s8_currant_permille"] = this.s8_currant_permille !== undefined ? this.s8_currant_permille : <any>null;
+        data["s8_currant_help"] = this.s8_currant_help !== undefined ? this.s8_currant_help : <any>null;
+        data["s8_strawberries_permille"] = this.s8_strawberries_permille !== undefined ? this.s8_strawberries_permille : <any>null;
+        data["s8_strawberries_help"] = this.s8_strawberries_help !== undefined ? this.s8_strawberries_help : <any>null;
+        data["s8_otherBerryFruit_permille"] = this.s8_otherBerryFruit_permille !== undefined ? this.s8_otherBerryFruit_permille : <any>null;
+        data["s8_otherBerryFruit_help"] = this.s8_otherBerryFruit_help !== undefined ? this.s8_otherBerryFruit_help : <any>null;
+        return data; 
+    }
+}
+
+export interface IStatementInfoDto {
+    id?: number;
+    accountingYear?: number;
+    s1_mushrooms_permille?: number;
+    s1_mushrooms_help?: string | null;
+    s1_tomatoCucumberHerb_permille?: number;
+    s1_tomatoCucumberHerb_help?: string | null;
+    s1_boughtPlants_permille?: number;
+    s1_boughtPlants_help?: string | null;
+    s3_carrots_permille?: number;
+    s3_carrots_help?: string | null;
+    s3_peas_permille?: number;
+    s3_peas_help?: string | null;
+    s3_onions_permille?: number;
+    s3_onions_help?: string | null;
+    s3_other_permille?: number;
+    s3_other_help?: string | null;
+    s3_boughtPlants_permille?: number;
+    s3_boughtPlants_help?: string | null;
+    s4_onions_permille?: number;
+    s4_onions_help?: string | null;
+    s4_plants_permille?: number;
+    s4_plants_help?: string | null;
+    s4_cutFlowers_permille?: number;
+    s4_cutFlowers_help?: string | null;
+    s4_boughtPlants_permille?: number;
+    s4_boughtPlants_help?: string | null;
+    s7_plants_permille?: number;
+    s7_plants_help?: string | null;
+    s7_boughtPlants_permille?: number;
+    s7_boughtPlants_help?: string | null;
+    s8_applesPearsEtc_permille?: number;
+    s8_applesPearsEtc_help?: string | null;
+    s8_packaging_permille?: number;
+    s8_packaging_help?: string | null;
+    s8_cherries_permille?: number;
+    s8_cherries_help?: string | null;
+    s8_plums_permille?: number;
+    s8_plums_help?: string | null;
+    s8_otherStoneFruit_permille?: number;
+    s8_otherStoneFruit_help?: string | null;
+    s8_currant_permille?: number;
+    s8_currant_help?: string | null;
+    s8_strawberries_permille?: number;
+    s8_strawberries_help?: string | null;
+    s8_otherBerryFruit_permille?: number;
+    s8_otherBerryFruit_help?: string | null;
+}
+
 export class CreateStatementCommand implements ICreateStatementCommand {
     clientId?: number;
     revisionYear?: number;
@@ -2614,6 +2958,73 @@ export class CSVResponseDto implements ICSVResponseDto {
 export interface ICSVResponseDto {
     fileName?: string | null;
     content?: string | null;
+}
+
+export class Unit implements IUnit {
+
+    constructor(data?: IUnit) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): Unit {
+        data = typeof data === 'object' ? data : {};
+        let result = new Unit();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data; 
+    }
+}
+
+export interface IUnit {
+}
+
+export class UpdateStatementInfoCommand implements IUpdateStatementInfoCommand {
+    newInfo?: StatementInfoDto | null;
+
+    constructor(data?: IUpdateStatementInfoCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.newInfo = data.newInfo && !(<any>data.newInfo).toJSON ? new StatementInfoDto(data.newInfo) : <StatementInfoDto>this.newInfo; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.newInfo = _data["newInfo"] ? StatementInfoDto.fromJS(_data["newInfo"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UpdateStatementInfoCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateStatementInfoCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["newInfo"] = this.newInfo ? this.newInfo.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IUpdateStatementInfoCommand {
+    newInfo?: IStatementInfoDto | null;
 }
 
 export class ConsentFileDto implements IConsentFileDto {
