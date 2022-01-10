@@ -58,7 +58,7 @@ namespace Web.Controllers
     public async Task<ActionResult> UpdateStatement([FromRoute] int id, UpdateStatementCommand command)
     {
       command.Id = id;
-      _ = await Mediator.Send(command);
+      await Mediator.Send(command);
 
       return NoContent();
     }
@@ -85,7 +85,7 @@ namespace Web.Controllers
     [HttpPut("statement/{id}/unassignAccountant")]
     public async Task<ActionResult> UnassignAccountant([FromRoute] int id)
     {
-      _ = await Mediator.Send(new UnassignAccountantCommand
+      await Mediator.Send(new UnassignAccountantCommand
       {
         StatementId = id
       });
