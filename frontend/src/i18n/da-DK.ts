@@ -113,7 +113,8 @@ export const table: Locale = {
     saveErrorTitle: "Fejl",
     saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer.",
     back: "Tilbage",
-    sendRequest: "Send anmodning"
+    sendRequest: "Send anmodning",
+    edit: "Rediger"
   },
 
   password: {
@@ -294,5 +295,11 @@ export const table: Locale = {
     signedOffStatus: "Besvaret",
     notSignedOffStatus: "Ikke besvaret",
     fillOutStatement: "Besvar"
+  },
+
+  statementInfo: {
+    editStatementInfo: "Rediger oplysningsskema",
+    helpText: "Hjælpetekst",
+    tax: "Afgift"
   }
 };
