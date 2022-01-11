@@ -55,10 +55,10 @@ const ComboSelect: FC<Props> = ({
     if (borderColorToken === DARK) return darkColor;
   }, [lightColor, darkColor, borderColorToken]);
 
-  const filteredOptions = useMemo(() => options.filter(x => x.name.indexOf(searchValue) !== -1), [
-    searchValue,
-    options
-  ]);
+  const filteredOptions = useMemo(
+    () => options.filter(x => x.name.indexOf(searchValue) !== -1),
+    [searchValue, options]
+  );
 
   useEffect(() => {
     setActiveItem(value);

@@ -11,13 +11,8 @@ interface Props {
 
 const StatusBadge: FC<Props> = ({ client, accountingYear }) => {
   const { t } = useLocales();
-  const {
-    statusNotSent,
-    statusIsSent,
-    statusIsEdited,
-    statusIsSigned,
-    statusTextColor
-  } = useColors();
+  const { statusNotSent, statusIsSent, statusIsEdited, statusIsSigned, statusTextColor } =
+    useColors();
   const { colorMode } = useColorMode();
   const locales = useLocales();
 

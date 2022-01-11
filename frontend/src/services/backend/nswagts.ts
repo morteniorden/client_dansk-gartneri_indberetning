@@ -501,6 +501,8 @@ export interface IStatementClient {
     getAllStatementInfo(): Promise<StatementInfoDto[]>;
     updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto>;
+    getAllStatementInfo(): Promise<StatementInfoDto[]>;
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
 }
 

@@ -270,6 +270,13 @@ export interface Locale {
       consentSignedText: string;
       downloadYourConsent: string;
     };
+    unsavedChanges: {
+      modalTitle: string;
+      modalText: string;
+      saveButton: string;
+      cancelButton: string;
+      ignoreButton: string;
+    };
   };
 
   myStatements: {
