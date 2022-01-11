@@ -113,7 +113,8 @@ export const table: Locale = {
     saveErrorTitle: "Fejl",
     saveErrorText: "Der skete en fejl, da vi forsøgte at gemme dine ændringer.",
     back: "Tilbage",
-    sendRequest: "Send anmodning"
+    sendRequest: "Send anmodning",
+    edit: "Rediger"
   },
 
   password: {
@@ -282,6 +283,13 @@ export const table: Locale = {
       consentSignedText:
         "Dit samtykke til oplysningsskemaet er nu underskrevet. Klienten kan nu se, at du har givet dit samtykke til oplysningsskemaet og kan nu selv endelig underskrive og indsende skemaet.",
       downloadYourConsent: "Hent din erklæring"
+    },
+    unsavedChanges: {
+      modalTitle: "Ikke gemte ændringer",
+      modalText: "Du har ændringer der ikke er gemt, og er ved at forlade siden",
+      saveButton: "Gem",
+      cancelButton: "Annuler",
+      ignoreButton: "Ignorer"
     }
   },
 
@@ -293,5 +301,11 @@ export const table: Locale = {
     signedOffStatus: "Besvaret",
     notSignedOffStatus: "Ikke besvaret",
     fillOutStatement: "Besvar"
+  },
+
+  statementInfo: {
+    editStatementInfo: "Rediger oplysningsskema",
+    helpText: "Hjælpetekst",
+    tax: "Afgift"
   }
 };

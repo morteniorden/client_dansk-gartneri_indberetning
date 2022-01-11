@@ -113,7 +113,8 @@ export const table: Locale = {
     saveErrorTitle: "Error",
     saveErrorText: "An error happened when trying to save your changes.",
     back: "Cancel",
-    sendRequest: "Send request"
+    sendRequest: "Send request",
+    edit: "Edit"
   },
 
   password: {
@@ -284,6 +285,13 @@ export const table: Locale = {
       consentSignedText:
         "Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to Dansk Gartneri.",
       downloadYourConsent: "Download your consent"
+    },
+    unsavedChanges: {
+      modalTitle: "Unsaved chagnes",
+      modalText: "You have changes you haven't saved, and are about to leave the page",
+      saveButton: "Save",
+      cancelButton: "Calcel",
+      ignoreButton: "Ignore"
     }
   },
 
@@ -295,5 +303,11 @@ export const table: Locale = {
     signedOffStatus: "Finished",
     notSignedOffStatus: "Pending",
     fillOutStatement: "Go to statement"
+  },
+
+  statementInfo: {
+    editStatementInfo: "Edit statement",
+    helpText: "Help text",
+    tax: "Tax"
   }
 };
