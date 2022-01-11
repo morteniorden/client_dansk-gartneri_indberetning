@@ -1,12 +1,12 @@
-using Application.Common.Interfaces;
-using Domain.Common;
-using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Interfaces;
+using Domain.Common;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence
 {
@@ -24,6 +24,11 @@ namespace Infrastructure.Persistence
       _dateTimeOffsetService = dateTimeOffset;
     }
     public DbSet<User> Users { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<Email> Emails { get; set; }
+    public DbSet<Statement> Statements { get; set; }
+    public DbSet<StatementInfo> StatementInfo { get; set; }
+
 
     [NotMapped]
     public IQueryable<Client> Clients
@@ -51,12 +56,6 @@ namespace Infrastructure.Persistence
         return Users.OfType<Admin>();
       }
     }
-
-
-
-    public DbSet<Address> Addresses { get; set; }
-    public DbSet<Email> Emails { get; set; }
-    public DbSet<Statement> Statements { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

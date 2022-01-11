@@ -110,6 +110,7 @@ export interface Locale {
     saveChanges: string;
     back: string;
     sendRequest: string;
+    edit: string;
   };
 
   password: {
@@ -274,6 +275,13 @@ export interface Locale {
       Name: string;
       Status: string;
     };
+    unsavedChanges: {
+      modalTitle: string;
+      modalText: string;
+      saveButton: string;
+      cancelButton: string;
+      ignoreButton: string;
+    };
   };
 
   myStatements: {
@@ -284,5 +292,11 @@ export interface Locale {
     signedOffStatus: string;
     notSignedOffStatus: string;
     fillOutStatement: string;
+  };
+
+  statementInfo: {
+    editStatementInfo: string;
+    helpText: string;
+    tax: string;
   };
 }

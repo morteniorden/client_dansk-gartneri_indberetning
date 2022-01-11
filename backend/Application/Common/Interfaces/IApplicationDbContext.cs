@@ -1,8 +1,8 @@
-using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Common.Interfaces
 {
@@ -15,6 +15,7 @@ namespace Application.Common.Interfaces
     DbSet<Address> Addresses { get; set; }
     DbSet<Email> Emails { get; set; }
     DbSet<Statement> Statements { get; set; }
+    DbSet<StatementInfo> StatementInfo { get; set; }
 
     int SaveChanges();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
