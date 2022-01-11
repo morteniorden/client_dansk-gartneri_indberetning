@@ -1,4 +1,14 @@
-import { Button, Flex, Heading, HStack, Skeleton, Stack, Text, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Link,
+  Skeleton,
+  Stack,
+  Text,
+  useToast
+} from "@chakra-ui/react";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
@@ -42,27 +52,6 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
         isClosable: true,
         position: "bottom-left"
       });
-    }
-  }, [statement]);
-
-  const fetchConsent = useCallback(async () => {
-    try {
-      const statementClient = await genStatementClient();
-      const data = await statementClient.getConsentFile(statement.id);
-
-      if (data != null) {
-        const downloadLink = document.createElement("a");
-
-        //This assumes that the file is always a pdf. But what if we want to support different files?
-        downloadLink.href = "data:application/pdf;base64," + data.stream;
-        downloadLink.download = `samtykkeerklæring ${statement.client.name} ${statement.accountingYear}`;
-
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-      }
-    } catch (err) {
-      logger.warn("statementClient.get Error", err);
     }
   }, [statement]);
 
@@ -110,9 +99,9 @@ const CurrentAccountant: FC<Props> = ({ statement }) => {
               </Text>
             )}
             {statement.isApproved && (
-              <Button variant="link" w="min" onClick={fetchConsent}>
+              <Link w="min" href={process.env.NEXT_PUBLIC_ERKLERING_LINK} isExternal>
                 {t("statements.downloadConsent")}
-              </Button>
+              </Link>
             )}
           </Stack>
         </HStack>
