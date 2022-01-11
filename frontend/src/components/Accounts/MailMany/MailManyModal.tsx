@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Button,
   Modal,
   ModalBody,
@@ -12,9 +13,9 @@ import { Dispatch, FC, useState } from "react";
 import { AllListActions } from "react-list-reducer";
 import { IClientDto } from "services/backend/nswagts";
 
-import { ActiveFilter, SearchFilter } from "./Filters/ClientFilters";
+import { ActiveFilter, SearchFilter } from "../Filters/ClientFilters";
+import SearchBar from "../SearchBar";
 import MailManyRow from "./MailManyRow";
-import SearchBar from "./SearchBar";
 
 export interface MailManyProps {
   mailToClients: IClientDto[];
@@ -34,20 +35,26 @@ const MailManyModal: FC<MailManyProps> = ({
   const [searchString, setSearchString] = useState("");
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent minW="container.md">
         <ModalHeader>{mailReason}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <SearchBar cb={value => setSearchString(value)} />
-          {mailToClients
-            .filter(client =>
-              [SearchFilter, ActiveFilter].every(f => f.predicate(client, searchString))
-            )
-            .map(client => (
-              <MailManyRow key={client.id} client={client} dispatchClient={dispatchMailToClients} />
-            ))}
+          <Accordion allowToggle>
+            {mailToClients
+              .filter(client =>
+                [SearchFilter, ActiveFilter].every(f => f.predicate(client, searchString))
+              )
+              .map(client => (
+                <MailManyRow
+                  key={client.id}
+                  client={client}
+                  dispatchClient={dispatchMailToClients}
+                />
+              ))}
+          </Accordion>
         </ModalBody>
 
         <ModalFooter>

@@ -24,7 +24,7 @@ import { logger } from "utils/logger";
 import AccountList from "./AccountList/AccountList";
 import DownloadCsvBtn from "./DownloadCsvBtn";
 import { ActiveFilter, SearchFilter } from "./Filters/ClientFilters";
-import MailManyModal, { MailManyProps } from "./MailManyModal";
+import MailManyModal, { MailManyProps } from "./MailMany/MailManyModal";
 import NewAccountModal from "./NewAccountModal";
 import SearchBar from "./SearchBar";
 
