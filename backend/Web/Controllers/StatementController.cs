@@ -13,6 +13,7 @@ using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSV;
 using Application.Users.Commands.UnassignAccountantCommand;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
