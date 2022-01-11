@@ -11,6 +11,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { genStatementClient } from "services/backend/apiClients";
 import {
   IStatementDto,
+  IStatementInfoDto,
   RoleEnum,
   StatementStatus,
   UpdateStatementCommand
@@ -29,6 +30,7 @@ const Statement: FC<Props> = ({ id }) => {
   const toast = useToast();
   const [statement, setStatement] = useState<IStatementDto>(null);
   const [isDirty, setIsDirty] = useState(false);
+  const [statementInfo, setStatementInfo] = useState<IStatementInfoDto>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { activeUser } = useAuth();
@@ -44,8 +46,11 @@ const Statement: FC<Props> = ({ id }) => {
       const statementClient = await genStatementClient();
       const data = await statementClient.getStatement(id);
 
-      if (data != null) setStatement(data);
-      else {
+      if (data != null) {
+        setStatement(data.statement);
+        setStatementInfo(data.statementInfo);
+        console.log(data.statementInfo);
+      } else {
         logger.info("statementClient.get no data");
         router.push("/mystatements");
       }
@@ -186,7 +191,8 @@ const Statement: FC<Props> = ({ id }) => {
             total: total,
             calcTotal: calcTotal,
             isDirty: isDirty,
-            setIsDirty: setIsDirty
+            setIsDirty: setIsDirty,
+            statementInfo: statementInfo
           }}>
           <BasicLayout variant="statementHeader" maxW="1500px">
             <Stack spacing={5}>

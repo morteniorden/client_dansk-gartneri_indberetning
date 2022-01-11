@@ -1,5 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { IStatementDto } from "services/backend/nswagts";
+import { IStatementDto, IStatementInfoDto } from "services/backend/nswagts";
 
 type ContextType = {
   statement: IStatementDto;
@@ -15,6 +15,7 @@ type ContextType = {
   calcTotal: () => number;
   isDirty: boolean;
   setIsDirty: Dispatch<SetStateAction<boolean>>;
+  statementInfo: IStatementInfoDto;
 };
 
 export const EditStatementContext = createContext<ContextType>({
@@ -30,5 +31,6 @@ export const EditStatementContext = createContext<ContextType>({
   total: 0,
   calcTotal: () => 0,
   isDirty: false,
-  setIsDirty: () => null
+  setIsDirty: () => null,
+  statementInfo: null
 });

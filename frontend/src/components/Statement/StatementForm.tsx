@@ -25,8 +25,16 @@ const StatementForm: FC = () => {
   const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
   const { activeUser } = useAuth();
   const { isOpen: modalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
-  const { statement, setStatement, submit, readonly, calcTotal, isDirty, setIsDirty } =
-    useContext(EditStatementContext);
+  const {
+    statement,
+    setStatement,
+    submit,
+    readonly,
+    calcTotal,
+    isDirty,
+    setIsDirty,
+    statementInfo
+  } = useContext(EditStatementContext);
   const router = useRouter();
 
   const updatedFormAttribute = useCallback(
@@ -128,7 +136,7 @@ const StatementForm: FC = () => {
               <StatementTableRow
                 text={t("statements.boughtPlants")}
                 subText={t("statements.section1.boughtPlantsDesc")}
-                helpInfo="Eksempel på hjælp til dette inputfelt.">
+                helpInfo={statementInfo?.s1_boughtPlants_help}>
                 <InputDKK name="s1_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -147,11 +155,11 @@ const StatementForm: FC = () => {
                 name={"s3_onions"}
               />
               <StandardStatementRow text={t("statements.other")} tax={3} name={"s3_other"} />
-
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
-                subText={t("statements.section3.boughtPlantsDesc")}>
+                subText={t("statements.section3.boughtPlantsDesc")}
+                helpInfo={statementInfo?.s3_boughtPlants_help}>
                 <InputDKK name="s3_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -176,7 +184,8 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.boughtPlants")}
-                subText={t("statements.section3.boughtPlantsDesc")}>
+                subText={t("statements.section3.boughtPlantsDesc")}
+                helpInfo={statementInfo?.s4_boughtPlants_help}>
                 <InputDKK name="s4_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -189,7 +198,9 @@ const StatementForm: FC = () => {
                 name={"s7_plants"}
               />
               <StatementTableColHeadings h2={t("statements.expences")} />
-              <StatementTableRow text={t("statements.boughtPlants")}>
+              <StatementTableRow
+                text={t("statements.boughtPlants")}
+                helpInfo={statementInfo?.s7_boughtPlants_help}>
                 <InputDKK name="s7_boughtPlants" />
               </StatementTableRow>
             </StatementSectionTable>
@@ -211,7 +222,8 @@ const StatementForm: FC = () => {
               <StatementTableColHeadings h2={t("statements.expences")} />
               <StatementTableRow
                 text={t("statements.section8.packagingCost")}
-                subText={t("statements.section8.packagingCostDesc")}>
+                subText={t("statements.section8.packagingCostDesc")}
+                helpInfo={statementInfo?.s8_packaging_help}>
                 <InputDKK name="s8_packaging" />
               </StatementTableRow>
               <StatementTableSubHeading>
