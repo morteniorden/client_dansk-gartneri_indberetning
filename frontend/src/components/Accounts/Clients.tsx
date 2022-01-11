@@ -159,11 +159,13 @@ const Accounts: FC = () => {
               <Button onClick={inviteAll}>Inviter alle</Button>
               <Button onClick={remindAll}>Send rykker til alle</Button>
               <MailManyModal
-                mailToClients={mailAllClients}
+                mailToClients={mailAllClients.filter(client => ActiveFilter.predicate(client))}
                 dispatchMailToClients={dispatchMailAllClients}
                 isOpen={isOpen}
                 onClose={onClose}
                 mailReason={mailReason}
+                revisionYear={accountingYear}
+                fetchData={fetchData}
               />
             </HStack>
           </Flex>
