@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Mails.Commands.SendRemindUserCommand;
 using Application.Statements;
 using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatement;
@@ -125,6 +126,13 @@ namespace Web.Controllers
       {
         StatementId = statementId
       });
+    }
+
+    [HttpPost("remind")]
+    public async Task<ActionResult> SendRemindUserEmail([FromBody] SendRemindUserCommand request)
+    {
+      await Mediator.Send(request);
+      return NoContent();
     }
   }
 }

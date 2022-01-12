@@ -500,6 +500,7 @@ export interface IStatementClient {
     unassignAccountant(id: number): Promise<FileResponse>;
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
+    sendRemindUserEmail(request: SendRemindUserCommand): Promise<FileResponse>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -990,6 +991,44 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<ConsentFileDto>(<any>null);
+    }
+
+    sendRemindUserEmail(request: SendRemindUserCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/remind";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processSendRemindUserEmail(_response));
+        });
+    }
+
+    protected processSendRemindUserEmail(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 }
 
@@ -2741,6 +2780,42 @@ export class ConsentFileDto implements IConsentFileDto {
 export interface IConsentFileDto {
     statementId?: number;
     stream?: string | null;
+}
+
+export class SendRemindUserCommand implements ISendRemindUserCommand {
+    email?: string | null;
+
+    constructor(data?: ISendRemindUserCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): SendRemindUserCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendRemindUserCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        return data; 
+    }
+}
+
+export interface ISendRemindUserCommand {
+    email?: string | null;
 }
 
 export class ClientDto implements IClientDto {
