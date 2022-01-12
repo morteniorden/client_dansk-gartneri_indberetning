@@ -501,6 +501,7 @@ export interface IStatementClient {
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
     sendRemindUserEmail(request: SendRemindUserCommand): Promise<FileResponse>;
+    sendRemindAllUsersEmail(request: SendRemindAllUsersCommand): Promise<FileResponse>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -1016,6 +1017,44 @@ export class StatementClient extends ClientBase implements IStatementClient {
     }
 
     protected processSendRemindUserEmail(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    sendRemindAllUsersEmail(request: SendRemindAllUsersCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/remindAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processSendRemindAllUsersEmail(_response));
+        });
+    }
+
+    protected processSendRemindAllUsersEmail(response: Response): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200 || status === 206) {
@@ -2816,6 +2855,50 @@ export class SendRemindUserCommand implements ISendRemindUserCommand {
 
 export interface ISendRemindUserCommand {
     email?: string | null;
+}
+
+export class SendRemindAllUsersCommand implements ISendRemindAllUsersCommand {
+    clientIds?: number[] | null;
+
+    constructor(data?: ISendRemindAllUsersCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["clientIds"])) {
+                this.clientIds = [] as any;
+                for (let item of _data["clientIds"])
+                    this.clientIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): SendRemindAllUsersCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendRemindAllUsersCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.clientIds)) {
+            data["clientIds"] = [];
+            for (let item of this.clientIds)
+                data["clientIds"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface ISendRemindAllUsersCommand {
+    clientIds?: number[] | null;
 }
 
 export class ClientDto implements IClientDto {

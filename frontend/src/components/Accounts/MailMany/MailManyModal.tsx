@@ -14,7 +14,11 @@ import {
 import { Dispatch, FC, useCallback, useEffect, useState } from "react";
 import { AllListActions } from "react-list-reducer";
 import { genStatementClient } from "services/backend/apiClients";
-import { CreateStatementsCommand, IClientDto } from "services/backend/nswagts";
+import {
+  CreateStatementsCommand,
+  IClientDto,
+  SendRemindAllUsersCommand
+} from "services/backend/nswagts";
 
 import { SearchFilter } from "../Filters/ClientFilters";
 import SearchBar from "../SearchBar";
@@ -66,6 +70,12 @@ const MailManyModal: FC<MailManyProps> = ({
             revisionYear
           })
         );
+      } else if (mailReason == "reminder") {
+        await statementClient.sendRemindAllUsersEmail(
+          new SendRemindAllUsersCommand({
+            clientIds
+          })
+        );
       }
     } catch (err) {
       console.error(err);
@@ -106,6 +116,7 @@ const MailManyModal: FC<MailManyProps> = ({
     }
   }, [status, sendMail, onClose]);
 
+  // TODO localize
   return (
     <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalOverlay />

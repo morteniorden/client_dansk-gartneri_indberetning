@@ -134,5 +134,12 @@ namespace Web.Controllers
       await Mediator.Send(request);
       return NoContent();
     }
+
+    [HttpPost("remindAll")]
+    public async Task<ActionResult> SendRemindAllUsersEmail([FromBody] SendRemindAllUsersCommand request)
+    {
+      await Mediator.Send(request);
+      return NoContent();
+    }
   }
 }
