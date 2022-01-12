@@ -1,41 +1,59 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Interfaces;
 using Application.Common.Security;
+using Domain.Entities;
 using Domain.Enums;
+using Hangfire;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Statements.Commands.CreateStatement
 {
   [Authorize(Role = RoleEnum.Admin)]
-  public class CreateStatementsCommand : IRequest<IEnumerable<int>>
+  public class CreateStatementsCommand : IRequest
   {
     public IEnumerable<int> ClientIds { get; set; }
     public int RevisionYear { get; set; }
 
-    public class CreateStatementsCommandHandler : IRequestHandler<CreateStatementsCommand, IEnumerable<int>>
+    public class CreateStatementsCommandHandler : IRequestHandler<CreateStatementsCommand>
     {
-      private readonly IMediator _mediator;
+      private readonly IApplicationDbContext _context;
+      private readonly IBackgroundJobClient _jobClient;
+      private readonly IMailService _mailService;
 
-      public CreateStatementsCommandHandler(IMediator mediator)
+      public CreateStatementsCommandHandler(IApplicationDbContext context, IBackgroundJobClient jobClient, IMailService mailService)
       {
-        _mediator = mediator;
+        _context = context;
+        _jobClient = jobClient;
+        _mailService = mailService;
       }
 
-      public async Task<IEnumerable<int>> Handle(CreateStatementsCommand request, CancellationToken cancellationToken)
+      public async Task<Unit> Handle(CreateStatementsCommand request, CancellationToken cancellationToken)
       {
         List<int> statementIds = new();
 
-        foreach (int ClientId in request.ClientIds)
-        {
-          statementIds.Add(await _mediator.Send(new CreateStatementCommand.CreateStatementCommand
-          {
-            ClientId = ClientId,
-            RevisionYear = request.RevisionYear
-          }, cancellationToken));
-        }
+        List<User> userEntities = await _context.Users.Where(e => request.ClientIds.Contains(e.Id)).ToListAsync(cancellationToken);
 
-        return statementIds;
+        foreach (User client in userEntities)
+        {
+          Statement statement = new()
+          {
+            ClientId = client.Id,
+            Client = (Client)client,
+            AccountingYear = request.RevisionYear,
+            Status = StatementStatus.InvitedNotEdited,
+            IsApproved = false
+          };
+
+          _context.Statements.Add(statement);
+
+          _jobClient.Enqueue(() => _mailService.SendStatementInvitationEmail(client.Email));
+        }
+        await _context.SaveChangesAsync(cancellationToken);
+        return Unit.Value;
       }
     }
   }

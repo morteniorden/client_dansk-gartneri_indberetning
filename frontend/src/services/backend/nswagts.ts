@@ -494,7 +494,7 @@ export interface IStatementClient {
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     checkIsSigned(id: number, caseFileId?: number | undefined): Promise<boolean>;
     createStatement(command: CreateStatementCommand): Promise<number>;
-    createStatements(command: CreateStatementsCommand): Promise<number[]>;
+    createStatements(command: CreateStatementsCommand): Promise<FileResponse>;
     signOffStatement(id: number): Promise<GetSigningUrlDto>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
@@ -756,7 +756,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<number>(<any>null);
     }
 
-    createStatements(command: CreateStatementsCommand): Promise<number[]> {
+    createStatements(command: CreateStatementsCommand): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/Statement/statements";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -767,7 +767,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/octet-stream"
             }
         };
 
@@ -778,26 +778,20 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processCreateStatements(response: Response): Promise<number[]> {
+    protected processCreateStatements(response: Response): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(item);
-            }
-            return result200;
-            });
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<number[]>(<any>null);
+        return Promise.resolve<FileResponse>(<any>null);
     }
 
     signOffStatement(id: number): Promise<GetSigningUrlDto> {
