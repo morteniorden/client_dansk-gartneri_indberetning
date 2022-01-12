@@ -8,7 +8,6 @@ import { IClientDto, SendRemindUserCommand } from "services/backend/nswagts";
 interface Props {
   client: IClientDto;
 }
-// TODO localize
 const RemindBtn: FC<Props> = ({ client }) => {
   const { t } = useLocales();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -24,8 +23,8 @@ const RemindBtn: FC<Props> = ({ client }) => {
         })
       );
       toast({
-        title: t("statements.invitationSentSuccessTitle"),
-        description: t("statements.invitationSentSuccessText"),
+        title: t("reminder.sentSuccessTitle"),
+        description: t("reminder.sentSuccessText"),
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -35,8 +34,8 @@ const RemindBtn: FC<Props> = ({ client }) => {
     } catch (err) {
       console.error(err);
       toast({
-        title: t("statements.invitationSentErrorTitle"),
-        description: t("statements.invitationSentErrorTitle"),
+        title: t("reminder.sentErrorTitle"),
+        description: t("reminder.sentErrorText"),
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -46,7 +45,7 @@ const RemindBtn: FC<Props> = ({ client }) => {
   }, [client]);
 
   return (
-    <Tooltip>
+    <Tooltip label={t("reminder.tooltip")}>
       <IconButton
         aria-label={"Remind user to fill out statement"}
         icon={isProcessing ? <Spinner size="sm" /> : <MdMessage />}

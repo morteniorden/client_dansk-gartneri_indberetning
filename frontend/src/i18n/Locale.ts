@@ -280,4 +280,25 @@ export interface Locale {
     notSignedOffStatus: string;
     fillOutStatement: string;
   };
+
+  reminder: {
+    sentSuccessTitle: string;
+    sentSuccessText: string;
+    sentErrorTitle: string;
+    sentErrorText: string;
+    tooltip: string;
+  };
+
+  mailMany: {
+    inviteSentSuccessTitle: string;
+    inviteSentSuccessText: string;
+    inviteSentErrorTitle: string;
+    inviteSentErrorText: string;
+    reminderSentSuccessTitle: string;
+    reminderSentSuccessText: string;
+    reminderSentErrorTitle: string;
+    reminderSentErrorText: string;
+    invite: string;
+    reminder: string;
+  };
 }

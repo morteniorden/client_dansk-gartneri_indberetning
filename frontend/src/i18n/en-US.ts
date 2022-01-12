@@ -295,5 +295,26 @@ export const table: Locale = {
     signedOffStatus: "Finished",
     notSignedOffStatus: "Pending",
     fillOutStatement: "Go to statement"
+  },
+
+  reminder: {
+    sentSuccessTitle: "Reminder sent",
+    sentSuccessText: "A reminder has been sent to the client",
+    sentErrorTitle: "Error",
+    sentErrorText: "An error occured in the process of sending the reminder",
+    tooltip: "Send reminder to client"
+  },
+
+  mailMany: {
+    inviteSentSuccessTitle: "Invitations sent",
+    inviteSentSuccessText: "Invitations have been sent to the choosen client",
+    inviteSentErrorTitle: "Error",
+    inviteSentErrorText: "An error occured in the process of sending the invitations",
+    reminderSentSuccessTitle: "Reminders sent",
+    reminderSentSuccessText: "Reminders have been sent to the choosen clients",
+    reminderSentErrorTitle: "Error",
+    reminderSentErrorText: "An error occured in the process of sending the reminders",
+    invite: "Choose clients to send invitations to",
+    reminder: "Choose clients to send reminders to"
   }
 };

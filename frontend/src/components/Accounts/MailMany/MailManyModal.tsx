@@ -9,8 +9,10 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
-  Text
+  Text,
+  useToast
 } from "@chakra-ui/react";
+import { useLocales } from "hooks/useLocales";
 import { Dispatch, FC, useCallback, useEffect, useState } from "react";
 import { AllListActions } from "react-list-reducer";
 import { genStatementClient } from "services/backend/apiClients";
@@ -50,8 +52,10 @@ const MailManyModal: FC<MailManyProps> = ({
   revisionYear,
   fetchData
 }) => {
+  const { t } = useLocales();
   const [searchString, setSearchString] = useState("");
   const [status, setStatus] = useState<MailManyStatus>(MailManyStatus.choosingUsers);
+  const toast = useToast();
 
   useEffect(() => {
     if (mailToClients.length == 0) setStatus(MailManyStatus.noUsers);
@@ -70,14 +74,49 @@ const MailManyModal: FC<MailManyProps> = ({
             revisionYear
           })
         );
+        toast({
+          title: t("mailMany.inviteSentSuccessTitle"),
+          description: t("mailMany.inviteSentSuccessText"),
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
       } else if (mailReason == "reminder") {
         await statementClient.sendRemindAllUsersEmail(
           new SendRemindAllUsersCommand({
             clientIds
           })
         );
+        toast({
+          title: t("mailMany.reminderSentSuccessTitle"),
+          description: t("mailMany.reminderSentSuccessText"),
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
       }
     } catch (err) {
+      if (mailReason == "invite") {
+        toast({
+          title: t("mailMany.inviteSentErrorTitle"),
+          description: t("mailMany.inviteSentErrorText"),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      } else if (mailReason == "reminder") {
+        toast({
+          title: t("mailMany.reminderSentErrorTitle"),
+          description: t("mailMany.reminderSentErrorText"),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left"
+        });
+      }
       console.error(err);
     }
     setStatus(MailManyStatus.mailsSent);
@@ -97,7 +136,7 @@ const MailManyModal: FC<MailManyProps> = ({
               {status == MailManyStatus.choosingUsers ? <Text>Send</Text> : <Spinner />}
             </Button>
             <Button colorScheme="red" onClick={onClose}>
-              Close
+              {t("actions.back")}
             </Button>
           </>
         );
@@ -110,18 +149,17 @@ const MailManyModal: FC<MailManyProps> = ({
               if (status == MailManyStatus.mailsSent) fetchData();
               onClose();
             }}>
-            Close
+            {t("actions.back")}
           </Button>
         );
     }
   }, [status, sendMail, onClose]);
 
-  // TODO localize
   return (
     <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalOverlay />
       <ModalContent minW="container.md">
-        <ModalHeader>{mailReason}</ModalHeader>
+        <ModalHeader>{t(`mailMany.${mailReason}`)}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <SearchBar cb={value => setSearchString(value)} />
