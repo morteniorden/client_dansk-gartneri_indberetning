@@ -25,6 +25,11 @@ const Navbar: FC = () => {
                   Admins
                 </Button>
               </Link>
+              <Link href="/statementinfo" passHref>
+                <Button variant="link" textColor="white">
+                  Skemaer
+                </Button>
+              </Link>
               <Link href="/editemails" passHref>
                 <Button variant="link" textColor="white">
                   Emails

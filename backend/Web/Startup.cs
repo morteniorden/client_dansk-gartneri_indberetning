@@ -114,6 +114,7 @@ namespace Web
       services.AddScoped<IMailService, MailService>();
       services.AddScoped<SuperAdminService>();
       services.AddScoped<DefaultEmailsService>();
+      services.AddScoped<IStatementInfoService, StatementInfoService>();
       services.AddSignalR();
 
       var key = Encoding.ASCII.GetBytes("VERY_SECRET_SECRET");

@@ -110,6 +110,7 @@ export interface Locale {
     saveChanges: string;
     back: string;
     sendRequest: string;
+    edit: string;
   };
 
   password: {
@@ -269,6 +270,13 @@ export interface Locale {
       consentSignedText: string;
       downloadYourConsent: string;
     };
+    unsavedChanges: {
+      modalTitle: string;
+      modalText: string;
+      saveButton: string;
+      cancelButton: string;
+      ignoreButton: string;
+    };
   };
 
   myStatements: {
@@ -300,5 +308,10 @@ export interface Locale {
     reminderSentErrorText: string;
     invite: string;
     reminder: string;
+  };
+  statementInfo: {
+    editStatementInfo: string;
+    helpText: string;
+    tax: string;
   };
 }

@@ -1,11 +1,11 @@
-import EditEmails from "components/Emails/EditMails";
+import EditStatementInfo from "components/Statement/EditStatementInfo/EditStatementInfo";
 import { Locale } from "i18n/Locale";
 // import { runTimeTable } from "i18n/runtimeTable";
 import { GetStaticProps, NextPage } from "next";
 import { I18nProps } from "next-rosetta";
 
-const ChangePasswordPage: NextPage = () => {
-  return <EditEmails />;
+const StatementInfoPage: NextPage = () => {
+  return <EditStatementInfo />;
 };
 
 export const getStaticProps: GetStaticProps<I18nProps<Locale>> = async context => {
@@ -18,4 +18,4 @@ export const getStaticProps: GetStaticProps<I18nProps<Locale>> = async context =
   };
 };
 
-export default ChangePasswordPage;
+export default StatementInfoPage;
