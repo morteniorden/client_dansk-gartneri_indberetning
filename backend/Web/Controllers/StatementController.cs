@@ -77,7 +77,7 @@ namespace Web.Controllers
 
     [HttpPut("{id}/signoff")]
     public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id)
-    { 
+    {
       return await Mediator.Send(new SignOffStatementCommand
       {
         Id = id
@@ -128,10 +128,11 @@ namespace Web.Controllers
     }
 
     [HttpPut("statementInfo/{year}")]
-    public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
+    public async Task<ActionResult> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
     {
       command.AccountingYear = year;
-      return await Mediator.Send(command);
+      await Mediator.Send(command);
+      return NoContent();
     }
 
     [HttpGet("consent")]

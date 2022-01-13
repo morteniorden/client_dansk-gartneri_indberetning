@@ -323,7 +323,7 @@ export const table: Locale = {
     invite: "Vælg kunder at invitere",
     reminder: "Vælg kunder at sende rykkere"
   },
-  
+
   statementInfo: {
     editStatementInfo: "Rediger oplysningsskema",
     helpText: "Hjælpetekst",
