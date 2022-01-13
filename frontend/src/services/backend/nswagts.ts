@@ -497,9 +497,6 @@ export interface IStatementClient {
     signOffStatement(id: number): Promise<GetSigningUrlDto>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
-    consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<FileResponse>;
-    getAllStatementInfo(): Promise<StatementInfoDto[]>;
-    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto>;
     getAllStatementInfo(): Promise<StatementInfoDto[]>;
     updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
