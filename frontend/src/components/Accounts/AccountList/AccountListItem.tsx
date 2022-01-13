@@ -16,6 +16,7 @@ import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { IClientDto, StatementStatus } from "services/backend/nswagts";
 
 import AccountItemExpandedPanel from "./AccountItemExpandedPanel";
+import EditClientStatementBtn from "./AccountListItemButtons/EditClientStatementBtn";
 import InviteBtn from "./AccountListItemButtons/InviteBtn";
 import OptionsBtn from "./AccountListItemButtons/OptionsBtn";
 import ViewStatementBtn from "./AccountListItemButtons/ViewStatementBtn";
@@ -56,6 +57,7 @@ const AccountListItem: FC<Props> = ({ client, accountingYear }) => {
               </HStack>
               <HStack>
                 <StatusBadge client={client} accountingYear={accountingYear} />
+                <EditClientStatementBtn client={client} accountingYear={accountingYear} />
                 {!statement && <InviteBtn client={client} accountingYear={accountingYear} />}
                 {statement && statement.status != StatementStatus.SignedOff && (
                   <ViewStatementBtn disabled={true} />
