@@ -59,6 +59,12 @@ namespace Web.Controllers
       return await Mediator.Send(command);
     }
 
+    [HttpPost("statement/noinvite")]
+    public async Task<ActionResult<int>> CreateStatementNoInvite([FromBody] CreateStatementNoInviteCommand command)
+    {
+      return await Mediator.Send(command);
+    }
+
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateStatement([FromRoute] int id, UpdateStatementCommand command)
     {
