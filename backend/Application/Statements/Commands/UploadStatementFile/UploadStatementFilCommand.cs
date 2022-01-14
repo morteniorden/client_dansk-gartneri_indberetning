@@ -10,6 +10,7 @@ using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Application.Statements.Commands.UploadStatementFile
 {
@@ -23,10 +24,10 @@ namespace Application.Statements.Commands.UploadStatementFile
       private readonly IApplicationDbContext _context;
       private readonly FileDriveOptions _options;
 
-      public UploadStatementFileCommandHandler(IApplicationDbContext context, FileDriveOptions options)
+      public UploadStatementFileCommandHandler(IApplicationDbContext context, IOptions<FileDriveOptions> options)
       {
         _context = context;
-        _options = options;
+        _options = options.Value;
       }
 
       public async Task<Unit> Handle(UploadStatementFileCommand request, CancellationToken cancellationToken)
