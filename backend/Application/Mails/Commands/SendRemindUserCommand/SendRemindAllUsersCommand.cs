@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Common.Security;
+using Domain.Enums;
 using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Mails.Commands.SendRemindUserCommand
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class SendRemindAllUsersCommand : IRequest
   {
     public IEnumerable<int> ClientIds { get; set; }
@@ -31,7 +34,7 @@ namespace Application.Mails.Commands.SendRemindUserCommand
 
         foreach (string email in userEmails)
         {
-          BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(email));
+          _ = BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(email));
         }
 
         return Unit.Value;

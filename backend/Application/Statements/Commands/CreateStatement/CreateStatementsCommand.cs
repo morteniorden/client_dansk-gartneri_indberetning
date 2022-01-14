@@ -33,7 +33,7 @@ namespace Application.Statements.Commands.CreateStatement
 
       public async Task<Unit> Handle(CreateStatementsCommand request, CancellationToken cancellationToken)
       {
-        List<int> statementIds = new();
+        var statementIds = new List<int>();
 
         List<User> userEntities = await _context.Users.Where(e => request.ClientIds.Contains(e.Id)).ToListAsync(cancellationToken);
 
@@ -41,7 +41,6 @@ namespace Application.Statements.Commands.CreateStatement
         {
           Statement statement = new()
           {
-            ClientId = client.Id,
             Client = (Client)client,
             AccountingYear = request.RevisionYear,
             Status = StatementStatus.InvitedNotEdited,

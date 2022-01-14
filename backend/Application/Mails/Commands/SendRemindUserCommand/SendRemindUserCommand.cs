@@ -3,13 +3,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Security;
 using Domain.Entities;
+using Domain.Enums;
 using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Mails.Commands.SendRemindUserCommand
 {
+  [Authorize(Role = RoleEnum.Admin)]
   public class SendRemindUserCommand : IRequest
   {
     public string Email { get; set; }
@@ -32,8 +35,8 @@ namespace Application.Mails.Commands.SendRemindUserCommand
         {
           throw new NotFoundException(nameof(User), request.Email);
         }
-
-        BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(request.Email));
+        _ =
+                BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(request.Email));
 
         return Unit.Value;
       }

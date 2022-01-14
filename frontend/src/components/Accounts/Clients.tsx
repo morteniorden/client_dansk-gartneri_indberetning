@@ -110,13 +110,7 @@ const Accounts: FC = () => {
       );
     });
 
-    dispatchMailAllClients({ type: ListReducerActionType.Reset, data: [] });
-    if (toBeReminded.length > 0)
-      dispatchMailAllClients({
-        type: ListReducerActionType.AddOrUpdate,
-        data: toBeReminded
-      });
-
+    dispatchMailAllClients({ type: ListReducerActionType.Reset, data: toBeReminded });
     setMailReason("reminder");
     onOpen();
   }, [clients, accountingYear, dispatchMailAllClients, onOpen, setMailReason]);
