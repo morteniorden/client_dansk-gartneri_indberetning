@@ -501,6 +501,8 @@ export interface IStatementClient {
     getAllStatementInfo(): Promise<StatementInfoDto[]>;
     updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
+    uploadStatementFile(id: number, file?: FileParameter | null | undefined): Promise<Unit>;
+    getStatementFile(id: number): Promise<StatementFileDto>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -1036,6 +1038,89 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<ConsentFileDto>(<any>null);
+    }
+
+    uploadStatementFile(id: number, file?: FileParameter | null | undefined): Promise<Unit> {
+        let url_ = this.baseUrl + "/api/Statement/statement/{id}/file";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (file !== null && file !== undefined)
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUploadStatementFile(_response));
+        });
+    }
+
+    protected processUploadStatementFile(response: Response): Promise<Unit> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Unit.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Unit>(<any>null);
+    }
+
+    getStatementFile(id: number): Promise<StatementFileDto> {
+        let url_ = this.baseUrl + "/api/Statement/statement/{id}/file";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetStatementFile(_response));
+        });
+    }
+
+    protected processGetStatementFile(response: Response): Promise<StatementFileDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = StatementFileDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<StatementFileDto>(<any>null);
     }
 }
 
@@ -3068,6 +3153,46 @@ export class ConsentFileDto implements IConsentFileDto {
 export interface IConsentFileDto {
     statementId?: number;
     stream?: string | null;
+}
+
+export class StatementFileDto implements IStatementFileDto {
+    fileName?: string | null;
+    data?: string | null;
+
+    constructor(data?: IStatementFileDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.fileName = _data["fileName"] !== undefined ? _data["fileName"] : <any>null;
+            this.data = _data["data"] !== undefined ? _data["data"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): StatementFileDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatementFileDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fileName"] = this.fileName !== undefined ? this.fileName : <any>null;
+        data["data"] = this.data !== undefined ? this.data : <any>null;
+        return data; 
+    }
+}
+
+export interface IStatementFileDto {
+    fileName?: string | null;
+    data?: string | null;
 }
 
 export class ClientDto implements IClientDto {

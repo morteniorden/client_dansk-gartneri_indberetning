@@ -8,9 +8,11 @@ using Application.Statements.Commands.ConsentToStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
+using Application.Statements.Commands.UploadStatementFile;
 using Application.Statements.Queries.CheckCasefileStatus;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
+using Application.Statements.Queries.GetStatementFile;
 using Application.Statements.Queries.GetStatementsCSV;
 using Application.Users.Commands.UnassignAccountantCommand;
 using MediatR;
@@ -132,6 +134,25 @@ namespace Web.Controllers
       return await Mediator.Send(new GetConsentFileQuery()
       {
         StatementId = statementId
+      });
+    }
+
+    [HttpPut("statement/{id}/file")]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<Unit>> UploadStatementFile([FromRoute] int id, IFormFile file)
+    {
+      await Mediator.Send(new UploadStatementFileCommand{
+        StatementId = id,
+        File = file
+      });
+      return NoContent();
+    }
+
+    [HttpGet("statement/{id}/file")]
+    public async Task<ActionResult<StatementFileDto>> GetStatementFile([FromRoute] int id)
+    {
+      return await Mediator.Send(new GetStatementFileQuery{
+        StatementId = id
       });
     }
   }
