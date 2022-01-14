@@ -35,8 +35,7 @@ namespace Application.Mails.Commands.SendRemindUserCommand
         {
           throw new NotFoundException(nameof(User), request.Email);
         }
-        _ =
-                BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(request.Email));
+        BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(request.Email));
 
         return Unit.Value;
       }

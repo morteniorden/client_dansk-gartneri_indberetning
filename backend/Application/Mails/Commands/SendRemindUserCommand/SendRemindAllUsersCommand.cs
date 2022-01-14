@@ -34,7 +34,7 @@ namespace Application.Mails.Commands.SendRemindUserCommand
 
         foreach (string email in userEmails)
         {
-          _ = BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(email));
+          BackgroundJob.Enqueue(() => _mailService.SendReminderEmail(email));
         }
 
         return Unit.Value;
