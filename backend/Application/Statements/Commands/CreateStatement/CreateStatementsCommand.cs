@@ -41,7 +41,7 @@ namespace Application.Statements.Commands.CreateStatement
         {
           Statement statement = new()
           {
-            Client = (Client)client,
+            ClientId = client.Id,
             AccountingYear = request.RevisionYear,
             Status = StatementStatus.InvitedNotEdited,
             IsApproved = false
