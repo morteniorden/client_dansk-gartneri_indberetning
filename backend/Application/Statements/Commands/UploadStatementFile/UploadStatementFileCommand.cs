@@ -32,7 +32,7 @@ namespace Application.Statements.Commands.UploadStatementFile
 
       public async Task<Unit> Handle(UploadStatementFileCommand request, CancellationToken cancellationToken)
       {
-        Task<Statement> statement = _context.Statements.FirstAsync(e => e.Id == request.StatementId, cancellationToken);
+        Statement statement = await _context.Statements.FirstAsync(e => e.Id == request.StatementId, cancellationToken);
         if (statement == null)
         {
           throw new NotFoundException(nameof(Statement), request.StatementId);
@@ -45,6 +45,10 @@ namespace Application.Statements.Commands.UploadStatementFile
         {
           await request.File.CopyToAsync(fileStream, cancellationToken);
         }
+
+        statement.StatementFileName = fileName;
+        _context.Statements.Update(statement);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
       }
