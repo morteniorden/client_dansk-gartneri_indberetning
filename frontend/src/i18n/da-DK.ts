@@ -290,7 +290,8 @@ export const table: Locale = {
       saveButton: "Gem",
       cancelButton: "Annuler",
       ignoreButton: "Ignorer"
-    }
+    },
+    editStatementForHeading: "Oplysningsskema for {{name}}"
   },
 
   myStatements: {

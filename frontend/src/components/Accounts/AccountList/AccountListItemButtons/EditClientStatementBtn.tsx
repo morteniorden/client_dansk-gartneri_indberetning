@@ -11,7 +11,6 @@ import {
   CreateStatementNoInviteCommand,
   IClientDto,
   IStatementDto,
-  StatementClient,
   StatementInfoDto,
   StatementNoUsersDto,
   StatementStatus,
@@ -26,7 +25,6 @@ interface Props {
   accountingYear: number;
 }
 
-// TODO localize
 const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
   const { t } = useLocales();
   const toast = useToast();
@@ -64,8 +62,7 @@ const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
       setStatementInfo(newStatement.statementInfo);
       await fetchData();
     } catch (err) {
-      console.error(err);
-      // TODO error toast
+      logger.warn("statementClient.get Error", err);
     }
   }, [setStatement, setStatementInfo, id]);
 
@@ -89,8 +86,7 @@ const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
       setIsProcessing(false);
       onOpen();
     } catch (err) {
-      console.error(err);
-      // TODO error toast
+      logger.warn("statementClient.put Error", err);
     }
   }, [client, accountingYear, setIsProcessing, router, onOpen, setStatement, setStatementInfo]);
 
@@ -230,7 +226,12 @@ const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
           setIsDirty: setIsDirty,
           statementInfo: statementInfo
         }}>
-        <EditClientStatementModal isOpen={isOpen} onClose={onClose} />
+        <EditClientStatementModal
+          isOpen={isOpen}
+          onClose={onClose}
+          client={client}
+          accountingYear={accountingYear}
+        />
       </EditStatementContext.Provider>
       <Tooltip>
         {statement ? (

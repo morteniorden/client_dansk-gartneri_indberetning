@@ -277,6 +277,7 @@ export interface Locale {
       cancelButton: string;
       ignoreButton: string;
     };
+    editStatementForHeading: string;
   };
 
   myStatements: {
