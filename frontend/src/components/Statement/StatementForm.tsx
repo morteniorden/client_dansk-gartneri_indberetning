@@ -1,8 +1,10 @@
-import { Stack } from "@chakra-ui/react";
+import { Stack, useDisclosure } from "@chakra-ui/react";
 import AccountantSection from "components/Statement/AccountantSection/AccountantSection";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useAuth } from "hooks/useAuth";
 import { useLocales } from "hooks/useLocales";
+import { route } from "next/dist/server/router";
+import { useRouter } from "next/router";
 import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import { DeepMap, FieldError, useForm } from "react-hook-form";
 import { IStatementNoUsersDto, RoleEnum } from "services/backend/nswagts";
@@ -16,16 +18,28 @@ import StatementTableColHeadings from "./StatementTableColHeadings";
 import StatementTableRow from "./StatementTableRow";
 import StatementTableSubHeading from "./StatementTableSubHeading";
 import TaxTotal from "./TaxTotal";
+import UnsavedChangesModal from "./UnsavedChangesModal";
 
 const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
   const { activeUser } = useAuth();
-  const { statement, setStatement, submit, readonly, calcTotal, statementInfo } =
-    useContext(EditStatementContext);
+  const { isOpen: modalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
+  const {
+    statement,
+    setStatement,
+    submit,
+    readonly,
+    calcTotal,
+    isDirty,
+    setIsDirty,
+    statementInfo
+  } = useContext(EditStatementContext);
+  const router = useRouter();
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementNoUsersDto, value: IStatementNoUsersDto[keyof IStatementNoUsersDto]) => {
+      setIsDirty(true);
       setStatement(x => {
         (x[key] as unknown) = value;
         return x;
@@ -34,6 +48,50 @@ const StatementForm: FC = () => {
     },
     [setStatement, calcTotal]
   );
+
+  //Handles the back button, aka. going to the previous page
+  useEffect(() => {
+    router.beforePopState(_ => {
+      if (isDirty) openModal();
+      return !isDirty;
+    });
+  }, [isDirty, openModal]);
+
+  const beforeUnloadEventHandler = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        if (e) e.returnValue = "";
+        return "";
+      }
+    },
+    [isDirty]
+  );
+
+  //Handles refresh page (F5/realod button top left) and close page (x on the tab)
+  useEffect(() => {
+    window.addEventListener("beforeunload", beforeUnloadEventHandler);
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadEventHandler);
+    };
+  }, [isDirty, openModal, beforeUnloadEventHandler]);
+
+  const routeChangeModalHandler = useCallback(() => {
+    if (isDirty) {
+      openModal();
+      router.events.emit("routeChangeError");
+      // An error object is not thrown as to not cause the error popup as this is not an actual error, but needed to prevent the route change
+      throw "Preventing changing page due to unsaved changes, this error can be safely ignored";
+    }
+  }, [isDirty, openModal, router]);
+
+  //Handles when trying to navigate to a different page/pressing a link
+  useEffect(() => {
+    router.events.on("routeChangeStart", routeChangeModalHandler);
+    return () => {
+      router.events.off("routeChangeStart", routeChangeModalHandler);
+    };
+  }, [routeChangeModalHandler]);
 
   const onValid = useCallback(
     (data: IStatementNoUsersDto) => {
@@ -52,6 +110,7 @@ const StatementForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} id="statement_form">
+      <UnsavedChangesModal isOpen={modalOpen} onClose={closeModal} setIsDirty={setIsDirty} />
       <Stack sx={readonly && { "input:disabled": { opacity: 1, cursor: "text" } }}>
         <FormControlContext.Provider
           value={{

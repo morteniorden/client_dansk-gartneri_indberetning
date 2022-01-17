@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Application.StatementInfos;
 using Application.StatementInfos.Commands.UpdateStatementInfo;
@@ -12,7 +11,7 @@ using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.CheckCasefileStatus;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
-using Application.Statements.Queries.GetStatementsCSVQuery;
+using Application.Statements.Queries.GetStatementsCSV;
 using Application.Users.Commands.UnassignAccountantCommand;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -70,7 +69,7 @@ namespace Web.Controllers
 
     [HttpPut("{id}/signoff")]
     public async Task<GetSigningUrlDto> SignOffStatement([FromRoute] int id)
-    { 
+    {
       return await Mediator.Send(new SignOffStatementCommand
       {
         Id = id

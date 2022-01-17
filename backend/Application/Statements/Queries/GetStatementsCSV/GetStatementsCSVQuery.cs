@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -14,7 +15,7 @@ using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Statements.Queries.GetStatementsCSVQuery
+namespace Application.Statements.Queries.GetStatementsCSV
 {
   [Authorize(Role = RoleEnum.Admin)]
   public class GetStatementsCSVQuery : IRequest<CSVResponseDto>
@@ -35,18 +36,48 @@ namespace Application.Statements.Queries.GetStatementsCSVQuery
       public async Task<CSVResponseDto> Handle(GetStatementsCSVQuery request, CancellationToken cancellationToken)
       {
         //Find all signed-off statements of the provided accounting year, or all if no year is provided
-        var statements = await _context.Statements
+        List<StatementCSVDto> statements = await _context.Statements
           .Where(e => (request.AccountingYear == null || e.AccountingYear == request.AccountingYear) && e.Status == StatementStatus.SignedOff)
           .Include(e => e.Client)
           .Include(e => e.Accountant)
           .ProjectTo<StatementCSVDto>(_mapper.ConfigurationProvider)
           .ToListAsync(cancellationToken);
 
-        byte[] bin;
-        using (MemoryStream stream = new MemoryStream())
+        foreach (StatementCSVDto statement in statements)
         {
-          using (var writer = new StreamWriter(stream))
-          using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
+          statement.s1_boughtPlants *= -1;
+          statement.s1_mushrooms *= -1;
+          statement.s1_tomatoCucumberHerb *= -1;
+
+          statement.s3_boughtPlants *= -1;
+          statement.s3_carrots *= -1;
+          statement.s3_onions *= -1;
+          statement.s3_other *= -1;
+          statement.s3_peas *= -1;
+
+          statement.s4_boughtPlants *= -1;
+          statement.s4_cutFlowers *= -1;
+          statement.s4_onions *= -1;
+          statement.s4_plants *= -1;
+
+          statement.s7_boughtPlants *= -1;
+          statement.s7_plants *= -1;
+
+          statement.s8_applesPearsEtc *= -1;
+          statement.s8_cherries *= -1;
+          statement.s8_currant *= -1;
+          statement.s8_otherBerryFruit *= -1;
+          statement.s8_otherStoneFruit *= -1;
+          statement.s8_packaging *= -1;
+          statement.s8_plums *= -1;
+          statement.s8_strawberries *= -1;
+        }
+
+        byte[] bin;
+        using (MemoryStream stream = new())
+        {
+          using (StreamWriter writer = new(stream))
+          using (CsvWriter csv = new(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
           {
             Encoding = Encoding.UTF8,
             Delimiter = ";"
