@@ -495,6 +495,7 @@ export interface IStatementClient {
     checkIsSigned(id: number, caseFileId?: number | undefined): Promise<boolean>;
     createStatement(command: CreateStatementCommand): Promise<number>;
     createStatements(command: CreateStatementsCommand): Promise<FileResponse>;
+    createStatementNoInvite(command: CreateStatementNoInviteCommand): Promise<number>;
     signOffStatement(id: number): Promise<GetSigningUrlDto>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
     unassignAccountant(id: number): Promise<FileResponse>;
@@ -796,6 +797,46 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    createStatementNoInvite(command: CreateStatementNoInviteCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/Statement/statement/noinvite";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateStatementNoInvite(_response));
+        });
+    }
+
+    protected processCreateStatementNoInvite(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
     }
 
     signOffStatement(id: number): Promise<GetSigningUrlDto> {
@@ -3002,6 +3043,46 @@ export class CreateStatementsCommand implements ICreateStatementsCommand {
 
 export interface ICreateStatementsCommand {
     clientIds?: number[] | null;
+    revisionYear?: number;
+}
+
+export class CreateStatementNoInviteCommand implements ICreateStatementNoInviteCommand {
+    clientId?: number;
+    revisionYear?: number;
+
+    constructor(data?: ICreateStatementNoInviteCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.clientId = _data["clientId"] !== undefined ? _data["clientId"] : <any>null;
+            this.revisionYear = _data["revisionYear"] !== undefined ? _data["revisionYear"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateStatementNoInviteCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateStatementNoInviteCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["clientId"] = this.clientId !== undefined ? this.clientId : <any>null;
+        data["revisionYear"] = this.revisionYear !== undefined ? this.revisionYear : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateStatementNoInviteCommand {
+    clientId?: number;
     revisionYear?: number;
 }
 

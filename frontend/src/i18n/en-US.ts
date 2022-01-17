@@ -286,13 +286,19 @@ export const table: Locale = {
         "Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to Dansk Gartneri.",
       downloadYourConsent: "Download your consent"
     },
+    sort: {
+      sortBy: "Sort by",
+      Name: "Name",
+      Status: "Status"
+    },
     unsavedChanges: {
       modalTitle: "Unsaved chagnes",
       modalText: "You have changes you haven't saved, and are about to leave the page",
       saveButton: "Save",
       cancelButton: "Calcel",
       ignoreButton: "Ignore"
-    }
+    },
+    editStatementForHeading: "Oplysningsskema for {{name}}"
   },
 
   myStatements: {

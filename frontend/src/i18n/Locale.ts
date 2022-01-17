@@ -270,6 +270,11 @@ export interface Locale {
       consentSignedText: string;
       downloadYourConsent: string;
     };
+    sort: {
+      sortBy: string;
+      Name: string;
+      Status: string;
+    };
     unsavedChanges: {
       modalTitle: string;
       modalText: string;
@@ -277,6 +282,7 @@ export interface Locale {
       cancelButton: string;
       ignoreButton: string;
     };
+    editStatementForHeading: string;
   };
 
   myStatements: {

@@ -13,7 +13,7 @@ using Application.Statements.Commands.UpdateStatement;
 using Application.Statements.Queries.CheckCasefileStatus;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
-using Application.Statements.Queries.GetStatementsCSVQuery;
+using Application.Statements.Queries.GetStatementsCSV;
 using Application.Users.Commands.UnassignAccountantCommand;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +64,12 @@ namespace Web.Controllers
     {
       await Mediator.Send(command);
       return NoContent();
+    }
+
+    [HttpPost("statement/noinvite")]
+    public async Task<ActionResult<int>> CreateStatementNoInvite([FromBody] CreateStatementNoInviteCommand command)
+    {
+      return await Mediator.Send(command);
     }
 
     [HttpPut("{id}")]

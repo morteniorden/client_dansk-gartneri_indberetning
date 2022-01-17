@@ -54,19 +54,22 @@ namespace Application.Statements.Commands.SignOffStatement
         }
 
         var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == _currentUser.UserId);
-        if (statementEntity.ClientId != currentUser.Id)
+        if (currentUser.Role != RoleEnum.Admin)
         {
-          throw new UnauthorizedAccessException("Tried to sign off a statement that belongs to another account");
-        }
+          if (statementEntity.ClientId != currentUser.Id)
+          {
+            throw new UnauthorizedAccessException("Tried to sign off a statement that belongs to another account");
+          }
 
-        if (statementEntity.Accountant != null && !statementEntity.IsApproved)
-        {
-          throw new InvalidOperationException("The statement requires an approval by the assigned accountant before sign-off.");
-        }
+          if (statementEntity.Accountant != null && !statementEntity.IsApproved)
+          {
+            throw new InvalidOperationException("The statement requires an approval by the assigned accountant before sign-off.");
+          }
 
-        if (statementEntity.GetTotal() >= _options.LimitForRequiredAccountant && !statementEntity.IsApproved)
-        {
-          throw new InvalidOperationException("The total turnover of the statement exceeds DKK " + _options.LimitForRequiredAccountant + ", which then requires an approval by an accountant.");
+          if (statementEntity.GetTotal() >= _options.LimitForRequiredAccountant && !statementEntity.IsApproved)
+          {
+            throw new InvalidOperationException("The total turnover of the statement exceeds DKK " + _options.LimitForRequiredAccountant + ", which then requires an approval by an accountant.");
+          }
         }
 
         // _penneoClient.StartConnection();

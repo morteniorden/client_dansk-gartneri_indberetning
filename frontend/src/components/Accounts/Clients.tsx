@@ -21,6 +21,7 @@ import { IClientDto } from "services/backend/nswagts";
 import { ClientFilter } from "types/ClientFilter";
 import { logger } from "utils/logger";
 
+import SortBySelect from "../Common/SortBySelect";
 import AccountList from "./AccountList/AccountList";
 import DownloadCsvBtn from "./DownloadCsvBtn";
 import { ActiveFilter, SearchFilter } from "./Filters/ClientFilters";
@@ -33,6 +34,7 @@ const Accounts: FC = () => {
 
   const [clients, dispatchClients] = useReducer(ListReducer<IClientDto>("id"), []);
   const [searchString, setSearchString] = useState<string>("");
+  const [sortId, setSortId] = useState<number>(0);
   //  const [filters, setFilters] = useState<ClientFilter[]>([SearchFilter]);
   const [isFetching, setIsFetching] = useState(false);
   const [showDeactive, setShowDeactive] = useState(false);
@@ -134,6 +136,7 @@ const Accounts: FC = () => {
                 value={accountingYear}
                 cb={setAccountingYear}
               />
+              <SortBySelect value={sortId} cb={setSortId} />
             </HStack>
             <HStack spacing={5}>
               <SearchBar cb={value => setSearchString(value)} />
@@ -166,6 +169,7 @@ const Accounts: FC = () => {
           <AccountList
             data={clients.filter(client => filters.every(f => f.predicate(client, searchString)))}
             accountingYear={accountingYear}
+            sortBy={sortId}
           />
         </Stack>
       </BasicLayout>
