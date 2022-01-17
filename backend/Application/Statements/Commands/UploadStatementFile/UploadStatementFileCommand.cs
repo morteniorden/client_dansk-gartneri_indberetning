@@ -18,7 +18,7 @@ namespace Application.Statements.Commands.UploadStatementFile
   public class UploadStatementFileCommand : IRequest
   {
     public int StatementId { get; set; }
-    public IFormFile File { get; set; }
+    public IFormFile StatementFile { get; set; }
     public class UploadStatementFileCommandHandler : IRequestHandler<UploadStatementFileCommand>
     {
       private readonly IApplicationDbContext _context;
@@ -37,13 +37,22 @@ namespace Application.Statements.Commands.UploadStatementFile
         {
           throw new NotFoundException(nameof(Statement), request.StatementId);
         }
+        // Make sure directory exist as an error would be thrown if it doesn't
+        Directory.CreateDirectory(_options.StatementPath);
 
-        string fileName = request.StatementId + request.File.ContentType[12..];
+        // In case the file extension changes, delete the old to ensure no redundant data is saved
+        if (statement.StatementFileName != null)
+        {
+          File.Delete(Path.Combine(_options.StatementPath, statement.StatementFileName));
+        }
+
+        string fileName = request.StatementId + "." + request.StatementFile.FileName.Split('.')[1];
         string filePath = Path.Combine(_options.StatementPath, fileName);
+
 
         using (Stream fileStream = new FileStream(filePath, FileMode.Create))
         {
-          await request.File.CopyToAsync(fileStream, cancellationToken);
+          await request.StatementFile.CopyToAsync(fileStream, cancellationToken);
         }
 
         statement.StatementFileName = fileName;

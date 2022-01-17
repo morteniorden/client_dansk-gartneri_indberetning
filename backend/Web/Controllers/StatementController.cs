@@ -143,7 +143,7 @@ namespace Web.Controllers
     {
       await Mediator.Send(new UploadStatementFileCommand{
         StatementId = id,
-        File = file
+        StatementFile = file
       });
       return NoContent();
     }

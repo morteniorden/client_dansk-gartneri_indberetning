@@ -3283,6 +3283,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
     id?: number;
     accountingYear?: number;
     status?: StatementStatus;
+    statementFileName?: string | null;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;
     s1_boughtPlants?: number;
@@ -3320,6 +3321,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.accountingYear = _data["accountingYear"] !== undefined ? _data["accountingYear"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.statementFileName = _data["statementFileName"] !== undefined ? _data["statementFileName"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
             this.s1_tomatoCucumberHerb = _data["s1_tomatoCucumberHerb"] !== undefined ? _data["s1_tomatoCucumberHerb"] : <any>null;
             this.s1_boughtPlants = _data["s1_boughtPlants"] !== undefined ? _data["s1_boughtPlants"] : <any>null;
@@ -3357,6 +3359,7 @@ export class StatementNoUsersDto implements IStatementNoUsersDto {
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["accountingYear"] = this.accountingYear !== undefined ? this.accountingYear : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["statementFileName"] = this.statementFileName !== undefined ? this.statementFileName : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
         data["s1_tomatoCucumberHerb"] = this.s1_tomatoCucumberHerb !== undefined ? this.s1_tomatoCucumberHerb : <any>null;
         data["s1_boughtPlants"] = this.s1_boughtPlants !== undefined ? this.s1_boughtPlants : <any>null;
@@ -3387,6 +3390,7 @@ export interface IStatementNoUsersDto {
     id?: number;
     accountingYear?: number;
     status?: StatementStatus;
+    statementFileName?: string | null;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;
     s1_boughtPlants?: number;
