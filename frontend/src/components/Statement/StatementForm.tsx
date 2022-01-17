@@ -21,9 +21,8 @@ const StatementForm: FC = () => {
   const { t } = useLocales();
   const { handleSubmit, control } = useForm<IStatementNoUsersDto>();
   const { activeUser } = useAuth();
-  const { statement, setStatement, submit, readonly, calcTotal, statementInfo } = useContext(
-    EditStatementContext
-  );
+  const { statement, setStatement, submit, readonly, calcTotal, statementInfo } =
+    useContext(EditStatementContext);
 
   const updatedFormAttribute = useCallback(
     (key: keyof IStatementNoUsersDto, value: IStatementNoUsersDto[keyof IStatementNoUsersDto]) => {
