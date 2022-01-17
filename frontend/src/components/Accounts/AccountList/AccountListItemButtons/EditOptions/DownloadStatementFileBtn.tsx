@@ -1,4 +1,5 @@
 import { MenuItem } from "@chakra-ui/react";
+import { useLocales } from "hooks/useLocales";
 import { FC, useCallback } from "react";
 import { genStatementClient } from "services/backend/apiClients";
 import { IStatementNoUsersDto } from "services/backend/nswagts";
@@ -20,6 +21,8 @@ function base64ToArrayBuffer(base64: string) {
 }
 
 const DownloadStatementFileBtn: FC<Props> = ({ statement }) => {
+  const { t } = useLocales();
+
   const download = useCallback(async () => {
     const statementClient = await genStatementClient();
     const data = await statementClient.getStatementFile(statement.id);
@@ -28,7 +31,11 @@ const DownloadStatementFileBtn: FC<Props> = ({ statement }) => {
   }, []);
 
   return (
-    <>{statement.statementFileName && <MenuItem onClick={download}>Download file</MenuItem>}</>
+    <>
+      {statement.statementFileName && (
+        <MenuItem onClick={download}>{t("statementFile.download")}</MenuItem>
+      )}
+    </>
   );
 };
 

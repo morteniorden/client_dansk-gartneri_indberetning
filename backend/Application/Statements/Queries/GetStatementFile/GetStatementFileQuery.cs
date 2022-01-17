@@ -39,7 +39,7 @@ namespace Application.Statements.Queries.GetStatementFile
         }
 
         // Make sure directory exist as an error would be thrown if it doesn't
-        _ = Directory.CreateDirectory(_options.StatementPath);
+        Directory.CreateDirectory(_options.StatementPath);
 
         string file = Directory.EnumerateFiles(_options.StatementPath, statement.StatementFileName)
           .FirstOrDefault();
@@ -57,7 +57,7 @@ namespace Application.Statements.Queries.GetStatementFile
         using (Stream fileStream = new FileStream(file, FileMode.Open))
         {
           result.Data = new byte[fileStream.Length];
-          _ = await fileStream.ReadAsync(result.Data, cancellationToken);
+          await fileStream.ReadAsync(result.Data, cancellationToken);
         }
 
         return result;

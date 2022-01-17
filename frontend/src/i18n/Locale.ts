@@ -299,4 +299,17 @@ export interface Locale {
     helpText: string;
     tax: string;
   };
+
+  statementFile: {
+    chooseUpload: string;
+    upload: string;
+    download: string;
+    attach: string;
+    override: string;
+
+    uploadSuccessTitle: string;
+    uploadSuccessText: string;
+    uploadErrorTitle: string;
+    uploadErrorText: string;
+  };
 }

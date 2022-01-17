@@ -42,8 +42,8 @@ const UploadStatementFileModal: FC<Props> = ({ statement }) => {
       await statementClient.uploadStatementFile(statement.id, { data: file, fileName: file.name });
       // TODO fix toast text
       toast({
-        title: t("accounts.deactivateUserSuccessTitle"),
-        description: t("accounts.deactivateUserSuccessText"),
+        title: t("statementFile.uploadSuccessTitle"),
+        description: t("statementFile.uploadSuccessText"),
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -55,8 +55,8 @@ const UploadStatementFileModal: FC<Props> = ({ statement }) => {
     } catch (err) {
       logger.warn("statementClient.put Error", err);
       toast({
-        title: t("accounts.deactivateUserErrorTitle"),
-        description: t("accounts.deactivateUserErrorText"),
+        title: t("statementFile.uploadErrorTitle"),
+        description: t("statementFile.uploadErrorText"),
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -70,12 +70,12 @@ const UploadStatementFileModal: FC<Props> = ({ statement }) => {
   return (
     <>
       <MenuItem onClick={onOpen}>
-        {statement.statementFileName ? "Overskriv vedhæftet fil" : "Vedhæft fil"}
+        {statement.statementFileName ? t("statementFile.override") : t("statementFile.attach")}
       </MenuItem>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Vælg fil at uploade</ModalHeader>
+          <ModalHeader>{t("statementFile.chooseUpload")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input
@@ -86,11 +86,11 @@ const UploadStatementFileModal: FC<Props> = ({ statement }) => {
             />
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
             <Button colorScheme="green" onClick={uploadFile} isDisabled={isProcessing}>
-              {isProcessing ? <Spinner /> : "Send"}
+              {isProcessing ? <Spinner /> : t("statementFile.upload")}
             </Button>
           </ModalFooter>
         </ModalContent>
