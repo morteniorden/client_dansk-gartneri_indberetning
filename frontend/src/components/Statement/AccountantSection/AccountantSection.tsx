@@ -42,7 +42,7 @@ const AccountantSection: FC = () => {
         res.url,
         res.caseFileId,
         statement.id,
-        () => {
+        async () => {
           toast({
             title: t("statements.ApproveSuccessTitle"),
             description: t("statements.ApproveSuccessText"),
@@ -51,6 +51,7 @@ const AccountantSection: FC = () => {
             isClosable: true,
             position: "bottom-left"
           });
+          await statementClient.consentCallback(statement.id);
           fetchData();
         },
         () => {
