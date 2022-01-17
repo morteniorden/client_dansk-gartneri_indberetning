@@ -1905,6 +1905,7 @@ export class StatementDto implements IStatementDto {
     isApproved?: boolean;
     clientCaseFileId?: number | null;
     accountantCaseFileId?: number | null;
+    statementFileName?: string | null;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;
     s1_boughtPlants?: number;
@@ -1952,6 +1953,7 @@ export class StatementDto implements IStatementDto {
             this.isApproved = _data["isApproved"] !== undefined ? _data["isApproved"] : <any>null;
             this.clientCaseFileId = _data["clientCaseFileId"] !== undefined ? _data["clientCaseFileId"] : <any>null;
             this.accountantCaseFileId = _data["accountantCaseFileId"] !== undefined ? _data["accountantCaseFileId"] : <any>null;
+            this.statementFileName = _data["statementFileName"] !== undefined ? _data["statementFileName"] : <any>null;
             this.s1_mushrooms = _data["s1_mushrooms"] !== undefined ? _data["s1_mushrooms"] : <any>null;
             this.s1_tomatoCucumberHerb = _data["s1_tomatoCucumberHerb"] !== undefined ? _data["s1_tomatoCucumberHerb"] : <any>null;
             this.s1_boughtPlants = _data["s1_boughtPlants"] !== undefined ? _data["s1_boughtPlants"] : <any>null;
@@ -1997,6 +1999,7 @@ export class StatementDto implements IStatementDto {
         data["isApproved"] = this.isApproved !== undefined ? this.isApproved : <any>null;
         data["clientCaseFileId"] = this.clientCaseFileId !== undefined ? this.clientCaseFileId : <any>null;
         data["accountantCaseFileId"] = this.accountantCaseFileId !== undefined ? this.accountantCaseFileId : <any>null;
+        data["statementFileName"] = this.statementFileName !== undefined ? this.statementFileName : <any>null;
         data["s1_mushrooms"] = this.s1_mushrooms !== undefined ? this.s1_mushrooms : <any>null;
         data["s1_tomatoCucumberHerb"] = this.s1_tomatoCucumberHerb !== undefined ? this.s1_tomatoCucumberHerb : <any>null;
         data["s1_boughtPlants"] = this.s1_boughtPlants !== undefined ? this.s1_boughtPlants : <any>null;
@@ -2035,6 +2038,7 @@ export interface IStatementDto {
     isApproved?: boolean;
     clientCaseFileId?: number | null;
     accountantCaseFileId?: number | null;
+    statementFileName?: string | null;
     s1_mushrooms?: number;
     s1_tomatoCucumberHerb?: number;
     s1_boughtPlants?: number;
