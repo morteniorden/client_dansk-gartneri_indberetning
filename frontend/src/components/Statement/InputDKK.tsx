@@ -43,7 +43,7 @@ const InputDKK: FC<Props> = ({ name }) => {
     if (isTouched) return colors.infoColor;
   }, [isDirty, isTouched, invalid, colors]);
 
-  const { leftOrRight } = useMemo(() => formatCurrency(value), [value, formatCurrency]);
+  const { leftOrRight } = useMemo(() => formatCurrency(value as number), [value, formatCurrency]);
 
   return (
     <InputGroup>
