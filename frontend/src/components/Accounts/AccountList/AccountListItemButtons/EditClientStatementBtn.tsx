@@ -32,7 +32,6 @@ const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
-  const [_, setIsDirty] = useState(false);
 
   const [total, setTotal] = useState(0);
 
@@ -124,7 +123,6 @@ const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
   }, [updatableStatement]);
 
   const onSaveChanges = useCallback(async () => {
-    setIsDirty(false);
     setIsSaving(true);
     try {
       const statementClient = await genStatementClient();
@@ -223,7 +221,9 @@ const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
           total: total,
           calcTotal: calcTotal,
           isDirty: false,
-          setIsDirty: setIsDirty,
+          setIsDirty: _ => {
+            return;
+          },
           statementInfo: statementInfo
         }}>
         <EditClientStatementModal
