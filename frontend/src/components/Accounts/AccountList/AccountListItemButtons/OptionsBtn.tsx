@@ -5,6 +5,7 @@ import { BsGearFill } from "react-icons/bs";
 import { IClientDto, IStatementNoUsersDto } from "services/backend/nswagts";
 
 import DeactivateClientModal from "./EditOptions/DeactivateClientModal";
+import DownloadStatementFileBtn from "./EditOptions/DownloadStatementFileBtn";
 import UploadStatementFileModal from "./EditOptions/UploadStatementFileModal";
 
 interface Props {
@@ -28,6 +29,7 @@ const OptionsBtn: FC<Props> = ({ client, statement }) => {
         <MenuList>
           <DeactivateClientModal client={client} />
           <UploadStatementFileModal statement={statement} />
+          <DownloadStatementFileBtn statement={statement} />
         </MenuList>
       </Menu>
     </>

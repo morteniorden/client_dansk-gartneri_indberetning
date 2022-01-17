@@ -38,7 +38,10 @@ namespace Application.Statements.Queries.GetStatementFile
           throw new NotFoundException(nameof(Statement), request.StatementId);
         }
 
-        string file = Directory.EnumerateFiles(_options.ConsentPath, statement.StatementFileName)
+        // Make sure directory exist as an error would be thrown if it doesn't
+        _ = Directory.CreateDirectory(_options.StatementPath);
+
+        string file = Directory.EnumerateFiles(_options.StatementPath, statement.StatementFileName)
           .FirstOrDefault();
 
         if (file == null)
@@ -46,7 +49,7 @@ namespace Application.Statements.Queries.GetStatementFile
           throw new NotFoundException("Statement file for statement with id " + statement.Id + " was not found.");
         }
 
-        StatementFileDto result = new StatementFileDto
+        StatementFileDto result = new()
         {
           FileName = statement.StatementFileName
         };
@@ -54,7 +57,7 @@ namespace Application.Statements.Queries.GetStatementFile
         using (Stream fileStream = new FileStream(file, FileMode.Open))
         {
           result.Data = new byte[fileStream.Length];
-          await fileStream.ReadAsync(result.Data, cancellationToken);
+          _ = await fileStream.ReadAsync(result.Data, cancellationToken);
         }
 
         return result;
