@@ -119,6 +119,15 @@ namespace Web.Controllers
       //return NoContent();
     }
 
+    [HttpPut("{id}/consent/callback")]
+    public async Task<ActionResult> ConsentCallback([FromRoute] int id)
+    {
+      await Mediator.Send(new ConsentCallbackCommand{
+        Id = id
+      });
+      return NoContent();
+    }
+
     [HttpGet("statementInfo")]
     public async Task<ActionResult<List<StatementInfoDto>>> GetAllStatementInfo()
     {
