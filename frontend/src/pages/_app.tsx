@@ -39,11 +39,14 @@ const MyApp = ({ Component, pageProps, __N_SSG }: AppPropsType): ReactElement =>
   return (
     <main>
       <Head>
-        <title>Dansk Gartneri - Indeberetning</title>
+        <title>Produktionsafgiftsfonden for frugt og gartneriprodukter - Indeberetning</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta charSet="utf-8" />
         <meta name="theme-color" content="#2196f3" />
-        <meta name="description" content="Dansk Gartneri - Indeberetning" />
+        <meta
+          name="description"
+          content="Produktionsafgiftsfonden for frugt og gartneriprodukter - Indeberetning"
+        />
         <meta name="robots" content="noindex" />
 
         <link rel="manifest" href="/manifest.json" />
