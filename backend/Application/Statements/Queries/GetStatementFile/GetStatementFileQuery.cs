@@ -9,16 +9,17 @@ using Application.Common.Security;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace Application.Statements.Queries.GetStatementFile
 {
   [Authorize(Role = RoleEnum.Admin)]
-  public class GetStatementFileQuery : IRequest<StatementFileDto>
+  public class GetStatementFileQuery : IRequest<FileResult>
   {
     public int StatementId { get; set; }
-    public class GetStatementFileQueryHandler : IRequestHandler<GetStatementFileQuery, StatementFileDto>
+    public class GetStatementFileQueryHandler : IRequestHandler<GetStatementFileQuery, FileResult>
     {
       private readonly IApplicationDbContext _context;
       private readonly FileDriveOptions _options;
@@ -29,13 +30,17 @@ namespace Application.Statements.Queries.GetStatementFile
         _options = options.Value;
       }
 
-      public async Task<StatementFileDto> Handle(GetStatementFileQuery request, CancellationToken cancellationToken)
+      public async Task<FileResult> Handle(GetStatementFileQuery request, CancellationToken cancellationToken)
       {
         Statement statement = await _context.Statements.FirstAsync(e => e.Id == request.StatementId, cancellationToken);
 
         if (statement == null)
         {
           throw new NotFoundException(nameof(Statement), request.StatementId);
+        }
+        if (statement.StatementFileName == null)
+        {
+          throw new NotFoundException("Statement has no specified statementFileName, and the statement could not be found");
         }
 
         // Make sure directory exist as an error would be thrown if it doesn't
@@ -49,18 +54,17 @@ namespace Application.Statements.Queries.GetStatementFile
           throw new NotFoundException("Statement file for statement with id " + statement.Id + " was not found.");
         }
 
-        StatementFileDto result = new()
-        {
-          FileName = statement.StatementFileName
-        };
-
+        byte[] data;
         using (Stream fileStream = new FileStream(file, FileMode.Open))
         {
-          result.Data = new byte[fileStream.Length];
-          await fileStream.ReadAsync(result.Data, cancellationToken);
+          data = new byte[fileStream.Length];
+          await fileStream.ReadAsync(data, cancellationToken);
         }
 
-        return result;
+        return new FileContentResult(data, "text/plain")
+        {
+          FileDownloadName = statement.StatementFileName
+        };
       }
     }
   }

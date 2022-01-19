@@ -36,11 +36,9 @@ const UploadStatementFileModal: FC<Props> = ({ statement }) => {
 
   const uploadFile = useCallback(async () => {
     setIsProcessing(true);
-    console.log(file.name);
     try {
       const statementClient = await genStatementClient();
       await statementClient.uploadStatementFile(statement.id, { data: file, fileName: file.name });
-      // TODO fix toast text
       toast({
         title: t("statementFile.uploadSuccessTitle"),
         description: t("statementFile.uploadSuccessText"),
@@ -66,7 +64,6 @@ const UploadStatementFileModal: FC<Props> = ({ statement }) => {
     setIsProcessing(false);
   }, [file, statement]);
 
-  // TODO localize
   return (
     <>
       <MenuItem onClick={onOpen}>

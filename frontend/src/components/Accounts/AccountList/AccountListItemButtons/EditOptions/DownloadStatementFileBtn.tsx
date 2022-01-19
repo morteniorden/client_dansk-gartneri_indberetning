@@ -9,17 +9,6 @@ interface Props {
   statement: IStatementNoUsersDto;
 }
 
-function base64ToArrayBuffer(base64: string) {
-  const binaryString = window.atob(base64);
-  const binaryLen = binaryString.length;
-  const bytes = new Uint8Array(binaryLen);
-  for (let i = 0; i < binaryLen; i++) {
-    const ascii = binaryString.charCodeAt(i);
-    bytes[i] = ascii;
-  }
-  return bytes;
-}
-
 const DownloadStatementFileBtn: FC<Props> = ({ statement }) => {
   const { t } = useLocales();
 
@@ -27,16 +16,10 @@ const DownloadStatementFileBtn: FC<Props> = ({ statement }) => {
     const statementClient = await genStatementClient();
     const data = await statementClient.getStatementFile(statement.id);
 
-    downloadFile(new Blob([base64ToArrayBuffer(data.data)]), data.fileName);
-  }, []);
+    downloadFile(data.data, data.fileName);
+  }, [statement]);
 
-  return (
-    <>
-      {statement.statementFileName && (
-        <MenuItem onClick={download}>{t("statementFile.download")}</MenuItem>
-      )}
-    </>
-  );
+  return <MenuItem onClick={download}>{t("statementFile.download")}</MenuItem>;
 };
 
 export default DownloadStatementFileBtn;

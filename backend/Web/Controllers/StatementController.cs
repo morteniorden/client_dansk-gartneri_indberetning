@@ -149,7 +149,7 @@ namespace Web.Controllers
     }
 
     [HttpGet("statement/{id}/file")]
-    public async Task<ActionResult<StatementFileDto>> GetStatementFile([FromRoute] int id)
+    public async Task<FileResult> GetStatementFile([FromRoute] int id)
     {
       return await Mediator.Send(new GetStatementFileQuery{
         StatementId = id

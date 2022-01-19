@@ -29,7 +29,7 @@ const OptionsBtn: FC<Props> = ({ client, statement }) => {
         <MenuList>
           <DeactivateClientModal client={client} />
           <UploadStatementFileModal statement={statement} />
-          <DownloadStatementFileBtn statement={statement} />
+          {statement.statementFileName && <DownloadStatementFileBtn statement={statement} />}
         </MenuList>
       </Menu>
     </>
