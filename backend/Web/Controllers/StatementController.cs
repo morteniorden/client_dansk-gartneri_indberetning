@@ -151,9 +151,12 @@ namespace Web.Controllers
     [HttpGet("statement/{id}/file")]
     public async Task<FileResult> GetStatementFile([FromRoute] int id)
     {
-      return await Mediator.Send(new GetStatementFileQuery{
+      var File = await Mediator.Send(new GetStatementFileQuery {
         StatementId = id
       });
+      return new FileStreamResult(File.Data, "text/plain") {
+        FileDownloadName = File.FileName
+      };
     }
   }
 }

@@ -16,10 +16,10 @@ using Microsoft.Extensions.Options;
 namespace Application.Statements.Queries.GetStatementFile
 {
   [Authorize(Role = RoleEnum.Admin)]
-  public class GetStatementFileQuery : IRequest<FileResult>
+  public class GetStatementFileQuery : IRequest<StatementFileDto>
   {
     public int StatementId { get; set; }
-    public class GetStatementFileQueryHandler : IRequestHandler<GetStatementFileQuery, FileResult>
+    public class GetStatementFileQueryHandler : IRequestHandler<GetStatementFileQuery, StatementFileDto>
     {
       private readonly IApplicationDbContext _context;
       private readonly FileDriveOptions _options;
@@ -30,7 +30,7 @@ namespace Application.Statements.Queries.GetStatementFile
         _options = options.Value;
       }
 
-      public async Task<FileResult> Handle(GetStatementFileQuery request, CancellationToken cancellationToken)
+      public async Task<StatementFileDto> Handle(GetStatementFileQuery request, CancellationToken cancellationToken)
       {
         Statement statement = await _context.Statements.FirstAsync(e => e.Id == request.StatementId, cancellationToken);
 
@@ -54,16 +54,9 @@ namespace Application.Statements.Queries.GetStatementFile
           throw new NotFoundException("Statement file for statement with id " + statement.Id + " was not found.");
         }
 
-        byte[] data;
-        using (Stream fileStream = new FileStream(file, FileMode.Open))
-        {
-          data = new byte[fileStream.Length];
-          await fileStream.ReadAsync(data, cancellationToken);
-        }
-
-        return new FileContentResult(data, "text/plain")
-        {
-          FileDownloadName = statement.StatementFileName
+        return new StatementFileDto {
+          Data = new FileStream(file, FileMode.Open),
+          FileName = statement.StatementFileName
         };
       }
     }
