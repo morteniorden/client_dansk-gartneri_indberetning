@@ -27,7 +27,7 @@ const AccountItemExpandedPanel: FC<Props> = ({ client }) => {
         </Stack>
         <Stack spacing={0}>
           <Text fontWeight="bold">{t("accounts.address")}</Text>
-          <SimpleGrid columns={2}>
+          <SimpleGrid columns={2} spacingX={1}>
             <Text>{t("accounts.firmName")}:</Text>
             <Text>{client.address.firmName}</Text>
             <Text>{t("accounts.ownerName")}:</Text>

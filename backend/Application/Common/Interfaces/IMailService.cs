@@ -13,5 +13,6 @@ namespace Application.Common.Interfaces
     Task SendStatementInvitationEmail(string email);
     Task SendInviteNewAccountantEmail(string email, string token);
     Task SendInviteExistingAccountantEmail(string email);
+    Task SendReminderEmail(string email);
   }
 }
