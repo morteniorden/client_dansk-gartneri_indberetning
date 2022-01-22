@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Mails.Commands.SendRemindUserCommand;
 using Application.StatementInfos;
 using Application.StatementInfos.Commands.UpdateStatementInfo;
 using Application.StatementInfos.Queries.GetStatementInfos;
 using Application.Statements;
 using Application.Statements.Commands.ConsentToStatement;
+using Application.Statements.Commands.CreateStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
@@ -13,7 +15,6 @@ using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
 using Application.Statements.Queries.GetStatementsCSV;
 using Application.Users.Commands.UnassignAccountantCommand;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,6 +57,13 @@ namespace Web.Controllers
     public async Task<ActionResult<int>> CreateStatement([FromBody] CreateStatementCommand command)
     {
       return await Mediator.Send(command);
+    }
+
+    [HttpPost("statements")]
+    public async Task<ActionResult> CreateStatements([FromBody] CreateStatementsCommand command)
+    {
+      await Mediator.Send(command);
+      return NoContent();
     }
 
     [HttpPost("statement/noinvite")]
@@ -135,10 +143,11 @@ namespace Web.Controllers
     }
 
     [HttpPut("statementInfo/{year}")]
-    public async Task<ActionResult<Unit>> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
+    public async Task<ActionResult> UpdateStatementInfo([FromRoute] int year, [FromBody] UpdateStatementInfoCommand command)
     {
       command.AccountingYear = year;
-      return await Mediator.Send(command);
+      await Mediator.Send(command);
+      return NoContent();
     }
 
     [HttpGet("consent")]
@@ -148,6 +157,20 @@ namespace Web.Controllers
       {
         StatementId = statementId
       });
+    }
+
+    [HttpPost("remind")]
+    public async Task<ActionResult> SendRemindUserEmail([FromBody] SendRemindUserCommand request)
+    {
+      await Mediator.Send(request);
+      return NoContent();
+    }
+
+    [HttpPost("remindAll")]
+    public async Task<ActionResult> SendRemindAllUsersEmail([FromBody] SendRemindAllUsersCommand request)
+    {
+      await Mediator.Send(request);
+      return NoContent();
     }
   }
 }

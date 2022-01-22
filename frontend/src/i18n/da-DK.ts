@@ -309,6 +309,27 @@ export const table: Locale = {
     fillOutStatement: "Besvar"
   },
 
+  reminder: {
+    sentSuccessTitle: "Rykker sendt",
+    sentSuccessText: "Der er blevet sendt en rykker til kunden",
+    sentErrorTitle: "Fejl",
+    sentErrorText: "Der skete en fejl i udsendelse af rykker til kunden",
+    tooltip: "Send rykker til kunden"
+  },
+
+  mailMany: {
+    inviteSentSuccessTitle: "Invitationer sendt",
+    inviteSentSuccessText: "Der er blevet sendt invitationer ud til de valgte kunder",
+    inviteSentErrorTitle: "Fejl",
+    inviteSentErrorText: "Der skete en fejl i udsendelse af invitationer til kunder",
+    reminderSentSuccessTitle: "Rykkere sendt",
+    reminderSentSuccessText: "Der er blevet sendt rykkere ud til de valgte kunder",
+    reminderSentErrorTitle: "Fejl",
+    reminderSentErrorText: "Der skete en fejl i udsendelse af rykkere til kunderne",
+    invite: "Vælg kunder at invitere",
+    reminder: "Vælg kunder at sende rykkere"
+  },
+
   statementInfo: {
     editStatementInfo: "Rediger oplysningsskema",
     helpText: "Hjælpetekst",

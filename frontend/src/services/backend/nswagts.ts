@@ -494,6 +494,7 @@ export interface IStatementClient {
     updateStatement(id: number, command: UpdateStatementCommand): Promise<FileResponse>;
     checkIsSigned(id: number, caseFileId?: number | undefined): Promise<boolean>;
     createStatement(command: CreateStatementCommand): Promise<number>;
+    createStatements(command: CreateStatementsCommand): Promise<FileResponse>;
     createStatementNoInvite(command: CreateStatementNoInviteCommand): Promise<number>;
     signOffStatement(id: number): Promise<GetSigningUrlDto>;
     getStatementsCSV(accountingYear?: number | null | undefined): Promise<CSVResponseDto>;
@@ -501,8 +502,10 @@ export interface IStatementClient {
     consentToStatement(id: number, file?: FileParameter | null | undefined): Promise<GetSigningUrlDto>;
     consentCallback(id: number): Promise<FileResponse>;
     getAllStatementInfo(): Promise<StatementInfoDto[]>;
-    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit>;
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<FileResponse>;
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto>;
+    sendRemindUserEmail(request: SendRemindUserCommand): Promise<FileResponse>;
+    sendRemindAllUsersEmail(request: SendRemindAllUsersCommand): Promise<FileResponse>;
 }
 
 export class StatementClient extends ClientBase implements IStatementClient {
@@ -757,6 +760,44 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<number>(<any>null);
+    }
+
+    createStatements(command: CreateStatementsCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/statements";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateStatements(_response));
+        });
+    }
+
+    protected processCreateStatements(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 
     createStatementNoInvite(command: CreateStatementNoInviteCommand): Promise<number> {
@@ -1034,7 +1075,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
         return Promise.resolve<StatementInfoDto[]>(<any>null);
     }
 
-    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<Unit> {
+    updateStatementInfo(year: number, command: UpdateStatementInfoCommand): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/Statement/statementInfo/{year}";
         if (year === undefined || year === null)
             throw new Error("The parameter 'year' must be defined.");
@@ -1048,7 +1089,7 @@ export class StatementClient extends ClientBase implements IStatementClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/octet-stream"
             }
         };
 
@@ -1059,22 +1100,20 @@ export class StatementClient extends ClientBase implements IStatementClient {
         });
     }
 
-    protected processUpdateStatementInfo(response: Response): Promise<Unit> {
+    protected processUpdateStatementInfo(response: Response): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Unit.fromJS(resultData200);
-            return result200;
-            });
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Unit>(<any>null);
+        return Promise.resolve<FileResponse>(<any>null);
     }
 
     getConsentFile(statementId?: number | undefined): Promise<ConsentFileDto> {
@@ -1115,6 +1154,82 @@ export class StatementClient extends ClientBase implements IStatementClient {
             });
         }
         return Promise.resolve<ConsentFileDto>(<any>null);
+    }
+
+    sendRemindUserEmail(request: SendRemindUserCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/remind";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processSendRemindUserEmail(_response));
+        });
+    }
+
+    protected processSendRemindUserEmail(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    sendRemindAllUsersEmail(request: SendRemindAllUsersCommand): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Statement/remindAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processSendRemindAllUsersEmail(_response));
+        });
+    }
+
+    protected processSendRemindAllUsersEmail(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(<any>null);
     }
 }
 
@@ -2921,6 +3036,54 @@ export interface ICreateStatementCommand {
     revisionYear?: number;
 }
 
+export class CreateStatementsCommand implements ICreateStatementsCommand {
+    clientIds?: number[] | null;
+    revisionYear?: number;
+
+    constructor(data?: ICreateStatementsCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["clientIds"])) {
+                this.clientIds = [] as any;
+                for (let item of _data["clientIds"])
+                    this.clientIds!.push(item);
+            }
+            this.revisionYear = _data["revisionYear"] !== undefined ? _data["revisionYear"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CreateStatementsCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateStatementsCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.clientIds)) {
+            data["clientIds"] = [];
+            for (let item of this.clientIds)
+                data["clientIds"].push(item);
+        }
+        data["revisionYear"] = this.revisionYear !== undefined ? this.revisionYear : <any>null;
+        return data; 
+    }
+}
+
+export interface ICreateStatementsCommand {
+    clientIds?: number[] | null;
+    revisionYear?: number;
+}
+
 export class CreateStatementNoInviteCommand implements ICreateStatementNoInviteCommand {
     clientId?: number;
     revisionYear?: number;
@@ -3078,36 +3241,6 @@ export interface ICSVResponseDto {
     content?: string | null;
 }
 
-export class Unit implements IUnit {
-
-    constructor(data?: IUnit) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): Unit {
-        data = typeof data === 'object' ? data : {};
-        let result = new Unit();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data; 
-    }
-}
-
-export interface IUnit {
-}
-
 export class UpdateStatementInfoCommand implements IUpdateStatementInfoCommand {
     newInfo?: StatementInfoDto | null;
 
@@ -3183,6 +3316,86 @@ export class ConsentFileDto implements IConsentFileDto {
 export interface IConsentFileDto {
     statementId?: number;
     stream?: string | null;
+}
+
+export class SendRemindUserCommand implements ISendRemindUserCommand {
+    email?: string | null;
+
+    constructor(data?: ISendRemindUserCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): SendRemindUserCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendRemindUserCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        return data; 
+    }
+}
+
+export interface ISendRemindUserCommand {
+    email?: string | null;
+}
+
+export class SendRemindAllUsersCommand implements ISendRemindAllUsersCommand {
+    clientIds?: number[] | null;
+
+    constructor(data?: ISendRemindAllUsersCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["clientIds"])) {
+                this.clientIds = [] as any;
+                for (let item of _data["clientIds"])
+                    this.clientIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): SendRemindAllUsersCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendRemindAllUsersCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.clientIds)) {
+            data["clientIds"] = [];
+            for (let item of this.clientIds)
+                data["clientIds"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface ISendRemindAllUsersCommand {
+    clientIds?: number[] | null;
 }
 
 export class ClientDto implements IClientDto {
