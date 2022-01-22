@@ -185,7 +185,7 @@ export const table: Locale = {
     sendToAccountantText1:
       "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
     sendToAccountantText2:
-      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
+      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Produktionsafgiftsfonden for frugt og gartneriprodukter. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Not invited",
     statusInvited: "Invited",
@@ -283,7 +283,7 @@ export const table: Locale = {
       dropFile: "Drop your file here...",
       signAndApprove: "Sign your consent",
       consentSignedText:
-        "Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to Dansk Gartneri.",
+        'Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to "Produktionsafgiftsfonden for frugt og gartneriprodukter".',
       downloadYourConsent: "Download your consent"
     },
     sort: {

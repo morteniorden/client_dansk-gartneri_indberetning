@@ -77,7 +77,7 @@ namespace Application.Common.Services
       var mail = new MailRequestDto
       {
         ToEmail = _mailOptions.Mail,
-        Subject = "Test mail from Dansk Gartneri",
+        Subject = "Test mail from Produktionsafgiftsfonden for frugt og gartneriprodukter",
         Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
       };
 

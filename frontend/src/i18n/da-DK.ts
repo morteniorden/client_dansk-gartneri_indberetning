@@ -183,7 +183,7 @@ export const table: Locale = {
     sendToAccountantText1:
       "Herunder kan du anmode en revisor eller uvildig konsulent om at erklære sit samtykke til dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
     sendToAccountantText2:
-      "Når revisoren eller konsulenten har erklæret samtykke, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
+      "Når revisoren eller konsulenten har erklæret samtykke, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Produktionsafgiftsfonden for frugt og gartneriprodukter. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Ikke inviteret",
     statusInvited: "Inviteret",
