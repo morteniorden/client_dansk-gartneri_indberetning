@@ -336,5 +336,18 @@ export const table: Locale = {
     editStatementInfo: "Edit statement",
     helpText: "Help text",
     tax: "Tax"
+  },
+
+  statementFile: {
+    chooseUpload: "Choose file to upload",
+    upload: "Upload",
+    download: "Download attached file",
+    override: "Override attached file",
+    attach: "Attach file",
+
+    uploadSuccessTitle: "File uploaded and attatched",
+    uploadSuccessText: "The file has been attached to the statement",
+    uploadErrorTitle: "Error",
+    uploadErrorText: "An error occured while trying to upload the file"
   }
 };

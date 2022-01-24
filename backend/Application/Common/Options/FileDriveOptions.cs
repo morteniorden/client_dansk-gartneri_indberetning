@@ -6,5 +6,6 @@ namespace Application.Common.Options
 
     public string ConsentPath { get; set; }
     public string ClientSignoffPath { get; set; }
+    public string StatementPath { get; set; }
   }
 }

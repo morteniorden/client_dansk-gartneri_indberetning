@@ -10,9 +10,11 @@ using Application.Statements.Commands.CreateStatement;
 using Application.Statements.Commands.CreateStatementCommand;
 using Application.Statements.Commands.SignOffStatement;
 using Application.Statements.Commands.UpdateStatement;
+using Application.Statements.Commands.UploadStatementFile;
 using Application.Statements.Queries.CheckCasefileStatus;
 using Application.Statements.Queries.GetAllStatements;
 using Application.Statements.Queries.GetMyStatements;
+using Application.Statements.Queries.GetStatementFile;
 using Application.Statements.Queries.GetStatementsCSV;
 using Application.Users.Commands.UnassignAccountantCommand;
 using Microsoft.AspNetCore.Http;
@@ -159,6 +161,27 @@ namespace Web.Controllers
       });
     }
 
+    [HttpPut("statement/{id}/file")]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> UploadStatementFile([FromRoute] int id, IFormFile file)
+    {
+      await Mediator.Send(new UploadStatementFileCommand{
+        StatementId = id,
+        StatementFile = file
+      });
+      return NoContent();
+    }
+
+    [HttpGet("statement/{id}/file")]
+    public async Task<FileResult> GetStatementFile([FromRoute] int id)
+    {
+      var File = await Mediator.Send(new GetStatementFileQuery {
+        StatementId = id
+      });
+      return new FileStreamResult(File.Data, "text/plain") {
+        FileDownloadName = File.FileName
+      };
+    }
     [HttpPost("remind")]
     public async Task<ActionResult> SendRemindUserEmail([FromBody] SendRemindUserCommand request)
     {

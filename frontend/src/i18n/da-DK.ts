@@ -334,5 +334,18 @@ export const table: Locale = {
     editStatementInfo: "Rediger oplysningsskema",
     helpText: "Hjælpetekst",
     tax: "Afgift"
+  },
+
+  statementFile: {
+    chooseUpload: "Vælg fil at oploade",
+    upload: "opload",
+    download: "Hent vedhæftet fil",
+    override: "Overskriv vedhæftet fil",
+    attach: "Vedhæft fil",
+
+    uploadSuccessTitle: "Fil oploaded og vedhæftet",
+    uploadSuccessText: "Fil oploaded og vedhæftet korrekt",
+    uploadErrorTitle: "Fejl",
+    uploadErrorText: "Der skete en fejl mens opload forsøgtes"
   }
 };

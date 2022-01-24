@@ -12,6 +12,7 @@ namespace Application.Statements
     public int Id { get; set; }
     public int AccountingYear { get; set; }
     public StatementStatus Status { get; set; }
+    public string StatementFileName { get; set; }
 
     public int s1_mushrooms { get; set; }
     public int s1_tomatoCucumberHerb { get; set; }
