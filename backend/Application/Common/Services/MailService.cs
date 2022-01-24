@@ -77,7 +77,7 @@ namespace Application.Common.Services
       var mail = new MailRequestDto
       {
         ToEmail = _mailOptions.Mail,
-        Subject = "Test mail from Dansk Gartneri",
+        Subject = "Test mail from Produktionsafgiftsfonden for frugt og gartneriprodukter",
         Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
       };
 
@@ -209,6 +209,30 @@ namespace Application.Common.Services
     public async Task SendInviteExistingAccountantEmail(string email)
     {
       var emailEntity = _context.Emails.Find(5);
+
+      var emailModel = new CtaButtonEmailViewModel()
+      {
+        Heading1 = emailEntity.Heading1,
+        paragraph1 = emailEntity.Paragraph1,
+        Heading2 = emailEntity.Heading2,
+        paragraph2 = emailEntity.Paragraph2,
+        Heading3 = emailEntity.Heading3,
+        paragraph3 = emailEntity.Paragraph3,
+        CtaButtonText = emailEntity.CtaButtonText,
+        CtaButtonUrl = _mailOptions.baseUrl
+      };
+      var mail = new MailRequestDto
+      {
+        ToEmail = email,
+        Subject = emailEntity.Subject,
+        Body = await _razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/CtaButtonEmail/CtaButtonEmail.cshtml", emailModel)
+      };
+      await SendEmailAsync(mail);
+    }
+
+    public async Task SendReminderEmail(string email)
+    {
+      var emailEntity = _context.Emails.Find(6);
 
       var emailModel = new CtaButtonEmailViewModel()
       {

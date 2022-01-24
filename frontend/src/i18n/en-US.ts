@@ -185,7 +185,7 @@ export const table: Locale = {
     sendToAccountantText1:
       "Herunder kan du anmode en revisor eller uvildig konsulent om at godkende dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
     sendToAccountantText2:
-      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
+      "Når revisoren eller konsulenten har godkendt dit oplysningsskema, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Produktionsafgiftsfonden for frugt og gartneriprodukter. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Not invited",
     statusInvited: "Invited",
@@ -283,7 +283,7 @@ export const table: Locale = {
       dropFile: "Drop your file here...",
       signAndApprove: "Sign your consent",
       consentSignedText:
-        "Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to Dansk Gartneri.",
+        'Your consent to the statement has been signed. The client can now view your consent, and is now able to sign-off and deliver the statement to "Produktionsafgiftsfonden for frugt og gartneriprodukter".',
       downloadYourConsent: "Download your consent"
     },
     sort: {
@@ -297,7 +297,8 @@ export const table: Locale = {
       saveButton: "Save",
       cancelButton: "Calcel",
       ignoreButton: "Ignore"
-    }
+    },
+    editStatementForHeading: "Oplysningsskema for {{name}}"
   },
 
   myStatements: {
@@ -308,6 +309,27 @@ export const table: Locale = {
     signedOffStatus: "Finished",
     notSignedOffStatus: "Pending",
     fillOutStatement: "Go to statement"
+  },
+
+  reminder: {
+    sentSuccessTitle: "Reminder sent",
+    sentSuccessText: "A reminder has been sent to the client",
+    sentErrorTitle: "Error",
+    sentErrorText: "An error occured in the process of sending the reminder",
+    tooltip: "Send reminder to client"
+  },
+
+  mailMany: {
+    inviteSentSuccessTitle: "Invitations sent",
+    inviteSentSuccessText: "Invitations have been sent to the choosen client",
+    inviteSentErrorTitle: "Error",
+    inviteSentErrorText: "An error occured in the process of sending the invitations",
+    reminderSentSuccessTitle: "Reminders sent",
+    reminderSentSuccessText: "Reminders have been sent to the choosen clients",
+    reminderSentErrorTitle: "Error",
+    reminderSentErrorText: "An error occured in the process of sending the reminders",
+    invite: "Choose clients to send invitations to",
+    reminder: "Choose clients to send reminders to"
   },
 
   statementInfo: {

@@ -183,7 +183,7 @@ export const table: Locale = {
     sendToAccountantText1:
       "Herunder kan du anmode en revisor eller uvildig konsulent om at erklære sit samtykke til dit oplysningsskema for dette revisionsår. Dette giver revisoren eller konsulenten adgang til både at læse og redigere i dit oplysningsskema.",
     sendToAccountantText2:
-      "Når revisoren eller konsulenten har erklæret samtykke, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Dansk Gartneri. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
+      "Når revisoren eller konsulenten har erklæret samtykke, vil det fremgå her på siden. Herefter er det op til dig at underskrive og indsende skemaet til Produktionsafgiftsfonden for frugt og gartneriprodukter. Du vil have mulighed for at trække en anmodning tilbage og sende en ny.",
 
     statusNotInvited: "Ikke inviteret",
     statusInvited: "Inviteret",
@@ -295,7 +295,8 @@ export const table: Locale = {
       saveButton: "Gem",
       cancelButton: "Annuler",
       ignoreButton: "Ignorer"
-    }
+    },
+    editStatementForHeading: "Oplysningsskema for {{name}}"
   },
 
   myStatements: {
@@ -306,6 +307,27 @@ export const table: Locale = {
     signedOffStatus: "Besvaret",
     notSignedOffStatus: "Ikke besvaret",
     fillOutStatement: "Besvar"
+  },
+
+  reminder: {
+    sentSuccessTitle: "Rykker sendt",
+    sentSuccessText: "Der er blevet sendt en rykker til kunden",
+    sentErrorTitle: "Fejl",
+    sentErrorText: "Der skete en fejl i udsendelse af rykker til kunden",
+    tooltip: "Send rykker til kunden"
+  },
+
+  mailMany: {
+    inviteSentSuccessTitle: "Invitationer sendt",
+    inviteSentSuccessText: "Der er blevet sendt invitationer ud til de valgte kunder",
+    inviteSentErrorTitle: "Fejl",
+    inviteSentErrorText: "Der skete en fejl i udsendelse af invitationer til kunder",
+    reminderSentSuccessTitle: "Rykkere sendt",
+    reminderSentSuccessText: "Der er blevet sendt rykkere ud til de valgte kunder",
+    reminderSentErrorTitle: "Fejl",
+    reminderSentErrorText: "Der skete en fejl i udsendelse af rykkere til kunderne",
+    invite: "Vælg kunder at invitere",
+    reminder: "Vælg kunder at sende rykkere"
   },
 
   statementInfo: {

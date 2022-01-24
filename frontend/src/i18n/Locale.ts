@@ -282,6 +282,7 @@ export interface Locale {
       cancelButton: string;
       ignoreButton: string;
     };
+    editStatementForHeading: string;
   };
 
   myStatements: {
@@ -294,6 +295,26 @@ export interface Locale {
     fillOutStatement: string;
   };
 
+  reminder: {
+    sentSuccessTitle: string;
+    sentSuccessText: string;
+    sentErrorTitle: string;
+    sentErrorText: string;
+    tooltip: string;
+  };
+
+  mailMany: {
+    inviteSentSuccessTitle: string;
+    inviteSentSuccessText: string;
+    inviteSentErrorTitle: string;
+    inviteSentErrorText: string;
+    reminderSentSuccessTitle: string;
+    reminderSentSuccessText: string;
+    reminderSentErrorTitle: string;
+    reminderSentErrorText: string;
+    invite: string;
+    reminder: string;
+  };
   statementInfo: {
     editStatementInfo: string;
     helpText: string;

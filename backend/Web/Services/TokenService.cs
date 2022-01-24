@@ -16,7 +16,7 @@ namespace Web.Services
   public class TokenService : ITokenService
   {
     private const double EXPIRE_HOURS = 4.0;
-    private const double SSO_EXPIRE_DAYS = 7.0;
+    private const double SSO_EXPIRE_DAYS = 28.0;
     private readonly TokenOptions _options;
     private readonly IApplicationDbContext _context;
     public TokenService(IOptions<TokenOptions> options, IApplicationDbContext context)
