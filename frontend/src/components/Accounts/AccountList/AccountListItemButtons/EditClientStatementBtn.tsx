@@ -55,6 +55,7 @@ const EditClientStatementBtn: FC<Props> = ({ client, accountingYear }) => {
 
   const fetchStatement = useCallback(async () => {
     try {
+      if (!id) return;
       const statementClient = await genStatementClient();
       const newStatement = await statementClient.getStatement(id);
       setStatement(newStatement.statement);

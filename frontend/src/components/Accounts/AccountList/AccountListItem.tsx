@@ -20,7 +20,6 @@ import EditClientStatementBtn from "./AccountListItemButtons/EditClientStatement
 import InviteBtn from "./AccountListItemButtons/InviteBtn";
 import OptionsBtn from "./AccountListItemButtons/OptionsBtn";
 import RemindBtn from "./AccountListItemButtons/RemindBtn";
-import ViewStatementBtn from "./AccountListItemButtons/ViewStatementBtn";
 import StatusBadge from "./StatusBadge";
 
 interface Props {

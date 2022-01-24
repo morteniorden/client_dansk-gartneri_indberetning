@@ -67,7 +67,7 @@ const UploadStatementFileModal: FC<Props> = ({ statement }) => {
   return (
     <>
       <MenuItem onClick={onOpen}>
-        {statement.statementFileName ? t("statementFile.override") : t("statementFile.attach")}
+        {statement?.statementFileName ? t("statementFile.override") : t("statementFile.attach")}
       </MenuItem>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
