@@ -17,7 +17,10 @@ app.prepare().then(() => {
     const parsedUrl = parse(req.url, true);
     handle(req, res, parsedUrl);
   }).listen(port, err => {
-    if (err) throw err;
+    if (err) {
+      console.log("[ERROR]: " + port);
+      throw err;
+    }
     console.log("> Ready on " + port);
   });
 });
