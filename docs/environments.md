@@ -2,6 +2,8 @@
 
 This system uses two services interlinked heavily and depending on each other.
 
+[![Upload Release Asset](https://github.com/IT-Minds/client_dansk-gartneri_indberetning/actions/workflows/zip_release.yml/badge.svg)](https://github.com/IT-Minds/client_dansk-gartneri_indberetning/actions/workflows/zip_release.yml)
+
 ## Prerequisite
 
 - [.NET]()
@@ -17,22 +19,22 @@ These following steps are for deploying a general application. In the sub sectio
 1. Create a Application Pool.
    - Choose "No Managed Code" as the .NET CLR version. And click OK
 
-![App Pool!](./images/image1.png)
+![App Pool!](/docs/images/image1.png)
 
 2. Select the website to deploy to (you might want to create a new one)
 3. Right click and in select Deploy > Import Application
 
-![Import!](./images/image10.png)
+![Import!](/docs/images/image10.png)
 
 4. Select the zip package abd press next
 5. Leave the default selection of contents and press next
 6. Enter the name of the application in the section for "paramter 1"
 
-![Parameter!](./images/image3.png)
+![Parameter!](/docs/images/image3.png)
 
 7. The following dialog should show up confirming that the site was successfully published
 
-![Confirmed!](./images/image4.png)
+![Confirmed!](/docs/images/image4.png)
 
 8. A successful deploy should result in a web.config file (along with many other files) are located in the applications physical directory.
 
@@ -40,16 +42,16 @@ These following steps are for deploying a general application. In the sub sectio
 
 1. Open the ConfigurationEditor
 
-![Config!](./images/image2.png)
+![Config!](/docs/images/image2.png)
 
 2. Select system.webServer/aspNetCore from the Section dropdown
 
-![Environment!](./images/image9.png)
+![Environment!](/docs/images/image9.png)
 
 3. Click environmentVariables and click on the ellipses next to it to open the configuration editor.
 4. Add the necessary configuration. The table below describes the configuration keys.
 
-![Select!](./images/image8.png)
+![Select!](/docs/images/image8.png)
 
 ### Frontend
 
