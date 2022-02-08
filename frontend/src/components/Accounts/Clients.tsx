@@ -11,14 +11,12 @@ import {
 import AccountingYearSelect from "components/Common/AccountingYearSelect";
 import FetchingSpinner from "components/Common/FetchingSpinner";
 import BasicLayout from "components/Layouts/BasicLayout";
-import StatementSection from "components/Statement/StatementSection";
 import { ClientsContext } from "contexts/ClientsContext";
 import { useLocales } from "hooks/useLocales";
 import React, { FC, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import ListReducer, { ListReducerActionType } from "react-list-reducer";
 import { genUserClient } from "services/backend/apiClients";
 import { IClientDto } from "services/backend/nswagts";
-import { ClientFilter } from "types/ClientFilter";
 import { logger } from "utils/logger";
 
 import SortBySelect from "../Common/SortBySelect";
@@ -62,8 +60,6 @@ const Accounts: FC = () => {
     try {
       const userClient = await genUserClient();
       const data = await userClient.getAllClients();
-
-      console.log(data);
 
       if (data && data.length > 0)
         dispatchClients({

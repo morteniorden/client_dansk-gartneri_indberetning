@@ -1,5 +1,4 @@
-import { Flex, HStack, Image, Spacer } from "@chakra-ui/react";
-import { AuthContext } from "contexts/AuthContext";
+import { Flex, Heading, HStack, Spacer } from "@chakra-ui/react";
 import { useColors } from "hooks/useColors";
 import Link from "next/link";
 import { FC } from "react";
@@ -17,14 +16,13 @@ const Header: FC = () => {
       alignItems="center"
       pl={[1, 5, 10]}
       pr={[3, 5, 10]}
-      bg={headerBg}>
+      bg={headerBg}
+      minH={14}>
       <Link href="/" passHref>
-        <Image
-          src="images/icons/logo.svg"
-          position="relative"
-          pb="15px"
-          h="60px"
-          _hover={{ cursor: "pointer" }}></Image>
+        <Heading color="gray.50" size="md">
+          Produktionsafgiftsfonden
+          <br /> for frugt og gartneriprodukter
+        </Heading>
       </Link>
 
       <HStack display={["none", null, "flex"]}>

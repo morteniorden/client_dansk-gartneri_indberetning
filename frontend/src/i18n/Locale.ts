@@ -3,6 +3,19 @@ export interface Locale {
   flagUrl: string;
   currencyCode: string;
 
+  formats: {
+    number: {
+      decimalSeparator: string;
+      thousandSeparator: string;
+      maxDecimals: number;
+    };
+    currency: {
+      prefix?: string;
+      suffix?: string;
+      maxDecimals: number;
+    };
+  };
+
   example: {
     title: string;
     byLine: string;

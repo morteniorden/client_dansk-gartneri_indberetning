@@ -5,36 +5,41 @@ import { useRouter } from "next/router";
 import { useI18n } from "next-rosetta";
 import { useCallback, useMemo, useState } from "react";
 
-import { useEffectAsync } from "./useEffectAsync";
+import { useMemoAsync } from "./useMemoAsync";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useLocales = () => {
-  const [localeNameMap, setLocaleNameMap] = useState<Record<string, string>>();
-  const [localeFlagMap, setLocaleFlagMap] = useState<Record<string, string>>();
   const { locale, locales } = useRouter();
 
-  const { t } = useI18n<Locale>();
+  const { t, table } = useI18n<Locale>();
 
-  useEffectAsync(async () => {
-    const localeNameMap = await locales.reduceAsync<Record<string, string>>(async (acc, cur) => {
-      const localeFile = await require("../i18n/" + cur);
+  const formats = useMemo(() => {
+    return (table(locale) as Locale)?.formats;
+  }, [locale, table]);
 
-      acc[cur] = (localeFile.table as Locale).locale;
+  const localeNameMap = useMemoAsync<Record<string, string>>(
+    async () => {
+      return await locales.reduceAsync<Record<string, string>>(async (acc, cur) => {
+        const localeFile = await require("../i18n/" + cur);
+        acc[cur] = (localeFile.table as Locale).locale;
+        return acc;
+      }, {});
+    },
+    [],
+    {}
+  );
 
-      return acc;
-    }, {});
-
-    const localeFlagMap = await locales.reduceAsync<Record<string, string>>(async (acc, cur) => {
-      const localeFile = await require("../i18n/" + cur);
-
-      acc[cur] = (localeFile.table as Locale).flagUrl;
-
-      return acc;
-    }, {});
-
-    setLocaleNameMap(localeNameMap);
-    setLocaleFlagMap(localeFlagMap);
-  }, []);
+  const localeFlagMap = useMemoAsync<Record<string, string>>(
+    async () => {
+      return await locales.reduceAsync<Record<string, string>>(async (acc, cur) => {
+        const localeFile = await require("../i18n/" + cur);
+        acc[cur] = (localeFile.table as Locale).locale;
+        return acc;
+      }, {});
+    },
+    [],
+    {}
+  );
 
   const numberFormatter = useMemo(
     () =>
@@ -76,6 +81,7 @@ export const useLocales = () => {
 
   return {
     t,
+    formats,
     locale,
     locales,
     localeNameMap,

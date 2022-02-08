@@ -5,6 +5,18 @@ export const table: Locale = {
   flagUrl: "images/icons/US.svg",
   currencyCode: "USD",
 
+  formats: {
+    number: {
+      decimalSeparator: ".",
+      thousandSeparator: ",",
+      maxDecimals: 4
+    },
+    currency: {
+      maxDecimals: 2,
+      prefix: "$ "
+    }
+  },
+
   example: {
     title: "Hello World",
     byLine: "When data is loading it is displayed below",

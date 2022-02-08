@@ -20,6 +20,7 @@ namespace Application.Common.Services
     public async Task CheckMissingYearsInfo()
     {
       var thisYear = DateTimeOffset.Now.Year;
+      await AddInfoForYear(thisYear - 1);
       await AddInfoForYear(thisYear);
       await AddInfoForYear(thisYear + 1); //TODO: Should we add the info for next year or not?
     }

@@ -5,6 +5,18 @@ export const table: Locale = {
   flagUrl: "images/icons/DK.svg",
   currencyCode: "DKK",
 
+  formats: {
+    number: {
+      decimalSeparator: ",",
+      thousandSeparator: ".",
+      maxDecimals: 4
+    },
+    currency: {
+      maxDecimals: 2,
+      suffix: "kr."
+    }
+  },
+
   example: {
     title: "Hej Verden",
     byLine: "Når dataen er indhentet vises den her",

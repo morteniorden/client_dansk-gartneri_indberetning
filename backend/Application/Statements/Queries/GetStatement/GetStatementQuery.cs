@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +8,6 @@ using Application.Common.Security;
 using Application.StatementInfos;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -55,12 +52,6 @@ namespace Application.Statements.Queries.GetMyStatements
         {
           throw new ForbiddenAccessException();
         }
-
-        if (statement == null)
-        {
-          throw new NotFoundException(nameof(Statement), request.Id);
-        }
-
         var statementInfo = await FindInfo(statement.AccountingYear);
 
         if (statementInfo == null)

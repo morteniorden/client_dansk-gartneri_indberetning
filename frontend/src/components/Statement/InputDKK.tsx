@@ -1,24 +1,27 @@
 import {
+  Input,
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
   NumberInput,
   NumberInputField
 } from "@chakra-ui/react";
+import LocaleCurrency from "components/Common/LocaleCurrency";
 import { EditStatementContext } from "contexts/EditStatementContext";
 import { useColors } from "hooks/useColors";
 import { useLocales } from "hooks/useLocales";
 import { FC, useContext, useMemo } from "react";
 import { useController } from "react-hook-form";
+import { NumberFormatProps, NumberFormatValues } from "react-number-format";
 import { IStatementNoUsersDto } from "services/backend/nswagts";
 
 import { FormControlContext } from "./FormControlContext";
 
-interface Props {
+type Props = {
   name: keyof IStatementNoUsersDto;
-}
+} & Pick<NumberFormatProps<unknown>, "allowNegative" | "allowLeadingZeros" | "decimalScale">;
 
-const InputDKK: FC<Props> = ({ name }) => {
+const InputDKK: FC<Props> = ({ name, children, ...rest }) => {
   const { formatCurrency } = useLocales();
 
   const { control, form, updatedFormAttribute } = useContext(FormControlContext);
@@ -48,8 +51,24 @@ const InputDKK: FC<Props> = ({ name }) => {
   return (
     <InputGroup>
       {leftOrRight === "left" && <InputLeftAddon>Kr.</InputLeftAddon>}
-      <NumberInput defaultValue={value} min={0} max={1000000000}>
-        <NumberInputField
+      <LocaleCurrency
+        customInput={Input}
+        onBlur={onBlur}
+        value={Number(value)}
+        defaultValue={0}
+        ref={ref}
+        disabled={readonly}
+        roundedLeft={leftOrRight === "left" ? "none" : "base"}
+        roundedRight={leftOrRight === "right" ? "none" : "base"}
+        bgColor={bgColor}
+        onValueChange={(v: NumberFormatValues) => {
+          onChange(v.value);
+          updatedFormAttribute(name, parseInt(v.value));
+        }}
+        {...rest}
+      />
+      {/* <NumberInput defaultValue={value} min={0} max={1000000000}> */}
+      {/* <NumberInputField
           name={name}
           ref={ref}
           disabled={readonly}
@@ -63,7 +82,7 @@ const InputDKK: FC<Props> = ({ name }) => {
             updatedFormAttribute(name, parseInt(e.target.value));
           }}
         />
-      </NumberInput>
+      </NumberInput> */}
       {leftOrRight === "right" && <InputRightAddon>Kr.</InputRightAddon>}
     </InputGroup>
   );
