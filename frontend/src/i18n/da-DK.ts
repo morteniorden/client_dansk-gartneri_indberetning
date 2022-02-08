@@ -305,7 +305,7 @@ export const table: Locale = {
       modalTitle: "Ikke gemte ændringer",
       modalText: "Du har ændringer der ikke er gemt, og er ved at forlade siden",
       saveButton: "Gem",
-      cancelButton: "Annuler",
+      cancelButton: "Annuller",
       ignoreButton: "Ignorer"
     },
     editStatementForHeading: "Oplysningsskema for {{name}}"
