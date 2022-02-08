@@ -307,7 +307,7 @@ export const table: Locale = {
       modalTitle: "Unsaved chagnes",
       modalText: "You have changes you haven't saved, and are about to leave the page",
       saveButton: "Save",
-      cancelButton: "Calcel",
+      cancelButton: "Cancel",
       ignoreButton: "Ignore"
     },
     editStatementForHeading: "Oplysningsskema for {{name}}"
